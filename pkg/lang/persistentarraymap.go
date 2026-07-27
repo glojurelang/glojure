@@ -5,8 +5,18 @@ import (
 )
 
 const (
-	hashmapThreshold   = 16
-	arrayMapInlineSize = hashmapThreshold - 2
+	arrayMapHashThreshold    = 16
+	arrayMapKeywordThreshold = 128
+	arrayMapInlineSize       = arrayMapHashThreshold - 2
+	keywordMapDeltaMax       = 8
+
+	// PersistentArrayMapInlineKeyValueCount lets the compiler preserve the
+	// one-allocation constructor for maps whose entries fit inline.
+	PersistentArrayMapInlineKeyValueCount = arrayMapInlineSize
+
+	// PersistentArrayMapMaxKeywordKeyValueCount is the largest keyword-only
+	// literal that should use the linear persistent-array-map representation.
+	PersistentArrayMapMaxKeywordKeyValueCount = arrayMapKeywordThreshold
 )
 
 type (
@@ -15,8 +25,40 @@ type (
 		meta         IPersistentMap
 		hash, hasheq uint32
 
-		keyVals []any
-		inline  [arrayMapInlineSize]any
+		keyVals      []any
+		keywordShape *KeywordMapShape
+		keywordDelta *keywordMapDelta
+	}
+
+	// KeywordMapShape is an immutable key layout shared by maps emitted from
+	// the same AOT keyword-map literal. Shaped maps store only their values.
+	KeywordMapShape struct {
+		keys []Keyword
+	}
+
+	// keywordMapDelta is a bounded immutable overlay on a shaped map's base
+	// values. It gives compiler-emitted keyword maps structural sharing on
+	// updates without imposing a trie on their fixed key layout.
+	keywordMapDelta struct {
+		prev  *keywordMapDelta
+		value any
+		index uint32
+		depth uint8
+	}
+
+	// keywordMapUpdateStorage co-allocates a shaped-map version with its newest
+	// immutable delta. The embedded Map points into its owning allocation, as
+	// inlineMapStorage does for small array maps.
+	keywordMapUpdateStorage struct {
+		Map
+		delta keywordMapDelta
+	}
+
+	// inlineMapStorage keeps small maps to one allocation without making every
+	// Map carry unused inline capacity. A pointer to Map keeps its owner alive.
+	inlineMapStorage struct {
+		Map
+		keyVals [arrayMapInlineSize]any
 	}
 
 	MapSeq struct {
@@ -24,6 +66,9 @@ type (
 		hash, hasheq uint32
 
 		keyVals []any
+		shape   *KeywordMapShape
+		shaped  *Map
+		index   int
 	}
 	MapKeySeq struct {
 		meta         IPersistentMap
@@ -76,22 +121,113 @@ func NewMap(keyVals ...any) IPersistentMap {
 		panic("invalid map. must have even number of inputs")
 	}
 
-	if len(keyVals) >= hashmapThreshold {
+	if !canBePersistentArrayMap(keyVals) {
 		return NewPersistentHashMap(keyVals...)
 	}
 
-	m := &Map{}
-	if len(keyVals) <= len(m.inline) {
-		copy(m.inline[:], keyVals)
-		m.keyVals = m.inline[:len(keyVals)]
-	} else {
-		m.keyVals = append([]any(nil), keyVals...)
+	return newArrayMap(keyVals)
+}
+
+// NewMapUniqueKeys constructs a map from compiler-owned key/value storage.
+// Like Clojure's RT.mapUniqueKeys, it may retain the variadic backing array
+// when the entries form a non-small persistent array map. Callers passing a
+// slice with ... must not mutate that slice afterward.
+func NewMapUniqueKeys(keyVals ...any) IPersistentMap {
+	if len(keyVals) == 0 {
+		return emptyMap
 	}
+
+	if len(keyVals)%2 != 0 {
+		panic("invalid map. must have even number of inputs")
+	}
+
+	if !canBePersistentArrayMap(keyVals) {
+		return NewPersistentHashMap(keyVals...)
+	}
+
+	if len(keyVals) <= arrayMapInlineSize {
+		return newArrayMap(keyVals)
+	}
+	return &Map{keyVals: keyVals}
+}
+
+func NewKeywordMapShape(names ...string) *KeywordMapShape {
+	keys := make([]Keyword, len(names))
+	for i, name := range names {
+		keys[i] = NewKeyword(name)
+	}
+	return &KeywordMapShape{keys: keys}
+}
+
+// NewStaticKeywordMap constructs a persistent map whose immutable keyword
+// layout is shared with other maps from the same AOT literal.
+func NewStaticKeywordMap(shape *KeywordMapShape, values ...any) IPersistentMap {
+	if shape == nil || len(shape.keys) != len(values) {
+		panic("invalid static keyword map shape")
+	}
+	if len(values) == 0 {
+		return emptyMap
+	}
+	return &Map{keyVals: values, keywordShape: shape}
+}
+
+// InitStaticKeywordMap initializes compiler-owned map storage. The values
+// slice must remain immutable and reachable for the lifetime of m.
+func InitStaticKeywordMap(m *Map, shape *KeywordMapShape, values []any) *Map {
+	if m == nil || shape == nil || len(shape.keys) != len(values) || len(values) == 0 {
+		panic("invalid static keyword map storage")
+	}
+	m.keyVals = values
+	m.keywordShape = shape
 	return m
 }
 
+func (s *KeywordMapShape) indexOf(key Keyword) int {
+	for i, candidate := range s.keys {
+		if candidate == key {
+			return i
+		}
+	}
+	return -1
+}
+
+func newArrayMap(keyVals []any) *Map {
+	m := newArrayMapWithSize(len(keyVals))
+	copy(m.keyVals, keyVals)
+	return m
+}
+
+func newArrayMapWithSize(size int) *Map {
+	if size <= arrayMapInlineSize {
+		storage := &inlineMapStorage{}
+		storage.Map.keyVals = storage.keyVals[:size]
+		return &storage.Map
+	}
+	return &Map{keyVals: make([]any, size)}
+}
+
+// canBePersistentArrayMap mirrors Clojure's PersistentArrayMap thresholds.
+// Small maps stay array-backed regardless of key type. Larger maps may remain
+// array-backed when every key beyond the general threshold is a keyword,
+// whose identity comparison keeps linear lookup inexpensive.
+func canBePersistentArrayMap(keyVals []any) bool {
+	if len(keyVals) <= arrayMapHashThreshold {
+		return true
+	}
+	if len(keyVals) > arrayMapKeywordThreshold {
+		return false
+	}
+	for i := arrayMapHashThreshold; i < len(keyVals); i += 2 {
+		if _, ok := keyVals[i].(Keyword); !ok {
+			return false
+		}
+	}
+	return true
+}
+
 func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
-	complexPath := (len(init) & 1) == 1
+	hasTrailing := (len(init) & 1) == 1
+	complexPath := hasTrailing
 	for i := 0; i < len(init) && !complexPath; i += 2 {
 		for j := 0; j < i; j += 2 {
 			if equalKey(init[i], init[j]) {
@@ -102,13 +238,28 @@ func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
 	}
 
 	if complexPath {
-		return newPersistentArrayMapAsIfByAssocComplexPath(init)
+		return newPersistentArrayMapAsIfByAssocComplexPath(init, hasTrailing)
 	}
 
-	return NewMap(init...)
+	return newArrayMap(init)
 }
 
-func newPersistentArrayMapAsIfByAssocComplexPath(init []any) IPersistentMap {
+func newPersistentArrayMapAsIfByAssocComplexPath(init []any, hasTrailing bool) IPersistentMap {
+	if hasTrailing {
+		trailing := emptyMap.Cons(init[len(init)-1]).(IPersistentMap)
+		seedCount := len(init) - 1
+		grown := make([]any, seedCount+trailing.Count()*2)
+		copy(grown, init[:seedCount])
+		i := seedCount
+		for seq := trailing.Seq(); seq != nil; seq = seq.Next() {
+			entry := seq.First().(IMapEntry)
+			grown[i] = entry.Key()
+			grown[i+1] = entry.Val()
+			i += 2
+		}
+		init = grown
+	}
+
 	n := 0
 	for i := 0; i < len(init); i += 2 {
 		duplicateKey := false
@@ -153,7 +304,7 @@ func newPersistentArrayMapAsIfByAssocComplexPath(init []any) IPersistentMap {
 		}
 		init = nodups
 	}
-	return NewMap(init...)
+	return newArrayMap(init)
 }
 
 func (m *Map) ValAt(key any) any {
@@ -163,6 +314,9 @@ func (m *Map) ValAt(key any) any {
 func (m *Map) ValAtDefault(key, def any) any {
 	if kw, ok := key.(Keyword); ok {
 		return m.valAtKeyword(kw, def)
+	}
+	if m.keywordShape != nil {
+		return def
 	}
 
 	for i := 0; i < len(m.keyVals); i += 2 {
@@ -175,6 +329,12 @@ func (m *Map) ValAtDefault(key, def any) any {
 }
 
 func (m *Map) valAtKeyword(key Keyword, def any) any {
+	if m.keywordShape != nil {
+		if i := m.keywordShape.indexOf(key); i >= 0 {
+			return m.keywordValueAt(i)
+		}
+		return def
+	}
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if candidate, ok := m.keyVals[i].(Keyword); ok && key == candidate {
 			return m.keyVals[i+1]
@@ -183,7 +343,41 @@ func (m *Map) valAtKeyword(key Keyword, def any) any {
 	return def
 }
 
+func (m *Map) keywordValueAt(index int) any {
+	for delta := m.keywordDelta; delta != nil; delta = delta.prev {
+		if int(delta.index) == index {
+			return delta.value
+		}
+	}
+	return m.keyVals[index]
+}
+
+func (m *Map) materializedKeywordValues() []any {
+	values := append([]any(nil), m.keyVals...)
+	var deltas [keywordMapDeltaMax]*keywordMapDelta
+	count := 0
+	for delta := m.keywordDelta; delta != nil; delta = delta.prev {
+		deltas[count] = delta
+		count++
+	}
+	for i := count - 1; i >= 0; i-- {
+		delta := deltas[i]
+		values[delta.index] = delta.value
+	}
+	return values
+}
+
 func (m *Map) EntryAt(k any) IMapEntry {
+	if m.keywordShape != nil {
+		kw, ok := k.(Keyword)
+		if !ok {
+			return nil
+		}
+		if i := m.keywordShape.indexOf(kw); i >= 0 {
+			return NewMapEntry(kw, m.keywordValueAt(i))
+		}
+		return nil
+	}
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if Equiv(m.keyVals[i], k) {
 			return NewMapEntry(m.keyVals[i], m.keyVals[i+1])
@@ -194,24 +388,88 @@ func (m *Map) EntryAt(k any) IMapEntry {
 }
 
 func (m *Map) clone() *Map {
-	cpy := *m
-	if len(m.keyVals) <= len(cpy.inline) {
-		cpy.keyVals = cpy.inline[:len(m.keyVals)]
-	} else {
-		cpy.keyVals = append([]any(nil), m.keyVals...)
+	if m.keywordShape != nil {
+		return &Map{
+			meta:         m.meta,
+			keyVals:      m.materializedKeywordValues(),
+			keywordShape: m.keywordShape,
+		}
 	}
-	return &cpy
+	cpy := newArrayMap(m.keyVals)
+	cpy.meta = m.meta
+	return cpy
+}
+
+func newKeywordMapUpdate(
+	m *Map,
+	prev *keywordMapDelta,
+	value any,
+	index int,
+	depth uint8,
+) *Map {
+	storage := &keywordMapUpdateStorage{}
+	storage.delta = keywordMapDelta{
+		prev:  prev,
+		value: value,
+		index: uint32(index),
+		depth: depth,
+	}
+	storage.Map = Map{
+		meta:         m.meta,
+		keyVals:      m.keyVals,
+		keywordShape: m.keywordShape,
+		keywordDelta: &storage.delta,
+	}
+	return &storage.Map
 }
 
 func (m *Map) Assoc(k, v any) Associative {
+	if m.keywordShape != nil {
+		if kw, ok := k.(Keyword); ok {
+			if i := m.keywordShape.indexOf(kw); i >= 0 {
+				if Identical(m.keywordValueAt(i), v) {
+					return m
+				}
+				if m.keywordDelta != nil && int(m.keywordDelta.index) == i {
+					return newKeywordMapUpdate(
+						m,
+						m.keywordDelta.prev,
+						v,
+						i,
+						m.keywordDelta.depth,
+					)
+				}
+				if m.keywordDelta == nil || m.keywordDelta.depth < keywordMapDeltaMax {
+					depth := uint8(1)
+					if m.keywordDelta != nil {
+						depth = m.keywordDelta.depth + 1
+					}
+					return newKeywordMapUpdate(m, m.keywordDelta, v, i, depth)
+				}
+				newMap := m.clone()
+				newMap.keyVals[i] = v
+				return newMap
+			}
+		}
+		keyVals := m.interleavedKeyVals(1)
+		keyVals = append(keyVals, k, v)
+		return NewMapUniqueKeys(keyVals...).(IObj).WithMeta(m.meta).(Associative)
+	}
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if Equiv(m.keyVals[i], k) {
+			if Identical(m.keyVals[i+1], v) {
+				return m
+			}
 			newMap := m.clone()
 			newMap.keyVals[i+1] = v
 			return newMap
 		}
 	}
-	if len(m.keyVals) < hashmapThreshold {
+	threshold := arrayMapHashThreshold
+	if _, ok := k.(Keyword); ok {
+		threshold = arrayMapKeywordThreshold
+	}
+	if len(m.keyVals) < threshold {
 		newMap := m.clone()
 		newMap.keyVals = append(newMap.keyVals, k, v)
 		return newMap
@@ -225,16 +483,48 @@ func (m *Map) AssocEx(k, v any) IPersistentMap {
 }
 
 func (m *Map) Without(k any) IPersistentMap {
-	newKeyVals := make([]any, 0, len(m.keyVals))
+	if m.keywordShape != nil {
+		kw, ok := k.(Keyword)
+		if !ok {
+			return m
+		}
+		remove := m.keywordShape.indexOf(kw)
+		if remove < 0 {
+			return m
+		}
+		keyVals := make([]any, 0, (len(m.keyVals)-1)*2)
+		for i, key := range m.keywordShape.keys {
+			if i != remove {
+				keyVals = append(keyVals, key, m.keywordValueAt(i))
+			}
+		}
+		return NewMapUniqueKeys(keyVals...).(IObj).WithMeta(m.meta).(IPersistentMap)
+	}
+	remove := -1
 	for i := 0; i < len(m.keyVals); i += 2 {
-		if !Equiv(m.keyVals[i], k) {
-			newKeyVals = append(newKeyVals, m.keyVals[i], m.keyVals[i+1])
+		if Equiv(m.keyVals[i], k) {
+			remove = i
+			break
 		}
 	}
-	return NewMap(newKeyVals...)
+	if remove < 0 {
+		return m
+	}
+	if len(m.keyVals) == 2 {
+		return emptyMap.WithMeta(m.meta).(IPersistentMap)
+	}
+
+	result := newArrayMapWithSize(len(m.keyVals) - 2)
+	result.meta = m.meta
+	copy(result.keyVals, m.keyVals[:remove])
+	copy(result.keyVals[remove:], m.keyVals[remove+2:])
+	return result
 }
 
 func (m *Map) Count() int {
+	if m.keywordShape != nil {
+		return len(m.keyVals)
+	}
 	return len(m.keyVals) / 2
 }
 
@@ -244,7 +534,18 @@ func (m *Map) Seq() ISeq {
 	if len(m.keyVals) == 0 {
 		return nil
 	}
+	if m.keywordShape != nil {
+		return newKeywordMapSeq(m)
+	}
 	return NewMapSeq(m.keyVals)
+}
+
+func (m *Map) interleavedKeyVals(extraEntries int) []any {
+	keyVals := make([]any, 0, (len(m.keyVals)+extraEntries)*2)
+	for i, key := range m.keywordShape.keys {
+		keyVals = append(keyVals, key, m.keywordValueAt(i))
+	}
+	return keyVals
 }
 
 func (m *Map) Empty() IPersistentCollection {
@@ -264,9 +565,6 @@ func (m *Map) WithMeta(meta IPersistentMap) any {
 		return m
 	}
 	cpy := *m
-	if len(m.keyVals) <= len(cpy.inline) {
-		cpy.keyVals = cpy.inline[:len(m.keyVals)]
-	}
 	cpy.meta = meta
 	return &cpy
 }
@@ -331,8 +629,7 @@ func (m *Map) ReduceInit(f IFn, init any) any {
 }
 
 func (m *Map) AsTransient() ITransientCollection {
-	// TODO: implement transients
-	return &TransientMap{IPersistentMap: m}
+	return &TransientMap{IPersistentMap: m.clone()}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -385,12 +682,49 @@ func (m *TransientMap) Conj(v any) Conjer {
 
 func (m *TransientMap) Assoc(k, v any) Associative {
 	m.ensureEditable()
+	if arrayMap, ok := m.IPersistentMap.(*Map); ok && arrayMap.keywordShape == nil {
+		for i := 0; i < len(arrayMap.keyVals); i += 2 {
+			if Equiv(arrayMap.keyVals[i], k) {
+				arrayMap.keyVals[i+1] = v
+				arrayMap.hash = 0
+				arrayMap.hasheq = 0
+				return m
+			}
+		}
+
+		threshold := arrayMapHashThreshold
+		if _, ok := k.(Keyword); ok {
+			threshold = arrayMapKeywordThreshold
+		}
+		if len(arrayMap.keyVals) < threshold {
+			arrayMap.keyVals = append(arrayMap.keyVals, k, v)
+			arrayMap.hash = 0
+			arrayMap.hasheq = 0
+			return m
+		}
+	}
 	m.IPersistentMap = m.IPersistentMap.Assoc(k, v).(IPersistentMap)
 	return m
 }
 
 func (m *TransientMap) Without(key any) IPersistentMap {
 	m.ensureEditable()
+	if arrayMap, ok := m.IPersistentMap.(*Map); ok && arrayMap.keywordShape == nil {
+		for i := 0; i < len(arrayMap.keyVals); i += 2 {
+			if !Equiv(arrayMap.keyVals[i], key) {
+				continue
+			}
+			newLen := len(arrayMap.keyVals) - 2
+			copy(arrayMap.keyVals[i:], arrayMap.keyVals[i+2:])
+			arrayMap.keyVals[newLen] = nil
+			arrayMap.keyVals[newLen+1] = nil
+			arrayMap.keyVals = arrayMap.keyVals[:newLen]
+			arrayMap.hash = 0
+			arrayMap.hasheq = 0
+			break
+		}
+		return m
+	}
 	m.IPersistentMap = m.IPersistentMap.Without(key).(IPersistentMap)
 	return m
 }
@@ -411,6 +745,22 @@ func NewMapSeq(kvs []any) *MapSeq {
 	return &MapSeq{
 		keyVals: kvs,
 	}
+}
+
+func newKeywordMapSeq(m *Map) *MapSeq {
+	if m == nil || m.keywordShape == nil || len(m.keyVals) == 0 {
+		return nil
+	}
+	return &MapSeq{shape: m.keywordShape, shaped: m}
+}
+
+// NewKeywordMapSeq constructs a sequence over an immutable shaped-map value
+// slice. Map.Seq uses newKeywordMapSeq so delta overlays remain visible.
+func NewKeywordMapSeq(shape *KeywordMapShape, values []any) *MapSeq {
+	if shape == nil || len(values) == 0 {
+		return nil
+	}
+	return newKeywordMapSeq(&Map{keyVals: values, keywordShape: shape})
 }
 
 func (s *MapSeq) xxx_sequential() {}
@@ -437,6 +787,12 @@ func (s *MapSeq) Seq() ISeq {
 }
 
 func (s *MapSeq) First() any {
+	if s.shape != nil {
+		return &MapEntry{
+			key: s.shape.keys[s.index],
+			val: s.shaped.keywordValueAt(s.index),
+		}
+	}
 	return &MapEntry{
 		key: s.keyVals[0],
 		val: s.keyVals[1],
@@ -444,6 +800,16 @@ func (s *MapSeq) First() any {
 }
 
 func (s *MapSeq) Next() ISeq {
+	if s.shape != nil {
+		if s.index+1 >= len(s.shaped.keyVals) {
+			return nil
+		}
+		return &MapSeq{
+			shape:  s.shape,
+			shaped: s.shaped,
+			index:  s.index + 1,
+		}
+	}
 	if len(s.keyVals) <= 2 {
 		return nil
 	}
@@ -465,6 +831,9 @@ func (s *MapSeq) Cons(o any) Conser {
 }
 
 func (s *MapSeq) Count() int {
+	if s.shape != nil {
+		return len(s.shaped.keyVals) - s.index
+	}
 	return len(s.keyVals) / 2
 }
 
@@ -491,6 +860,16 @@ func (s *MapSeq) HashEq() uint32 {
 }
 
 func (s *MapSeq) Reduce(f IFn) any {
+	if s.shape != nil {
+		acc := s.First()
+		for i := s.index + 1; i < len(s.shaped.keyVals); i++ {
+			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.shaped.keywordValueAt(i)))
+			if IsReduced(acc) {
+				return acc.(IDeref).Deref()
+			}
+		}
+		return acc
+	}
 	if len(s.keyVals) == 0 {
 		return f.Invoke()
 	}
@@ -505,6 +884,16 @@ func (s *MapSeq) Reduce(f IFn) any {
 }
 
 func (s *MapSeq) ReduceInit(f IFn, init any) any {
+	if s.shape != nil {
+		acc := init
+		for i := s.index; i < len(s.shaped.keyVals); i++ {
+			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.shaped.keywordValueAt(i)))
+			if IsReduced(acc) {
+				return acc.(IDeref).Deref()
+			}
+		}
+		return acc
+	}
 	acc := init
 	for i := 0; i < len(s.keyVals); i += 2 {
 		acc = f.Invoke(acc, NewMapEntry(s.keyVals[i], s.keyVals[i+1]))
@@ -518,6 +907,13 @@ func (s *MapSeq) ReduceInit(f IFn, init any) any {
 func (s *MapSeq) Drop(n int) Sequential {
 	if n >= s.Count() {
 		return nil
+	}
+	if s.shape != nil {
+		return &MapSeq{
+			shape:  s.shape,
+			shaped: s.shaped,
+			index:  s.index + n,
+		}
 	}
 	return NewMapSeq(s.keyVals[n*2:])
 }

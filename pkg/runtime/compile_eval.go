@@ -299,6 +299,108 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 			return evalCompiledCall(env, fnValue, args)
 		}
 
+	case ast.OpKeywordLookup:
+		lookup := n.Sub.(*ast.KeywordLookupNode)
+		target := c.compile(lookup.Target)
+		if target == nil {
+			return nil
+		}
+		var fallback evalFn
+		if lookup.Default != nil {
+			fallback = c.compile(lookup.Default)
+			if fallback == nil {
+				return nil
+			}
+		}
+		return func(env *environment) (res interface{}, err error) {
+			defer env.recoverOptimizedInvoke(
+				lookup.Meta,
+				n.Form,
+				&res,
+				&err,
+			)
+			value, err := target(env)
+			if err != nil {
+				return nil, err
+			}
+			if fallback == nil {
+				return lookup.Keyword.Invoke1(value), nil
+			}
+			defaultValue, err := fallback(env)
+			if err != nil {
+				return nil, err
+			}
+			return lookup.Keyword.Invoke2(value, defaultValue), nil
+		}
+
+	case ast.OpAssoc:
+		assoc := n.Sub.(*ast.AssocNode)
+		target := c.compile(assoc.Target)
+		if target == nil {
+			return nil
+		}
+		keys := make([]evalFn, len(assoc.Entries))
+		values := make([]evalFn, len(assoc.Entries))
+		for i, entry := range assoc.Entries {
+			keys[i] = c.compile(entry.Key)
+			values[i] = c.compile(entry.Val)
+			if keys[i] == nil || values[i] == nil {
+				return nil
+			}
+		}
+		return func(env *environment) (res interface{}, err error) {
+			defer env.recoverOptimizedInvoke(
+				assoc.Meta,
+				n.Form,
+				&res,
+				&err,
+			)
+			result, err := target(env)
+			if err != nil {
+				return nil, err
+			}
+			keyValues := make([]any, len(keys)*2)
+			for i := range keys {
+				keyValues[i*2], err = keys[i](env)
+				if err != nil {
+					return nil, err
+				}
+				keyValues[i*2+1], err = values[i](env)
+				if err != nil {
+					return nil, err
+				}
+			}
+			for i := range keys {
+				result = lang.Assoc(
+					result,
+					keyValues[i*2],
+					keyValues[i*2+1],
+				)
+			}
+			return result, nil
+		}
+
+	case ast.OpReplaceLast:
+		replace := n.Sub.(*ast.ReplaceLastNode)
+		collection := c.compile(replace.Collection)
+		value := c.compile(replace.Value)
+		if collection == nil || value == nil {
+			return nil
+		}
+		return func(env *environment) (res interface{}, err error) {
+			defer env.recoverReplaceLast(n, &res, &err)
+			coll, err := collection(env)
+			if err != nil {
+				return nil, err
+			}
+			plan := PrepareReplaceLast(coll)
+			replacement, err := value(env)
+			if err != nil {
+				return nil, err
+			}
+			return plan.Finish(replacement), nil
+		}
+
 	case ast.OpRecur:
 		recur := n.Sub.(*ast.RecurNode)
 		exprs := c.compileArgs(recur.Exprs)

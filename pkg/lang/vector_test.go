@@ -1,8 +1,88 @@
 package lang
 
 import (
+	"runtime"
 	"testing"
 )
+
+func TestSmallVectorAssocUsesIndependentPersistentStorage(t *testing.T) {
+	original := NewVector(1, 2, 3)
+	updated := original.AssocN(1, 20).(*Vector)
+	if got := original.Nth(1); got != 2 {
+		t.Fatalf("original value = %v, want 2", got)
+	}
+	if got := updated.Nth(1); got != 20 {
+		t.Fatalf("updated value = %v, want 20", got)
+	}
+
+	var result IPersistentVector
+	if got := testing.AllocsPerRun(1_000, func() {
+		result = original.AssocN(1, 20)
+	}); got != 3 {
+		t.Fatalf("small-vector assoc allocated %v objects per call, want 3", got)
+	}
+	runtime.KeepAlive(result)
+}
+
+func TestLargeVectorConsCoallocatesResultAndTail(t *testing.T) {
+	original := NewVector(1, 2, 3, 4, 5)
+	var result Conser
+	if got := testing.AllocsPerRun(1_000, func() {
+		result = original.Cons(6)
+	}); got != 1 {
+		t.Fatalf("large-vector cons allocated %v objects per call, want 1", got)
+	}
+	runtime.KeepAlive(result)
+}
+
+func TestVectorReplaceLastIsPersistentAndCoallocated(t *testing.T) {
+	tests := []struct {
+		name     string
+		original *Vector
+	}{
+		{"base tail", NewVector(1, 2, 3, 4, 5)},
+		{"delta tail", func() *Vector {
+			vector := NewVector()
+			for _, value := range []int{1, 2, 3, 4, 5} {
+				vector = vector.Cons(value).(*Vector)
+			}
+			return vector
+		}()},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			var result *Vector
+			if got := testing.AllocsPerRun(1_000, func() {
+				result = test.original.ReplaceLast(9)
+			}); got != 1 {
+				t.Fatalf("replace-last allocated %v objects per call, want 1", got)
+			}
+			if got := test.original.Nth(4); got != 5 {
+				t.Fatalf("original final value = %v, want 5", got)
+			}
+			if got := result.Nth(4); got != 9 {
+				t.Fatalf("replacement final value = %v, want 9", got)
+			}
+			runtime.KeepAlive(result)
+		})
+	}
+}
+
+func TestSmallVectorWithMetaKeepsInlineStorageAlive(t *testing.T) {
+	meta := NewMap(NewKeyword("source"), "test").(IPersistentMap)
+	withMeta := func() *Vector {
+		original := NewVector("value")
+		return original.WithMeta(meta).(*Vector)
+	}()
+	runtime.GC()
+
+	if got := withMeta.Nth(0); got != "value" {
+		t.Fatalf("value after WithMeta and GC = %v, want value", got)
+	}
+	if got := withMeta.Meta(); got != meta {
+		t.Fatalf("Meta() = %v, want %v", got, meta)
+	}
+}
 
 // TestVectorPopReturnsVector verifies that Vector.Pop returns a *Vector,
 // not a *SubVector.
@@ -127,19 +207,17 @@ func TestNthStringASCII(t *testing.T) {
 	}
 }
 
-// TestNthStringMultibyte verifies Nth on multi-byte UTF-8 strings returns
-// runes (not bytes).
+// TestNthStringMultibyte verifies strings use byte-oriented indexing.
 func TestNthStringMultibyte(t *testing.T) {
 	s := "héllo" // 'é' is 2 bytes (U+00E9)
-	wantRunes := []rune(s)
-	for i, want := range wantRunes {
+	for i, want := range []byte(s) {
 		got, ok := Nth(s, i)
 		if !ok {
 			t.Errorf("Nth(%q, %d): ok=false, want true", s, i)
 			continue
 		}
-		if got != NewChar(want) {
-			t.Errorf("Nth(%q, %d) = %v, want %v", s, i, got, NewChar(want))
+		if got != NewChar(rune(want)) {
+			t.Errorf("Nth(%q, %d) = %v, want %v", s, i, got, NewChar(rune(want)))
 		}
 	}
 }
@@ -168,14 +246,13 @@ func TestCharAtASCII(t *testing.T) {
 	}
 }
 
-// TestCharAtMultibyte verifies CharAt on multi-byte UTF-8 strings.
+// TestCharAtMultibyte verifies CharAt uses byte-oriented indexing.
 func TestCharAtMultibyte(t *testing.T) {
 	s := "café"
-	wantRunes := []rune(s)
-	for i, want := range wantRunes {
+	for i, want := range []byte(s) {
 		got := CharAt(s, i)
-		if got != NewChar(want) {
-			t.Errorf("CharAt(%q, %d) = %v, want %v", s, i, got, NewChar(want))
+		if got != NewChar(rune(want)) {
+			t.Errorf("CharAt(%q, %d) = %v, want %v", s, i, got, NewChar(rune(want)))
 		}
 	}
 }

@@ -35,6 +35,9 @@ func TestCoreSlurpLazilyLoadsIONamespace(t *testing.T) {
 // FnFuncN were passed to typeof*.
 func TestFnQmarkRecognizesFnFuncN(t *testing.T) {
 	fnQ := Var("clojure.core", "fn?")
+	plus := Var("clojure.core", "+").(*lang.Var)
+	minus := Var("clojure.core", "-").(*lang.Var)
+	str := Var("clojure.core", "str").(*lang.Var)
 
 	cases := []struct {
 		name string
@@ -47,6 +50,19 @@ func TestFnQmarkRecognizesFnFuncN(t *testing.T) {
 		{"FnFunc2", lang.FnFunc2(func(a, b any) any { return a }), true},
 		{"FnFunc3", lang.FnFunc3(func(a, b, c any) any { return a }), true},
 		{"FnFunc4", lang.FnFunc4(func(a, b, c, d any) any { return a }), true},
+		{"FnFunc5", lang.FnFunc5(func(a, b, c, d, e any) any { return a }), true},
+		{"FnFunc6", lang.FnFunc6(func(a, b, c, d, e, f any) any { return a }), true},
+		{"FnFunc20", lang.FnFunc20(func(
+			a0, a1, a2, a3, a4, a5, a6, a7, a8, a9,
+			a10, a11, a12, a13, a14, a15, a16, a17, a18, a19 any,
+		) any {
+			return a0
+		}), true},
+		{"VariadicFn", lang.NewVariadicFn(0, func(_ []any, _ lang.ISeq) any { return nil }), true},
+		{"native +", plus.Get(), true},
+		{"native -", minus.Get(), true},
+		{"native str", str.Get(), true},
+		{"Var", plus, false},
 		{"string", "hello", false},
 		{"int", 42, false},
 		{"nil", nil, false},

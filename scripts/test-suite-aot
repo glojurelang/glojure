@@ -1,0 +1,183 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: $0 TEST-SUITE-DIR" >&2
+  exit 2
+fi
+
+repo_root=$(cd "$(dirname "$0")/.." && pwd)
+suite_dir=$1
+go_cmd=go
+test_root="$suite_dir/test"
+aot_dir="$suite_dir/.glojure-aot"
+bootstrap="$aot_dir/glj"
+manifest="$aot_dir/namespaces"
+load_errors="$aot_dir/load-errors"
+runner_source="$aot_dir/main.go"
+runner="$aot_dir/test-suite"
+
+suite_relative=${suite_dir#"$repo_root/"}
+if [[ "$suite_relative" == "$suite_dir" ]]; then
+  echo "test suite must be inside $repo_root" >&2
+  exit 1
+fi
+module_path=$(cd "$repo_root" && "$go_cmd" list -m)
+test_import_root="$module_path/$suite_relative/test"
+
+mapfile -t sources < <(find "$test_root" -type f -name '*.cljc' | sort)
+if [[ ${#sources[@]} -eq 0 ]]; then
+  echo "no Clojure test-suite sources found under $test_root" >&2
+  exit 1
+fi
+
+load_entries=()
+for source in "${sources[@]}"; do
+  resource=${source#"$test_root/"}
+  resource=${resource%.cljc}
+  namespace=${resource//\//.}
+  namespace=${namespace//_/-}
+  escaped_source=${source//\\/\\\\}
+  escaped_source=${escaped_source//\"/\\\"}
+  load_entries+=("[$namespace \"$escaped_source\"]")
+done
+
+mkdir -p "$aot_dir"
+rm -f "$manifest"
+rm -f "$load_errors"
+
+"$go_cmd" build \
+  -tags glj_no_aot_stdlib \
+  -o "$bootstrap" \
+  "$repo_root/cmd/glj"
+
+entry_list=${load_entries[*]}
+GLJ_CLASSPATH="$test_root" \
+GLOJURE_AOT_MANIFEST="$manifest" \
+GLOJURE_AOT_LOAD_ERRORS="$load_errors" \
+GLOJURE_STDLIB_PATH="$repo_root/pkg/stdlib" \
+GLOJURE_USE_AOT=false \
+  "$bootstrap" -e \
+  "(let [entries '[$entry_list]]
+     (require 'clojure.test 'clojure.string)
+     (let [result (reduce
+                   (fn [result [test-ns path]]
+                     (try
+                       (load-file path)
+                       (update result :loaded conj test-ns)
+                       (catch go/any e
+                         (binding [*out* os.Stderr]
+                           (println \"Skipping\" test-ns \"because it cannot be loaded:\"
+                                    (.Error e)))
+                         (update result :failed conj test-ns))))
+                   {:loaded [] :failed []}
+                   entries)
+           loaded (:loaded result)
+           failed (:failed result)]
+       (doseq [test-ns loaded] (compile test-ns))
+       (let [content (clojure.string/join \"\n\" loaded)
+             err (os.WriteFile
+                  (os.Getenv \"GLOJURE_AOT_MANIFEST\")
+                  ((go/slice-of go/byte) content)
+                  0644)]
+         (when err (throw err)))
+       (let [content (clojure.string/join \"\n\" failed)
+             err (os.WriteFile
+                  (os.Getenv \"GLOJURE_AOT_LOAD_ERRORS\")
+                  ((go/slice-of go/byte) content)
+                  0644)]
+         (when err (throw err)))))"
+
+mapfile -t namespaces < "$manifest"
+if [[ ${#namespaces[@]} -eq 0 ]]; then
+  echo "no loadable Clojure test-suite namespaces found under $test_root" >&2
+  exit 1
+fi
+
+mapfile -t load_error_names < "$load_errors"
+expected_load_errors=${TEST_SUITE_EXPECT_LOAD_ERRORS:-0}
+if [[ ! "$expected_load_errors" =~ ^[0-9]+$ ]]; then
+  echo "invalid TEST_SUITE_EXPECT_LOAD_ERRORS value: $expected_load_errors" >&2
+  exit 2
+fi
+actual_load_errors=${#load_error_names[@]}
+echo "LOAD ERROR SUMMARY: $actual_load_errors of ${#sources[@]} files failed to load; expected $expected_load_errors"
+if [[ $actual_load_errors -ne $expected_load_errors ]]; then
+  exit 1
+fi
+
+resources=()
+for namespace in "${namespaces[@]}"; do
+  resource=${namespace//-/_}
+  resources+=("${resource//./\/}")
+done
+
+{
+  printf '%s\n' 'package main'
+  printf '%s\n' ''
+  printf '%s\n' 'import ('
+  printf '%s\n' '  "fmt"'
+  printf '%s\n' '  "os"'
+  printf '%s\n' '  "regexp"'
+  printf '%s\n' '  "strconv"'
+  printf '%s\n' ''
+  printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/glj"'
+  printf '%s\n' '  "github.com/glojurelang/glojure/pkg/lang"'
+  printf '%s\n' '  "github.com/glojurelang/glojure/pkg/runtime"'
+  printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/core/protocols"'
+  printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/string"'
+  printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/template"'
+  printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/test"'
+  printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/uuid"'
+  printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/walk"'
+  for resource in "${resources[@]}"; do
+    printf '  _ "%s/%s"\n' "$test_import_root" "$resource"
+  done
+  printf '%s\n' ')'
+  printf '%s\n' ''
+  printf '%s\n' 'func expected(name string) int {'
+  printf '%s\n' '  value := os.Getenv(name)'
+  printf '%s\n' '  if value == "" {'
+  printf '%s\n' '    return 0'
+  printf '%s\n' '  }'
+  printf '%s\n' '  result, err := strconv.Atoi(value)'
+  printf '%s\n' '  if err != nil {'
+  printf '%s\n' '    panic(fmt.Sprintf("invalid %s value %q", name, value))'
+  printf '%s\n' '  }'
+  printf '%s\n' '  return result'
+  printf '%s\n' '}'
+  printf '%s\n' ''
+  printf '%s\n' 'func main() {'
+  printf '%s\n' '  runtime.RT.Load("clojure/core/protocols")'
+  printf '%s\n' '  runtime.RT.Load("clojure/test")'
+  for resource in "${resources[@]}"; do
+    printf '  runtime.RT.Load("%s")\n' "$resource"
+  done
+  printf '%s\n' '  testNS := lang.FindNamespace(lang.NewSymbol("clojure.test"))'
+  printf '%s\n' '  runAllTests := testNS.FindInternedVar(lang.NewSymbol("run-all-tests")).Get()'
+  printf '%s\n' '  summary := lang.Apply1(runAllTests, regexp.MustCompile(`^clojure\.(core|string)-test\..*$`))'
+  printf '%s\n' '  failures := lang.MustAsInt(lang.GetDefault(summary, lang.NewKeyword("fail"), int64(0)))'
+  printf '%s\n' '  errors := lang.MustAsInt(lang.GetDefault(summary, lang.NewKeyword("error"), int64(0)))'
+  printf '%s\n' '  expectedFailures := expected("TEST_SUITE_EXPECT_FAILURES")'
+  printf '%s\n' '  expectedErrors := expected("TEST_SUITE_EXPECT_ERRORS")'
+  printf '%s\n' '  if failures != expectedFailures || errors != expectedErrors {'
+  printf '%s\n' '    fmt.Fprintf(os.Stderr, "expected %d failures and %d errors; got %d failures and %d errors\n", expectedFailures, expectedErrors, failures, errors)'
+  printf '%s\n' '    os.Exit(1)'
+  printf '%s\n' '  }'
+  printf '%s\n' '}'
+} > "$runner_source"
+
+"$go_cmd" fmt "$runner_source"
+"$go_cmd" build \
+  -tags glj_aot_runtime \
+  -o "$runner" \
+  "$runner_source"
+
+(
+  cd "$suite_dir"
+  GLOJURE_USE_AOT=true \
+  TEST_SUITE_EXPECT_FAILURES=${TEST_SUITE_EXPECT_FAILURES:-0} \
+  TEST_SUITE_EXPECT_ERRORS=${TEST_SUITE_EXPECT_ERRORS:-0} \
+    "$runner"
+)

@@ -10,6 +10,7 @@ import (
 	_ "github.com/glojurelang/glojure/pkg/javacompat/instant"
 	_ "github.com/glojurelang/glojure/pkg/javacompat/integer"
 	_ "github.com/glojurelang/glojure/pkg/javacompat/long"
+	_ "github.com/glojurelang/glojure/pkg/javacompat/mapentry"
 	_ "github.com/glojurelang/glojure/pkg/javacompat/math"
 	_ "github.com/glojurelang/glojure/pkg/javacompat/regex"
 	_ "github.com/glojurelang/glojure/pkg/javacompat/string"

@@ -1,11 +1,12 @@
 package lang
 
 type (
+	// StringSeq exposes the bytes of an immutable Go string as Char values.
 	StringSeq struct {
 		meta         IPersistentMap
 		hash, hasheq uint32
 
-		str []rune
+		str string
 		i   int
 	}
 )
@@ -18,17 +19,13 @@ var (
 )
 
 func NewStringSeq(s string, i int) *StringSeq {
-	if len(s) == 0 {
+	if len(s) == 0 || i >= len(s) {
 		return nil
 	}
-	runes := []rune(s)
-	if i >= len(runes) {
-		return nil
-	}
-	return &StringSeq{str: runes, i: i}
+	return &StringSeq{str: s, i: i}
 }
 
-func newStringSeq(s []rune, i int) *StringSeq {
+func newStringSeq(s string, i int) *StringSeq {
 	if len(s) == 0 || i >= len(s) {
 		return nil
 	}
@@ -63,7 +60,7 @@ func (s *StringSeq) Cons(o any) Conser {
 }
 
 func (s *StringSeq) First() any {
-	return NewChar(s.str[s.i])
+	return NewChar(rune(s.str[s.i]))
 }
 
 func (s *StringSeq) Next() ISeq {
@@ -120,7 +117,7 @@ func (s *StringSeq) Drop(n int) Sequential {
 func (s *StringSeq) ReduceInit(f IFn, init any) any {
 	acc := init
 	for i := s.i; i < len(s.str); i++ {
-		acc = f.Invoke(acc, NewChar(s.str[i]))
+		acc = f.Invoke(acc, NewChar(rune(s.str[i])))
 		if IsReduced(acc) {
 			return acc.(IDeref).Deref()
 		}

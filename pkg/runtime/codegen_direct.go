@@ -25,9 +25,10 @@ func sortedAOTTargets(
 }
 
 // prepareAOTCallTargets allocates package-level call slots for ordinary
-// fixed-arity functions in the namespace. Generated callers can use the slot
-// while its Var retains the root seen by LoadNS, and fall back to Var dispatch
-// after a redefinition.
+// functions in the namespace. With direct linking, inferred calls use these
+// slots without consulting the Var. When direct linking is disabled, or a Var
+// is marked ^:redef, generated callers guard the slot with the root seen by
+// LoadNS and fall back to Var dispatch after a redefinition.
 func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 	for _, named := range vars {
 		vr := named.vr
@@ -42,38 +43,72 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			continue
 		}
 		fnNode := fn.ASTNode().Sub.(*ast.FnNode)
-		if len(fnNode.Methods) != 1 || fnNode.IsVariadic {
-			continue
-		}
-		method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		if method.IsVariadic || method.FixedArity > 4 {
+		arityDispatch := len(fnNode.Methods) != 1 || fnNode.IsVariadic
+		directArities := directAOTFnArities(fnNode)
+		if !hasDirectAOTArity(directArities) {
 			continue
 		}
 
 		index := len(g.aotCallTargets)
+		directLinked := g.directLink &&
+			!RT.BooleanCast(lang.Get(vr.Meta(), lang.KWRedef))
+		rootVersionVar := ""
+		if !directLinked {
+			rootVersionVar = fmt.Sprintf("aotRootVersion%d", index)
+		}
 		target := &aotSpecializationTarget{
 			vr:             vr,
 			fn:             fn,
-			arity:          method.FixedArity,
+			arityDispatch:  arityDispatch,
+			directLinked:   directLinked,
+			directArities:  directArities,
 			directFnVar:    fmt.Sprintf("aotDirectFn%d", index),
 			int64FnVar:     fmt.Sprintf("aotInt64Fn%d", index),
 			float64FnVar:   fmt.Sprintf("aotFloat64Fn%d", index),
-			rootVersionVar: fmt.Sprintf("aotRootVersion%d", index),
+			rootVersionVar: rootVersionVar,
+		}
+		directType := "lang.ArityFn"
+		if !arityDispatch {
+			method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
+			target.arity = method.FixedArity
+			directType = fmt.Sprintf("lang.FnFunc%d", target.arity)
 		}
 		g.aotCallTargets[vr] = target
-		fmt.Fprintf(
-			&g.aotDeclarations,
-			"var %s lang.FnFunc%d\nvar %s *lang.VarRootVersion\n",
-			target.directFnVar,
-			target.arity,
-			target.rootVersionVar,
-		)
+		fmt.Fprintf(&g.aotDeclarations, "var %s %s\n",
+			target.directFnVar, directType)
+		if target.rootVersionVar != "" {
+			fmt.Fprintf(&g.aotDeclarations,
+				"var %s *lang.VarRootVersion\n", target.rootVersionVar)
+		}
+		if arityDispatch {
+			for _, methodNode := range fnNode.Methods {
+				method := methodNode.Sub.(*ast.FnMethodNode)
+				if method.IsVariadic ||
+					method.FixedArity < 0 ||
+					method.FixedArity >= len(target.directArityVars) {
+					continue
+				}
+				slot := fmt.Sprintf(
+					"%sArity%d",
+					target.directFnVar,
+					method.FixedArity,
+				)
+				target.directArityVars[method.FixedArity] = slot
+				fmt.Fprintf(
+					&g.aotDeclarations,
+					"var %s lang.FnFunc%d\n",
+					slot,
+					method.FixedArity,
+				)
+			}
+		}
 	}
 	for {
 		changed := false
 		for _, named := range vars {
 			target := g.aotCallTargets[named.vr]
-			if target == nil || target.int64Analysis != nil {
+			if target == nil || target.arityDispatch ||
+				target.arity > 4 || target.int64Analysis != nil {
 				continue
 			}
 			fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
@@ -95,7 +130,8 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 	}
 	for _, named := range vars {
 		target := g.aotCallTargets[named.vr]
-		if target == nil || target.int64Analysis == nil {
+		if target == nil || target.arityDispatch ||
+			target.int64Analysis == nil {
 			continue
 		}
 		fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
@@ -106,7 +142,8 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		changed := false
 		for _, named := range vars {
 			target := g.aotCallTargets[named.vr]
-			if target == nil || target.int64Analysis != nil ||
+			if target == nil || target.arityDispatch ||
+				target.arity > 4 || target.int64Analysis != nil ||
 				target.float64Analysis != nil {
 				continue
 			}
@@ -162,6 +199,35 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 	}
 }
 
+func directAOTFnArities(fn *ast.FnNode) [21]bool {
+	var result [21]bool
+	for _, methodNode := range fn.Methods {
+		method := methodNode.Sub.(*ast.FnMethodNode)
+		if method.IsVariadic {
+			if method.FixedArity < 0 {
+				continue
+			}
+			for arity := method.FixedArity; arity < len(result); arity++ {
+				result[arity] = true
+			}
+			continue
+		}
+		if method.FixedArity >= 0 && method.FixedArity < len(result) {
+			result[method.FixedArity] = true
+		}
+	}
+	return result
+}
+
+func hasDirectAOTArity(arities [21]bool) bool {
+	for _, supported := range arities {
+		if supported {
+			return true
+		}
+	}
+	return false
+}
+
 func codegenVarValue(vr *lang.Var) any {
 	// Dynamic Vars are resolved against goroutine-local bindings. Reading from
 	// a fresh goroutine obtains the root value used to build an AOT loader.
@@ -179,16 +245,17 @@ func (g *Generator) aotInvokeTarget(
 		return nil
 	}
 	target := g.aotCallTargets[invoke.Fn.Sub.(*ast.VarNode).Var]
-	if target == nil || target.arity != len(invoke.Args) {
+	arity := len(invoke.Args)
+	if target == nil || arity >= len(target.directArities) ||
+		!target.directArities[arity] {
 		return nil
 	}
 	return target
 }
 
-// aotExternalInvokeTarget caches the root of a statically resolved call into
-// another namespace. Compiled calls use the root present when the namespace
-// loads while its version remains current, and fall back to Var dispatch after
-// a redefinition. Dynamic Vars always retain runtime lookup.
+// aotExternalInvokeTarget prepares a statically resolved call into another
+// namespace. Statically resolved calls are linked directly when enabled.
+// Dynamic and ^:redef Vars always retain runtime lookup.
 func (g *Generator) aotExternalInvokeTarget(
 	invoke *ast.InvokeNode,
 ) *aotExternalCallTarget {
@@ -203,37 +270,46 @@ func (g *Generator) aotExternalInvokeTarget(
 		return nil
 	}
 	arity := len(invoke.Args)
-	intrinsic := aotExternalIntrinsic(vr, arity)
+	intrinsic := g.aotExternalIntrinsic(vr, invoke)
 	if arity > 5 ||
 		(intrinsic == "" && !aotSupportsArity(codegenVarValue(vr), arity)) {
 		return nil
 	}
-	key := aotExternalCallKey{vr: vr, arity: arity}
+	key := aotExternalCallKey{vr: vr, arity: arity, intrinsic: intrinsic}
 	if target := g.aotExternalCallTargets[key]; target != nil {
 		return target
 	}
 	index := len(g.aotExternalCallTargets)
+	directLinked := g.directLink &&
+		!RT.BooleanCast(lang.Get(vr.Meta(), lang.KWRedef))
 	target := &aotExternalCallTarget{
 		vr:             vr,
 		arity:          arity,
 		fnVar:          fmt.Sprintf("aotExternalFn%d", index),
 		intrinsic:      intrinsic,
+		directLinked:   directLinked,
 		defaultVar:     fmt.Sprintf("aotExternalDefault%d", index),
 		rootVersionVar: fmt.Sprintf("aotExternalRootVersion%d", index),
 	}
-	g.allocVarVar(
-		vr.Namespace().Name().String(),
-		vr.Symbol().String(),
-	)
+	if intrinsic == "" || !directLinked {
+		g.allocVarVar(
+			vr.Namespace().Name().String(),
+			vr.Symbol().String(),
+		)
+	}
 	g.aotExternalCallTargets[key] = target
 	return target
 }
 
-func aotExternalIntrinsic(vr *lang.Var, arity int) string {
+func (g *Generator) aotExternalIntrinsic(
+	vr *lang.Var,
+	invoke *ast.InvokeNode,
+) string {
 	if vr.Namespace().Name().String() != "clojure.core" {
 		return ""
 	}
 	name := vr.Symbol().String()
+	arity := len(invoke.Args)
 	switch {
 	case name == "assoc" && (arity == 3 || arity == 5):
 	case name == "count" && arity == 1:
@@ -244,6 +320,10 @@ func aotExternalIntrinsic(vr *lang.Var, arity int) string {
 	case name == "first" && arity == 1:
 	case name == "get" && (arity == 2 || arity == 3):
 	case name == "inc" && arity == 1:
+	case name == "instance?" && arity == 2:
+		if _, ok := g.staticInstanceCall(invoke, []string{"", "value"}); !ok {
+			return ""
+		}
 	case name == "next" && arity == 1:
 	case name == "nth" && (arity == 2 || arity == 3):
 	case name == "peek" && arity == 1:
@@ -257,6 +337,7 @@ func aotExternalIntrinsic(vr *lang.Var, arity int) string {
 
 func (g *Generator) aotExternalIntrinsicCall(
 	intrinsic string,
+	invoke *ast.InvokeNode,
 	args []string,
 ) string {
 	switch intrinsic {
@@ -287,6 +368,12 @@ func (g *Generator) aotExternalIntrinsicCall(
 		return fmt.Sprintf("lang.GetDefault(%s, %s, %s)", args[0], args[1], args[2])
 	case "inc":
 		return fmt.Sprintf("lang.Numbers.Inc(%s)", args[0])
+	case "instance?":
+		call, ok := g.staticInstanceCall(invoke, args)
+		if !ok {
+			panic("static instance? intrinsic lost its target type")
+		}
+		return call
 	case "next":
 		return fmt.Sprintf("lang.Next(%s)", args[0])
 	case "nth":
@@ -311,12 +398,19 @@ func (g *Generator) aotExternalIntrinsicCall(
 	}
 }
 
-func (g *Generator) generateAOTExternalCacheAdapters() {
-	var arities [6]bool
+func (g *Generator) generateAOTExternalAdapters() {
+	var cachedArities, linkedArities [6]bool
 	for _, target := range g.aotExternalCallTargets {
-		arities[target.arity] = true
+		if target.directLinked {
+			linkedArities[target.arity] = true
+		} else {
+			cachedArities[target.arity] = true
+		}
 	}
-	for arity, used := range arities {
+	if hasAOTAdapterArity(linkedArities) {
+		g.addImport("sync")
+	}
+	for arity, used := range cachedArities {
 		if !used {
 			continue
 		}
@@ -359,6 +453,59 @@ func (g *Generator) generateAOTExternalCacheAdapters() {
 			arity, aotAdapterArgs(args),
 			arity, aotAdapterArgs(args))
 	}
+	for arity, used := range linkedArities {
+		if !used {
+			continue
+		}
+		params := make([]string, arity)
+		args := make([]string, arity)
+		for i := range params {
+			args[i] = fmt.Sprintf("p%d", i)
+			params[i] = args[i] + " any"
+		}
+		paramList := strings.Join(params, ", ")
+		argList := strings.Join(args, ", ")
+		fmt.Fprintf(&g.aotDeclarations,
+			"func aotLinkFn%d(vr *lang.Var) lang.FnFunc%d {\n"+
+				"if vr.IsBound() { return aotLinkBoundFn%d(vr) }\n"+
+				"var once sync.Once\n"+
+				"var linked lang.FnFunc%d\n"+
+				"return func(%s) any {\n"+
+				"if !vr.IsBound() { return lang.Apply%d(checkDerefVar(vr)%s) }\n"+
+				"once.Do(func() { linked = aotLinkBoundFn%d(vr) })\n"+
+				"return linked(%s)\n"+
+				"}\n"+
+				"}\n\n"+
+				"func aotLinkBoundFn%d(vr *lang.Var) lang.FnFunc%d {\n"+
+				"fn := checkDerefVar(vr)\n",
+			arity, arity,
+			arity,
+			arity,
+			paramList,
+			arity, aotAdapterArgs(args),
+			arity,
+			argList,
+			arity, arity)
+		fmt.Fprintf(&g.aotDeclarations,
+			"if direct, ok := fn.(lang.FnFunc%d); ok { return direct }\n",
+			arity)
+		fmt.Fprintf(&g.aotDeclarations,
+			"if fixed, ok := fn.(lang.FixedArityFn%d); ok { return fixed.Invoke%d }\n",
+			arity, arity)
+		fmt.Fprintf(&g.aotDeclarations,
+			"return func(%s) any { return lang.Apply%d(fn%s) }\n"+
+				"}\n\n",
+			paramList, arity, aotAdapterArgs(args))
+	}
+}
+
+func hasAOTAdapterArity(arities [6]bool) bool {
+	for _, used := range arities {
+		if used {
+			return true
+		}
+	}
+	return false
 }
 
 func aotAdapterArgs(args []string) string {

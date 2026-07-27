@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"reflect"
 	"time"
-	"unicode/utf8"
 )
 
 type (
@@ -503,8 +502,9 @@ func Count(coll any) int {
 	case nil:
 		return 0
 	case string:
-		// count runes, not bytes
-		return utf8.RuneCountInString(arg)
+		// Go strings are immutable byte sequences. Text operations that need
+		// Unicode semantics decode UTF-8 explicitly.
+		return len(arg)
 	case Counted:
 		return arg.Count()
 	}

@@ -120,6 +120,8 @@ var (
 	KWMacro         = NewKeyword("macro")
 	KWPrivate       = NewKeyword("private")
 	KWDynamic       = NewKeyword("dynamic")
+	KWRedef         = NewKeyword("redef")
+	KWDirectLinking = NewKeyword("direct-linking")
 	KWInline        = NewKeyword("inline")
 	KWInlineArities = NewKeyword("inline-arities")
 	KWNS            = NewKeyword("ns")

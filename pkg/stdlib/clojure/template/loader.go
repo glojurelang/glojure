@@ -7,63 +7,61 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	sync "sync"
 )
 
 var aotDirectFn0 lang.FnFunc3
-var aotRootVersion0 *lang.VarRootVersion
 
-func aotCacheFn1(vr *lang.Var) lang.FnFunc1 {
-	version := vr.RootVersion()
-	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc1); ok {
-		return func(p0 any) any {
-			if vr.RootVersion() == version {
-				return direct(p0)
-			}
-			return lang.Apply1(checkDerefVar(vr), p0)
-		}
+func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
+	if vr.IsBound() {
+		return aotLinkBoundFn1(vr)
 	}
-	if fixed, ok := fn.(lang.FixedArityFn1); ok {
-		return func(p0 any) any {
-			if vr.RootVersion() == version {
-				return fixed.Invoke1(p0)
-			}
-			return lang.Apply1(checkDerefVar(vr), p0)
-		}
-	}
+	var once sync.Once
+	var linked lang.FnFunc1
 	return func(p0 any) any {
-		if vr.RootVersion() == version {
-			return lang.Apply1(fn, p0)
+		if !vr.IsBound() {
+			return lang.Apply1(checkDerefVar(vr), p0)
 		}
-		return lang.Apply1(checkDerefVar(vr), p0)
+		once.Do(func() { linked = aotLinkBoundFn1(vr) })
+		return linked(p0)
 	}
 }
 
-func aotCacheFn2(vr *lang.Var) lang.FnFunc2 {
-	version := vr.RootVersion()
+func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
+	fn := checkDerefVar(vr)
+	if direct, ok := fn.(lang.FnFunc1); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn1); ok {
+		return fixed.Invoke1
+	}
+	return func(p0 any) any { return lang.Apply1(fn, p0) }
+}
+
+func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
+	if vr.IsBound() {
+		return aotLinkBoundFn2(vr)
+	}
+	var once sync.Once
+	var linked lang.FnFunc2
+	return func(p0 any, p1 any) any {
+		if !vr.IsBound() {
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+		once.Do(func() { linked = aotLinkBoundFn2(vr) })
+		return linked(p0, p1)
+	}
+}
+
+func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
 	fn := checkDerefVar(vr)
 	if direct, ok := fn.(lang.FnFunc2); ok {
-		return func(p0 any, p1 any) any {
-			if vr.RootVersion() == version {
-				return direct(p0, p1)
-			}
-			return lang.Apply2(checkDerefVar(vr), p0, p1)
-		}
+		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn2); ok {
-		return func(p0 any, p1 any) any {
-			if vr.RootVersion() == version {
-				return fixed.Invoke2(p0, p1)
-			}
-			return lang.Apply2(checkDerefVar(vr), p0, p1)
-		}
+		return fixed.Invoke2
 	}
-	return func(p0 any, p1 any) any {
-		if vr.RootVersion() == version {
-			return lang.Apply2(fn, p0, p1)
-		}
-		return lang.Apply2(checkDerefVar(vr), p0, p1)
-	}
+	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
 }
 
 func init() {
@@ -98,7 +96,6 @@ func LoadNS() {
 	sym_clojure_DOT_template := lang.NewSymbolUnchecked("clojure.template")
 	sym_clojure_DOT_walk := lang.NewSymbolUnchecked("clojure.walk")
 	sym_concat := lang.NewSymbolUnchecked("concat")
-	sym_count := lang.NewSymbolUnchecked("count")
 	sym_do := lang.NewSymbolUnchecked("do")
 	sym_do_DASH_template := lang.NewSymbolUnchecked("do-template")
 	sym_expr := lang.NewSymbolUnchecked("expr")
@@ -106,7 +103,6 @@ func LoadNS() {
 	sym_map := lang.NewSymbolUnchecked("map")
 	sym_partition := lang.NewSymbolUnchecked("partition")
 	sym_postwalk_DASH_replace := lang.NewSymbolUnchecked("postwalk-replace")
-	sym_seq := lang.NewSymbolUnchecked("seq")
 	sym_values := lang.NewSymbolUnchecked("values")
 	sym_walk := lang.NewSymbolUnchecked("walk")
 	sym_zipmap := lang.NewSymbolUnchecked("zipmap")
@@ -121,16 +117,12 @@ func LoadNS() {
 	kw_ns := lang.NewKeyword("ns")
 	// var clojure.core/concat
 	var_clojure_DOT_core_concat := lang.InternVarName(sym_clojure_DOT_core, sym_concat)
-	// var clojure.core/count
-	var_clojure_DOT_core_count := lang.InternVarName(sym_clojure_DOT_core, sym_count)
 	// var clojure.core/list
 	var_clojure_DOT_core_list := lang.InternVarName(sym_clojure_DOT_core, sym_list)
 	// var clojure.core/map
 	var_clojure_DOT_core_map := lang.InternVarName(sym_clojure_DOT_core, sym_map)
 	// var clojure.core/partition
 	var_clojure_DOT_core_partition := lang.InternVarName(sym_clojure_DOT_core, sym_partition)
-	// var clojure.core/seq
-	var_clojure_DOT_core_seq := lang.InternVarName(sym_clojure_DOT_core, sym_seq)
 	// var clojure.core/zipmap
 	var_clojure_DOT_core_zipmap := lang.InternVarName(sym_clojure_DOT_core, sym_zipmap)
 	// var clojure.template/apply-template
@@ -139,15 +131,11 @@ func LoadNS() {
 	var_clojure_DOT_template_do_DASH_template := lang.InternVarName(sym_clojure_DOT_template, sym_do_DASH_template)
 	// var clojure.walk/postwalk-replace
 	var_clojure_DOT_walk_postwalk_DASH_replace := lang.InternVarName(sym_clojure_DOT_walk, sym_postwalk_DASH_replace)
-	aotExternalFn0 := aotCacheFn2(var_clojure_DOT_walk_postwalk_DASH_replace)
-	aotExternalFn1 := aotCacheFn2(var_clojure_DOT_core_zipmap)
-	aotExternalDefault2 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_count)
-	aotExternalRootVersion2 := var_clojure_DOT_core_count.RootVersion()
-	aotExternalDefault3 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_seq)
-	aotExternalRootVersion3 := var_clojure_DOT_core_seq.RootVersion()
-	aotExternalFn4 := aotCacheFn2(var_clojure_DOT_core_concat)
-	aotExternalFn5 := aotCacheFn2(var_clojure_DOT_core_map)
-	aotExternalFn6 := aotCacheFn2(var_clojure_DOT_core_partition)
+	aotExternalFn0 := aotLinkFn2(var_clojure_DOT_walk_postwalk_DASH_replace)
+	aotExternalFn1 := aotLinkFn2(var_clojure_DOT_core_zipmap)
+	aotExternalFn4 := aotLinkFn2(var_clojure_DOT_core_concat)
+	aotExternalFn5 := aotLinkFn2(var_clojure_DOT_core_map)
+	aotExternalFn6 := aotLinkFn2(var_clojure_DOT_core_partition)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -245,9 +233,8 @@ func LoadNS() {
 		})
 		aotDirectFn0 = tmp1
 		var_clojure_DOT_template_apply_DASH_template = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_clojure_DOT_template_apply_DASH_template.RootVersion()
 		var_clojure_DOT_template_apply_DASH_template.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/template.glj", kw_line, int(30), kw_column, int(7), kw_end_DASH_line, int(30), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym_values)), kw_doc, "For use in macros.  argv is an argument list, as in defn.  expr is\n  a quoted expression using the symbols in argv.  values is a sequence\n  of values to be used for the arguments.\n\n  apply-template will recursively replace argument symbols in expr\n  with their corresponding values, returning a modified expr.\n\n  Example: (apply-template '[x] '(+ x x) '[2])\n           ;=> (+ 2 2)", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/template.glj", kw_line, int(30), kw_column, int(7), kw_end_DASH_line, int(30), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym_values)), kw_doc, "For use in macros.  argv is an argument list, as in defn.  expr is\n  a quoted expression using the symbols in argv.  values is a sequence\n  of values to be used for the arguments.\n\n  apply-template will recursively replace argument symbols in expr\n  with their corresponding values, returning a modified expr.\n\n  Example: (apply-template '[x] '(+ x x) '[2])\n           ;=> (+ 2 2)", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template))
 		})
 	}
 	// do-template
@@ -274,45 +261,23 @@ func LoadNS() {
 				var tmp7 any
 				{ // let
 					// let binding "c"
-					var tmp8 any
-					if aotExternalDefault2 && var_clojure_DOT_core_count.RootVersion() == aotExternalRootVersion2 {
-						tmp8 = lang.Count(v4)
-					} else {
-						tmp9 := checkDerefVar(var_clojure_DOT_core_count)
-						tmp8 = lang.Apply1(tmp9, v4)
-					}
-					var v10 any = tmp8
-					_ = v10
-					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_do)
-					var tmp13 lang.FnFunc1
-					tmp13 = lang.FnFunc1(func(p0 any) any {
-						v14 := p0
-						_ = v14
-						tmp15 := var_clojure_DOT_template_apply_DASH_template.RootVersion() == aotRootVersion0 && !var_clojure_DOT_template_apply_DASH_template.IsMacro()
-						var tmp16 any
-						if !tmp15 {
-							tmp16 = checkDerefVar(var_clojure_DOT_template_apply_DASH_template)
-						}
-						var tmp17 any
-						if tmp15 {
-							tmp17 = aotDirectFn0(v4, v5, v14)
-						} else {
-							tmp17 = lang.Apply3(tmp16, v4, v5, v14)
-						}
-						return tmp17
+					tmp8 := lang.Count(v4)
+					var v9 any = tmp8
+					_ = v9
+					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp11 := lang.Apply1(tmp10, sym_do)
+					var tmp12 lang.FnFunc1
+					tmp12 = lang.FnFunc1(func(p0 any) any {
+						v13 := p0
+						_ = v13
+						tmp14 := aotDirectFn0(v4, v5, v13)
+						return tmp14
 					})
-					tmp14 := aotExternalFn6(v10, v6)
-					tmp15 := aotExternalFn5(tmp13, tmp14)
-					tmp16 := aotExternalFn4(tmp12, tmp15)
-					var tmp17 any
-					if aotExternalDefault3 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion3 {
-						tmp17 = lang.Seq(tmp16)
-					} else {
-						tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp17 = lang.Apply1(tmp18, tmp16)
-					}
-					tmp7 = tmp17
+					tmp13 := aotExternalFn6(v9, v6)
+					tmp14 := aotExternalFn5(tmp12, tmp13)
+					tmp15 := aotExternalFn4(tmp11, tmp14)
+					tmp16 := lang.Seq(tmp15)
+					tmp7 = tmp16
 				} // end let
 				return tmp7
 			}),
@@ -320,7 +285,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_template_do_DASH_template = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_template_do_DASH_template.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym__AMP_, sym_values)), kw_doc, "Repeatedly copies expr (in a do block) for each group of arguments\n  in values.  values are automatically partitioned by the number of\n  arguments in argv, an argument vector as in defn.\n\n  Example: (macroexpand '(do-template [x y] (+ y x) 2 4 3 5))\n           ;=> (do (+ 4 2) (+ 5 3))", kw_file, "clojure/template.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(45), kw_end_DASH_line, int(45))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/template.glj", kw_line, int(45), kw_column, int(11), kw_end_DASH_line, int(45), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym__AMP_, sym_values)), kw_doc, "Repeatedly copies expr (in a do block) for each group of arguments\n  in values.  values are automatically partitioned by the number of\n  arguments in argv, an argument vector as in defn.\n\n  Example: (macroexpand '(do-template [x y] (+ y x) 2 4 3 5))\n           ;=> (do (+ 4 2) (+ 5 3))", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template), kw_macro, true)
 		})
 	}
 }

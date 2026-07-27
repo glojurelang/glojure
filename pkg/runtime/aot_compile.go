@@ -36,7 +36,7 @@ func generateNamespaceAOT(fsDir string, ns *lang.Namespace) {
 	}
 
 	var buf bytes.Buffer
-	gen := NewGenerator(&buf)
+	gen := newGenerator(&buf, aotDirectLinkEnabled())
 	if err := gen.Generate(ns); err != nil {
 		_ = os.WriteFile(targetFile, buf.Bytes(), 0644)
 		panic(fmt.Errorf("failed to generate code for namespace %s: %w", ns.Name(), err))
@@ -44,4 +44,8 @@ func generateNamespaceAOT(fsDir string, ns *lang.Namespace) {
 	if err := os.WriteFile(targetFile, buf.Bytes(), 0644); err != nil {
 		panic(fmt.Errorf("failed to write generated code to %s: %w", targetFile, err))
 	}
+}
+
+func aotDirectLinkEnabled() bool {
+	return directLinkEnabled()
 }

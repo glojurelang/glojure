@@ -8,11 +8,14 @@ import (
 	"math"
 	"os"
 	"reflect"
+	"regexp"
 	"strings"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
+	"github.com/google/uuid"
 )
 
 func TestGenerateNamedScalarValue(t *testing.T) {
@@ -24,6 +27,15 @@ func TestGenerateNamedScalarValue(t *testing.T) {
 	}
 	if got := generator.imports["io/fs"]; got != "fs0" {
 		t.Fatalf("io/fs import alias = %q, want %q", got, "fs0")
+	}
+
+	id := uuid.MustParse("f81d4fae-7dec-11d0-a765-00a0c91e6bf6")
+	got = generator.generateValue(id)
+	if !strings.HasPrefix(got, "uuid1.UUID{") {
+		t.Fatalf("generated uuid.UUID = %q", got)
+	}
+	if got := generator.imports["github.com/google/uuid"]; got != "uuid1" {
+		t.Fatalf("uuid import alias = %q, want %q", got, "uuid1")
 	}
 }
 
@@ -37,6 +49,86 @@ func TestGenerateStandardFileHandles(t *testing.T) {
 	} {
 		if got := generator.generateValue(handle); got != want {
 			t.Errorf("generated standard file handle = %q, want %q", got, want)
+		}
+	}
+}
+
+func TestGenerateArbitraryPrecisionConstants(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+
+	bigInt, err := lang.NewBigInt("123456789012345678901234567890")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := generator.generateValue(bigInt); !strings.Contains(
+		got,
+		`lang.NewBigInt("123456789012345678901234567890")`,
+	) {
+		t.Fatalf("generated BigInt = %q", got)
+	}
+
+	ratio := lang.NewRatioBigInt(
+		lang.NewBigIntFromInt64(-1),
+		lang.NewBigIntFromInt64(5),
+	)
+	got := generator.generateValue(ratio)
+	for _, want := range []string{`lang.NewBigInt("-1")`, `lang.NewBigInt("5")`} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("generated Ratio = %q, missing %q", got, want)
+		}
+	}
+}
+
+func TestGenerateNonFiniteFloatConstants(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+
+	for name, value := range map[string]float64{
+		"positive infinity": math.Inf(1),
+		"negative infinity": math.Inf(-1),
+		"not a number":      math.NaN(),
+		"negative zero":     math.Copysign(0, -1),
+	} {
+		got := generator.generateValue(value)
+		if !strings.Contains(got, "math0.Float64frombits(") {
+			t.Errorf("generated %s = %q, want exact IEEE-754 reconstruction", name, got)
+		}
+	}
+	if got := generator.imports["math"]; got != "math0" {
+		t.Fatalf("math import alias = %q, want %q", got, "math0")
+	}
+}
+
+func TestGenerateRegexConstantsPreserveOccurrenceIdentity(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+	first := regexp.MustCompile("same pattern")
+	second := regexp.MustCompile("same pattern")
+
+	constant := func(value *regexp.Regexp) *ast.Node {
+		node := ast.MakeNode(ast.OpConst, nil)
+		node.Sub = &ast.ConstNode{Value: value}
+		return node
+	}
+
+	firstName := generator.generateASTNode(constant(first))
+	if got := generator.generateASTNode(constant(first)); got != firstName {
+		t.Fatalf("same regex object generated as %q then %q", firstName, got)
+	}
+	if secondName := generator.generateASTNode(constant(second)); secondName == firstName {
+		t.Fatalf("distinct regex literals shared generated constant %q", firstName)
+	}
+	if got := generator.generateValue(first); !strings.Contains(got, ".MustCompile(") {
+		t.Fatalf("generated regex initializer = %q, want regexp.MustCompile", got)
+	}
+}
+
+func TestMungePackageNameAvoidsGoKeywords(t *testing.T) {
+	for input, want := range map[string]string{
+		"case":   "pkg_case",
+		"normal": "normal",
+		"1thing": "pkg_1thing",
+	} {
+		if got := mungePackageName(input); got != want {
+			t.Errorf("mungePackageName(%q) = %q, want %q", input, got, want)
 		}
 	}
 }
@@ -57,6 +149,521 @@ func TestGenerateNestedClosureCapturedAtLoadTime(t *testing.T) {
 	var output bytes.Buffer
 	if err := NewGenerator(&output).Generate(ns); err != nil {
 		t.Fatalf("generate nested captured closure: %v", err)
+	}
+}
+
+func TestGenerateFixedArityFunctionsThroughTwenty(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.fixed-arity-twenty"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn fixed
+		  [a b c d e f g h i j k l m n o p q r s t]
+		  [a b c d e f g h i j k l m n o p q r s t])
+		(defn invoke [f]
+		  (f 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate fixed arity function: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "lang.FnFunc20") {
+		t.Fatalf("twenty-argument function did not use FnFunc20:\n%s", generated)
+	}
+	if !strings.Contains(generated, "lang.Apply20") {
+		t.Fatalf("dynamic twenty-argument call did not use Apply20:\n%s", generated)
+	}
+}
+
+func TestGenerateConcreteRecordTypeAndDirectOperations(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.record"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defrecord Point [x y])
+		(defn move [point x y]
+		  (assoc point :x x :y y))
+		(defn x-coordinate [point]
+		  (:x point))
+		(defn label [value]
+		  (:label value))
+		(defn tag [value tag]
+		  (assoc value :tag tag))
+		(defn origin []
+		  (Point. 0 0))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate record: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"type aotRecord0Point struct",
+		"func aotRecordNew0(",
+		"case *aotRecord0Point:",
+		"return value.f0",
+		"case *aotRecord0Point:",
+		"result.f0 = v0",
+		"result.f1 = v1",
+		":= aotRecordNew0(",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("generated record omitted %q:\n%s", expected, generated)
+		}
+	}
+	if strings.Contains(generated, "type aotKeywordMap") {
+		t.Fatalf("record generation revived arbitrary map specialization:\n%s",
+			generated)
+	}
+	if got := strings.Count(generated, "func aotKeywordLookup"); got != 1 {
+		t.Fatalf("generated %d record lookup helpers, want 1:\n%s",
+			got, generated)
+	}
+	if got := strings.Count(generated, "func aotKeywordAssoc"); got != 1 {
+		t.Fatalf("generated %d record assoc helpers, want 1:\n%s",
+			got, generated)
+	}
+}
+
+func TestGenerateStaticInstanceCheck(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.static-instance"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn vector-value? [x]
+		  (instance? github.com:glojurelang:glojure:pkg:lang.IPersistentVector x))
+		(defn dynamic-instance? [t x]
+		  (instance? t x))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate static instance check: %v", err)
+	}
+	generated := output.String()
+	const directCheck = "lang.IsInstance[lang.IPersistentVector]"
+	if !strings.Contains(generated, directCheck) {
+		t.Fatalf("known instance? target did not use a type assertion:\n%s", generated)
+	}
+	if got := strings.Count(generated, directCheck); got != 1 {
+		t.Fatalf("generated %d static vector checks, want 1:\n%s", got, generated)
+	}
+}
+
+func TestGenerateStaticInstanceCheckForSameNamespaceDirectLink(t *testing.T) {
+	instanceVar := lang.NSCore.FindInternedVar(lang.NewSymbol("instance?"))
+	if instanceVar == nil {
+		t.Fatal("clojure.core/instance? is not interned")
+	}
+
+	var output bytes.Buffer
+	generator := newGenerator(&output, true)
+	generator.addImport("github.com/glojurelang/glojure/pkg/lang")
+	generator.currentWriter = &output
+	generator.aotNamespace = lang.NSCore
+	target := &aotSpecializationTarget{
+		vr:           instanceVar,
+		directLinked: true,
+		directFnVar:  "aotDirectFn0",
+	}
+	target.directArities[2] = true
+	generator.aotCallTargets[instanceVar] = target
+
+	vectorType := reflect.TypeOf((*lang.IPersistentVector)(nil)).Elem()
+	invoke := &ast.InvokeNode{
+		Fn: &ast.Node{
+			Op:  ast.OpVar,
+			Sub: &ast.VarNode{Var: instanceVar},
+		},
+		Args: []*ast.Node{
+			{Op: ast.OpConst, Sub: &ast.ConstNode{Value: vectorType}},
+			{Op: ast.OpConst, Sub: &ast.ConstNode{Value: nil}},
+		},
+	}
+	generator.generateInvokeDefault(invoke)
+
+	generated := output.String()
+	if !strings.Contains(
+		generated,
+		"lang.IsInstance[lang.IPersistentVector](nil)",
+	) {
+		t.Fatalf("same-namespace instance? did not use a type assertion:\n%s",
+			generated)
+	}
+	if strings.Contains(generated, "aotDirectFn0") {
+		t.Fatalf("same-namespace instance? retained function dispatch:\n%s",
+			generated)
+	}
+}
+
+func TestGenerateDirectCallsForKnownFunctionArities(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.direct-known-arities"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn fixed
+		  [a b c d e f g h i j k l m n o p q r s t]
+		  t)
+		(defn choose
+		  ([x] x)
+		  ([x y] y))
+		(defn flexible
+		  ([x] x)
+		  ([x y & more] more))
+		(defn call-fixed []
+		  (fixed 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))
+		(defn call-one [] (choose 1))
+		(defn call-two [] (choose 1 2))
+		(defn call-variadic [] (flexible 1 2 3))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate known function calls: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "lang.FnFunc20") ||
+		!strings.Contains(generated, "aotDirectFn") {
+		t.Fatalf("known arity-20 function did not receive a direct slot:\n%s", generated)
+	}
+	if got := strings.Count(generated, " lang.ArityFn\n"); got < 2 {
+		t.Fatalf("multi-arity functions received %d direct slots, want at least 2:\n%s",
+			got, generated)
+	}
+	for _, declaration := range []string{
+		"Arity1 lang.FnFunc1",
+		"Arity2 lang.FnFunc2",
+	} {
+		if !strings.Contains(generated, declaration) {
+			t.Fatalf("known overload omitted typed slot %q:\n%s",
+				declaration, generated)
+		}
+	}
+	for _, call := range []string{
+		"Arity1(int64(1))",
+		"Arity2(int64(1), int64(2))",
+		".Invoke3(",
+	} {
+		if !strings.Contains(generated, call) {
+			t.Fatalf("known function call omitted direct %s dispatch:\n%s",
+				call, generated)
+		}
+	}
+	if strings.Contains(generated, "RootVersion() ==") {
+		t.Fatalf("default direct linking retained a same-namespace Var guard:\n%s",
+			generated)
+	}
+}
+
+func TestInferredDirectLinkingCanBeDisabled(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.guarded-inferred-call"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn target [x] x)
+		(defn caller [x] (target x))`)
+
+	var output bytes.Buffer
+	if err := newGenerator(&output, false).Generate(ns); err != nil {
+		t.Fatalf("generate guarded inferred call: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "RootVersion() ==") {
+		t.Fatalf("disabled direct linking omitted same-namespace Var guard:\n%s",
+			generated)
+	}
+}
+
+func TestGenerateDirectLinkedRecursiveInt64Function(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.direct-recursive-int64"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn fib [n]
+		  (if (<= n 1)
+		    n
+		    (+ (fib (- n 1)) (fib (- n 2)))))
+		(defn run [] (fib 10))`)
+
+	t.Run("default direct link", func(t *testing.T) {
+		var output bytes.Buffer
+		if err := NewGenerator(&output).Generate(ns); err != nil {
+			t.Fatalf("generate direct-linked recursive function: %v", err)
+		}
+		if generated := output.String(); strings.Contains(
+			generated,
+			"RootVersion() !=",
+		) {
+			t.Fatalf(
+				"direct-linked recursive specialization retained a Var guard:\n%s",
+				generated,
+			)
+		}
+	})
+
+	t.Run("disabled", func(t *testing.T) {
+		var output bytes.Buffer
+		if err := newGenerator(&output, false).Generate(ns); err != nil {
+			t.Fatalf("generate guarded recursive function: %v", err)
+		}
+		if generated := output.String(); !strings.Contains(
+			generated,
+			"RootVersion() !=",
+		) {
+			t.Fatalf(
+				"guarded recursive specialization omitted its Var guard:\n%s",
+				generated,
+			)
+		}
+	})
+}
+
+func TestGenerateDirectLinkedFloat64Callee(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.direct-float64-callee"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn polynomial [x]
+		  (+ (* x x) 1.0))
+		(defn caller [x]
+		  (polynomial x))`)
+
+	t.Run("default direct link", func(t *testing.T) {
+		var output bytes.Buffer
+		if err := NewGenerator(&output).Generate(ns); err != nil {
+			t.Fatalf("generate direct-linked float64 callee: %v", err)
+		}
+		if generated := output.String(); strings.Contains(
+			generated,
+			"RootVersion() !=",
+		) {
+			t.Fatalf(
+				"direct-linked float64 specialization retained a Var guard:\n%s",
+				generated,
+			)
+		}
+	})
+
+	t.Run("disabled", func(t *testing.T) {
+		var output bytes.Buffer
+		if err := newGenerator(&output, false).Generate(ns); err != nil {
+			t.Fatalf("generate guarded float64 callee: %v", err)
+		}
+		if generated := output.String(); !strings.Contains(
+			generated,
+			"RootVersion() !=",
+		) {
+			t.Fatalf(
+				"guarded float64 specialization omitted its Var guard:\n%s",
+				generated,
+			)
+		}
+	})
+}
+
+func TestGenerateSharedStaticKeywordMapShapes(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.static-keyword-maps"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn state-one [value]
+		  {:a value, :b 2, :c 3, :d 4, :e 5, :f 6, :g 7, :h 8, :i 9})
+		(defn state-two [value]
+		  {:a value, :b 2, :c 3, :d 4, :e 5, :f 6, :g 7, :h 8, :i 9})`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate static keyword maps: %v", err)
+	}
+	generated := output.String()
+	if got := strings.Count(generated, "lang.NewKeywordMapShape("); got != 1 {
+		t.Fatalf("generated %d keyword map shapes, want 1:\n%s", got, generated)
+	}
+	if got := strings.Count(generated, "aotKeywordMapNew0("); got != 3 {
+		t.Fatalf("generated keyword map constructor occurred %d times, want 3:\n%s",
+			got, generated)
+	}
+	if got := strings.Count(generated, "aotKeywordMapStorage0 struct"); got != 1 {
+		t.Fatalf("generated %d keyword map storage types, want 1:\n%s", got, generated)
+	}
+	if strings.Contains(generated, "lang.NewStaticKeywordMap(") {
+		t.Fatalf("generated static keyword maps retained variadic storage:\n%s", generated)
+	}
+}
+
+func TestGenerateSeqTruthinessWithoutSequenceAllocation(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.seq-truthiness"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn has-items? [xs]
+		  (if (seq xs) true false))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate seq truthiness: %v", err)
+	}
+	if !strings.Contains(output.String(), "lang.IsSeqTruthy(") {
+		t.Fatalf("generated code did not specialize seq truthiness:\n%s", output.String())
+	}
+	if strings.Contains(output.String(), "aotExternalDefault") {
+		t.Fatalf("default core direct linking retained a Var guard:\n%s", output.String())
+	}
+}
+
+func TestCoreDirectLinkingCanBeDisabled(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.guarded-core-call"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn call-identity [x]
+		  (identity x))`)
+
+	for _, test := range []struct {
+		name       string
+		directLink bool
+		want       string
+		notWant    string
+	}{
+		{
+			name:       "default direct link",
+			directLink: true,
+			want:       "aotLinkFn1",
+			notWant:    "aotCacheFn1",
+		},
+		{
+			name:       "disabled",
+			directLink: false,
+			want:       "aotCacheFn1",
+			notWant:    "aotLinkFn1",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			var output bytes.Buffer
+			if err := newGenerator(&output, test.directLink).Generate(ns); err != nil {
+				t.Fatalf("generate core call: %v", err)
+			}
+			generated := output.String()
+			if !strings.Contains(generated, test.want) {
+				t.Fatalf("generated core call omitted %q:\n%s", test.want, generated)
+			}
+			if strings.Contains(generated, test.notWant) {
+				t.Fatalf("generated core call unexpectedly retained %q:\n%s",
+					test.notWant, generated)
+			}
+			if test.directLink {
+				for _, bootstrapGuard := range []string{
+					"if vr.IsBound()",
+					"var once sync.Once",
+				} {
+					if !strings.Contains(generated, bootstrapGuard) {
+						t.Fatalf("direct-link adapter omitted bootstrap guard %q:\n%s",
+							bootstrapGuard, generated)
+					}
+				}
+			}
+		})
+	}
+}
+
+func TestDirectLinkingUsesCompilerOptions(t *testing.T) {
+	compilerOptions := lang.NSCore.FindInternedVar(
+		lang.NewSymbol("*compiler-options*"),
+	)
+	if compilerOptions == nil {
+		t.Fatal("clojure.core/*compiler-options* is not interned")
+	}
+
+	t.Run("explicit false", func(t *testing.T) {
+		lang.PushThreadBindings(lang.NewMap(
+			compilerOptions,
+			lang.NewMap(lang.KWDirectLinking, false),
+		))
+		defer lang.PopThreadBindings()
+		if aotDirectLinkEnabled() {
+			t.Fatal("{:direct-linking false} left direct linking enabled")
+		}
+	})
+
+	t.Run("absent", func(t *testing.T) {
+		lang.PushThreadBindings(lang.NewMap(
+			compilerOptions,
+			lang.NewMap(),
+		))
+		defer lang.PopThreadBindings()
+		if !aotDirectLinkEnabled() {
+			t.Fatal("direct linking is not enabled when the option is absent")
+		}
+	})
+}
+
+func TestCoreDirectLinkingHonorsRedefMetadata(t *testing.T) {
+	identity := lang.NSCore.FindInternedVar(lang.NewSymbol("identity"))
+	originalMeta := identity.Meta()
+	identity.SetMeta(originalMeta.Assoc(lang.KWRedef, true).(lang.IPersistentMap))
+	defer identity.SetMeta(originalMeta)
+
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.redef-core-call"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn call-redef-identity [x]
+		  (identity x))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate ^:redef core call: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "aotCacheFn1") {
+		t.Fatalf("^:redef core call was linked directly:\n%s", generated)
+	}
+	if strings.Contains(generated, "aotLinkFn1") {
+		t.Fatalf("^:redef core call received a direct-link adapter:\n%s", generated)
+	}
+}
+
+func TestInferredDirectLinkingHonorsRedefMetadata(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.redef-inferred-call"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn ^:redef target [x] x)
+		(defn caller [x] (target x))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate ^:redef inferred call: %v", err)
+	}
+	if generated := output.String(); !strings.Contains(generated, "RootVersion() ==") {
+		t.Fatalf("^:redef inferred call omitted its Var guard:\n%s", generated)
 	}
 }
 
@@ -89,6 +696,27 @@ func TestGenerateResolvedHostReference(t *testing.T) {
 	}
 	if got, want := generator.imports["example.com/host"], "host0"; got != want {
 		t.Fatalf("host import alias = %q, want %q", got, want)
+	}
+}
+
+func TestGenerateLateBoundHostForm(t *testing.T) {
+	var output bytes.Buffer
+	generator := NewGenerator(&output)
+	node := ast.MakeNode(ast.OpMaybeHostForm, nil)
+	node.Sub = &ast.MaybeHostFormNode{
+		Class: "clojure.lang.MapEntry",
+		Field: lang.NewSymbol("create"),
+	}
+
+	result := generator.generateASTNode(node)
+	if result == "nil" {
+		t.Fatal("late-bound host form was discarded")
+	}
+	if got := output.String(); !strings.Contains(
+		got,
+		`Get("clojure.lang.MapEntry.create")`,
+	) {
+		t.Fatalf("generated host lookup = %q", got)
 	}
 }
 
@@ -172,6 +800,171 @@ func TestDirectHostCallConvertsIntegerArguments(t *testing.T) {
 	}
 	if got, want := args[1], "lang.IntCast(index)"; got != want {
 		t.Fatalf("index argument = %q, want %q", got, want)
+	}
+
+	for _, args := range [][]string{
+		{"collection", "key"},
+		{"collection", "key", "notFound"},
+	} {
+		method, converted, ok := directHostCall(target, "Get", args)
+		if !ok || method != "Get" {
+			t.Fatalf("directHostCall(Get, %d args) = %q, %v, %v", len(args), method, converted, ok)
+		}
+		if !reflect.DeepEqual(converted, args) {
+			t.Fatalf("directHostCall(Get) args = %v, want %v", converted, args)
+		}
+	}
+
+	if method, _, ok := directHostCall(target, "Get", []string{"collection"}); ok {
+		t.Fatalf("undersupplied variadic call unexpectedly resolved directly as %q", method)
+	}
+}
+
+func TestDirectTaggedHostCallUsesInferredMethodSet(t *testing.T) {
+	const volatileType = "github.com:glojurelang:glojure:pkg:lang.Volatile"
+	pkgmap.Set(
+		"github.com/glojurelang/glojure/pkg/lang.Volatile",
+		reflect.TypeOf(lang.Volatile{}),
+	)
+	taggedName := lang.NewSymbol("value").WithMeta(
+		lang.NewMap(lang.KWTag, lang.NewSymbol(volatileType)),
+	).(*lang.Symbol)
+	form := lang.NewSymbol("value").WithMeta(
+		lang.NewMap(lang.KWLine, int64(1)),
+	)
+	target := ast.MakeNode(ast.OpLocal, form)
+	target.Sub = &ast.LocalNode{Name: taggedName}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	method, receiver, args, ok := generator.directInferredHostCall(
+		target,
+		"value",
+		"reset",
+		[]string{"replacement"},
+	)
+	if !ok {
+		t.Fatal("tagged Volatile Reset call was not resolved directly")
+	}
+	if want := "Reset"; method != want {
+		t.Fatalf("method = %q, want %q", method, want)
+	}
+	if want := "value.(interface { Reset(any) any })"; receiver != want {
+		t.Fatalf("receiver = %q, want %q", receiver, want)
+	}
+	if want := []string{"replacement"}; !reflect.DeepEqual(args, want) {
+		t.Fatalf("args = %v, want %v", args, want)
+	}
+}
+
+func TestDirectKnownHostCallConvertsInterfaceArguments(t *testing.T) {
+	target := ast.MakeNode(ast.OpConst, nil)
+	target.Sub = &ast.ConstNode{Value: RT}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	generator.addImport("github.com/glojurelang/glojure/pkg/lang")
+	generator.addImport("github.com/glojurelang/glojure/pkg/runtime")
+	method, receiver, args, ok := generator.directInferredHostCall(
+		target,
+		"runtime.RT",
+		"Subvec",
+		[]string{"vector", "start", "end"},
+	)
+	if !ok {
+		t.Fatal("known RT.Subvec call was not resolved directly")
+	}
+	if want := "Subvec"; method != want {
+		t.Fatalf("method = %q, want %q", method, want)
+	}
+	if want := "runtime.RT"; receiver != want {
+		t.Fatalf("receiver = %q, want %q", receiver, want)
+	}
+	wantArgs := []string{
+		"lang.MustHostCast[lang.IPersistentVector](vector)",
+		"start",
+		"end",
+	}
+	if !reflect.DeepEqual(args, wantArgs) {
+		t.Fatalf("args = %v, want %v", args, wantArgs)
+	}
+}
+
+func TestDirectTaggedHostCallUsesFormMetadata(t *testing.T) {
+	const derefType = "github.com:glojurelang:glojure:pkg:lang.IDeref"
+	pkgmap.Set(
+		"github.com/glojurelang/glojure/pkg/lang.IDeref",
+		reflect.TypeFor[lang.IDeref](),
+	)
+	form := lang.NewSymbol("value").WithMeta(
+		lang.NewMap(lang.KWTag, lang.NewSymbol(derefType)),
+	).(*lang.Symbol)
+	target := ast.MakeNode(ast.OpLocal, form)
+	target.Sub = &ast.LocalNode{Name: lang.NewSymbol("value")}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	method, receiver, args, ok := generator.directInferredHostCall(
+		target,
+		"value",
+		"deref",
+		nil,
+	)
+	if !ok {
+		t.Fatal("tagged IDeref call was not resolved directly")
+	}
+	if want := "Deref"; method != want {
+		t.Fatalf("method = %q, want %q", method, want)
+	}
+	if want := "value.(interface { Deref() any })"; receiver != want {
+		t.Fatalf("receiver = %q, want %q", receiver, want)
+	}
+	if len(args) != 0 {
+		t.Fatalf("args = %v, want none", args)
+	}
+}
+
+func TestDirectTaggedHostCallResolvesClojureLangAlias(t *testing.T) {
+	pkgmap.Set(
+		"github.com/glojurelang/glojure/pkg/lang.IChunk",
+		reflect.TypeFor[lang.IChunk](),
+	)
+	taggedName := lang.NewSymbol("chunk").WithMeta(
+		lang.NewMap(lang.KWTag, lang.NewSymbol("clojure.lang.IChunk")),
+	).(*lang.Symbol)
+	target := ast.MakeNode(ast.OpLocal, taggedName)
+	target.Sub = &ast.LocalNode{Name: taggedName}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	method, receiver, args, ok := generator.directInferredHostCall(
+		target,
+		"chunk",
+		"nth",
+		[]string{"index"},
+	)
+	if !ok {
+		t.Fatal("clojure.lang.IChunk Nth call was not resolved directly")
+	}
+	if want := "Nth"; method != want {
+		t.Fatalf("method = %q, want %q", method, want)
+	}
+	if want := "chunk.(interface { Nth(int) any })"; receiver != want {
+		t.Fatalf("receiver = %q, want %q", receiver, want)
+	}
+	if want := []string{"lang.IntCast(index)"}; !reflect.DeepEqual(args, want) {
+		t.Fatalf("args = %v, want %v", args, want)
+	}
+}
+
+func TestDirectTaggedHostCallRequiresResolvableType(t *testing.T) {
+	target := ast.MakeNode(ast.OpLocal, lang.NewSymbol("value"))
+	target.Sub = &ast.LocalNode{Name: lang.NewSymbol("value")}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	if method, _, _, ok := generator.directInferredHostCall(
+		target,
+		"value",
+		"deref",
+		nil,
+	); ok {
+		t.Fatalf("untagged call unexpectedly resolved directly as %q", method)
 	}
 }
 

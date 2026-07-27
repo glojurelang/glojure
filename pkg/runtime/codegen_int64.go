@@ -116,7 +116,7 @@ func (g *Generator) generateInt64SpecializedFixedFn(
 	if analysis.guardInt32Params {
 		g.writeInt32AOTFallbackGuards(typedParams)
 	}
-	if analysis.usesSelf {
+	if analysis.usesSelf && target.rootVersionVar != "" {
 		varName := g.allocVarVar(
 			target.vr.Namespace().Name().String(),
 			target.vr.Symbol().String(),
@@ -449,14 +449,16 @@ func (e *int64AOTEmitter) emitInvoke(
 	helper := e.helper
 	if vr != e.analysis.target.vr {
 		target := e.g.aotCallTargets[vr]
-		varName := e.g.allocVarVar(
-			vr.Namespace().Name().String(),
-			vr.Symbol().String(),
-		)
-		e.g.writef("if %s.RootVersion() != %s {\n",
-			varName, target.rootVersionVar)
-		e.g.writef("return 0, false\n")
-		e.g.writef("}\n")
+		if target.rootVersionVar != "" {
+			varName := e.g.allocVarVar(
+				vr.Namespace().Name().String(),
+				vr.Symbol().String(),
+			)
+			e.g.writef("if %s.RootVersion() != %s {\n",
+				varName, target.rootVersionVar)
+			e.g.writef("return 0, false\n")
+			e.g.writef("}\n")
+		}
 		helper = e.callees[target]
 	}
 	result := e.g.allocateTempVar()

@@ -1,8 +1,6 @@
 package lang
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestCanSeq(t *testing.T) {
 	tests := []struct {
@@ -10,7 +8,6 @@ func TestCanSeq(t *testing.T) {
 		value    interface{}
 		expected bool
 	}{
-		// Should return true for seqable types
 		{"nil", nil, true},
 		{"string", "hello", true},
 		{"empty string", "", true},
@@ -21,8 +18,6 @@ func TestCanSeq(t *testing.T) {
 		{"empty map", map[string]int{}, true},
 		{"empty list", emptyList, true},
 		{"lazy seq", NewLazySeq(func() interface{} { return nil }), true},
-
-		// Should return false for non-seqable types
 		{"int", 42, false},
 		{"float", 3.14, false},
 		{"bool", true, false},
@@ -30,18 +25,17 @@ func TestCanSeq(t *testing.T) {
 		{"pointer to int", new(int), false},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := CanSeq(tt.value)
-			if result != tt.expected {
-				t.Errorf("CanSeq(%v) = %v, expected %v", tt.value, result, tt.expected)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := CanSeq(test.value); got != test.expected {
+				t.Errorf("CanSeq(%v) = %v, expected %v",
+					test.value, got, test.expected)
 			}
 		})
 	}
 }
 
 func TestCanSeqConsistentWithSeq(t *testing.T) {
-	// CanSeq should return true for any value that Seq() doesn't panic on
 	seqableValues := []interface{}{
 		nil,
 		"test",
@@ -52,9 +46,44 @@ func TestCanSeqConsistentWithSeq(t *testing.T) {
 		NewLazySeq(func() interface{} { return nil }),
 	}
 
-	for _, val := range seqableValues {
-		if !CanSeq(val) {
-			t.Errorf("CanSeq returned false for value that should be seqable: %v", val)
+	for _, value := range seqableValues {
+		if !CanSeq(value) {
+			t.Errorf("CanSeq returned false for seqable value: %v", value)
 		}
 	}
+}
+
+func TestIsSeqTruthy(t *testing.T) {
+	tests := []struct {
+		name  string
+		value any
+		want  bool
+	}{
+		{"nil", nil, false},
+		{"empty list", emptyList, false},
+		{"empty vector", NewVector(), false},
+		{"vector", NewVector(int64(1)), true},
+		{"empty string", "", false},
+		{"string", "a", true},
+		{"empty slice", []int{}, false},
+		{"slice", []int{1}, true},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := IsSeqTruthy(test.value); got != test.want {
+				t.Fatalf("IsSeqTruthy(%v) = %t, want %t",
+					test.value, got, test.want)
+			}
+		})
+	}
+}
+
+func TestIsSeqTruthyRejectsCountedNonSeqableValue(t *testing.T) {
+	transient := NewVector(int64(1)).AsTransient()
+	defer func() {
+		if recover() == nil {
+			t.Fatal("IsSeqTruthy accepted a counted, non-seqable transient")
+		}
+	}()
+	IsSeqTruthy(transient)
 }

@@ -1,14 +1,19 @@
 package lang
 
-import "sync/atomic"
+import (
+	"sync"
+	"sync/atomic"
+)
 
 type (
 	Atom struct {
 		state   atomic.Pointer[Box]
 		initial Box
-		watches IPersistentMap
 
-		meta IPersistentMap
+		referenceMu sync.RWMutex
+		watches     IPersistentMap
+		validator   IFn
+		meta        IPersistentMap
 	}
 )
 
@@ -36,23 +41,49 @@ func (a *Atom) Deref() interface{} {
 	return a.state.Load().val
 }
 
-func (a *Atom) SetValidator(vf IFn) { panic("not implemented") }
-func (a *Atom) Validator() IFn      { panic("not implemented") }
+func (a *Atom) SetValidator(vf IFn) {
+	if vf != nil && !IsTruthy(Apply1(vf, a.Deref())) {
+		panic(NewIllegalStateError("Invalid reference state"))
+	}
+	a.referenceMu.Lock()
+	a.validator = vf
+	a.referenceMu.Unlock()
+}
+
+func (a *Atom) Validator() IFn {
+	a.referenceMu.RLock()
+	defer a.referenceMu.RUnlock()
+	return a.validator
+}
+
+// GetValidator is the JVM-style IRef alias used by Clojure host interop.
+func (a *Atom) GetValidator() IFn {
+	return a.Validator()
+}
+
 func (a *Atom) Watches() IPersistentMap {
+	a.referenceMu.RLock()
+	defer a.referenceMu.RUnlock()
 	return a.watches
 }
 
 func (a *Atom) AddWatch(key interface{}, fn IFn) IRef {
+	a.referenceMu.Lock()
+	defer a.referenceMu.Unlock()
 	a.watches = a.watches.Assoc(key, fn).(IPersistentMap)
 	return a
 }
 
 func (a *Atom) RemoveWatch(key interface{}) {
+	a.referenceMu.Lock()
+	defer a.referenceMu.Unlock()
 	a.watches = a.watches.Without(key)
 }
 
 func (a *Atom) notifyWatches(oldVal, newVal interface{}) {
+	a.referenceMu.RLock()
 	watches := a.watches
+	a.referenceMu.RUnlock()
 	if watches == nil || watches.Count() == 0 {
 		return
 	}
@@ -66,10 +97,26 @@ func (a *Atom) notifyWatches(oldVal, newVal interface{}) {
 	}
 }
 
+func (a *Atom) validate(newVal interface{}) {
+	a.referenceMu.RLock()
+	validator := a.validator
+	a.referenceMu.RUnlock()
+	if validator != nil && !IsTruthy(Apply1(validator, newVal)) {
+		panic(NewIllegalStateError("Invalid reference state"))
+	}
+}
+
+func (a *Atom) hasWatches() bool {
+	a.referenceMu.RLock()
+	defer a.referenceMu.RUnlock()
+	return a.watches != nil && a.watches.Count() != 0
+}
+
 func (a *Atom) Swap(f IFn, args ISeq) interface{} {
 	for {
 		old := a.state.Load()
 		nw := f.ApplyTo(NewCons(old.val, args))
+		a.validate(nw)
 		if a.compareAndSetBox(old, nw) {
 			return nw
 		}
@@ -83,6 +130,7 @@ func (a *Atom) Swap0(f IFn) interface{} {
 	for {
 		old := a.state.Load()
 		nw := Apply1(f, old.val)
+		a.validate(nw)
 		if a.compareAndSetBox(old, nw) {
 			return nw
 		}
@@ -93,6 +141,7 @@ func (a *Atom) Swap1(f IFn, x interface{}) interface{} {
 	for {
 		old := a.state.Load()
 		nw := Apply2(f, old.val, x)
+		a.validate(nw)
 		if a.compareAndSetBox(old, nw) {
 			return nw
 		}
@@ -103,6 +152,7 @@ func (a *Atom) Swap2(f IFn, x, y interface{}) interface{} {
 	for {
 		old := a.state.Load()
 		nw := Apply3(f, old.val, x, y)
+		a.validate(nw)
 		if a.compareAndSetBox(old, nw) {
 			return nw
 		}
@@ -114,13 +164,13 @@ func (a *Atom) CompareAndSet(oldv, newv interface{}) bool {
 	if !Identical(old.val, oldv) {
 		return false
 	}
+	a.validate(newv)
 	return a.compareAndSetBox(old, newv)
 }
 
 func (a *Atom) compareAndSetBox(old *Box, newv interface{}) bool {
-	// TODO: validate
 	if Identical(old.val, newv) &&
-		(a.watches == nil || a.watches.Count() == 0) {
+		!a.hasWatches() {
 		return a.state.CompareAndSwap(old, old)
 	}
 	swapped := a.state.CompareAndSwap(old, NewBox(newv))
@@ -131,11 +181,11 @@ func (a *Atom) compareAndSetBox(old *Box, newv interface{}) bool {
 }
 
 func (a *Atom) Reset(newVal interface{}) interface{} {
-	// TODO: validate
+	a.validate(newVal)
 	for {
 		old := a.state.Load()
 		if Identical(old.val, newVal) &&
-			(a.watches == nil || a.watches.Count() == 0) {
+			!a.hasWatches() {
 			if a.state.CompareAndSwap(old, old) {
 				return newVal
 			}
@@ -148,8 +198,22 @@ func (a *Atom) Reset(newVal interface{}) interface{} {
 }
 
 func (a *Atom) Meta() IPersistentMap {
-	if a.meta == nil {
-		return nil
-	}
+	a.referenceMu.RLock()
+	defer a.referenceMu.RUnlock()
 	return a.meta
+}
+
+func (a *Atom) AlterMeta(f IFn, args ISeq) IPersistentMap {
+	meta := ApplySeq(f, NewCons(a.Meta(), args))
+	if meta == nil {
+		return a.ResetMeta(nil)
+	}
+	return a.ResetMeta(meta.(IPersistentMap))
+}
+
+func (a *Atom) ResetMeta(meta IPersistentMap) IPersistentMap {
+	a.referenceMu.Lock()
+	a.meta = meta
+	a.referenceMu.Unlock()
+	return meta
 }

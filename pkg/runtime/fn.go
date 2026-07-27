@@ -123,6 +123,8 @@ func (fn *Fn) WithMeta(meta lang.IPersistentMap) interface{} {
 	return &cpy
 }
 
+func (*Fn) IsFnValue() {}
+
 func (fn *Fn) ASTNode() *ast.Node {
 	return fn.astNode
 }

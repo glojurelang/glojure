@@ -31,6 +31,7 @@ type (
 		Macroexpand1 func(form interface{}) (interface{}, error)
 		CreateVar    func(sym *Symbol, env Env) (interface{}, error)
 		IsVar        func(v interface{}) bool
+		Optimizer    *Optimizer
 
 		Gensym func(prefix string) *Symbol
 
@@ -42,7 +43,14 @@ type (
 // Analyze performs semantic analysis on the given s-expression,
 // returning an AST.
 func (a *Analyzer) Analyze(form interface{}, env Env) (*ast.Node, error) {
-	return a.analyzeForm(form, ctxEnv(env, ctxExpr).Assoc(KWTopLevel, true).(Env))
+	node, err := a.analyzeForm(
+		form,
+		ctxEnv(env, ctxExpr).Assoc(KWTopLevel, true).(Env),
+	)
+	if err != nil {
+		return nil, err
+	}
+	return a.Optimizer.Optimize(node)
 }
 
 func (a *Analyzer) analyzeForm(form interface{}, env Env) (n *ast.Node, err error) {
@@ -399,6 +407,17 @@ func (a *Analyzer) parse(form interface{}, env Env) (*ast.Node, error) {
 	opSym, ok := op.(*Symbol)
 	if !ok {
 		return a.parseInvoke(form, env)
+	}
+	if opSym.Namespace() == "" && len(opSym.Name()) > 1 &&
+		strings.HasSuffix(opSym.Name(), ".") {
+		class := NewSymbol(strings.TrimSuffix(opSym.Name(), "."))
+		return a.parseNew(
+			NewCons(
+				NewSymbol("new"),
+				NewCons(class, Rest(form)),
+			),
+			env,
+		)
 	}
 
 	switch opSym.FullName() {
@@ -1155,14 +1174,6 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node, error) {
 			Method:         method,
 			Args:           argNodes,
 			ResolvedMethod: resolvedMethod,
-		}
-		if value, ok := foldLiteralNumberCall(n.Sub.(*ast.HostCallNode)); ok {
-			folded, err := a.analyzeConst(value, env)
-			if err != nil {
-				return nil, err
-			}
-			folded.Form = form
-			return folded, nil
 		}
 		return n, nil
 	case isField:

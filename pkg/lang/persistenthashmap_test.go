@@ -25,6 +25,24 @@ func TestPersistentHashMap(t *testing.T) {
 	}
 }
 
+func TestPersistentHashMapAssocIdenticalValueReturnsOriginal(t *testing.T) {
+	value := []int{1, 2, 3}
+	original := NewPersistentHashMap("key", value).(*PersistentHashMap)
+
+	if got := original.Assoc("key", value); got != original {
+		t.Fatal("Assoc with an identical value did not return the original map")
+	}
+
+	equalValue := []int{1, 2, 3}
+	updated := original.Assoc("key", equalValue).(*PersistentHashMap)
+	if updated == original {
+		t.Fatal("Assoc with an equal but non-identical value returned the original map")
+	}
+	if got := updated.ValAt("key"); !Identical(got, equalValue) {
+		t.Fatalf("updated value = %v, want the newly associated slice", got)
+	}
+}
+
 func FuzzPersistentHashMap(f *testing.F) {
 	f.Add([]byte(`[
       42,

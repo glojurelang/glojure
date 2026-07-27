@@ -7,17 +7,30 @@ import (
 	"github.com/glojurelang/glojure/internal/persistent/vector"
 )
 
-const vectorInlineSize = 4
-
 // Vector is a vector of values.
 type (
 	Vector struct {
+		attrs *vectorAttrs
+		vec   vector.Persistent
+	}
+
+	// vectorAttrs keeps metadata and lazily populated hash caches off the hot
+	// path for ordinary vectors, where all three values are absent.
+	vectorAttrs struct {
 		meta         IPersistentMap
 		hash, hasheq uint32
+	}
 
-		vec       vector.Vector
-		inlineLen uint8
-		inline    [vectorInlineSize]any
+	// vectorUpdateStorage co-allocates a vector version with the immutable tail
+	// entry created by Cons.
+	vectorUpdateStorage struct {
+		Vector
+		tail vector.TailStorage
+	}
+
+	vectorReplaceStorage struct {
+		Vector
+		tail vector.ReplaceTailStorage
 	}
 
 	PersistentVector = Vector
@@ -47,13 +60,8 @@ func NewVector(values ...any) *Vector {
 	if len(values) == 0 {
 		return emptyVector
 	}
-	if len(values) <= vectorInlineSize {
-		v := &Vector{inlineLen: uint8(len(values))}
-		copy(v.inline[:], values)
-		return v
-	}
 	return &Vector{
-		vec: vector.New(values...),
+		vec: vector.NewPersistent(values...),
 	}
 }
 
@@ -68,9 +76,6 @@ var (
 func (v *Vector) xxx_sequential() {}
 
 func (v *Vector) Count() int {
-	if v.vec == nil {
-		return int(v.inlineLen)
-	}
 	return v.vec.Len()
 }
 
@@ -81,42 +86,33 @@ func (v *Vector) Length() int {
 }
 
 func (v *Vector) Cons(x any) Conser {
-	if v.vec == nil {
-		if v.inlineLen < vectorInlineSize {
-			result := *v
-			result.hash, result.hasheq = 0, 0
-			result.inline[result.inlineLen] = x
-			result.inlineLen++
-			return &result
-		}
-		values := make([]any, vectorInlineSize+1)
-		copy(values, v.inline[:])
-		values[vectorInlineSize] = x
-		return &Vector{
-			meta: v.meta,
-			vec:  vector.New(values...),
-		}
-	}
-	return &Vector{
-		meta: v.meta,
-		vec:  v.vec.Conj(x),
-	}
+	storage := &vectorUpdateStorage{}
+	storage.attrs = newVectorAttrs(v.Meta())
+	storage.vec = v.vec.ConjValueInto(x, &storage.tail)
+	return &storage.Vector
 }
 
 func (v *Vector) AssocN(i int, val any) IPersistentVector {
 	if i < 0 || i > v.Count() {
 		panic(NewIndexOutOfBoundsError())
 	}
-	if v.vec == nil {
-		if i == int(v.inlineLen) {
-			return v.Cons(val).(IPersistentVector)
-		}
-		result := *v
-		result.hash, result.hasheq = 0, 0
-		result.inline[i] = val
-		return &result
+	result, ok := v.vec.AssocValue(i, val)
+	if !ok {
+		panic(NewIndexOutOfBoundsError())
 	}
-	return &Vector{meta: v.meta, vec: v.vec.Assoc(i, val)}
+	return &Vector{attrs: newVectorAttrs(v.Meta()), vec: result}
+}
+
+// ReplaceLast returns a persistent vector whose final value is val.
+func (v *Vector) ReplaceLast(val any) *Vector {
+	storage := &vectorReplaceStorage{}
+	result, ok := v.vec.ReplaceLastValueInto(val, &storage.tail)
+	if !ok {
+		panic("can't pop an empty vector")
+	}
+	storage.attrs = newVectorAttrs(v.Meta())
+	storage.vec = result
+	return &storage.Vector
 }
 
 func (v *Vector) ContainsKey(key any) bool {
@@ -155,7 +151,7 @@ func (v *Vector) IsEmpty() bool {
 }
 
 func (v *Vector) Empty() IPersistentCollection {
-	return emptyVector.WithMeta(v.meta).(IPersistentCollection)
+	return emptyVector.WithMeta(v.Meta()).(IPersistentCollection)
 }
 
 func (v *Vector) ValAt(i any) any {
@@ -170,12 +166,6 @@ func (v *Vector) ValAtDefault(k, def any) any {
 }
 
 func (v *Vector) Nth(i int) any {
-	if v.vec == nil {
-		if i < 0 || i >= int(v.inlineLen) {
-			panic(NewIndexOutOfBoundsError())
-		}
-		return v.inline[i]
-	}
 	res, ok := v.vec.Index(i)
 	if !ok {
 		panic(NewIndexOutOfBoundsError())
@@ -252,39 +242,45 @@ func (v *Vector) Pop() IPersistentStack {
 	if v.Count() == 1 {
 		return emptyVector
 	}
-	if v.vec == nil {
-		result := *v
-		result.hash, result.hasheq = 0, 0
-		result.inlineLen--
-		result.inline[result.inlineLen] = nil
-		return &result
+	result, ok := v.vec.PopValue()
+	if !ok {
+		panic("can't pop an empty vector")
 	}
 	return &Vector{
-		meta: v.meta,
-		vec:  v.vec.Pop(),
+		attrs: newVectorAttrs(v.Meta()),
+		vec:   result,
 	}
 }
 
 func (v *Vector) Meta() IPersistentMap {
-	return v.meta
+	if v.attrs == nil {
+		return nil
+	}
+	return v.attrs.meta
 }
 
 func (v *Vector) WithMeta(meta IPersistentMap) any {
-	if v.meta == meta {
+	if v.Meta() == meta {
 		return v
 	}
 
 	cpy := *v
-	cpy.meta = meta
+	if v.attrs == nil {
+		cpy.attrs = newVectorAttrs(meta)
+	} else {
+		attrs := *v.attrs
+		attrs.meta = meta
+		cpy.attrs = &attrs
+	}
 	return &cpy
 }
 
 func (v *Vector) HashEq() uint32 {
-	return apersistentVectorHashEq(&v.hasheq, v)
+	return apersistentVectorHashEq(&v.ensureAttrs().hasheq, v)
 }
 
 func (v *Vector) Hash() uint32 {
-	return apersistentVectorHash(&v.hash, v)
+	return apersistentVectorHash(&v.ensureAttrs().hash, v)
 }
 
 func (v *Vector) ReduceInit(f IFn, init any) any {
@@ -329,23 +325,26 @@ func (v *Vector) Drop(n int) Sequential {
 	if n >= v.Count() {
 		return nil
 	}
-	if v.vec == nil {
-		result := NewVector(v.inline[n:v.inlineLen]...)
-		result.meta = v.meta
-		return result
+	return NewSubVector(v.Meta(), v, n, v.Count())
+}
+
+func newVectorAttrs(meta IPersistentMap) *vectorAttrs {
+	if meta == nil {
+		return nil
 	}
-	return &Vector{
-		vec: v.vec.SubVector(n, v.Count()),
+	return &vectorAttrs{meta: meta}
+}
+
+func (v *Vector) ensureAttrs() *vectorAttrs {
+	if v.attrs == nil {
+		v.attrs = &vectorAttrs{}
 	}
+	return v.attrs
 }
 
 func (v *Vector) AsTransient() ITransientCollection {
-	vec := v.vec
-	if vec == nil {
-		vec = vector.New(v.inline[:v.inlineLen]...)
-	}
 	return &TransientVector{
-		vec: vector.NewTransient(vec),
+		vec: vector.NewTransient(&v.vec),
 	}
 }
 
@@ -422,14 +421,10 @@ func (t *TransientVector) ValAtDefault(k, def any) any {
 
 func (t *TransientVector) Persistent() IPersistentCollection {
 	vec := t.vec.Persistent()
-	if vec.Len() <= vectorInlineSize {
-		values := make([]any, vec.Len())
-		for i := range values {
-			values[i], _ = vec.Index(i)
-		}
-		return NewVector(values...)
+	if vec.Len() == 0 {
+		return emptyVector
 	}
-	return &Vector{vec: vec}
+	return &Vector{vec: *vec}
 }
 
 func (t *TransientVector) Count() int {

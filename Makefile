@@ -79,6 +79,7 @@ TEST-SUITE-DIR := test/clojure-test-suite
 TEST-SUITE-FILE := test-glojure.glj
 TEST-SUITE-EXPECT-FAILURES ?= 0
 TEST-SUITE-EXPECT-ERRORS ?= 0
+TEST-SUITE-EXPECT-LOAD-ERRORS ?= 7
 
 MAKES-CLEAN := \
   report.html \
@@ -211,13 +212,30 @@ vet: $(GO)
 test: test-aot-runtime test-glj  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
 
+TEST-COMPARE-LOAD := $(shell \
+	processors=$$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2); \
+	awk -v processors="$$processors" \
+	  'BEGIN { threshold = processors * 0.75; \
+	           print (threshold < 1 ? 1 : threshold) }')
+
 test-compare: $(YS)
 	@scripts/make-test-compare \
 	  '$(if $(with),$(with),origin/main)' '$(file)' \
-	  '$(if $(load),$(load),1.0)'
+	  '$(if $(load),$(load),$(TEST-COMPARE-LOAD))'
 
 test-aot-runtime: $(GO)
 	go test -tags glj_aot_runtime ./pkg/glj ./pkg/gljmain ./pkg/runtime
+
+.PHONY: test-aot test-suite-aot
+test-aot: test-aot-runtime test-glj
+	$(MAKE) test-suite-aot
+
+test-suite-aot: $(GO) $(STDLIB-TARGETS) generate aot $(TEST-SUITE-DIR)
+	cd $(TEST-SUITE-DIR) && git checkout $(TEST-SUITE-BRANCH)
+	TEST_SUITE_EXPECT_FAILURES=$(TEST-SUITE-EXPECT-FAILURES) \
+	TEST_SUITE_EXPECT_ERRORS=$(TEST-SUITE-EXPECT-ERRORS) \
+	TEST_SUITE_EXPECT_LOAD_ERRORS=$(TEST-SUITE-EXPECT-LOAD-ERRORS) \
+	  scripts/test-suite-aot $(abspath $(TEST-SUITE-DIR))
 
 test-glj: $(TEST-GLJ-TARGETS)
 
@@ -230,6 +248,7 @@ test-suite: $(GLJ-CMD) $(TEST-SUITE-DIR)
 	  $(abspath $<) $(TEST-SUITE-FILE) \
 	    $(if $(TEST-SUITE-EXPECT-FAILURES),--expect-failures $(TEST-SUITE-EXPECT-FAILURES)) \
 	    $(if $(TEST-SUITE-EXPECT-ERRORS),--expect-errors $(TEST-SUITE-EXPECT-ERRORS)) \
+	    --expect-load-errors $(TEST-SUITE-EXPECT-LOAD-ERRORS) \
 	    $(if $(v),,2>/dev/null)
 
 $(TEST-GLJ-TARGETS): $(GLJ-CMD)

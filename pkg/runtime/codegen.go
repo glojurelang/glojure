@@ -83,7 +83,11 @@ type aotSpecializationTarget struct {
 	vr              *lang.Var
 	fn              *Fn
 	arity           int
+	arityDispatch   bool
+	directLinked    bool
+	directArities   [21]bool
 	directFnVar     string
+	directArityVars [21]string
 	int64FnVar      string
 	int64Analysis   *int64AOTAnalysis
 	float64FnVar    string
@@ -96,13 +100,40 @@ type aotExternalCallTarget struct {
 	arity          int
 	fnVar          string
 	intrinsic      string
+	directLinked   bool
 	defaultVar     string
 	rootVersionVar string
 }
 
 type aotExternalCallKey struct {
-	vr    *lang.Var
-	arity int
+	vr        *lang.Var
+	arity     int
+	intrinsic string
+}
+
+type aotKeywordLookupHelper struct {
+	name    string
+	keyword string
+}
+
+type aotKeywordAssocHelper struct {
+	name     string
+	keywords []string
+}
+
+type aotRecordType struct {
+	index        int
+	descriptor   *lang.RecordType
+	descriptorGo string
+	typeName     string
+	constructor  string
+	mapFactory   string
+	fieldNames   []string
+}
+
+type aotRecordCallTarget struct {
+	record  *aotRecordType
+	fromMap bool
 }
 
 // Generator handles the conversion of AST nodes to Go code
@@ -115,10 +146,14 @@ type Generator struct {
 	varScopes  []varScope     // stack of variable scopes
 	recurStack []recurContext // stack of recur contexts for nested loops
 
-	imports         map[string]string  // set of imported packages with their aliases
-	varVariables    map[varInfo]string // map of vars to their Go variable names
-	symbolVariables map[string]string  // set of all generated symbols to minimize allocations
-	kwVariables     map[string]string  // set of all generated keywords to minimize allocations
+	imports                map[string]string  // set of imported packages with their aliases
+	varVariables           map[varInfo]string // map of vars to their Go variable names
+	symbolVariables        map[string]string  // set of all generated symbols to minimize allocations
+	kwVariables            map[string]string  // set of all generated keywords to minimize allocations
+	keywordMapConstructors map[string]string  // co-allocating constructors for those layouts
+	keywordLookupHelpers   map[string]*aotKeywordLookupHelper
+	keywordAssocHelpers    map[string]*aotKeywordAssocHelper
+	aotRecordTypes         map[*lang.RecordType]*aotRecordType
 
 	valueInits []*valueInit // map of value initializations
 
@@ -126,6 +161,7 @@ type Generator struct {
 	aotCallTargets         map[*lang.Var]*aotSpecializationTarget
 	aotExternalCallTargets map[aotExternalCallKey]*aotExternalCallTarget
 	aotNamespace           *lang.Namespace
+	directLink             bool
 
 	// Fields for handling closures
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
@@ -159,6 +195,10 @@ var (
 
 // NewGenerator creates a new code generator
 func NewGenerator(w io.Writer) *Generator {
+	return newGenerator(w, true)
+}
+
+func newGenerator(w io.Writer, directLink bool) *Generator {
 	return &Generator{
 		originalWriter:         w,
 		currentWriter:          w,
@@ -168,10 +208,15 @@ func NewGenerator(w io.Writer) *Generator {
 		varVariables:           make(map[varInfo]string),
 		symbolVariables:        make(map[string]string),
 		kwVariables:            make(map[string]string),
+		keywordMapConstructors: make(map[string]string),
+		keywordLookupHelpers:   make(map[string]*aotKeywordLookupHelper),
+		keywordAssocHelpers:    make(map[string]*aotKeywordAssocHelper),
+		aotRecordTypes:         make(map[*lang.RecordType]*aotRecordType),
 		liftedValues:           make(map[liftedKey]*liftedValue),
 		liftedCounter:          0,
 		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
 		aotExternalCallTargets: make(map[aotExternalCallKey]*aotExternalCallTarget),
+		directLink:             directLink,
 	}
 }
 
@@ -318,6 +363,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	sort.Slice(internedVars, func(i, j int) bool {
 		return internedVars[i].name.String() < internedVars[j].name.String()
 	})
+	g.prepareAOTRecordTypes(internedVars)
 	g.prepareAOTCallTargets(internedVars)
 	for _, nv := range internedVars {
 		if isRuntimeOwnedVar(nv.vr) {
@@ -463,6 +509,9 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 		return externalTargets[i].fnVar < externalTargets[j].fnVar
 	})
 	for _, target := range externalTargets {
+		if target.intrinsic != "" && target.directLinked {
+			continue
+		}
 		varName := g.allocVarVar(
 			target.vr.Namespace().Name().String(),
 			target.vr.Symbol().String(),
@@ -477,11 +526,13 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 			))
 			continue
 		}
+		adapter := "Cache"
+		if target.directLinked {
+			adapter = "Link"
+		}
 		initBuf.WriteString(fmt.Sprintf(
-			"%s := aotCacheFn%d(%s)\n",
-			target.fnVar,
-			target.arity,
-			varName,
+			"%s := aot%sFn%d(%s)\n",
+			target.fnVar, adapter, target.arity, varName,
 		))
 	}
 
@@ -557,14 +608,15 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 
 	// Closing brace for LoadNS
 	initBuf.WriteString("}\n")
-	g.generateAOTExternalCacheAdapters()
+	g.generateAOTKeywordHelpers()
+	g.generateAOTExternalAdapters()
 
 	////////////////////////////////////////////////////////////////////////////////
 
 	// Prepare the final source
-	sourceBytes := []byte(g.header(mungeID(getLastNSPart(ns.Name().String())))) // File header with package and imports
-	sourceBytes = append(sourceBytes, g.aotDeclarations.Bytes()...)             // Package-level AOT call caches
-	sourceBytes = append(sourceBytes, initBuf.Bytes()...)                       // The complete init function
+	sourceBytes := []byte(g.header(mungePackageName(getLastNSPart(ns.Name().String())))) // File header with package and imports
+	sourceBytes = append(sourceBytes, g.aotDeclarations.Bytes()...)                      // Package-level AOT call caches
+	sourceBytes = append(sourceBytes, initBuf.Bytes()...)                                // The complete init function
 
 	// Format the generated code
 	formatted, err := format.Source(sourceBytes)
@@ -698,6 +750,10 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 // returns the variable name or constant expression for the value
 func (g *Generator) generateValue(value any) string {
 	switch v := value.(type) {
+	case *lang.RecordType:
+		return g.allocAOTRecordType(v).descriptorGo
+	case *lang.RecordConstructor:
+		return g.generateRecordConstructorValue(v)
 	case *lang.Class:
 		return g.generateClassValue(v)
 	case reflect.Type:
@@ -778,18 +834,20 @@ func (g *Generator) generateValue(value any) string {
 	case int64:
 		return fmt.Sprintf("int64(%d)", v)
 	case float64:
-		return fmt.Sprintf("float64(%g)", v)
+		return fmt.Sprintf("float64(%s)", g.generateFloatLiteral(v, 64))
 	case float32:
-		return fmt.Sprintf("float32(%g)", v)
+		return fmt.Sprintf("float32(%s)", g.generateFloatLiteral(float64(v), 32))
 	case time.Duration:
 		alias := g.addImportWithAlias("time")
 		return fmt.Sprintf("%s.Duration(%d)", alias, int64(v))
 	case *regexp.Regexp:
-		// Regex literals can appear inside hot functions. Reuse the process-wide
-		// immutable regexp instead of recompiling the same pattern per call.
-		return fmt.Sprintf("lang.CachedCompileRegexp(%#v)", v.String())
+		return fmt.Sprintf("%s.MustCompile(%#v)", g.addImportWithAlias("regexp"), v.String())
 	case *lang.BigDecimal:
 		return g.generateBigDecimalValue(v)
+	case *lang.BigInt:
+		return generateBigIntValue(v)
+	case *lang.Ratio:
+		return generateRatioValue(v)
 	case bool:
 		// return the boolean as a Go boolean literal
 		if v {
@@ -854,8 +912,9 @@ func (g *Generator) generateValue(value any) string {
 }
 
 // generateNamedScalarValue emits constants whose Go type has a name, such as
-// fs.FileMode. Host symbols resolve to their exact Go values during analysis,
-// so AOT generation must preserve both the scalar value and its named type.
+// fs.FileMode or uuid.UUID. Host symbols resolve to their exact Go values
+// during analysis, so AOT generation must preserve both the value and its
+// named type.
 func (g *Generator) generateNamedScalarValue(v reflect.Value) (string, bool) {
 	if !v.IsValid() || v.Type().Name() == "" {
 		return "", false
@@ -870,14 +929,71 @@ func (g *Generator) generateNamedScalarValue(v reflect.Value) (string, bool) {
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
 		return fmt.Sprintf("%s(%d)", typeName, v.Uint()), true
 	case reflect.Float32, reflect.Float64:
-		return fmt.Sprintf("%s(%g)", typeName, v.Float()), true
+		return fmt.Sprintf("%s(%s)", typeName, g.generateFloatLiteral(v.Float(), v.Type().Bits())), true
 	case reflect.Complex64, reflect.Complex128:
-		return fmt.Sprintf("%s(%g)", typeName, v.Complex()), true
+		bits := v.Type().Bits() / 2
+		value := v.Complex()
+		return fmt.Sprintf(
+			"%s(complex(%s, %s))",
+			typeName,
+			g.generateFloatLiteral(real(value), bits),
+			g.generateFloatLiteral(imag(value), bits),
+		), true
 	case reflect.String:
 		return fmt.Sprintf("%s(%q)", typeName, v.String()), true
+	case reflect.Array:
+		elements := make([]string, v.Len())
+		for i := range elements {
+			element, ok := g.generateScalarLiteral(v.Index(i))
+			if !ok {
+				return "", false
+			}
+			elements[i] = element
+		}
+		return fmt.Sprintf("%s{%s}", typeName, strings.Join(elements, ", ")), true
 	default:
 		return "", false
 	}
+}
+
+func (g *Generator) generateScalarLiteral(v reflect.Value) (string, bool) {
+	switch v.Kind() {
+	case reflect.Bool:
+		return fmt.Sprintf("%t", v.Bool()), true
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return fmt.Sprintf("%d", v.Int()), true
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return fmt.Sprintf("%d", v.Uint()), true
+	case reflect.Float32, reflect.Float64:
+		return g.generateFloatLiteral(v.Float(), v.Type().Bits()), true
+	case reflect.Complex64, reflect.Complex128:
+		bits := v.Type().Bits() / 2
+		value := v.Complex()
+		return fmt.Sprintf(
+			"complex(%s, %s)",
+			g.generateFloatLiteral(real(value), bits),
+			g.generateFloatLiteral(imag(value), bits),
+		), true
+	case reflect.String:
+		return fmt.Sprintf("%q", v.String()), true
+	default:
+		return "", false
+	}
+}
+
+// generateFloatLiteral uses ordinary Go literals when they preserve the value.
+// Go has no literal syntax for infinities, NaNs, or negative zero, so emit those
+// values from their exact IEEE-754 bit pattern.
+func (g *Generator) generateFloatLiteral(value float64, bits int) string {
+	if !math.IsNaN(value) && !math.IsInf(value, 0) && (value != 0 || !math.Signbit(value)) {
+		return fmt.Sprintf("%g", value)
+	}
+
+	alias := g.addImportWithAlias("math")
+	if bits == 32 {
+		return fmt.Sprintf("%s.Float32frombits(0x%08x)", alias, math.Float32bits(float32(value)))
+	}
+	return fmt.Sprintf("%s.Float64frombits(0x%016x)", alias, math.Float64bits(value))
 }
 
 // generateClassValue wraps the embedded reflect.Type in a fresh
@@ -1076,7 +1192,11 @@ func (g *Generator) generateRefValue(ref *lang.Ref) string {
 // generateMapValue generates Go code for a Clojure map
 func (g *Generator) generateMapValue(m lang.IPersistentMap) string {
 	var buf bytes.Buffer
-	buf.WriteString("lang.NewMap(")
+	if m.Count()*2 > lang.PersistentArrayMapInlineKeyValueCount {
+		buf.WriteString("lang.NewMapUniqueKeys(")
+	} else {
+		buf.WriteString("lang.NewMap(")
+	}
 
 	// Iterate through the map entries
 	for seq := m.Seq(); seq != nil; seq = seq.Next() {
@@ -1139,6 +1259,23 @@ func (g *Generator) generateBigDecimalValue(bd *lang.BigDecimal) string {
 `, resultId, bigAlias, bigAlias, hexAlias, hexBlob)
 
 	return resultId
+}
+
+func generateBigIntValue(value *lang.BigInt) string {
+	return fmt.Sprintf(
+		`func() *lang.BigInt { value, err := lang.NewBigInt(%q); if err != nil { panic(err) }; return value }()`,
+		value.String(),
+	)
+}
+
+func generateRatioValue(value *lang.Ratio) string {
+	numerator := lang.NewBigIntFromGoBigInt(value.Numerator())
+	denominator := lang.NewBigIntFromGoBigInt(value.Denominator())
+	return fmt.Sprintf(
+		"lang.NewRatioBigInt(%s, %s)",
+		generateBigIntValue(numerator),
+		generateBigIntValue(denominator),
+	)
 }
 
 // generateSetValue generates Go code for a Clojure set
@@ -1249,12 +1386,12 @@ func (g *Generator) generateFn(fn *Fn) string {
 	astNode := fn.ASTNode()
 	fnNode := astNode.Sub.(*ast.FnNode)
 
-	// Determine if we can use a fixed-arity FnFuncN (0-5 args, single method,
+	// Determine if we can use a fixed-arity FnFuncN (0-20 args, single method,
 	// non-variadic). fixedArity == -1 means fall back to FnFunc.
 	fixedArity := -1
 	if len(fnNode.Methods) == 1 && !fnNode.IsVariadic {
 		mn := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		if mn.FixedArity <= 5 {
+		if mn.FixedArity <= 20 {
 			fixedArity = mn.FixedArity
 		}
 	}
@@ -1272,7 +1409,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 	fnVar := g.allocateTempVar()
 
 	// Declare with the appropriate type.
-	// FnFuncN for 0-5 arg non-variadic single-arity functions eliminates
+	// FnFuncN for supported non-variadic single-arity functions eliminates
 	// []any heap allocation at call sites that use ApplyN.
 	fnType := "lang.FnFunc"
 	if fixedArity >= 0 {
@@ -1306,10 +1443,9 @@ func (g *Generator) generateFn(fn *Fn) string {
 	}
 
 	if fixedArity >= 0 {
-		// Single-arity 0-5: emit FnFuncN with direct named params
+		// Supported single arity: emit FnFuncN with direct named params.
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		allParamNames := []string{"p0", "p1", "p2", "p3", "p4"}
-		paramNames := allParamNames[:fixedArity]
+		paramNames := fixedParamNames(fixedArity)
 		if !g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
 			sig := ""
@@ -1335,12 +1471,37 @@ func (g *Generator) generateFn(fn *Fn) string {
 			}
 		}
 
+		target := g.specializationTarget
+		if target != nil && target.fn == fn {
+			for _, method := range fnNode.Methods {
+				methodNode := method.Sub.(*ast.FnMethodNode)
+				if methodNode.IsVariadic ||
+					methodNode.FixedArity < 0 ||
+					methodNode.FixedArity >= len(target.directArityVars) {
+					continue
+				}
+				slot := target.directArityVars[methodNode.FixedArity]
+				if slot == "" {
+					continue
+				}
+				g.writef("%s = ", slot)
+				g.generateFixedMethodFnValue(methodNode)
+				g.writef("\n")
+			}
+		}
+
 		if smallFixed {
 			g.writef("%s = lang.NewArityFn(\n", fnVar)
-			for _, methodNode := range fixedMethods {
+			for arity, methodNode := range fixedMethods {
 				if methodNode == nil {
 					g.writef("nil,\n")
 					continue
+				}
+				if target != nil && target.fn == fn {
+					if slot := target.directArityVars[arity]; slot != "" {
+						g.writef("%s,\n", slot)
+						continue
+					}
 				}
 				g.generateFixedMethodFn(methodNode)
 			}
@@ -1352,10 +1513,23 @@ func (g *Generator) generateFn(fn *Fn) string {
 					continue
 				}
 				g.writef("%d: ", arity)
+				if target != nil && target.fn == fn {
+					if slot := target.directArityVars[arity]; slot != "" {
+						g.writef("%s,\n", slot)
+						continue
+					}
+				}
 				g.generateFixedMethodFn(methodNode)
 			}
 			for _, methodNode := range fixedOther {
 				g.writef("%d: ", methodNode.FixedArity)
+				if target != nil && target.fn == fn &&
+					methodNode.FixedArity < len(target.directArityVars) {
+					if slot := target.directArityVars[methodNode.FixedArity]; slot != "" {
+						g.writef("%s,\n", slot)
+						continue
+					}
+				}
 				g.generateFixedMethodFn(methodNode)
 			}
 			g.writef("},\n")
@@ -1398,24 +1572,36 @@ func (g *Generator) generateFn(fn *Fn) string {
 }
 
 func (g *Generator) generateFixedMethodFn(methodNode *ast.FnMethodNode) {
+	g.generateFixedMethodFnValue(methodNode)
+	g.writef(",\n")
+}
+
+func (g *Generator) generateFixedMethodFnValue(methodNode *ast.FnMethodNode) {
 	arity := methodNode.FixedArity
-	if arity <= 5 {
-		allParamNames := []string{"p0", "p1", "p2", "p3", "p4"}
-		paramNames := allParamNames[:arity]
+	if arity <= 20 {
+		paramNames := fixedParamNames(arity)
 		sig := ""
 		if arity > 0 {
 			sig = strings.Join(paramNames, ", ") + " any"
 		}
 		g.writef("lang.FnFunc%d(func(%s) any {\n", arity, sig)
 		g.generateFnMethodFixed(methodNode, paramNames)
-		g.writef("}),\n")
+		g.writef("})")
 		return
 	}
 
 	g.writef("lang.NewFnFunc(func(args ...any) any {\n")
 	g.writef("checkArity(args, %d)\n", arity)
 	g.generateFnMethod(methodNode, "args")
-	g.writef("}),\n")
+	g.writef("})")
+}
+
+func fixedParamNames(arity int) []string {
+	names := make([]string, arity)
+	for i := range names {
+		names[i] = fmt.Sprintf("p%d", i)
+	}
+	return names
 }
 
 func runtimeFunctionMeta(meta lang.IPersistentMap) lang.IPersistentMap {
@@ -1583,6 +1769,13 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 				return g.generateGoExportedName(constNode.HostSymbol.FullName())
 			}
 		}
+		// A compiled Clojure regex is a constant object: repeated evaluation of
+		// one literal returns the same object, while two equal literal
+		// occurrences remain distinct. Lift by pointer identity to preserve
+		// both halves of that contract.
+		if _, ok := constNode.Value.(*regexp.Regexp); ok {
+			return g.liftValue(constNode.Value)
+		}
 		return g.generateValue(constNode.Value)
 	case ast.OpVector:
 		return g.generateVector(node)
@@ -1604,6 +1797,85 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		return g.generateIf(node)
 	case ast.OpInvoke:
 		return g.generateInvoke(node)
+	case ast.OpKeywordLookup:
+		lookup := node.Sub.(*ast.KeywordLookupNode)
+		target := g.generateASTNode(lookup.Target)
+		result := g.allocateTempVar()
+		if g.aotRecordHasField(keywordName(lookup.Keyword)) {
+			fallback := "nil"
+			if lookup.Default != nil {
+				fallback = g.generateASTNode(lookup.Default)
+			}
+			helper := g.allocKeywordLookupHelper(keywordName(lookup.Keyword))
+			g.writef(
+				"%s := %s(%s, %s)\n",
+				result,
+				helper,
+				target,
+				fallback,
+			)
+		} else {
+			keyword := g.generateValue(lookup.Keyword)
+			if lookup.Default == nil {
+				g.writef("%s := %s.Invoke1(%s)\n", result, keyword, target)
+			} else {
+				fallback := g.generateASTNode(lookup.Default)
+				g.writef(
+					"%s := %s.Invoke2(%s, %s)\n",
+					result,
+					keyword,
+					target,
+					fallback,
+				)
+			}
+		}
+		return result
+	case ast.OpAssoc:
+		assoc := node.Sub.(*ast.AssocNode)
+		target := g.generateASTNode(assoc.Target)
+		staticNames, staticKeys := staticKeywordMapNames(keysFromAssoc(assoc))
+		useRecordHelper := staticKeys && g.aotRecordHasFields(staticNames)
+		keys := make([]string, len(assoc.Entries))
+		values := make([]string, len(assoc.Entries))
+		for i, entry := range assoc.Entries {
+			if !useRecordHelper {
+				keys[i] = g.generateASTNode(entry.Key)
+			}
+			values[i] = g.generateASTNode(entry.Val)
+		}
+		if useRecordHelper {
+			helper := g.allocKeywordAssocHelper(staticNames)
+			result := g.allocateTempVar()
+			g.writef(
+				"%s := %s(%s, %s)\n",
+				result,
+				helper,
+				target,
+				strings.Join(values, ", "),
+			)
+			return result
+		}
+		result := g.allocateTempVar()
+		g.writef("var %s any = %s\n", result, target)
+		for i := range keys {
+			g.writef(
+				"%s = lang.Assoc(%s, %s, %s)\n",
+				result,
+				result,
+				keys[i],
+				values[i],
+			)
+		}
+		return result
+	case ast.OpReplaceLast:
+		replace := node.Sub.(*ast.ReplaceLastNode)
+		collection := g.generateASTNode(replace.Collection)
+		plan := g.allocateTempVar()
+		g.writef("%s := runtime.PrepareReplaceLast(%s)\n", plan, collection)
+		value := g.generateASTNode(replace.Value)
+		result := g.allocateTempVar()
+		g.writef("%s := %s.Finish(%s)\n", result, plan, value)
+		return result
 	case ast.OpVar:
 		return g.generateVarDeref(node)
 	case ast.OpRecur:
@@ -1717,8 +1989,12 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	var fnExpr string
 	directCall := false
 	directKeywordCall := false
+	recordTarget := g.aotRecordInvokeTarget(invokeNode)
 	aotTarget := g.aotInvokeTarget(invokeNode)
-	externalTarget := g.aotExternalInvokeTarget(invokeNode)
+	var externalTarget *aotExternalCallTarget
+	if recordTarget == nil {
+		externalTarget = g.aotExternalInvokeTarget(invokeNode)
+	}
 	if invokeNode.Fn.Op == ast.OpConst {
 		value := invokeNode.Fn.Sub.(*ast.ConstNode).Value
 		if _, ok := value.(lang.Keyword); ok &&
@@ -1744,14 +2020,14 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 			}
 		}
 	}
-	if !directCall && !directKeywordCall &&
+	if !directCall && !directKeywordCall && recordTarget == nil &&
 		aotTarget == nil && externalTarget == nil {
 		// Generate the general function expression before its arguments.
 		fnExpr = g.generateASTNode(invokeNode.Fn)
 	}
 
 	var aotFast, aotFallbackFn string
-	if aotTarget != nil {
+	if aotTarget != nil && !aotTarget.directLinked {
 		varNode := invokeNode.Fn.Sub.(*ast.VarNode)
 		varID := g.allocVarVar(
 			varNode.Var.Namespace().Name().String(),
@@ -1772,12 +2048,37 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 
 	// Generate the arguments
 	var argExprs []string
-	for _, arg := range invokeNode.Args {
+	_, staticInstance := g.staticInstanceCall(
+		invokeNode,
+		[]string{"", "value"},
+	)
+	skipInstanceType := staticInstance &&
+		((aotTarget != nil && aotTarget.directLinked) ||
+			(externalTarget != nil &&
+				externalTarget.directLinked &&
+				externalTarget.intrinsic == "instance?"))
+	for index, arg := range invokeNode.Args {
+		if skipInstanceType && index == 0 {
+			argExprs = append(argExprs, "")
+			continue
+		}
 		argExprs = append(argExprs, g.generateASTNode(arg))
 	}
 
 	// Allocate a result variable for the invocation
 	resultVar := g.allocateTempVar()
+	if recordTarget != nil {
+		factory := recordTarget.record.constructor
+		if recordTarget.fromMap {
+			factory = recordTarget.record.mapFactory
+		}
+		g.writef("%s := %s(%s)\n",
+			resultVar,
+			factory,
+			strings.Join(argExprs, ", "),
+		)
+		return resultVar
+	}
 	if directCall {
 		g.writef("%s := %s(%s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
 		return resultVar
@@ -1792,10 +2093,58 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		return resultVar
 	}
 	if aotTarget != nil {
+		if aotTarget.directLinked {
+			if instanceCall, ok := g.staticInstanceCall(invokeNode, argExprs); ok {
+				g.writef("%s := %s\n", resultVar, instanceCall)
+				return resultVar
+			}
+			if slot := aotTarget.directArityVars[len(argExprs)]; slot != "" {
+				g.writef("%s := %s(%s)\n",
+					resultVar,
+					slot,
+					strings.Join(argExprs, ", "),
+				)
+			} else if aotTarget.arityDispatch {
+				g.writef("%s := %s.Invoke%d(%s)\n",
+					resultVar,
+					aotTarget.directFnVar,
+					len(argExprs),
+					strings.Join(argExprs, ", "),
+				)
+			} else {
+				g.writef("%s := %s(%s)\n",
+					resultVar, aotTarget.directFnVar, strings.Join(argExprs, ", "))
+			}
+			return resultVar
+		}
+		if instanceCall, ok := g.staticInstanceCall(invokeNode, argExprs); ok {
+			g.writef("var %s any\n", resultVar)
+			g.writef("if %s {\n", aotFast)
+			g.writef("%s = %s\n", resultVar, instanceCall)
+			g.writef("} else {\n")
+			g.generateApply(resultVar, aotFallbackFn, argExprs, false)
+			g.writef("}\n")
+			return resultVar
+		}
 		g.writef("var %s any\n", resultVar)
 		g.writef("if %s {\n", aotFast)
-		g.writef("%s = %s(%s)\n",
-			resultVar, aotTarget.directFnVar, strings.Join(argExprs, ", "))
+		if slot := aotTarget.directArityVars[len(argExprs)]; slot != "" {
+			g.writef("%s = %s(%s)\n",
+				resultVar,
+				slot,
+				strings.Join(argExprs, ", "),
+			)
+		} else if aotTarget.arityDispatch {
+			g.writef("%s = %s.Invoke%d(%s)\n",
+				resultVar,
+				aotTarget.directFnVar,
+				len(argExprs),
+				strings.Join(argExprs, ", "),
+			)
+		} else {
+			g.writef("%s = %s(%s)\n",
+				resultVar, aotTarget.directFnVar, strings.Join(argExprs, ", "))
+		}
 		g.writef("} else {\n")
 		g.generateApply(resultVar, aotFallbackFn, argExprs, false)
 		g.writef("}\n")
@@ -1803,6 +2152,17 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	}
 	if externalTarget != nil {
 		if externalTarget.intrinsic != "" {
+			if externalTarget.directLinked {
+				g.writef("%s := %s\n",
+					resultVar,
+					g.aotExternalIntrinsicCall(
+						externalTarget.intrinsic,
+						invokeNode,
+						argExprs,
+					),
+				)
+				return resultVar
+			}
 			varNode := invokeNode.Fn.Sub.(*ast.VarNode)
 			varID := g.allocVarVar(
 				varNode.Var.Namespace().Name().String(),
@@ -1816,7 +2176,11 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 			)
 			g.writef("%s = %s\n",
 				resultVar,
-				g.aotExternalIntrinsicCall(externalTarget.intrinsic, argExprs),
+				g.aotExternalIntrinsicCall(
+					externalTarget.intrinsic,
+					invokeNode,
+					argExprs,
+				),
 			)
 			g.writef("} else {\n")
 			fallback := g.allocateTempVar()
@@ -1838,6 +2202,36 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	return resultVar
 }
 
+func staticInstanceType(invoke *ast.InvokeNode) (reflect.Type, bool) {
+	if len(invoke.Args) != 2 ||
+		invoke.Fn.Op != ast.OpVar ||
+		invoke.Args[0].Op != ast.OpConst {
+		return nil, false
+	}
+	vr := invoke.Fn.Sub.(*ast.VarNode).Var
+	if vr.Namespace().Name().String() != "clojure.core" ||
+		vr.Symbol().String() != "instance?" {
+		return nil, false
+	}
+	typ, ok := invoke.Args[0].Sub.(*ast.ConstNode).Value.(reflect.Type)
+	return typ, ok && typ != nil
+}
+
+func (g *Generator) staticInstanceCall(
+	invoke *ast.InvokeNode,
+	args []string,
+) (string, bool) {
+	typ, ok := staticInstanceType(invoke)
+	if !ok || len(args) != 2 {
+		return "", false
+	}
+	typeExpr, ok := g.goTypeExpr(typ)
+	if !ok {
+		return "", false
+	}
+	return fmt.Sprintf("lang.IsInstance[%s](%s)", typeExpr, args[1]), true
+}
+
 func (g *Generator) generateApply(
 	resultVar string,
 	fnExpr string,
@@ -1848,23 +2242,18 @@ func (g *Generator) generateApply(
 	if declare {
 		operator = ":="
 	}
-	n := len(argExprs)
-	switch n {
-	case 0:
+	arity := len(argExprs)
+	if arity == 0 {
 		g.writef("%s %s lang.Apply0(%s)\n", resultVar, operator, fnExpr)
-	case 1:
-		g.writef("%s %s lang.Apply1(%s, %s)\n", resultVar, operator, fnExpr, argExprs[0])
-	case 2:
-		g.writef("%s %s lang.Apply2(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
-	case 3:
-		g.writef("%s %s lang.Apply3(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
-	case 4:
-		g.writef("%s %s lang.Apply4(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
-	case 5:
-		g.writef("%s %s lang.Apply5(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
-	default:
-		g.writef("%s %s lang.Apply(%s, []any{%s})\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
+		return
 	}
+	if arity <= 20 {
+		g.writef("%s %s lang.Apply%d(%s, %s)\n",
+			resultVar, operator, arity, fnExpr, strings.Join(argExprs, ", "))
+		return
+	}
+	g.writef("%s %s lang.Apply(%s, []any{%s})\n",
+		resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 }
 
 // generateDo generates code for a Do node
@@ -1893,8 +2282,8 @@ func (g *Generator) generateIf(node *ast.Node) string {
 
 	// Emit the if statement to g.w
 	g.writef("var %s any\n", resultVar)
-	testExpr := g.generateASTNode(ifNode.Test)
-	g.writef("if lang.IsTruthy(%s) {\n", testExpr)
+	testExpr := g.generateTruthyTest(ifNode.Test)
+	g.writef("if %s {\n", testExpr)
 	thenExpr := g.generateASTNode(ifNode.Then)
 	g.writeAssign(resultVar, thenExpr)
 	g.writef("} else {\n")
@@ -1908,6 +2297,46 @@ func (g *Generator) generateIf(node *ast.Node) string {
 
 	// Return the r-value
 	return resultVar
+}
+
+func (g *Generator) generateTruthyTest(node *ast.Node) string {
+	if node.Op != ast.OpInvoke {
+		return fmt.Sprintf("lang.IsTruthy(%s)", g.generateASTNode(node))
+	}
+	invoke := node.Sub.(*ast.InvokeNode)
+	target := g.aotExternalInvokeTarget(invoke)
+	if target == nil || target.intrinsic != "seq" {
+		return fmt.Sprintf("lang.IsTruthy(%s)", g.generateASTNode(node))
+	}
+
+	arg := g.generateASTNode(invoke.Args[0])
+	if target.directLinked {
+		result := g.allocateTempVar()
+		g.writef("%s := lang.IsSeqTruthy(%s)\n", result, arg)
+		return result
+	}
+	varNode := invoke.Fn.Sub.(*ast.VarNode)
+	varID := g.allocVarVar(
+		varNode.Var.Namespace().Name().String(),
+		varNode.Var.Symbol().String(),
+	)
+	result := g.allocateTempVar()
+	g.writef("var %s bool\n", result)
+	g.writef("if %s && %s.RootVersion() == %s {\n",
+		target.defaultVar,
+		varID,
+		target.rootVersionVar,
+	)
+	g.writef("%s = lang.IsSeqTruthy(%s)\n", result, arg)
+	g.writef("} else {\n")
+	fallback := g.allocateTempVar()
+	g.writef("%s := checkDerefVar(%s)\n", fallback, varID)
+	fallbackResult := g.allocateTempVar()
+	g.writef("var %s any\n", fallbackResult)
+	g.generateApply(fallbackResult, fallback, []string{arg}, false)
+	g.writef("%s = lang.IsTruthy(%s)\n", result, fallbackResult)
+	g.writef("}\n")
+	return result
 }
 
 func (g *Generator) generateCase(node *ast.Node) string {
@@ -2347,6 +2776,22 @@ func (g *Generator) generateVector(node *ast.Node) string {
 func (g *Generator) generateMap(node *ast.Node) string {
 	mapNode := node.Sub.(*ast.MapNode)
 
+	keyValueCount := len(mapNode.Keys) * 2
+	if keyValueCount > lang.PersistentArrayMapInlineKeyValueCount &&
+		keyValueCount <= lang.PersistentArrayMapMaxKeywordKeyValueCount {
+		if names, ok := staticKeywordMapNames(mapNode.Keys); ok {
+			valueIDs := make([]string, len(mapNode.Vals))
+			for i, value := range mapNode.Vals {
+				valueIDs[i] = g.generateASTNode(value)
+			}
+			constructor := g.allocKeywordMapConstructor(names)
+			mapID := g.allocateTempVar()
+			g.writef("%s := %s(%s)\n",
+				mapID, constructor, strings.Join(valueIDs, ", "))
+			return mapID
+		}
+	}
+
 	keyValIds := make([]string, 2*len(mapNode.Keys))
 	for i, key := range mapNode.Keys {
 		keyId := g.generateASTNode(key)
@@ -2358,9 +2803,95 @@ func (g *Generator) generateMap(node *ast.Node) string {
 		keyValIds[2*i+1] = valId // value
 	}
 	mapId := g.allocateTempVar()
-	g.writef("%s := lang.NewMap(%s)\n", mapId, strings.Join(keyValIds, ", "))
+	constructor := "lang.NewMap"
+	if len(keyValIds) > lang.PersistentArrayMapInlineKeyValueCount {
+		constructor = "lang.NewMapUniqueKeys"
+	}
+	g.writef("%s := %s(%s)\n", mapId, constructor, strings.Join(keyValIds, ", "))
 
 	return mapId
+}
+
+func staticKeywordMapNames(keys []*ast.Node) ([]string, bool) {
+	names := make([]string, len(keys))
+	for i, key := range keys {
+		if key.Op != ast.OpConst {
+			return nil, false
+		}
+		keyword, ok := key.Sub.(*ast.ConstNode).Value.(lang.Keyword)
+		if !ok {
+			return nil, false
+		}
+		if ns := keyword.Namespace(); ns != nil {
+			names[i] = fmt.Sprintf("%s/%s", ns, keyword.Name())
+		} else {
+			names[i] = keyword.Name()
+		}
+	}
+	return names, true
+}
+
+func keysFromAssoc(assoc *ast.AssocNode) []*ast.Node {
+	keys := make([]*ast.Node, len(assoc.Entries))
+	for i := range assoc.Entries {
+		keys[i] = assoc.Entries[i].Key
+	}
+	return keys
+}
+
+func keywordName(keyword lang.Keyword) string {
+	if ns := keyword.Namespace(); ns != nil {
+		return fmt.Sprintf("%s/%s", ns, keyword.Name())
+	}
+	return keyword.Name()
+}
+
+func (g *Generator) allocKeywordMapConstructor(names []string) string {
+	key := strings.Join(names, "\x00")
+	if constructor, ok := g.keywordMapConstructors[key]; ok {
+		return constructor
+	}
+	index := len(g.keywordMapConstructors)
+	shape := fmt.Sprintf("aotKeywordMapShape%d", index)
+	constructor := fmt.Sprintf("aotKeywordMapNew%d", index)
+	storage := fmt.Sprintf("aotKeywordMapStorage%d", index)
+	quoted := make([]string, len(names))
+	params := make([]string, len(names))
+	values := make([]string, len(names))
+	for i, name := range names {
+		quoted[i] = fmt.Sprintf("%q", name)
+		params[i] = fmt.Sprintf("v%d any", i)
+		values[i] = fmt.Sprintf("v%d", i)
+	}
+	fmt.Fprintf(&g.aotDeclarations,
+		`var %s = lang.NewKeywordMapShape(%s)
+type %s struct {
+	lang.Map
+	values [%d]any
+}
+func %s(%s) *lang.Map {
+	storage := &%s{}
+	storage.values = [%d]any{%s}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		%s,
+		storage.values[:],
+	)
+}
+`,
+		shape,
+		strings.Join(quoted, ", "),
+		storage,
+		len(names),
+		constructor,
+		strings.Join(params, ", "),
+		storage,
+		len(names),
+		strings.Join(values, ", "),
+		shape,
+	)
+	g.keywordMapConstructors[key] = constructor
+	return constructor
 }
 
 func (g *Generator) generateSet(node *ast.Node) string {
@@ -2464,6 +2995,22 @@ func (g *Generator) generateHostCall(node *ast.Node) string {
 		g.writef("%s := %s.%s(%s)\n", resultId, tgtId, directMethod, strings.Join(directArgs, ", "))
 		return resultId
 	}
+	if directMethod, receiver, directArgs, ok := g.directInferredHostCall(
+		tgt,
+		tgtId,
+		methodName,
+		argIds,
+	); ok {
+		resultId := g.allocateTempVar()
+		g.writef(
+			"%s := %s.%s(%s)\n",
+			resultId,
+			receiver,
+			directMethod,
+			strings.Join(directArgs, ", "),
+		)
+		return resultId
+	}
 
 	methodId := g.allocateTempVar()
 	g.writef("%s, _ := lang.FieldOrMethod(%s, %q)\n", methodId, tgtId, methodName)
@@ -2521,28 +3068,250 @@ func directHostCall(
 	if typ == nil {
 		return "", nil, false
 	}
+	method, receiverOffset, ok := directHostMethodForType(typ, name)
+	if !ok {
+		return "", nil, false
+	}
+	converted, ok := convertDirectHostArgs(
+		method,
+		receiverOffset,
+		args,
+		convertDirectHostArg,
+	)
+	if !ok {
+		return "", nil, false
+	}
+	return method.Name, converted, true
+}
+
+func convertDirectHostArg(paramType reflect.Type, arg string) (string, bool) {
+	switch paramType {
+	case reflect.TypeFor[any]():
+		return arg, true
+	case reflect.TypeFor[int]():
+		return "lang.IntCast(" + arg + ")", true
+	default:
+		// Keep the reflective path when codegen cannot preserve Glojure's
+		// host-argument coercion semantics.
+		return "", false
+	}
+}
+
+func directHostMethodForType(
+	typ reflect.Type,
+	name string,
+) (reflect.Method, int, bool) {
+	if typ == nil || name == "" {
+		return reflect.Method{}, 0, false
+	}
 	if name[0] >= 'a' && name[0] <= 'z' {
 		name = string(name[0]-'a'+'A') + name[1:]
 	}
 	method, ok := typ.MethodByName(name)
-	if !ok || method.Type.IsVariadic() ||
-		method.Type.NumIn() != len(args)+1 || method.Type.NumOut() != 1 {
-		return "", nil, false
+	receiverOffset := 1
+	if typ.Kind() == reflect.Interface {
+		receiverOffset = 0
 	}
-	anyType := reflect.TypeFor[any]()
-	intType := reflect.TypeFor[int]()
+	if !ok && typ.Kind() != reflect.Pointer {
+		typ = reflect.PointerTo(typ)
+		method, ok = typ.MethodByName(name)
+		receiverOffset = 1
+	}
+	if !ok || method.Type.NumOut() != 1 {
+		return reflect.Method{}, 0, false
+	}
+	return method, receiverOffset, true
+}
+
+func convertDirectHostArgs(
+	method reflect.Method,
+	receiverOffset int,
+	args []string,
+	convert func(reflect.Type, string) (string, bool),
+) ([]string, bool) {
+	fixedArgCount := method.Type.NumIn() - receiverOffset
+	if method.Type.IsVariadic() {
+		fixedArgCount--
+		if len(args) < fixedArgCount {
+			return nil, false
+		}
+	} else if len(args) != fixedArgCount {
+		return nil, false
+	}
+
 	converted := make([]string, len(args))
-	for i := 1; i < method.Type.NumIn(); i++ {
-		switch method.Type.In(i) {
-		case anyType:
-			converted[i-1] = args[i-1]
-		case intType:
-			converted[i-1] = "lang.IntCast(" + args[i-1] + ")"
-		default:
-			return "", nil, false
+	for i := range args {
+		var paramType reflect.Type
+		if i < fixedArgCount {
+			paramType = method.Type.In(i + receiverOffset)
+		} else {
+			paramType = method.Type.In(method.Type.NumIn() - 1).Elem()
+		}
+		var ok bool
+		converted[i], ok = convert(paramType, args[i])
+		if !ok {
+			return nil, false
 		}
 	}
-	return method.Name, converted, true
+	return converted, true
+}
+
+func (g *Generator) directInferredHostCall(
+	target *ast.Node,
+	targetID string,
+	name string,
+	args []string,
+) (methodName, receiver string, converted []string, ok bool) {
+	typ, ok := inferredHostType(target)
+	if !ok {
+		return "", "", nil, false
+	}
+	method, receiverOffset, ok := directHostMethodForType(typ, name)
+	if !ok {
+		return "", "", nil, false
+	}
+	converted, ok = convertDirectHostArgs(
+		method,
+		receiverOffset,
+		args,
+		g.convertInferredDirectHostArg,
+	)
+	if !ok {
+		return "", "", nil, false
+	}
+	if target.Op == ast.OpConst {
+		return method.Name, targetID, converted, true
+	}
+	interfaceExpr, ok := g.hostMethodInterfaceExpr(method, receiverOffset)
+	if !ok {
+		return "", "", nil, false
+	}
+	return method.Name,
+		fmt.Sprintf("%s.(%s)", targetID, interfaceExpr),
+		converted,
+		true
+}
+
+func (g *Generator) convertInferredDirectHostArg(
+	paramType reflect.Type,
+	arg string,
+) (string, bool) {
+	if converted, ok := convertDirectHostArg(paramType, arg); ok {
+		return converted, true
+	}
+	if paramType.Kind() != reflect.Interface {
+		return "", false
+	}
+	typeExpr, ok := g.goTypeExpr(paramType)
+	if !ok {
+		return "", false
+	}
+	return fmt.Sprintf("lang.MustHostCast[%s](%s)", typeExpr, arg), true
+}
+
+func inferredHostType(target *ast.Node) (reflect.Type, bool) {
+	if target != nil && target.Op == ast.OpConst {
+		typ := reflect.TypeOf(target.Sub.(*ast.ConstNode).Value)
+		if typ != nil {
+			return typ, true
+		}
+	}
+	var tag *lang.Symbol
+	if target != nil {
+		if withMeta, ok := target.Form.(lang.IMeta); ok {
+			tag, _ = lang.Get(withMeta.Meta(), lang.KWTag).(*lang.Symbol)
+		}
+		if tag == nil && target.Op == ast.OpLocal {
+			tag, _ = lang.Get(
+				target.Sub.(*ast.LocalNode).Name.Meta(),
+				lang.KWTag,
+			).(*lang.Symbol)
+		}
+	}
+	if tag == nil {
+		return nil, false
+	}
+	tagName := tag.FullName()
+	value, ok := pkgmap.Get(tagName)
+	if !ok && strings.HasPrefix(tagName, "clojure.lang.") {
+		value, ok = pkgmap.Get(
+			"github.com/glojurelang/glojure/pkg/lang." +
+				strings.TrimPrefix(tagName, "clojure.lang."),
+		)
+	}
+	if !ok {
+		return nil, false
+	}
+	switch value := value.(type) {
+	case reflect.Type:
+		return value, true
+	case *lang.Class:
+		return value.Type, value.Type != nil
+	default:
+		return nil, false
+	}
+}
+
+func (g *Generator) hostMethodInterfaceExpr(
+	method reflect.Method,
+	receiverOffset int,
+) (string, bool) {
+	params := make([]string, 0, method.Type.NumIn()-receiverOffset)
+	for i := receiverOffset; i < method.Type.NumIn(); i++ {
+		paramType := method.Type.In(i)
+		variadic := method.Type.IsVariadic() && i == method.Type.NumIn()-1
+		if variadic {
+			paramType = paramType.Elem()
+		}
+		typeExpr, ok := g.goTypeExpr(paramType)
+		if !ok {
+			return "", false
+		}
+		if variadic {
+			typeExpr = "..." + typeExpr
+		}
+		params = append(params, typeExpr)
+	}
+	result, ok := g.goTypeExpr(method.Type.Out(0))
+	if !ok {
+		return "", false
+	}
+	return fmt.Sprintf(
+		"interface { %s(%s) %s }",
+		method.Name,
+		strings.Join(params, ", "),
+		result,
+	), true
+}
+
+func (g *Generator) goTypeExpr(typ reflect.Type) (string, bool) {
+	if typ == reflect.TypeFor[any]() {
+		return "any", true
+	}
+	if typ.Name() != "" {
+		if typ.PkgPath() == "" {
+			return typ.Name(), true
+		}
+		alias := g.addImportWithAlias(typ.PkgPath())
+		return alias + "." + typ.Name(), true
+	}
+	switch typ.Kind() {
+	case reflect.Pointer:
+		elem, ok := g.goTypeExpr(typ.Elem())
+		return "*" + elem, ok
+	case reflect.Slice:
+		elem, ok := g.goTypeExpr(typ.Elem())
+		return "[]" + elem, ok
+	case reflect.Map:
+		key, keyOK := g.goTypeExpr(typ.Key())
+		value, valueOK := g.goTypeExpr(typ.Elem())
+		return "map[" + key + "]" + value, keyOK && valueOK
+	case reflect.Interface:
+		if typ.NumMethod() == 0 {
+			return "any", true
+		}
+	}
+	return "", false
 }
 
 func (g *Generator) generateHostInterop(node *ast.Node) string {
@@ -2551,6 +3320,16 @@ func (g *Generator) generateHostInterop(node *ast.Node) string {
 	tgtId := g.generateASTNode(hostInteropNode.Target)
 
 	mOrF := hostInteropNode.MOrF.Name()
+	if directMethod, receiver, _, ok := g.directInferredHostCall(
+		hostInteropNode.Target,
+		tgtId,
+		mOrF,
+		nil,
+	); ok {
+		resultId := g.allocateTempVar()
+		g.writef("%s := %s.%s()\n", resultId, receiver, directMethod)
+		return resultId
+	}
 	mOrFId := g.allocateTempVar()
 	g.writef("%s, ok := lang.FieldOrMethod(%s, %q)\n", mOrFId, tgtId, mOrF)
 	g.writef("if !ok {\n")
@@ -2569,17 +3348,19 @@ func (g *Generator) generateHostInterop(node *ast.Node) string {
 	return resultId
 }
 
-// generateMaybeHostForm generates code for a MaybeHostForm node
+// generateMaybeHostForm preserves the evaluator's late-bound host lookup.
+// Some portable Clojure forms use JVM-style class names that compatibility
+// bridges register only at runtime (for example clojure.lang.MapEntry/create).
 func (g *Generator) generateMaybeHostForm(node *ast.Node) string {
 	maybeHostNode := node.Sub.(*ast.MaybeHostFormNode)
-	class := maybeHostNode.Class
-	field := maybeHostNode.Field
-
-	// TODO: implement support for host forms or disallow entirely
-	//panic(fmt.Sprintf("unsupported form: %s/%s", maybeHostNode.Class, field))
-
-	fmt.Printf("skipping host form: %s/%s\n", class, field)
-	return "nil"
+	export := maybeHostNode.Class + "." + maybeHostNode.Field.Name()
+	resultID := g.allocateTempVar()
+	alias := g.addImportWithAlias("github.com/glojurelang/glojure/pkg/pkgmap")
+	g.writef("%s, ok := %s.Get(%q)\n", resultID, alias, export)
+	g.writef("if !ok {\n")
+	g.writef("  panic(lang.NewIllegalArgumentError(%q))\n", "unable to resolve host form: "+export)
+	g.writef("}\n")
+	return resultID
 }
 
 func (g *Generator) generateTheVar(node *ast.Node) string {
@@ -2666,10 +3447,42 @@ func (g *Generator) generateSetBang(node *ast.Node) string {
 func (g *Generator) generateNew(node *ast.Node) string {
 	newNode := node.Sub.(*ast.NewNode)
 
+	if newNode.Class.Op == ast.OpVar {
+		vr := newNode.Class.Sub.(*ast.VarNode).Var
+		if recordType, ok := codegenVarValue(vr).(*lang.RecordType); ok {
+			record := g.allocAOTRecordType(recordType)
+			args := make([]string, len(newNode.Args))
+			for i, arg := range newNode.Args {
+				args[i] = g.generateASTNode(arg)
+			}
+			resultID := g.allocateTempVar()
+			g.writef("%s := %s(%s)\n",
+				resultID,
+				record.constructor,
+				strings.Join(args, ", "),
+			)
+			return resultID
+		}
+	}
+
 	// the interpreter is more lax; it allows for expressions that evaluate to a type
 	// here we assume the class is a constant type. clojure's new form is similar
 	switch sub := newNode.Class.Sub.(type) {
 	case *ast.ConstNode:
+		if recordType, ok := sub.Value.(*lang.RecordType); ok {
+			record := g.allocAOTRecordType(recordType)
+			args := make([]string, len(newNode.Args))
+			for i, arg := range newNode.Args {
+				args[i] = g.generateASTNode(arg)
+			}
+			resultID := g.allocateTempVar()
+			g.writef("%s := %s(%s)\n",
+				resultID,
+				record.constructor,
+				strings.Join(args, ", "),
+			)
+			return resultID
+		}
 		class, ok := sub.Value.(reflect.Type)
 		if !ok {
 			fmt.Printf("Warning: glojure codegen only supports new with constant class types. Got %T\n", sub.Value)
@@ -2877,6 +3690,24 @@ func (g *Generator) makeLiftedKey(value any) liftedKey {
 	}
 }
 
+func (g *Generator) liftValue(value any) string {
+	key := g.makeLiftedKey(value)
+	if lifted, ok := g.liftedValues[key]; ok {
+		return lifted.varName
+	}
+
+	varName := fmt.Sprintf("closed%d", g.liftedCounter)
+	g.liftedCounter++
+	g.liftedValues[key] = &liftedValue{
+		value:   value,
+		varName: varName,
+	}
+	if g.currentValueInit != nil && varName != g.currentValueInit.name {
+		g.currentValueInit.deps[varName] = struct{}{}
+	}
+	return varName
+}
+
 func (g *Generator) getLocal(name string) string {
 	// First check normal scopes
 	for i := len(g.varScopes) - 1; i >= 0; i-- {
@@ -2890,28 +3721,7 @@ func (g *Generator) getLocal(name string) string {
 	if g.currentFnEnv != nil {
 		// Look up in the environment using the new public method
 		if value, found := g.currentFnEnv.LookupLocal(name); found {
-			// Create a key for deduplication
-			key := g.makeLiftedKey(value)
-
-			// Check if already lifted
-			if lifted, ok := g.liftedValues[key]; ok {
-				return lifted.varName
-			}
-
-			// Create new lifted value
-			varName := fmt.Sprintf("closed%d", g.liftedCounter)
-			g.liftedCounter++
-			g.liftedValues[key] = &liftedValue{
-				value:   value,
-				varName: varName,
-			}
-
-			// Add as a dependency to the current value init if we're in one
-			if g.currentValueInit != nil && varName != g.currentValueInit.name {
-				g.currentValueInit.deps[varName] = struct{}{}
-			}
-
-			return varName
+			return g.liftValue(value)
 		}
 	}
 
@@ -2983,6 +3793,14 @@ func mungeID(name string) string {
 	return sb.String()
 }
 
+func mungePackageName(name string) string {
+	name = mungeID(name)
+	if !token.IsIdentifier(name) {
+		return "pkg_" + name
+	}
+	return name
+}
+
 func getLastNSPart(ns string) string {
 	parts := strings.Split(ns, ".")
 	return parts[len(parts)-1]
@@ -3047,7 +3865,10 @@ func (g *Generator) allocKWVar(kw string) string {
 
 var (
 	runtimeOwnedVars = map[string]bool{
-		"in-ns": true,
+		// NewEnvironment supplies these roots outside the stdlib loader.
+		"defrecord": true,
+		"in-ns":     true,
+		"record?":   true,
 	}
 
 	wellKnownFunctions = map[uintptr]string{

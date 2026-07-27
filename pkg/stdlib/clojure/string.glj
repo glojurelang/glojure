@@ -24,7 +24,8 @@
   "Returns s with its characters reversed."
   {:added "1.2"}
   [^go/string s]
-  (apply str (clojure.core/reverse (check-string s))))
+  (github.com:glojurelang:glojure:pkg:lang.ReverseString
+   (check-string s)))
 
 (defn ^go/string re-quote-replacement
   "Given a replacement string that you wish to be a literal

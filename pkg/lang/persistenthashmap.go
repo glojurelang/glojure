@@ -312,7 +312,7 @@ func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key any, val any, add
 			}
 		}
 		if Equiv(key, keyOrNull) {
-			if val == valOrNode {
+			if Identical(val, valOrNode) {
 				return b
 			}
 			return &BitmapIndexedNode{
@@ -697,7 +697,7 @@ func (n *HashCollisionNode) assoc(shift uint, hash uint32, key any, val any, add
 	if hash == n.hash {
 		idx := n.findIndex(key)
 		if idx != -1 {
-			if n.array[idx+1] == val {
+			if Identical(n.array[idx+1], val) {
 				return n
 			}
 			return &HashCollisionNode{
