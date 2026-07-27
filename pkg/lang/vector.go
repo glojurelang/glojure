@@ -10,10 +10,15 @@ import (
 // Vector is a vector of values.
 type (
 	Vector struct {
+		attrs *vectorAttrs
+		vec   vector.Persistent
+	}
+
+	// vectorAttrs keeps metadata and lazily populated hash caches off the hot
+	// path for ordinary vectors, where all three values are absent.
+	vectorAttrs struct {
 		meta         IPersistentMap
 		hash, hasheq uint32
-
-		vec vector.Persistent
 	}
 
 	// vectorUpdateStorage co-allocates a vector version with the immutable tail
@@ -77,7 +82,7 @@ func (v *Vector) Length() int {
 
 func (v *Vector) Cons(x any) Conser {
 	storage := &vectorUpdateStorage{}
-	storage.meta = v.meta
+	storage.attrs = newVectorAttrs(v.Meta())
 	storage.vec = v.vec.ConjValueInto(x, &storage.tail)
 	return &storage.Vector
 }
@@ -90,7 +95,7 @@ func (v *Vector) AssocN(i int, val any) IPersistentVector {
 	if !ok {
 		panic(NewIndexOutOfBoundsError())
 	}
-	return &Vector{meta: v.meta, vec: result}
+	return &Vector{attrs: newVectorAttrs(v.Meta()), vec: result}
 }
 
 func (v *Vector) ContainsKey(key any) bool {
@@ -129,7 +134,7 @@ func (v *Vector) IsEmpty() bool {
 }
 
 func (v *Vector) Empty() IPersistentCollection {
-	return emptyVector.WithMeta(v.meta).(IPersistentCollection)
+	return emptyVector.WithMeta(v.Meta()).(IPersistentCollection)
 }
 
 func (v *Vector) ValAt(i any) any {
@@ -225,31 +230,40 @@ func (v *Vector) Pop() IPersistentStack {
 		panic("can't pop an empty vector")
 	}
 	return &Vector{
-		meta: v.meta,
-		vec:  result,
+		attrs: newVectorAttrs(v.Meta()),
+		vec:   result,
 	}
 }
 
 func (v *Vector) Meta() IPersistentMap {
-	return v.meta
+	if v.attrs == nil {
+		return nil
+	}
+	return v.attrs.meta
 }
 
 func (v *Vector) WithMeta(meta IPersistentMap) any {
-	if v.meta == meta {
+	if v.Meta() == meta {
 		return v
 	}
 
 	cpy := *v
-	cpy.meta = meta
+	if v.attrs == nil {
+		cpy.attrs = newVectorAttrs(meta)
+	} else {
+		attrs := *v.attrs
+		attrs.meta = meta
+		cpy.attrs = &attrs
+	}
 	return &cpy
 }
 
 func (v *Vector) HashEq() uint32 {
-	return apersistentVectorHashEq(&v.hasheq, v)
+	return apersistentVectorHashEq(&v.ensureAttrs().hasheq, v)
 }
 
 func (v *Vector) Hash() uint32 {
-	return apersistentVectorHash(&v.hash, v)
+	return apersistentVectorHash(&v.ensureAttrs().hash, v)
 }
 
 func (v *Vector) ReduceInit(f IFn, init any) any {
@@ -294,7 +308,21 @@ func (v *Vector) Drop(n int) Sequential {
 	if n >= v.Count() {
 		return nil
 	}
-	return NewSubVector(v.meta, v, n, v.Count())
+	return NewSubVector(v.Meta(), v, n, v.Count())
+}
+
+func newVectorAttrs(meta IPersistentMap) *vectorAttrs {
+	if meta == nil {
+		return nil
+	}
+	return &vectorAttrs{meta: meta}
+}
+
+func (v *Vector) ensureAttrs() *vectorAttrs {
+	if v.attrs == nil {
+		v.attrs = &vectorAttrs{}
+	}
+	return v.attrs
 }
 
 func (v *Vector) AsTransient() ITransientCollection {
