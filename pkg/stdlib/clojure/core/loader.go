@@ -15504,7 +15504,7 @@ func LoadNS() {
 				} else {
 					tmp5 = lang.Apply1(tmp4, v2)
 				}
-				tmp6 := lang.Apply1(lang.SeqToTypedArray, tmp5)
+				tmp6 := lang.Apply1(nil, tmp5)
 				return tmp6
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
@@ -15523,7 +15523,7 @@ func LoadNS() {
 				} else {
 					tmp6 = lang.Apply1(tmp5, v3)
 				}
-				tmp7 := lang.Apply2(lang.SeqToTypedArray, v2, tmp6)
+				tmp7 := lang.Apply2(nil, v2, tmp6)
 				return tmp7
 			}),
 			nil,
@@ -76213,17 +76213,8 @@ func LoadNS() {
 			_ = v59
 			v60 := p1
 			_ = v60
-			tmp61, ok := lang.FieldOrMethod(v59, "StripTrailingZeros")
-			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v59, "StripTrailingZeros")))
-			}
-			var tmp62 any
-			switch reflect.TypeOf(tmp61).Kind() {
-			case reflect.Func:
-				tmp62 = lang.Apply(tmp61, nil)
-			default:
-				tmp62 = tmp61
-			}
+			tmp61 := checkDerefVar(var_clojure_DOT_core_str)
+			tmp62 := lang.Apply1(tmp61, v59)
 			tmp63 := lang.Apply2(lang.WriteWriter, v60, tmp62)
 			_ = tmp63
 			tmp64 := lang.Apply2(lang.WriteWriter, v60, "M")

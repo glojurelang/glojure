@@ -3486,9 +3486,9 @@
   {:added "1.0"
    :static true}
   ([aseq]
-     (github.com:glojurelang:glojure:pkg:lang.SeqToTypedArray (seq aseq)))
+     (clojure.lang.RT/seqToTypedArray (seq aseq)))
   ([type aseq]
-     (github.com:glojurelang:glojure:pkg:lang.SeqToTypedArray type (seq aseq))))
+     (clojure.lang.RT/seqToTypedArray type (seq aseq))))
 
 (defn ^{:private true}
   array [& items]

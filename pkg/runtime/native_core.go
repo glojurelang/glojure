@@ -1,7 +1,6 @@
 package runtime
 
 import (
-	"reflect"
 	"regexp"
 	"strings"
 
@@ -484,14 +483,6 @@ func (r nativeCoreReduce) Invoke2(fn, coll interface{}) interface{} {
 	if reducible, ok := coll.(lang.IReduce); ok {
 		return reducible.Reduce(fn.(lang.IFn))
 	}
-	if values, ok := nativeArrayValue(coll); ok {
-		reducer := fn.(lang.IFn)
-		if values.Len() == 0 {
-			return reducer.Invoke()
-		}
-		result := values.Index(0).Interface()
-		return reduceNativeArray(reducer, result, values, 1)
-	}
 	return lang.Apply2(r.fallback, fn, coll)
 }
 
@@ -499,42 +490,11 @@ func (r nativeCoreReduce) Invoke3(fn, initial, coll interface{}) interface{} {
 	if reducible, ok := coll.(lang.IReduceInit); ok {
 		return reducible.ReduceInit(fn.(lang.IFn), initial)
 	}
-	if values, ok := nativeArrayValue(coll); ok {
-		return reduceNativeArray(fn.(lang.IFn), initial, values, 0)
-	}
 	return lang.Apply3(r.fallback, fn, initial, coll)
 }
 
 func (r nativeCoreReduce) ApplyTo(args lang.ISeq) interface{} {
 	return r.Invoke(seqToSlice(args)...)
-}
-
-func nativeArrayValue(value interface{}) (reflect.Value, bool) {
-	if value == nil {
-		return reflect.Value{}, false
-	}
-	values := reflect.ValueOf(value)
-	switch values.Kind() {
-	case reflect.Array, reflect.Slice:
-		return values, true
-	default:
-		return reflect.Value{}, false
-	}
-}
-
-func reduceNativeArray(
-	reducer lang.IFn,
-	result interface{},
-	values reflect.Value,
-	start int,
-) interface{} {
-	for i := start; i < values.Len(); i++ {
-		result = lang.Apply2(reducer, result, values.Index(i).Interface())
-		if lang.IsReduced(result) {
-			return result.(lang.IDeref).Deref()
-		}
-	}
-	return result
 }
 
 type fixedAtomSwap0 interface {

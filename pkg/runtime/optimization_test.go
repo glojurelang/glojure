@@ -397,47 +397,6 @@ func TestNativeCoreReduceUsesReductionInterfaces(t *testing.T) {
 	}
 }
 
-func TestNativeCoreReduceUsesNativeArraysAndSlices(t *testing.T) {
-	fallback := lang.FnFunc(func(args ...interface{}) interface{} {
-		t.Fatalf("unexpected reduce fallback: %v", args)
-		return nil
-	})
-	fn := nativeCoreReduce{fallback: fallback}
-	add := lang.FnFunc2(func(a, b interface{}) interface{} {
-		return lang.Numbers.Add(a, b)
-	})
-
-	if got := fn.Invoke2(add, []int64{1, 2, 3}); got != int64(6) {
-		t.Fatalf("slice reduce = %v, want 6", got)
-	}
-	if got := fn.Invoke3(add, int64(4), [3]int64{1, 2, 3}); got != int64(10) {
-		t.Fatalf("array reduce = %v, want 10", got)
-	}
-
-	stopAfterTwo := lang.FnFunc2(func(a, b interface{}) interface{} {
-		sum := lang.Numbers.Add(a, b)
-		if sum == int64(3) {
-			return lang.NewReduced(sum)
-		}
-		return sum
-	})
-	if got := fn.Invoke3(stopAfterTwo, int64(0), []int64{1, 2, 100}); got != int64(3) {
-		t.Fatalf("reduced slice = %v, want 3", got)
-	}
-
-	called := false
-	empty := lang.FnFunc(func(args ...interface{}) interface{} {
-		called = true
-		if len(args) != 0 {
-			t.Fatalf("empty reduction received args: %v", args)
-		}
-		return int64(42)
-	})
-	if got := fn.Invoke2(empty, []int64{}); got != int64(42) || !called {
-		t.Fatalf("empty slice reduce = %v, called %v; want 42, true", got, called)
-	}
-}
-
 func TestNativeCoreRequireFastPathPreservesRuntimeSemantics(t *testing.T) {
 	ns := lang.NewNamespace(lang.NewSymbol("runtime.native-require-test"))
 	loadedRef := lang.NewRef(lang.NewSet())

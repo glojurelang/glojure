@@ -922,13 +922,6 @@
                   '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromRatio x))
    (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
                   'github.com:glojurelang:glojure:pkg:lang.NewBigIntFromGoBigInt)
-   (sexpr-replace
-    '(defmethod print-method java.math.BigDecimal [b, ^Writer w]
-       (.write w (str b))
-       (.write w "M"))
-    '(defmethod print-method java.math.BigDecimal [b, ^Writer w]
-       (.write w (.StripTrailingZeros b))
-       (.write w "M")))
 
    (sexpr-replace '.equals '.Equals)
 
@@ -992,7 +985,6 @@
    (sexpr-replace '(list 'new 'clojure.lang.Delay (list* '^{:once true} fn* [] body))
                   '(list 'github.com:glojurelang:glojure:pkg:lang.NewDelay (list* '^{:once true} fn* [] body)))
    (sexpr-replace 'clojure.lang.RT/count 'github.com:glojurelang:glojure:pkg:lang.Count)
-   (sexpr-replace 'clojure.lang.RT/seqToTypedArray 'github.com:glojurelang:glojure:pkg:lang.SeqToTypedArray)
 
    (sexpr-replace 'clojure.lang.IChunkedSeq 'github.com:glojurelang:glojure:pkg:lang.IChunkedSeq)
    (sexpr-replace 'clojure.lang.ChunkBuffer.

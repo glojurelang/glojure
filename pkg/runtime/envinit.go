@@ -138,19 +138,6 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 
 	// Set the glojure version
 	core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
-	// clojure.core's ns form intentionally does not add itself to
-	// *loaded-libs*. The JVM bootstrap does that around the initial load; do
-	// the equivalent here so a later (:require clojure.core) does not reload
-	// the namespace and replace native core overrides.
-	if loadedLibs := core.FindInternedVar(lang.NewSymbol("*loaded-libs*")); loadedLibs != nil {
-		if loadedRef, ok := loadedLibs.Deref().(*lang.Ref); ok {
-			lang.LockingTransaction.RunInTransaction(lang.FnFunc(func(...any) any {
-				return loadedRef.Commute(lang.FnFunc1(func(libs any) any {
-					return libs.(lang.IPersistentSet).Cons(lang.NewSymbol("clojure.core"))
-				}), nil)
-			}))
-		}
-	}
 	if installNativeCoreOverrides {
 		installNativeCoreFunctions(core)
 	}

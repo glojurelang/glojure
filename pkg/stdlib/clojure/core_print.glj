@@ -369,7 +369,7 @@
 (do)
 
 (defmethod print-method github.com:glojurelang:glojure:pkg:lang.*BigDecimal [b, ^Writer w]
-  (github.com:glojurelang:glojure:pkg:lang.WriteWriter w (.StripTrailingZeros b))
+  (github.com:glojurelang:glojure:pkg:lang.WriteWriter w (str b))
   (github.com:glojurelang:glojure:pkg:lang.WriteWriter w "M"))
 
 (defmethod print-method github.com:glojurelang:glojure:pkg:lang.*BigInt [b, ^Writer w]
