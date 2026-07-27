@@ -108,3 +108,80 @@ func TestDefaultOptimizerFoldsNestedLiteralNumberCall(t *testing.T) {
 		t.Fatal("constant fold did not retain AST source metadata")
 	}
 }
+
+func TestDirectLinkOptimizerFusesPopConj(t *testing.T) {
+	coreVar := func(name string) *lang.Var {
+		return lang.NSCore.Intern(lang.NewSymbol(name))
+	}
+	varNode := func(vr *lang.Var) *ast.Node {
+		return &ast.Node{
+			Op:  ast.OpVar,
+			Sub: &ast.VarNode{Var: vr, Meta: vr.Meta()},
+		}
+	}
+	collection := &ast.Node{
+		Op:  ast.OpConst,
+		Sub: &ast.ConstNode{Value: lang.NewVector(int64(1))},
+	}
+	value := &ast.Node{
+		Op:  ast.OpConst,
+		Sub: &ast.ConstNode{Value: int64(2)},
+	}
+	pop := &ast.Node{
+		Op: ast.OpInvoke,
+		Sub: &ast.InvokeNode{
+			Fn:   varNode(coreVar("pop")),
+			Args: []*ast.Node{collection},
+		},
+	}
+	root := &ast.Node{
+		Op: ast.OpInvoke,
+		Sub: &ast.InvokeNode{
+			Fn:   varNode(coreVar("conj")),
+			Args: []*ast.Node{pop, value},
+		},
+	}
+
+	result, err := NewDefaultOptimizer(OptimizationOptions{
+		DirectLinking: true,
+	}).Optimize(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.Op != ast.OpReplaceLast {
+		t.Fatalf("optimized op = %v, want OpReplaceLast", result.Op)
+	}
+	replace := result.Sub.(*ast.ReplaceLastNode)
+	if replace.Collection != collection || replace.Value != value {
+		t.Fatal("fused operation did not retain its operands")
+	}
+}
+
+func TestReplaceLastFusionRequiresDirectLinking(t *testing.T) {
+	conj := lang.NSCore.Intern(lang.NewSymbol("conj"))
+	pop := lang.NSCore.Intern(lang.NewSymbol("pop"))
+	varNode := func(vr *lang.Var) *ast.Node {
+		return &ast.Node{Op: ast.OpVar, Sub: &ast.VarNode{Var: vr}}
+	}
+	root := &ast.Node{
+		Op: ast.OpInvoke,
+		Sub: &ast.InvokeNode{
+			Fn: varNode(conj),
+			Args: []*ast.Node{{
+				Op: ast.OpInvoke,
+				Sub: &ast.InvokeNode{
+					Fn:   varNode(pop),
+					Args: []*ast.Node{{Op: ast.OpConst, Sub: &ast.ConstNode{}}},
+				},
+			}, {Op: ast.OpConst, Sub: &ast.ConstNode{}}},
+		},
+	}
+
+	result, err := NewDefaultOptimizer(OptimizationOptions{}).Optimize(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.Op != ast.OpInvoke {
+		t.Fatalf("optimized op = %v, want OpInvoke", result.Op)
+	}
+}

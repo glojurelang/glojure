@@ -238,6 +238,30 @@ func (v Persistent) AssocValue(i int, val interface{}) (Persistent, bool) {
 	}, true
 }
 
+// ReplaceLastValueInto returns persistent state with its final value replaced.
+// When the tail ends in a delta, storage holds the replacement delta so the
+// operation does not have to materialize and copy the tail.
+func (v Persistent) ReplaceLastValueInto(
+	val interface{},
+	storage *TailStorage,
+) (Persistent, bool) {
+	if v.count == 0 {
+		return Persistent{}, false
+	}
+	if v.tailDelta != nil {
+		storage.entry = tailEntry{
+			value: val,
+			prev:  v.tailDelta.prev,
+		}
+		v.tailDelta = &storage.entry
+		return v, true
+	}
+	tail := append([]interface{}(nil), v.baseTail()...)
+	tail[len(tail)-1] = val
+	v.tail = newTailBase(tail)
+	return v, true
+}
+
 // doAssoc returns an almost identical tree, with the i-th element replaced by
 // val.
 func doAssoc(height uint, n node, i int, val interface{}) node {

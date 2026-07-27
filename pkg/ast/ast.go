@@ -99,6 +99,15 @@ type (
 		Args []*Node
 	}
 
+	// ReplaceLastNode is the backend-neutral form of
+	// (conj (pop collection) value). Collection must be prepared (including
+	// validating pop) before Value is evaluated.
+	ReplaceLastNode struct {
+		Meta       lang.IPersistentMap
+		Collection *Node
+		Value      *Node
+	}
+
 	IfNode struct {
 		Test *Node
 		Then *Node
@@ -231,6 +240,7 @@ const (
 	OpLetFn
 	OpLoop
 	OpInvoke
+	OpReplaceLast
 	OpQuote
 	OpVar
 	OpLocal

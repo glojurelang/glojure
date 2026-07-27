@@ -98,6 +98,18 @@ func (v *Vector) AssocN(i int, val any) IPersistentVector {
 	return &Vector{attrs: newVectorAttrs(v.Meta()), vec: result}
 }
 
+// ReplaceLast returns a persistent vector whose final value is val.
+func (v *Vector) ReplaceLast(val any) *Vector {
+	storage := &vectorUpdateStorage{}
+	result, ok := v.vec.ReplaceLastValueInto(val, &storage.tail)
+	if !ok {
+		panic("can't pop an empty vector")
+	}
+	storage.attrs = newVectorAttrs(v.Meta())
+	storage.vec = result
+	return &storage.Vector
+}
+
 func (v *Vector) ContainsKey(key any) bool {
 	kInt, ok := AsInt(key)
 	if !ok {

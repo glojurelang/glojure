@@ -140,6 +140,9 @@ func (env *environment) evalInternalInNamespace(
 		},
 		FindNamespace: lang.FindNamespace,
 		ResolveHost:   resolveHost,
+		Optimizer: compiler.NewDefaultOptimizer(compiler.OptimizationOptions{
+			DirectLinking: directLinkEnabled(),
+		}),
 	}
 	astNode, err := analyzer.Analyze(n, lang.NewMap(
 		lang.KWNS, currentNS.Name(),

@@ -299,6 +299,27 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 			return evalCompiledCall(env, fnValue, args)
 		}
 
+	case ast.OpReplaceLast:
+		replace := n.Sub.(*ast.ReplaceLastNode)
+		collection := c.compile(replace.Collection)
+		value := c.compile(replace.Value)
+		if collection == nil || value == nil {
+			return nil
+		}
+		return func(env *environment) (res interface{}, err error) {
+			defer env.recoverReplaceLast(n, &res, &err)
+			coll, err := collection(env)
+			if err != nil {
+				return nil, err
+			}
+			plan := PrepareReplaceLast(coll)
+			replacement, err := value(env)
+			if err != nil {
+				return nil, err
+			}
+			return plan.Finish(replacement), nil
+		}
+
 	case ast.OpRecur:
 		recur := n.Sub.(*ast.RecurNode)
 		exprs := c.compileArgs(recur.Exprs)

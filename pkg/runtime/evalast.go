@@ -101,6 +101,8 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 		return env.EvalASTLetFn(n)
 	case ast.OpInvoke:
 		return env.EvalASTInvoke(n)
+	case ast.OpReplaceLast:
+		return env.EvalASTReplaceLast(n)
 	case ast.OpQuote:
 		return n.Sub.(*ast.QuoteNode).Expr.Sub.(*ast.ConstNode).Value, nil
 	case ast.OpVar:
@@ -134,6 +136,32 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	default:
 		panic(fmt.Errorf("unimplemented op: %d. Form: %s", n.Op, lang.ToString(n.Form)))
 	}
+}
+
+func (env *environment) EvalASTReplaceLast(
+	n *ast.Node,
+) (res interface{}, err error) {
+	replace := n.Sub.(*ast.ReplaceLastNode)
+	defer env.recoverReplaceLast(n, &res, &err)
+	collection, err := env.EvalAST(replace.Collection)
+	if err != nil {
+		return nil, err
+	}
+	plan := PrepareReplaceLast(collection)
+	value, err := env.EvalAST(replace.Value)
+	if err != nil {
+		return nil, err
+	}
+	return plan.Finish(value), nil
+}
+
+func (env *environment) recoverReplaceLast(
+	n *ast.Node,
+	res *interface{},
+	err *error,
+) {
+	replace := n.Sub.(*ast.ReplaceLastNode)
+	env.recoverInvokeForm(recover(), replace.Meta, n.Form, res, err)
 }
 
 func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {

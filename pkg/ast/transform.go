@@ -102,6 +102,11 @@ func transformChildren(node *Node, fn func(*Node) (*Node, error)) error {
 			return err
 		}
 		return transformNodes(sub.Args, fn)
+	case *ReplaceLastNode:
+		if err := transformNode(&sub.Collection, fn); err != nil {
+			return err
+		}
+		return transformNode(&sub.Value, fn)
 	case *IfNode:
 		if err := transformNode(&sub.Test, fn); err != nil {
 			return err

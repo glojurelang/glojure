@@ -1676,6 +1676,15 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		return g.generateIf(node)
 	case ast.OpInvoke:
 		return g.generateInvoke(node)
+	case ast.OpReplaceLast:
+		replace := node.Sub.(*ast.ReplaceLastNode)
+		collection := g.generateASTNode(replace.Collection)
+		plan := g.allocateTempVar()
+		g.writef("%s := runtime.PrepareReplaceLast(%s)\n", plan, collection)
+		value := g.generateASTNode(replace.Value)
+		result := g.allocateTempVar()
+		g.writef("%s := %s.Finish(%s)\n", result, plan, value)
+		return result
 	case ast.OpVar:
 		return g.generateVarDeref(node)
 	case ast.OpRecur:

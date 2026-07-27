@@ -35,6 +35,26 @@ func TestLargeVectorConsCoallocatesResultAndTail(t *testing.T) {
 	runtime.KeepAlive(result)
 }
 
+func TestVectorReplaceLastIsPersistentAndCoallocated(t *testing.T) {
+	original := NewVector()
+	for _, value := range []int{1, 2, 3, 4, 5} {
+		original = original.Cons(value).(*Vector)
+	}
+	var result *Vector
+	if got := testing.AllocsPerRun(1_000, func() {
+		result = original.ReplaceLast(9)
+	}); got != 1 {
+		t.Fatalf("replace-last allocated %v objects per call, want 1", got)
+	}
+	if got := original.Nth(4); got != 5 {
+		t.Fatalf("original final value = %v, want 5", got)
+	}
+	if got := result.Nth(4); got != 9 {
+		t.Fatalf("replacement final value = %v, want 9", got)
+	}
+	runtime.KeepAlive(result)
+}
+
 func TestSmallVectorWithMetaKeepsInlineStorageAlive(t *testing.T) {
 	meta := NewMap(NewKeyword("source"), "test").(IPersistentMap)
 	withMeta := func() *Vector {
