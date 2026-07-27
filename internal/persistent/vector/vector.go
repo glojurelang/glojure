@@ -88,6 +88,13 @@ type TailStorage struct {
 	entry tailEntry
 }
 
+// ReplaceTailStorage reserves storage for replacing the last tail entry
+// without copying either a base tail or a delta chain.
+type ReplaceTailStorage struct {
+	entry tailEntry
+	base  tailBase
+}
+
 // Empty is an empty Vector.
 var Empty Vector = &Persistent{}
 
@@ -243,7 +250,7 @@ func (v Persistent) AssocValue(i int, val interface{}) (Persistent, bool) {
 // operation does not have to materialize and copy the tail.
 func (v Persistent) ReplaceLastValueInto(
 	val interface{},
-	storage *TailStorage,
+	storage *ReplaceTailStorage,
 ) (Persistent, bool) {
 	if v.count == 0 {
 		return Persistent{}, false
@@ -256,9 +263,11 @@ func (v Persistent) ReplaceLastValueInto(
 		v.tailDelta = &storage.entry
 		return v, true
 	}
-	tail := append([]interface{}(nil), v.baseTail()...)
-	tail[len(tail)-1] = val
-	v.tail = newTailBase(tail)
+	base := v.baseTail()
+	storage.base = tailBase(base[:len(base)-1])
+	storage.entry = tailEntry{value: val}
+	v.tail = &storage.base
+	v.tailDelta = &storage.entry
 	return v, true
 }
 

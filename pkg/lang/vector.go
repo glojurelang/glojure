@@ -28,6 +28,11 @@ type (
 		tail vector.TailStorage
 	}
 
+	vectorReplaceStorage struct {
+		Vector
+		tail vector.ReplaceTailStorage
+	}
+
 	PersistentVector = Vector
 
 	TransientVector struct {
@@ -100,7 +105,7 @@ func (v *Vector) AssocN(i int, val any) IPersistentVector {
 
 // ReplaceLast returns a persistent vector whose final value is val.
 func (v *Vector) ReplaceLast(val any) *Vector {
-	storage := &vectorUpdateStorage{}
+	storage := &vectorReplaceStorage{}
 	result, ok := v.vec.ReplaceLastValueInto(val, &storage.tail)
 	if !ok {
 		panic("can't pop an empty vector")

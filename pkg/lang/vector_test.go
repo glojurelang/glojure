@@ -36,23 +36,36 @@ func TestLargeVectorConsCoallocatesResultAndTail(t *testing.T) {
 }
 
 func TestVectorReplaceLastIsPersistentAndCoallocated(t *testing.T) {
-	original := NewVector()
-	for _, value := range []int{1, 2, 3, 4, 5} {
-		original = original.Cons(value).(*Vector)
+	tests := []struct {
+		name     string
+		original *Vector
+	}{
+		{"base tail", NewVector(1, 2, 3, 4, 5)},
+		{"delta tail", func() *Vector {
+			vector := NewVector()
+			for _, value := range []int{1, 2, 3, 4, 5} {
+				vector = vector.Cons(value).(*Vector)
+			}
+			return vector
+		}()},
 	}
-	var result *Vector
-	if got := testing.AllocsPerRun(1_000, func() {
-		result = original.ReplaceLast(9)
-	}); got != 1 {
-		t.Fatalf("replace-last allocated %v objects per call, want 1", got)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			var result *Vector
+			if got := testing.AllocsPerRun(1_000, func() {
+				result = test.original.ReplaceLast(9)
+			}); got != 1 {
+				t.Fatalf("replace-last allocated %v objects per call, want 1", got)
+			}
+			if got := test.original.Nth(4); got != 5 {
+				t.Fatalf("original final value = %v, want 5", got)
+			}
+			if got := result.Nth(4); got != 9 {
+				t.Fatalf("replacement final value = %v, want 9", got)
+			}
+			runtime.KeepAlive(result)
+		})
 	}
-	if got := original.Nth(4); got != 5 {
-		t.Fatalf("original final value = %v, want 5", got)
-	}
-	if got := result.Nth(4); got != 9 {
-		t.Fatalf("replacement final value = %v, want 9", got)
-	}
-	runtime.KeepAlive(result)
 }
 
 func TestSmallVectorWithMetaKeepsInlineStorageAlive(t *testing.T) {
