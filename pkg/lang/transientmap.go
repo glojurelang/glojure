@@ -17,6 +17,12 @@ type TransientMap struct {
 	// array is non-nil while the map uses the small-map representation.
 	array []any
 
+	// strings is non-nil after a string-only array map outgrows the small-map
+	// representation. Go's native string hashing is substantially cheaper than
+	// routing every lookup and update through the generic HAMT. A non-string
+	// key promotes this representation to the HAMT without changing semantics.
+	strings map[string]any
+
 	count    int
 	root     Node
 	leafFlag Box
@@ -66,6 +72,16 @@ func (m *TransientMap) Assoc(key, value any) ITransientAssociative {
 	if m.array != nil {
 		return m.assocArray(key, value)
 	}
+	if m.strings != nil {
+		if stringKey, ok := key.(string); ok {
+			if _, found := m.strings[stringKey]; !found {
+				m.count++
+			}
+			m.strings[stringKey] = value
+			return m
+		}
+		m.promoteStrings()
+	}
 	m.assocHAMT(key, value)
 	return m
 }
@@ -83,8 +99,14 @@ func (m *TransientMap) assocArray(key, value any) *TransientMap {
 		threshold = arrayMapKeywordThreshold
 	}
 	if len(m.array) >= threshold {
-		m.promoteArray()
-		m.assocHAMT(key, value)
+		if stringKey, ok := key.(string); ok && m.arrayHasOnlyStringKeys() {
+			m.promoteArrayStrings()
+			m.strings[stringKey] = value
+			m.count++
+		} else {
+			m.promoteArray()
+			m.assocHAMT(key, value)
+		}
 		return m
 	}
 
@@ -137,6 +159,17 @@ func (m *TransientMap) Without(key any) ITransientMap {
 		m.count--
 		return m
 	}
+	if m.strings != nil {
+		stringKey, ok := key.(string)
+		if !ok {
+			return m
+		}
+		if _, found := m.strings[stringKey]; found {
+			delete(m.strings, stringKey)
+			m.count--
+		}
+		return m
+	}
 	if m.root == nil {
 		return m
 	}
@@ -181,6 +214,9 @@ func (m *TransientMap) Conj(value any) Conjer {
 
 func (m *TransientMap) Persistent() IPersistentCollection {
 	m.ensureEditable()
+	if m.strings != nil {
+		m.promoteStrings()
+	}
 	m.edit.persisted = true
 	if m.array != nil {
 		keyVals := append([]any(nil), m.array...)
@@ -211,6 +247,16 @@ func (m *TransientMap) ValAtDefault(key, fallback any) any {
 		}
 		return fallback
 	}
+	if m.strings != nil {
+		stringKey, ok := key.(string)
+		if !ok {
+			return fallback
+		}
+		if value, found := m.strings[stringKey]; found {
+			return value
+		}
+		return fallback
+	}
 	if m.root != nil {
 		if _, value, found := m.root.find(0, HashEq(key), key); found {
 			return value
@@ -224,6 +270,14 @@ func (m *TransientMap) ContainsKey(key any) bool {
 	if m.array != nil {
 		return m.arrayIndex(key) >= 0
 	}
+	if m.strings != nil {
+		stringKey, ok := key.(string)
+		if !ok {
+			return false
+		}
+		_, found := m.strings[stringKey]
+		return found
+	}
 	if m.root != nil {
 		_, _, found := m.root.find(0, HashEq(key), key)
 		return found
@@ -236,6 +290,14 @@ func (m *TransientMap) EntryAt(key any) IMapEntry {
 	if m.array != nil {
 		if index := m.arrayIndex(key); index >= 0 {
 			return NewMapEntry(m.array[index], m.array[index+1])
+		}
+	} else if m.strings != nil {
+		stringKey, ok := key.(string)
+		if !ok {
+			return nil
+		}
+		if value, found := m.strings[stringKey]; found {
+			return NewMapEntry(stringKey, value)
 		}
 	} else if m.root != nil {
 		foundKey, value, found := m.root.find(0, HashEq(key), key)
@@ -279,5 +341,33 @@ func (m *TransientMap) promoteArray() {
 	m.count = 0
 	for i := 0; i < len(keyVals); i += 2 {
 		m.assocHAMT(keyVals[i], keyVals[i+1])
+	}
+}
+
+func (m *TransientMap) arrayHasOnlyStringKeys() bool {
+	for i := 0; i < len(m.array); i += 2 {
+		if _, ok := m.array[i].(string); !ok {
+			return false
+		}
+	}
+	return true
+}
+
+func (m *TransientMap) promoteArrayStrings() {
+	keyVals := m.array
+	m.array = nil
+	m.strings = make(map[string]any, len(keyVals)/2+1)
+	for i := 0; i < len(keyVals); i += 2 {
+		m.strings[keyVals[i].(string)] = keyVals[i+1]
+	}
+}
+
+func (m *TransientMap) promoteStrings() {
+	values := m.strings
+	m.strings = nil
+	m.root = nil
+	m.count = 0
+	for key, value := range values {
+		m.assocHAMT(key, value)
 	}
 }

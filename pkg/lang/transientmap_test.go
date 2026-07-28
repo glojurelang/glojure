@@ -134,6 +134,47 @@ func TestTransientMapPromotesToHAMTAndHandlesCollisions(t *testing.T) {
 	}
 }
 
+func TestTransientMapSpecializesStringKeysAndFallsBackToHAMT(t *testing.T) {
+	transient := newTransientMapForTest(t, NewMap())
+	for i := 0; i < 64; i++ {
+		transient = assocTransientMap(
+			t,
+			transient,
+			fmt.Sprintf("key-%d", i),
+			int64(i),
+		)
+	}
+
+	implementation := transient.(*TransientMap)
+	if implementation.strings == nil {
+		t.Fatal("string-key transient did not select the native string map")
+	}
+	transient = assocTransientMap(t, transient, "key-7", int64(700))
+	transient = transient.Without("key-8").(transientMapOps)
+	if got := transient.ValAt("key-7"); got != int64(700) {
+		t.Fatalf("updated string value = %v, want 700", got)
+	}
+	if implementation.ContainsKey("key-8") {
+		t.Fatal("removed string key remains in transient")
+	}
+
+	transient = assocTransientMap(t, transient, int64(99), "mixed")
+	if implementation.strings != nil || implementation.root == nil {
+		t.Fatal("mixed-key transient did not fall back to the HAMT")
+	}
+
+	persistent := transient.Persistent().(IPersistentMap)
+	if got := persistent.ValAt("key-7"); got != int64(700) {
+		t.Fatalf("persistent updated string value = %v, want 700", got)
+	}
+	if persistent.ContainsKey("key-8") {
+		t.Fatal("persistent map retained removed string key")
+	}
+	if got := persistent.ValAt(int64(99)); got != "mixed" {
+		t.Fatalf("persistent mixed-key value = %v, want mixed", got)
+	}
+}
+
 func TestTransientMapHAMTCopyOnWrite(t *testing.T) {
 	const entries = 512
 	key := func(i int) controlledHashKey {
