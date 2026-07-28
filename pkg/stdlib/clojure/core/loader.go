@@ -11288,7 +11288,7 @@ func LoadNS() {
 											_ = v24
 											for {
 												var tmp25 any
-												tmp26 := lang.Numbers.Lt(v24, v22)
+												tmp26 := (v24 < lang.AsInt64(v22))
 												if lang.IsTruthy(tmp26) {
 													var tmp27 any
 													{ // let
@@ -15414,7 +15414,7 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			tmp3 := lang.LongCast(v2)
-			return tmp3
+			return lang.BoxInt64(tmp3)
 		})
 		aotDirectFn264 = tmp1
 		var_clojure_DOT_core_long = ns.InternWithValue(tmp0, tmp1, true)
@@ -28774,7 +28774,7 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			tmp3 := lang.UncheckedIntCast(v2)
-			return tmp3
+			return lang.BoxInt(tmp3)
 		})
 		aotDirectFn536 = tmp1
 		var_clojure_DOT_core_unchecked_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
@@ -28815,7 +28815,7 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			tmp3 := lang.UncheckedLongCast(v2)
-			return tmp3
+			return lang.BoxInt64(tmp3)
 		})
 		aotDirectFn537 = tmp1
 		var_clojure_DOT_core_unchecked_DASH_long = ns.InternWithValue(tmp0, tmp1, true)
@@ -37120,7 +37120,7 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			tmp4 := lang.Compare(v2, v3)
-			return tmp4
+			return lang.BoxInt(tmp4)
 		})
 		aotDirectFn107 = tmp1
 		var_clojure_DOT_core_compare = ns.InternWithValue(tmp0, tmp1, true)
@@ -37696,7 +37696,7 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			tmp3 := lang.Count(v2)
-			return tmp3
+			return lang.BoxInt(tmp3)
 		})
 		aotDirectFn118 = tmp1
 		var_clojure_DOT_core_count = ns.InternWithValue(tmp0, tmp1, true)
@@ -44114,7 +44114,7 @@ func LoadNS() {
 						tmp8 := aotDirectFn292(v3)
 						tmp9 := runtime.RT.IntCast(lang.NewChar(46))
 						tmp10 := lang.Apply2(strings9.Index, tmp8, tmp9)
-						tmp11 := lang.Numbers.IsPos(tmp10)
+						tmp11 := (lang.AsInt64(tmp10) > 0)
 						tmp7 = tmp11
 					} else {
 						tmp7 = v6
@@ -45426,7 +45426,7 @@ func LoadNS() {
 											_ = v25
 											for {
 												var tmp26 any
-												tmp27 := lang.Numbers.Lt(v25, v23)
+												tmp27 := (v25 < lang.AsInt64(v23))
 												if lang.IsTruthy(tmp27) {
 													tmp28, _ := lang.FieldOrMethod(v15, "nth")
 													if reflect.TypeOf(tmp28).Kind() != reflect.Func {

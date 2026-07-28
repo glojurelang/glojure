@@ -1683,7 +1683,7 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 	// Generate the body
 	bodyVar := g.generateASTNode(methodNode.Body)
 	if bodyVar != "" {
-		g.writef("return %s\n", bodyVar)
+		g.writef("return %s\n", g.boxDynamicResult(methodNode.Body, bodyVar))
 	}
 	// If bodyVar is empty (e.g., from throw), no return is generated
 }
@@ -1724,7 +1724,7 @@ func (g *Generator) generateFnMethodSplit(
 
 	bodyVar := g.generateASTNode(methodNode.Body)
 	if bodyVar != "" {
-		g.writef("return %s\n", bodyVar)
+		g.writef("return %s\n", g.boxDynamicResult(methodNode.Body, bodyVar))
 	}
 }
 
@@ -1763,9 +1763,27 @@ func (g *Generator) generateFnMethodFixed(methodNode *ast.FnMethodNode, paramVar
 	// Generate the body
 	bodyVar := g.generateASTNode(methodNode.Body)
 	if bodyVar != "" {
-		g.writef("return %s\n", bodyVar)
+		g.writef("return %s\n", g.boxDynamicResult(methodNode.Body, bodyVar))
 	}
 	// If bodyVar is empty (e.g., from throw), no return is generated
+}
+
+func (g *Generator) boxDynamicResult(node *ast.Node, expression string) string {
+	if g.currentIR == nil || node == nil {
+		return expression
+	}
+	typ := g.currentIR.Facts(node).Type.GoType
+	if typ == nil {
+		return expression
+	}
+	switch typ {
+	case reflect.TypeFor[int]():
+		return "lang.BoxInt(" + expression + ")"
+	case reflect.TypeFor[int64]():
+		return "lang.BoxInt64(" + expression + ")"
+	default:
+		return expression
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@ package lang
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 )
 
@@ -18,10 +17,9 @@ func SortSlice(slice []any, comp any) {
 		panic(NewIllegalArgumentError("Comparator must be a function"))
 	}
 
-	// Use sort.SliceStable for stable sorting (maintains relative order of equal elements)
-	sort.SliceStable(slice, func(i, j int) bool {
+	stableSortAny(slice, func(x, y any) bool {
 		// Call the comparator function with the two elements
-		result := compFn.Invoke(slice[i], slice[j])
+		result := Apply2(compFn, x, y)
 
 		// Handle both boolean and numeric comparators
 		// Boolean comparator: returns true if i < j
@@ -43,11 +41,102 @@ func SortSlice(slice []any, comp any) {
 	})
 }
 
+func stableSortAny(values []any, less func(any, any) bool) {
+	if len(values) < 2 {
+		return
+	}
+
+	// Match the adaptive behavior Clojure gets from its object-array sort for
+	// the two most useful natural runs. The reverse path restores the original
+	// order inside comparator-equal groups, so stability is preserved.
+	ordered := true
+	for i := 1; i < len(values); i++ {
+		if less(values[i], values[i-1]) {
+			ordered = false
+			break
+		}
+	}
+	if ordered {
+		return
+	}
+	reverseOrdered := true
+	for i := 1; i < len(values); i++ {
+		if less(values[i-1], values[i]) {
+			reverseOrdered = false
+			break
+		}
+	}
+	if reverseOrdered {
+		reverseAny(values)
+		runStart := 0
+		for i := 1; i <= len(values); i++ {
+			if i == len(values) || less(values[i-1], values[i]) {
+				reverseAny(values[runStart:i])
+				runStart = i
+			}
+		}
+		return
+	}
+
+	// Clojure's object-array sort uses temporary merge storage. Do the same
+	// for Glojure's []any representation instead of paying the extra swaps
+	// required by Go's allocation-free symmetric stable merge.
+	scratch := make([]any, len(values))
+	source, destination := values, scratch
+	sourceIsValues := true
+
+	for width := 1; width < len(values); width *= 2 {
+		for start := 0; start < len(values); start += 2 * width {
+			middle := min(start+width, len(values))
+			end := min(start+2*width, len(values))
+			left, right := start, middle
+			for output := start; output < end; output++ {
+				if right >= end ||
+					(left < middle && !less(source[right], source[left])) {
+					destination[output] = source[left]
+					left++
+				} else {
+					destination[output] = source[right]
+					right++
+				}
+			}
+		}
+		source, destination = destination, source
+		sourceIsValues = !sourceIsValues
+	}
+
+	if !sourceIsValues {
+		copy(values, source)
+	}
+}
+
+func reverseAny(values []any) {
+	for left, right := 0, len(values)-1; left < right; left, right = left+1, right-1 {
+		values[left], values[right] = values[right], values[left]
+	}
+}
+
 // Compare implements Clojure's compare function.
 // Returns a negative number, zero, or a positive number when x is logically
 // 'less than', 'equal to', or 'greater than' y.
 // Handles nil values (nil is less than everything except nil).
 func Compare(x, y any) int {
+	// Keep the overwhelmingly common homogeneous integer comparison on a
+	// concrete path. This avoids generic interface equality, nil reflection,
+	// and numeric dispatch.
+	if xInt, ok := x.(int64); ok {
+		if yInt, ok := y.(int64); ok {
+			switch {
+			case xInt < yInt:
+				return -1
+			case xInt > yInt:
+				return 1
+			default:
+				return 0
+			}
+		}
+	}
+
 	// Identity check
 	if x == y {
 		return 0
@@ -64,9 +153,9 @@ func Compare(x, y any) int {
 		return 1
 	}
 
-	// Handle numbers using the Numbers.Compare method
-	if xNum, xIsNum := AsNumber(x); xIsNum {
-		return Numbers.Compare(xNum, y)
+	// Handle other numeric combinations using the Numbers.Compare method.
+	if IsNumber(x) {
+		return Numbers.Compare(x, y)
 	}
 
 	// Check if x implements Comparer interface

@@ -29,6 +29,27 @@ func TestBoxInt64PreservesValues(t *testing.T) {
 	}
 }
 
+func TestBoxIntPreservesValues(t *testing.T) {
+	for _, value := range []int{-129, -128, 0, 4096, 4097} {
+		if got := BoxInt(value); got != value {
+			t.Errorf("BoxInt(%d) = %v", value, got)
+		}
+	}
+}
+
+func TestBoxIntCachesCommonValues(t *testing.T) {
+	var boxed any
+	allocs := testing.AllocsPerRun(1000, func() {
+		boxed = BoxInt(42)
+	})
+	if boxed != 42 {
+		t.Fatalf("BoxInt(42) = %v", boxed)
+	}
+	if allocs != 0 {
+		t.Fatalf("BoxInt(42) allocated %v times, want zero", allocs)
+	}
+}
+
 func TestCommonInt64ArithmeticDoesNotAllocate(t *testing.T) {
 	if got := testing.AllocsPerRun(1_000, func() {
 		boxedArithmeticSink = Numbers.Add(

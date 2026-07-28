@@ -1147,6 +1147,44 @@ func TestInferredDirectLinkingHonorsRedefMetadata(t *testing.T) {
 	}
 }
 
+func TestGeneratedFunctionCachesResolvedIntegerReturn(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.boxed-host-return"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn compare-result [x y]
+		  (github.com:glojurelang:glojure:pkg:lang.Compare x y))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate resolved integer return: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "return lang.BoxInt(") {
+		t.Fatalf("resolved Go int return was not boxed through the cache:\n%s", generated)
+	}
+}
+
+type codegenNamedInt int64
+
+func TestGeneratedFunctionPreservesNamedIntegerReturn(t *testing.T) {
+	call := aotTestConst(func(any) codegenNamedInt { return 1 })
+	invoke := &ast.Node{
+		Op: ast.OpInvoke,
+		Sub: &ast.InvokeNode{
+			Fn:   call,
+			Args: []*ast.Node{aotTestConst(int64(42))},
+		},
+	}
+	generator := NewGenerator(&bytes.Buffer{})
+	generator.currentIR = compiler.BuildTypedIR(invoke)
+	if got := generator.boxDynamicResult(invoke, "value"); got != "value" {
+		t.Fatalf("named integer return was coerced at dynamic boundary: %s", got)
+	}
+}
+
 func TestGenerateMutableRuntimeValues(t *testing.T) {
 	generator := NewGenerator(&bytes.Buffer{})
 

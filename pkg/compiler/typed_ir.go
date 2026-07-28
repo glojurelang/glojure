@@ -65,6 +65,10 @@ const (
 type IRType struct {
 	Kind     IRValueKind
 	Nullable bool
+	// GoType records a concrete Go representation when analysis can prove
+	// one. Backends can use it at dynamic boundaries without recognizing the
+	// source function or expression that produced the value.
+	GoType reflect.Type
 }
 
 type IRShape struct {
@@ -343,9 +347,14 @@ func (ir *TypedIR) refineTypes(node *ast.Node) bool {
 		thenType := ir.facts[ifNode.Then].Type
 		elseType := ir.facts[ifNode.Else].Type
 		if thenType.Kind == elseType.Kind {
+			goType := thenType.GoType
+			if goType != elseType.GoType {
+				goType = nil
+			}
 			typ = IRType{
 				Kind:     thenType.Kind,
 				Nullable: thenType.Nullable || elseType.Nullable,
+				GoType:   goType,
 			}
 		}
 	case ast.OpAssoc:
@@ -355,6 +364,10 @@ func (ir *TypedIR) refineTypes(node *ast.Node) bool {
 	case ast.OpHostCall:
 		if inferred, ok := ir.inferHostCallType(
 			node.Sub.(*ast.HostCallNode),
+		); ok {
+			typ = inferred
+		} else if inferred, ok := irResolvedCallType(
+			node.Sub.(*ast.HostCallNode).ResolvedMethod,
 		); ok {
 			typ = inferred
 		}
@@ -460,10 +473,21 @@ func (ir *TypedIR) visit(node *ast.Node) {
 		thenType := ir.facts[ifNode.Then].Type
 		elseType := ir.facts[ifNode.Else].Type
 		if thenType.Kind == elseType.Kind {
+			goType := thenType.GoType
+			if goType != elseType.GoType {
+				goType = nil
+			}
 			facts.Type = IRType{
 				Kind:     thenType.Kind,
 				Nullable: thenType.Nullable || elseType.Nullable,
+				GoType:   goType,
 			}
+		}
+	case ast.OpHostCall:
+		if inferred, ok := irResolvedCallType(
+			node.Sub.(*ast.HostCallNode).ResolvedMethod,
+		); ok {
+			facts.Type = inferred
 		}
 	case ast.OpVar:
 		facts.Effects |= IREffectReadVar
@@ -478,6 +502,13 @@ func (ir *TypedIR) visit(node *ast.Node) {
 
 func (ir *TypedIR) inferInvoke(node *ast.Node, facts *IRFacts) {
 	invoke := node.Sub.(*ast.InvokeNode)
+	if invoke.Fn != nil && invoke.Fn.Op == ast.OpConst {
+		if inferred, ok := irResolvedCallType(
+			invoke.Fn.Sub.(*ast.ConstNode).Value,
+		); ok {
+			facts.Type = inferred
+		}
+	}
 	vr, namespace, name, known := irVarCall(invoke)
 	facts.Call = IRCall{
 		Var:   vr,
@@ -884,6 +915,30 @@ func irConstType(value any) IRType {
 	default:
 		return IRType{Kind: IRDynamic, Nullable: true}
 	}
+}
+
+func irResolvedCallType(callable any) (IRType, bool) {
+	typ := reflect.TypeOf(callable)
+	if typ == nil || typ.Kind() != reflect.Func || typ.NumOut() != 1 {
+		return IRType{}, false
+	}
+	result := typ.Out(0)
+	inferred := IRType{GoType: result}
+	switch result.Kind() {
+	case reflect.Bool:
+		inferred.Kind = IRBool
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
+		reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16,
+		reflect.Uint32, reflect.Uint64:
+		inferred.Kind = IRInt
+	case reflect.Float32, reflect.Float64:
+		inferred.Kind = IRFloat
+	case reflect.String:
+		inferred.Kind = IRString
+	default:
+		return IRType{}, false
+	}
+	return inferred, true
 }
 
 func irKeywordKeys(keys []*ast.Node) ([]lang.Keyword, bool) {

@@ -1383,7 +1383,7 @@ func LoadNS() {
 			{ // let
 				// let binding "s"
 				tmp6 := lang.ToString(v2)
-				var v7 any = tmp6
+				var v7 string = any(tmp6).(string)
 				_ = v7
 				// let binding "i"
 				tmp8 := runtime.RT.IntCast(v3)
@@ -1396,7 +1396,7 @@ func LoadNS() {
 					tmp11 = v7
 				} else {
 					tmp13 := runtime.RT.SubsEnd(any(v7).(string), lang.IntCast(int64(0)), lang.IntCast(v10))
-					tmp14 := lang.Numbers.Inc(v10)
+					tmp14 := lang.CheckedAddInt64(lang.AsInt64(v10), 1)
 					tmp15 := runtime.RT.Subs(any(v7).(string), lang.IntCast(tmp14))
 					tmp16 := aotExternalFn23(tmp13, v4, tmp15)
 					tmp11 = tmp16
@@ -1426,7 +1426,7 @@ func LoadNS() {
 			{ // let
 				// let binding "s"
 				tmp6 := lang.ToString(v2)
-				var v7 any = tmp6
+				var v7 string = any(tmp6).(string)
 				_ = v7
 				// let binding "i"
 				tmp8 := lang.Apply2(strings5.Index, v7, v3)
@@ -1439,7 +1439,7 @@ func LoadNS() {
 				} else {
 					tmp12 := runtime.RT.SubsEnd(any(v7).(string), lang.IntCast(int64(0)), lang.IntCast(v9))
 					tmp13 := lang.Count(v3)
-					tmp14 := lang.Numbers.Add(v9, tmp13)
+					tmp14 := lang.CheckedAddInt64(lang.AsInt64(v9), lang.AsInt64(tmp13))
 					tmp15 := runtime.RT.Subs(any(v7).(string), lang.IntCast(tmp14))
 					tmp16 := aotExternalFn23(tmp12, v4, tmp15)
 					tmp10 = tmp16

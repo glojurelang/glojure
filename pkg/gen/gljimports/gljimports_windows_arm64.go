@@ -298,6 +298,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.BoundedLength", github_com_glojurelang_glojure_pkg_lang.BoundedLength)
 	_register("github.com/glojurelang/glojure/pkg/lang.Box", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Box)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.*Box", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Box)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/lang.BoxInt", github_com_glojurelang_glojure_pkg_lang.BoxInt)
 	_register("github.com/glojurelang/glojure/pkg/lang.BoxInt64", github_com_glojurelang_glojure_pkg_lang.BoxInt64)
 	_register("github.com/glojurelang/glojure/pkg/lang.BuiltinTypes", github_com_glojurelang_glojure_pkg_lang.BuiltinTypes)
 	_register("github.com/glojurelang/glojure/pkg/lang.Builtins", github_com_glojurelang_glojure_pkg_lang.Builtins)

@@ -1,11 +1,28 @@
 package compiler
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
+
+func TestTypedIRRecordsResolvedCallRepresentation(t *testing.T) {
+	call := typedIRConst(func(any) int { return 1 })
+	invoke := &ast.Node{
+		Op: ast.OpInvoke,
+		Sub: &ast.InvokeNode{
+			Fn:   call,
+			Args: []*ast.Node{typedIRConst(int64(42))},
+		},
+	}
+
+	facts := BuildTypedIR(invoke).Facts(invoke)
+	if facts.Type.Kind != IRInt || facts.Type.GoType != reflect.TypeFor[int]() {
+		t.Fatalf("resolved call type = %#v, want concrete Go int", facts.Type)
+	}
+}
 
 func TestTypedIRFindsFixedGetInAndKeywordMapShapes(t *testing.T) {
 	getIn := typedIRCoreVar("get-in")
