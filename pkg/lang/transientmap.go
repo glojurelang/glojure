@@ -86,6 +86,49 @@ func (m *TransientMap) Assoc(key, value any) ITransientAssociative {
 	return m
 }
 
+// AssocString is the typed entry point used when analysis has proved a
+// transient map update's key representation. It avoids converting the string
+// to an interface before the native string-map lookup.
+func (m *TransientMap) AssocString(key string, value any) *TransientMap {
+	m.ensureEditable()
+	if m.array != nil {
+		if index := m.arrayStringIndex(key); index >= 0 {
+			if !Identical(m.array[index+1], value) {
+				m.array[index+1] = value
+			}
+			return m
+		}
+		if len(m.array) >= arrayMapHashThreshold &&
+			m.arrayHasOnlyStringKeys() {
+			m.promoteArrayStrings()
+			m.strings[key] = value
+			m.count++
+			return m
+		}
+		if len(m.array)+2 > cap(m.array) {
+			capacity := arrayMapHashThreshold
+			if capacity < len(m.array)+2 {
+				capacity = len(m.array) + 2
+			}
+			grown := make([]any, len(m.array), capacity)
+			copy(grown, m.array)
+			m.array = grown
+		}
+		m.array = append(m.array, key, value)
+		m.count++
+		return m
+	}
+	if m.strings != nil {
+		if _, found := m.strings[key]; !found {
+			m.count++
+		}
+		m.strings[key] = value
+		return m
+	}
+	m.assocHAMT(key, value)
+	return m
+}
+
 func (m *TransientMap) assocArray(key, value any) *TransientMap {
 	if index := m.arrayIndex(key); index >= 0 {
 		if !Identical(m.array[index+1], value) {
@@ -263,6 +306,39 @@ func (m *TransientMap) ValAtDefault(key, fallback any) any {
 		}
 	}
 	return fallback
+}
+
+// ValAtStringDefault is the typed counterpart to ValAtDefault for a proven
+// string key.
+func (m *TransientMap) ValAtStringDefault(key string, fallback any) any {
+	m.ensureEditable()
+	if m.array != nil {
+		if index := m.arrayStringIndex(key); index >= 0 {
+			return m.array[index+1]
+		}
+		return fallback
+	}
+	if m.strings != nil {
+		if value, found := m.strings[key]; found {
+			return value
+		}
+		return fallback
+	}
+	if m.root != nil {
+		if _, value, found := m.root.find(0, HashEq(key), key); found {
+			return value
+		}
+	}
+	return fallback
+}
+
+func (m *TransientMap) arrayStringIndex(key string) int {
+	for index := 0; index < len(m.array); index += 2 {
+		if existing, ok := m.array[index].(string); ok && existing == key {
+			return index
+		}
+	}
+	return -1
 }
 
 func (m *TransientMap) ContainsKey(key any) bool {

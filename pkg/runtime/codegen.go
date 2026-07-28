@@ -38,13 +38,15 @@ type varScope struct {
 	localAtoms        map[string]bool   // local atoms proven not to escape
 	localStringStacks map[string]bool   // confined string stacks
 	ownedMaps         map[string]bool   // uniquely owned loop-carried maps
+	localTypes        map[string]compiler.IRValueKind
 }
 
 // recurContext represents the context for a loop/recur form
 type recurContext struct {
 	loopID   *lang.Symbol // The loop ID to match recur with its loop
 	bindings []string     // Go variable names for loop bindings (in order)
-	useGoto  bool         // Whether to use Go's "goto" for recur
+	types    []compiler.IRValueKind
+	useGoto  bool // Whether to use Go's "goto" for recur
 }
 
 // liftedKey is a composite key for deduplicating lifted values
@@ -204,9 +206,13 @@ func NewGenerator(w io.Writer) *Generator {
 
 func newGenerator(w io.Writer, directLink bool) *Generator {
 	return &Generator{
-		originalWriter:         w,
-		currentWriter:          w,
-		varScopes:              []varScope{{nextNum: 0, names: make(map[string]string)}},
+		originalWriter: w,
+		currentWriter:  w,
+		varScopes: []varScope{{
+			nextNum:    0,
+			names:      make(map[string]string),
+			localTypes: make(map[string]compiler.IRValueKind),
+		}},
 		recurStack:             []recurContext{},
 		imports:                make(map[string]string),
 		varVariables:           make(map[varInfo]string),
@@ -1658,7 +1664,7 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 	if methodNode.LoopID != nil && nodeRecurs(methodNode.Body, methodNode.LoopID.Name()) {
 		g.writef("recur_%s:\n", methodNode.LoopID.Name())
 
-		g.pushRecurContext(methodNode.LoopID, paramVars, true)
+		g.pushRecurContext(methodNode.LoopID, paramVars, nil, true)
 		defer g.popRecurContext()
 	}
 
@@ -1700,7 +1706,7 @@ func (g *Generator) generateFnMethodSplit(
 	if methodNode.LoopID != nil && nodeRecurs(methodNode.Body, methodNode.LoopID.Name()) {
 		g.writef("recur_%s:\n", methodNode.LoopID.Name())
 
-		g.pushRecurContext(methodNode.LoopID, paramVars, true)
+		g.pushRecurContext(methodNode.LoopID, paramVars, nil, true)
 		defer g.popRecurContext()
 	}
 
@@ -1734,7 +1740,7 @@ func (g *Generator) generateFnMethodFixed(methodNode *ast.FnMethodNode, paramVar
 	if methodNode.LoopID != nil && nodeRecurs(methodNode.Body, methodNode.LoopID.Name()) {
 		g.writef("recur_%s:\n", methodNode.LoopID.Name())
 
-		g.pushRecurContext(methodNode.LoopID, paramVars, true)
+		g.pushRecurContext(methodNode.LoopID, paramVars, nil, true)
 		defer g.popRecurContext()
 	}
 
@@ -1866,12 +1872,23 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		if g.currentIR != nil &&
 			g.currentIR.Facts(node).OwnedMapAssoc {
 			for i := range keys {
-				g.writef(
-					"%s.(*lang.TransientMap).Assoc(%s, %s)\n",
-					target,
-					keys[i],
-					values[i],
-				)
+				if g.currentIR.Facts(
+					assoc.Entries[i].Key,
+				).Type.Kind == compiler.IRString {
+					g.writef(
+						"%s.(*lang.TransientMap).AssocString(%s, %s)\n",
+						target,
+						g.irStringExpr(assoc.Entries[i].Key, keys[i]),
+						values[i],
+					)
+				} else {
+					g.writef(
+						"%s.(*lang.TransientMap).Assoc(%s, %s)\n",
+						target,
+						keys[i],
+						values[i],
+					)
+				}
 			}
 			return target
 		}
@@ -2536,8 +2553,10 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 
 	// Collect binding variable names for recur context if this is a loop
 	var bindingVars []string
+	var bindingTypes []compiler.IRValueKind
 	if isLoop {
 		bindingVars = make([]string, 0, len(letNode.Bindings))
+		bindingTypes = make([]compiler.IRValueKind, 0, len(letNode.Bindings))
 	}
 
 	// Emit bindings directly to g.w
@@ -2570,6 +2589,38 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			g.markOwnedMap(name)
 			g.writeAssign("_", varName)
 			bindingVars = append(bindingVars, varName)
+			bindingTypes = append(bindingTypes, compiler.IRDynamic)
+			continue
+		}
+		if isLoop &&
+			bindingFacts.StableType.Kind == compiler.IRInt {
+			initCode := g.generateASTNode(init)
+			varName := g.allocateLocal(name)
+			g.writef(
+				"var %s int64 = %s\n",
+				varName,
+				g.irInt64Expr(init, initCode),
+			)
+			g.markLocalType(name, compiler.IRInt)
+			g.writeAssign("_", varName)
+			bindingVars = append(bindingVars, varName)
+			bindingTypes = append(bindingTypes, compiler.IRInt)
+			continue
+		}
+		if bindingFacts.StableType.Kind == compiler.IRString {
+			initCode := g.generateASTNode(init)
+			varName := g.allocateLocal(name)
+			g.writef(
+				"var %s string = %s\n",
+				varName,
+				g.irStringExpr(init, initCode),
+			)
+			g.markLocalType(name, compiler.IRString)
+			g.writeAssign("_", varName)
+			if isLoop {
+				bindingVars = append(bindingVars, varName)
+				bindingTypes = append(bindingTypes, compiler.IRString)
+			}
 			continue
 		}
 
@@ -2593,12 +2644,18 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		// Collect binding variables for loop
 		if isLoop {
 			bindingVars = append(bindingVars, varName)
+			bindingTypes = append(bindingTypes, compiler.IRDynamic)
 		}
 	}
 
 	if isLoop {
 		// Push recur context for this loop
-		g.pushRecurContext(letNode.LoopID, bindingVars, false)
+		g.pushRecurContext(
+			letNode.LoopID,
+			bindingVars,
+			bindingTypes,
+			false,
+		)
 		defer g.popRecurContext()
 
 		g.writef("for {\n")
@@ -2682,7 +2739,21 @@ func (g *Generator) generateRecur(node *ast.Node) string {
 		tempVar := g.allocateTempVar()
 		tempVars[i] = tempVar
 		exprCode := g.generateASTNode(expr)
-		g.writef("var %s any = %s\n", tempVar, exprCode)
+		if ctx.types[i] == compiler.IRInt {
+			g.writef(
+				"var %s int64 = %s\n",
+				tempVar,
+				g.irInt64Expr(expr, exprCode),
+			)
+		} else if ctx.types[i] == compiler.IRString {
+			g.writef(
+				"var %s string = %s\n",
+				tempVar,
+				g.irStringExpr(expr, exprCode),
+			)
+		} else {
+			g.writef("var %s any = %s\n", tempVar, exprCode)
+		}
 	}
 
 	// Assign the temporary values to the loop bindings
@@ -3042,6 +3113,12 @@ func (g *Generator) generateGoExportedName(pkg string) string {
 }
 
 func (g *Generator) generateHostCall(node *ast.Node) string {
+	if result, ok := g.generateIRNumbersHostCall(node); ok {
+		return result
+	}
+	if result, ok := g.generateIROwnedMapHostCall(node); ok {
+		return result
+	}
 	hostCallNode := node.Sub.(*ast.HostCallNode)
 
 	tgt := hostCallNode.Target
@@ -3689,6 +3766,7 @@ func (g *Generator) pushVarScope() {
 		localAtoms:        make(map[string]bool),
 		localStringStacks: make(map[string]bool),
 		ownedMaps:         make(map[string]bool),
+		localTypes:        make(map[string]compiler.IRValueKind),
 	})
 }
 
@@ -3838,6 +3916,23 @@ func (g *Generator) getOwnedMap(name string) (string, bool) {
 	return "", false
 }
 
+func (g *Generator) markLocalType(
+	name string,
+	kind compiler.IRValueKind,
+) {
+	g.varScopes[len(g.varScopes)-1].localTypes[name] = kind
+}
+
+func (g *Generator) getLocalType(name string) compiler.IRValueKind {
+	for i := len(g.varScopes) - 1; i >= 0; i-- {
+		scope := &g.varScopes[i]
+		if _, ok := scope.names[name]; ok {
+			return scope.localTypes[name]
+		}
+	}
+	return compiler.IRDynamic
+}
+
 // allocateTempVar allocates a fresh temporary variable without name tracking
 func (g *Generator) allocateTempVar() string {
 	if len(g.varScopes) == 0 {
@@ -3902,10 +3997,19 @@ func getLastNSPart(ns string) string {
 	return parts[len(parts)-1]
 }
 
-func (g *Generator) pushRecurContext(loopID *lang.Symbol, bindings []string, useGoto bool) {
+func (g *Generator) pushRecurContext(
+	loopID *lang.Symbol,
+	bindings []string,
+	types []compiler.IRValueKind,
+	useGoto bool,
+) {
+	if len(types) == 0 {
+		types = make([]compiler.IRValueKind, len(bindings))
+	}
 	g.recurStack = append(g.recurStack, recurContext{
 		loopID:   loopID,
 		bindings: bindings,
+		types:    types,
 		useGoto:  useGoto,
 	})
 }

@@ -71,6 +71,37 @@ func Equals(a, b any) bool {
 	return false
 }
 
+// EqualsInt64 compares an unboxed loop-local integer with a dynamically
+// represented Clojure value. The common int64 case avoids forcing the typed
+// value back through an interface on every comparison; uncommon numeric
+// representations retain the full equality rules.
+func EqualsInt64(a int64, b any) bool {
+	switch b := b.(type) {
+	case int64:
+		return a == b
+	case int:
+		return a == int64(b)
+	case int32:
+		return a == int64(b)
+	case int16:
+		return a == int64(b)
+	case int8:
+		return a == int64(b)
+	case uint:
+		return a >= 0 && uint64(a) == uint64(b)
+	case uint64:
+		return a >= 0 && uint64(a) == b
+	case uint32:
+		return a >= 0 && uint64(a) == uint64(b)
+	case uint16:
+		return a >= 0 && uint64(a) == uint64(b)
+	case uint8:
+		return a >= 0 && uint64(a) == uint64(b)
+	default:
+		return Equals(BoxInt64(a), b)
+	}
+}
+
 func Identical(a, b any) bool {
 	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)
 

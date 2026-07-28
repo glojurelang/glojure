@@ -203,6 +203,41 @@ func TestGenerateOwnedLoopMapUsesTransientRepresentation(t *testing.T) {
 	}
 }
 
+func TestGenerateTypedStringOwnedMapOperations(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.typed-string-map"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn substring-histogram [text]
+		  (loop [i 0
+		         counts {}]
+		    (if (= i (count text))
+		      counts
+		      (let [token (subs text i (inc i))]
+		        (recur (inc i)
+		               (assoc counts token
+		                      (inc (get counts token 0))))))))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate typed string map loop: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		" int64 = ",
+		" string = ",
+		".ValAtStringDefault(",
+		".AssocString(",
+		"runtime.RT.SubsEnd(",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("typed lowering omitted %q:\n%s", expected, generated)
+		}
+	}
+}
+
 func TestGenerateFixedArityFunctionsThroughTwenty(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.fixed-arity-twenty"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)

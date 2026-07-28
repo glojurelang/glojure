@@ -135,23 +135,23 @@ func TestTransientMapPromotesToHAMTAndHandlesCollisions(t *testing.T) {
 }
 
 func TestTransientMapSpecializesStringKeysAndFallsBackToHAMT(t *testing.T) {
-	transient := newTransientMapForTest(t, NewMap())
+	implementation := newTransientMapForTest(t, NewMap()).(*TransientMap)
 	for i := 0; i < 64; i++ {
-		transient = assocTransientMap(
-			t,
-			transient,
+		implementation.AssocString(
 			fmt.Sprintf("key-%d", i),
 			int64(i),
 		)
 	}
 
-	implementation := transient.(*TransientMap)
 	if implementation.strings == nil {
 		t.Fatal("string-key transient did not select the native string map")
 	}
-	transient = assocTransientMap(t, transient, "key-7", int64(700))
-	transient = transient.Without("key-8").(transientMapOps)
-	if got := transient.ValAt("key-7"); got != int64(700) {
+	implementation.AssocString("key-7", int64(700))
+	transient := implementation.Without("key-8").(transientMapOps)
+	if got := implementation.ValAtStringDefault(
+		"key-7",
+		nil,
+	); got != int64(700) {
 		t.Fatalf("updated string value = %v, want 700", got)
 	}
 	if implementation.ContainsKey("key-8") {

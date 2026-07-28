@@ -227,6 +227,42 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 		if args == nil {
 			return nil
 		}
+		if c.ir != nil && c.ir.Facts(n).OwnedMapGet &&
+			(len(args) == 2 || len(args) == 3) {
+			target, key := args[0], args[1]
+			var fallback evalFn
+			if len(args) == 3 {
+				fallback = args[2]
+			}
+			return func(env *environment) (interface{}, error) {
+				value, err := target(env)
+				if err != nil {
+					return nil, err
+				}
+				keyValue, err := key(env)
+				if err != nil {
+					return nil, err
+				}
+				var fallbackValue any
+				if fallback != nil {
+					fallbackValue, err = fallback(env)
+					if err != nil {
+						return nil, err
+					}
+				}
+				transient := value.(*lang.TransientMap)
+				if stringKey, ok := keyValue.(string); ok {
+					return transient.ValAtStringDefault(
+						stringKey,
+						fallbackValue,
+					), nil
+				}
+				return transient.ValAtDefault(
+					keyValue,
+					fallbackValue,
+				), nil
+			}
+		}
 		if numeric := compileNumberCall(hostCall, args); numeric != nil {
 			if c.typedLoop {
 				return c.compileNumericRegion(hostCall, numeric)
@@ -364,6 +400,14 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 			}
 		}
 		owned := c.ir != nil && c.ir.Facts(n).OwnedMapAssoc
+		stringKeys := make([]bool, len(assoc.Entries))
+		if owned && c.ir != nil {
+			for i, entry := range assoc.Entries {
+				stringKeys[i] = c.ir.Facts(
+					entry.Key,
+				).Type.Kind == compiler.IRString
+			}
+		}
 		return func(env *environment) (res interface{}, err error) {
 			defer env.recoverOptimizedInvoke(
 				assoc.Meta,
@@ -374,6 +418,28 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 			result, err := target(env)
 			if err != nil {
 				return nil, err
+			}
+			if len(keys) == 1 {
+				key, err := keys[0](env)
+				if err != nil {
+					return nil, err
+				}
+				value, err := values[0](env)
+				if err != nil {
+					return nil, err
+				}
+				if owned {
+					transient := result.(*lang.TransientMap)
+					if stringKeys[0] {
+						if stringKey, ok := key.(string); ok {
+							transient.AssocString(stringKey, value)
+							return result, nil
+						}
+					}
+					transient.Assoc(key, value)
+					return result, nil
+				}
+				return lang.Assoc(result, key, value), nil
 			}
 			keyValues := make([]any, len(keys)*2)
 			for i := range keys {
@@ -388,10 +454,17 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 			}
 			for i := range keys {
 				if owned {
-					result.(*lang.TransientMap).Assoc(
-						keyValues[i*2],
-						keyValues[i*2+1],
-					)
+					transient := result.(*lang.TransientMap)
+					if stringKeys[i] {
+						if stringKey, ok := keyValues[i*2].(string); ok {
+							transient.AssocString(
+								stringKey,
+								keyValues[i*2+1],
+							)
+							continue
+						}
+					}
+					transient.Assoc(keyValues[i*2], keyValues[i*2+1])
 				} else {
 					result = lang.Assoc(
 						result,

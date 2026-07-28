@@ -150,6 +150,10 @@ func TestFixedArityTwoFunctionUsesCompiledParameterSlots(t *testing.T) {
 }
 
 func TestInterpreterOwnedLoopMapReturnsPersistentValue(t *testing.T) {
+	if !testCompilerAvailable {
+		t.Skip("source evaluator is unavailable in an AOT runtime build")
+	}
+	env := NewEnvironment()
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("runtime.owned-loop-map"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)
 	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
@@ -163,7 +167,7 @@ func TestInterpreterOwnedLoopMapReturnsPersistentValue(t *testing.T) {
 		      (let [value (first remaining)]
 		        (recur (next remaining)
 		               (assoc counts value (inc (get counts value 0)))))
-		      counts)))`)
+		      counts)))`, WithEnv(env))
 	histogram := ns.FindInternedVar(lang.NewSymbol("histogram")).Get()
 	result := lang.Apply1(
 		histogram,

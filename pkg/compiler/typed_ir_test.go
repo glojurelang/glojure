@@ -214,6 +214,42 @@ func TestTypedIRPreservesPipelineStageOrder(t *testing.T) {
 	}
 }
 
+func TestTypedIRProvesStableLoopBindingTypes(t *testing.T) {
+	index := lang.NewSymbol("index")
+	loopID := lang.NewSymbol("stable-loop")
+	binding := typedIRBinding(index, typedIRConst(int64(0)))
+	next := typedIRNumbersCall("Inc", typedIRLocal(index))
+	recur := &ast.Node{
+		Op: ast.OpRecur,
+		Sub: &ast.RecurNode{
+			LoopID: loopID,
+			Exprs:  []*ast.Node{next},
+		},
+	}
+	loop := &ast.Node{
+		Op: ast.OpLoop,
+		Sub: &ast.LetNode{
+			Bindings: []*ast.Node{binding},
+			Body:     recur,
+			LoopID:   loopID,
+		},
+	}
+
+	ir := BuildTypedIR(loop)
+	if got := ir.Facts(next).Type.Kind; got != IRInt {
+		t.Fatalf("increment type = %v, want IRInt", got)
+	}
+	if got := ir.BindingFacts(binding).StableType.Kind; got != IRInt {
+		t.Fatalf("stable binding type = %v, want IRInt", got)
+	}
+
+	recur.Sub.(*ast.RecurNode).Exprs[0] = typedIRConst("changed")
+	ir = BuildTypedIR(loop)
+	if got := ir.BindingFacts(binding).StableType.Kind; got != IRDynamic {
+		t.Fatalf("type-changing binding = %v, want IRDynamic", got)
+	}
+}
+
 func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
 	index := lang.NewSymbol("index")
 	counts := lang.NewSymbol("counts")
@@ -296,6 +332,9 @@ func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
 	if !ir.Facts(update).OwnedMapAssoc {
 		t.Fatal("loop-carried assoc was not marked as an owned update")
 	}
+	if !ir.Facts(get).OwnedMapGet {
+		t.Fatal("owned map lookup was not marked")
+	}
 	exit := body.Sub.(*ast.IfNode).Then
 	if !ir.Facts(exit).PersistOwnedMap {
 		t.Fatal("terminal map result was not marked for persistence")
@@ -342,6 +381,24 @@ func typedIRInvoke(vr *lang.Var, args ...*ast.Node) *ast.Node {
 		Sub: &ast.InvokeNode{
 			Fn:   typedIRVar(vr),
 			Args: args,
+		},
+	}
+}
+
+func typedIRNumbersCall(method string, args ...*ast.Node) *ast.Node {
+	return &ast.Node{
+		Op: ast.OpHostCall,
+		Sub: &ast.HostCallNode{
+			Target: &ast.Node{
+				Op: ast.OpConst,
+				Sub: &ast.ConstNode{
+					Value:      lang.Numbers,
+					HostSymbol: lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Numbers"),
+				},
+			},
+			Method:         lang.NewSymbol(method),
+			Args:           args,
+			ResolvedMethod: true,
 		},
 	}
 }

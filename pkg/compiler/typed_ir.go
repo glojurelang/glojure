@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"reflect"
+	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -188,6 +189,9 @@ type IRFacts struct {
 	// evaluating every key and value.
 	OwnedMapAssoc bool
 
+	// OwnedMapGet marks a lookup against a uniquely owned loop-carried map.
+	OwnedMapGet bool
+
 	// PersistOwnedMap marks a terminal local whose transient representation
 	// must be frozen before it leaves its ownership region.
 	PersistOwnedMap bool
@@ -198,6 +202,9 @@ type IRBindingFacts struct {
 	AtomInit    *ast.Node
 	StringStack bool
 	OwnedMap    bool
+	// StableType is a representation-relevant type proved to hold at loop
+	// entry and at every recur edge for this binding.
+	StableType IRType
 }
 
 // TypedIR is a side-effect-free analysis layer built after the shared AST
@@ -216,7 +223,13 @@ func BuildTypedIR(root *ast.Node) *TypedIR {
 		bindings: make(map[*ast.Node]IRBindingFacts),
 	}
 	ir.visit(root)
-	ir.propagateLocalTypes(root, nil)
+	for {
+		propagated := ir.propagateLocalTypes(root, nil)
+		refined := ir.refineTypes(root)
+		if !propagated && !refined {
+			break
+		}
+	}
 	ir.analyzeBindings(root)
 	return ir
 }
@@ -245,34 +258,38 @@ func (ir *TypedIR) BindingFacts(binding *ast.Node) IRBindingFacts {
 func (ir *TypedIR) propagateLocalTypes(
 	node *ast.Node,
 	scope map[string]IRType,
-) {
+) bool {
 	if node == nil {
-		return
+		return false
 	}
 	if node.Op == ast.OpLocal {
 		name := node.Sub.(*ast.LocalNode).Name
 		if name != nil {
 			if typ, ok := scope[name.String()]; ok {
 				facts := ir.facts[node]
-				facts.Type = typ
-				ir.facts[node] = facts
+				if facts.Type != typ {
+					facts.Type = typ
+					ir.facts[node] = facts
+					return true
+				}
 			}
 		}
-		return
+		return false
 	}
 
+	changed := false
 	switch node.Op {
 	case ast.OpLet, ast.OpLoop:
 		let := node.Sub.(*ast.LetNode)
 		current := irCopyTypeScope(scope)
 		for _, binding := range let.Bindings {
 			bindingNode := binding.Sub.(*ast.BindingNode)
-			ir.propagateLocalTypes(bindingNode.Init, current)
+			changed = ir.propagateLocalTypes(bindingNode.Init, current) ||
+				changed
 			current[bindingNode.Name.String()] =
 				ir.facts[bindingNode.Init].Type
 		}
-		ir.propagateLocalTypes(let.Body, current)
-		return
+		return ir.propagateLocalTypes(let.Body, current) || changed
 	case ast.OpFn:
 		fn := node.Sub.(*ast.FnNode)
 		for _, methodNode := range fn.Methods {
@@ -283,9 +300,10 @@ func (ir *TypedIR) propagateLocalTypes(
 				methodScope[name.String()] =
 					IRType{Kind: IRDynamic, Nullable: true}
 			}
-			ir.propagateLocalTypes(method.Body, methodScope)
+			changed = ir.propagateLocalTypes(method.Body, methodScope) ||
+				changed
 		}
-		return
+		return changed
 	case ast.OpFnMethod:
 		method := node.Sub.(*ast.FnMethodNode)
 		methodScope := irCopyTypeScope(scope)
@@ -294,11 +312,95 @@ func (ir *TypedIR) propagateLocalTypes(
 			methodScope[name.String()] =
 				IRType{Kind: IRDynamic, Nullable: true}
 		}
-		ir.propagateLocalTypes(method.Body, methodScope)
-		return
+		return ir.propagateLocalTypes(method.Body, methodScope)
 	}
 	for _, child := range irChildren(node) {
-		ir.propagateLocalTypes(child, scope)
+		changed = ir.propagateLocalTypes(child, scope) || changed
+	}
+	return changed
+}
+
+// refineTypes recomputes facts whose result type depends on child facts. It is
+// run to a fixed point with local propagation so nested lets and loops can
+// acquire useful types without making the AST optimizer backend-specific.
+func (ir *TypedIR) refineTypes(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	changed := false
+	for _, child := range irChildren(node) {
+		changed = ir.refineTypes(child) || changed
+	}
+	facts := ir.facts[node]
+	typ := facts.Type
+	switch node.Op {
+	case ast.OpDo:
+		typ = ir.facts[node.Sub.(*ast.DoNode).Ret].Type
+	case ast.OpLet, ast.OpLoop:
+		typ = ir.facts[node.Sub.(*ast.LetNode).Body].Type
+	case ast.OpIf:
+		ifNode := node.Sub.(*ast.IfNode)
+		thenType := ir.facts[ifNode.Then].Type
+		elseType := ir.facts[ifNode.Else].Type
+		if thenType.Kind == elseType.Kind {
+			typ = IRType{
+				Kind:     thenType.Kind,
+				Nullable: thenType.Nullable || elseType.Nullable,
+			}
+		}
+	case ast.OpAssoc:
+		if ir.facts[node.Sub.(*ast.AssocNode).Target].Type.Kind == IRMap {
+			typ = IRType{Kind: IRMap}
+		}
+	case ast.OpHostCall:
+		if inferred, ok := ir.inferHostCallType(
+			node.Sub.(*ast.HostCallNode),
+		); ok {
+			typ = inferred
+		}
+	}
+	if facts.Type != typ {
+		facts.Type = typ
+		ir.facts[node] = facts
+		changed = true
+	}
+	return changed
+}
+
+func (ir *TypedIR) inferHostCallType(
+	call *ast.HostCallNode,
+) (IRType, bool) {
+	if call == nil || call.Method == nil ||
+		call.Target == nil || call.Target.Op != ast.OpConst {
+		return IRType{}, false
+	}
+	target := call.Target.Sub.(*ast.ConstNode)
+	if target.Value != lang.Numbers {
+		if target.HostSymbol == nil ||
+			target.HostSymbol.String() !=
+				"github.com:glojurelang:glojure:pkg:lang.Numbers" {
+			return IRType{}, false
+		}
+	}
+	allInt := len(call.Args) > 0
+	for _, argument := range call.Args {
+		if ir.facts[argument].Type.Kind != IRInt {
+			allInt = false
+			break
+		}
+	}
+	if !allInt {
+		return IRType{}, false
+	}
+	switch strings.ToLower(call.Method.Name()) {
+	case "inc", "unchecked_inc", "dec", "uncheckeddec", "unchecked_dec",
+		"add", "uncheckedadd", "minus", "unchecked_minus", "multiply",
+		"unchecked_multiply", "quotient", "remainder":
+		return IRType{Kind: IRInt}, true
+	case "lt", "lte", "gt", "gte", "iszero", "ispos", "isneg":
+		return IRType{Kind: IRBool}, true
+	default:
+		return IRType{}, false
 	}
 }
 
@@ -409,6 +511,11 @@ func (ir *TypedIR) inferInvoke(node *ast.Node, facts *IRFacts) {
 		facts.Type = IRType{Kind: IRInt}
 	case "str":
 		facts.Type = IRType{Kind: IRString}
+	case "subs":
+		facts.Type = IRType{Kind: IRString}
+		facts.Effects |= IREffectMayThrow
+	case "=":
+		facts.Type = IRType{Kind: IRBool}
 	case "deref":
 		facts.Effects |= IREffectReadMutable
 	case "reset!", "swap!":
@@ -456,7 +563,10 @@ func (ir *TypedIR) analyzeBindings(node *ast.Node) {
 		let := node.Sub.(*ast.LetNode)
 		for i, binding := range let.Bindings {
 			bindingNode := binding.Sub.(*ast.BindingNode)
-			result := IRBindingFacts{Escape: IREscapes}
+			result := IRBindingFacts{
+				Escape:     IREscapes,
+				StableType: ir.facts[bindingNode.Init].Type,
+			}
 			if init := irScalarAtomInit(
 				bindingNode,
 				let.Bindings[i+1:],
@@ -474,12 +584,61 @@ func (ir *TypedIR) analyzeBindings(node *ast.Node) {
 				result.Escape = IRDoesNotEscape
 				result.OwnedMap = true
 			}
+			if node.Op == ast.OpLoop {
+				result.StableType = ir.analyzeStableLoopBinding(
+					binding,
+					i,
+					let,
+				)
+			}
 			ir.bindings[binding] = result
 		}
 	}
 	for _, child := range irChildren(node) {
 		ir.analyzeBindings(child)
 	}
+}
+
+func (ir *TypedIR) analyzeStableLoopBinding(
+	binding *ast.Node,
+	bindingIndex int,
+	loop *ast.LetNode,
+) IRType {
+	initType := ir.facts[binding.Sub.(*ast.BindingNode).Init].Type
+	if initType.Kind == IRDynamic || initType.Kind == IRNil {
+		return IRType{}
+	}
+	recurCount := 0
+	stable := true
+	var scan func(*ast.Node)
+	scan = func(node *ast.Node) {
+		if node == nil || !stable {
+			return
+		}
+		// A nested function is a separate recurrence region.
+		if node.Op == ast.OpFn || node.Op == ast.OpFnMethod {
+			return
+		}
+		if node.Op == ast.OpRecur {
+			recur := node.Sub.(*ast.RecurNode)
+			if recur.LoopID == loop.LoopID {
+				recurCount++
+				if bindingIndex >= len(recur.Exprs) ||
+					ir.facts[recur.Exprs[bindingIndex]].Type != initType {
+					stable = false
+				}
+				return
+			}
+		}
+		for _, child := range irChildren(node) {
+			scan(child)
+		}
+	}
+	scan(loop.Body)
+	if !stable || recurCount == 0 {
+		return IRType{}
+	}
+	return initType
 }
 
 func (ir *TypedIR) analyzeStringStack(

@@ -311,6 +311,7 @@ func (g *Generator) aotExternalIntrinsic(
 	name := vr.Symbol().String()
 	arity := len(invoke.Args)
 	switch {
+	case name == "=" && arity == 2:
 	case name == "assoc" && (arity == 3 || arity == 5):
 	case name == "count" && arity == 1:
 	case name == "dec" && arity == 1:
@@ -329,6 +330,7 @@ func (g *Generator) aotExternalIntrinsic(
 	case name == "peek" && arity == 1:
 	case name == "pop" && arity == 1:
 	case name == "seq" && arity == 1:
+	case name == "subs" && (arity == 2 || arity == 3):
 	default:
 		return ""
 	}
@@ -341,6 +343,18 @@ func (g *Generator) aotExternalIntrinsicCall(
 	args []string,
 ) string {
 	switch intrinsic {
+	case "=":
+		leftInt := g.irHasInt64Representation(invoke.Args[0])
+		rightInt := g.irHasInt64Representation(invoke.Args[1])
+		switch {
+		case leftInt && rightInt:
+			return fmt.Sprintf("(%s == %s)", args[0], args[1])
+		case leftInt:
+			return fmt.Sprintf("lang.EqualsInt64(%s, %s)", args[0], args[1])
+		case rightInt:
+			return fmt.Sprintf("lang.EqualsInt64(%s, %s)", args[1], args[0])
+		}
+		return fmt.Sprintf("lang.Equals(%s, %s)", args[0], args[1])
 	case "assoc":
 		if len(args) == 3 {
 			return fmt.Sprintf("lang.Assoc(%s, %s, %s)", args[0], args[1], args[2])
@@ -393,6 +407,17 @@ func (g *Generator) aotExternalIntrinsicCall(
 		return fmt.Sprintf("runtime.RT.Pop(%s)", args[0])
 	case "seq":
 		return fmt.Sprintf("lang.Seq(%s)", args[0])
+	case "subs":
+		if len(args) == 2 {
+			return fmt.Sprintf(
+				"runtime.RT.Subs(any(%s).(string), lang.IntCast(%s))",
+				args[0], args[1],
+			)
+		}
+		return fmt.Sprintf(
+			"runtime.RT.SubsEnd(any(%s).(string), lang.IntCast(%s), lang.IntCast(%s))",
+			args[0], args[1], args[2],
+		)
 	default:
 		panic("unsupported AOT external intrinsic: " + intrinsic)
 	}

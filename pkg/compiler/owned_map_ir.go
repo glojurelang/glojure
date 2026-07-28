@@ -143,6 +143,9 @@ func (u *ownedMapUsage) scanRead(node *ast.Node) {
 		if len(call.Args) > 0 &&
 			irLocalIs(call.Args[0], u.target) &&
 			isOwnedMapReadHostCall(call) {
+			facts := u.ir.facts[node]
+			facts.OwnedMapGet = true
+			u.ir.facts[node] = facts
 			for _, argument := range call.Args[1:] {
 				u.scanRead(argument)
 			}

@@ -39,6 +39,32 @@ func TestCheckedInt64Arithmetic(t *testing.T) {
 	assertArithmeticPanic(t, func() { CheckedNegateInt64(math.MinInt64) })
 }
 
+func TestEqualsInt64MatchesDynamicNumericEquality(t *testing.T) {
+	for _, test := range []struct {
+		value any
+		want  bool
+	}{
+		{value: int64(42), want: true},
+		{value: int(42), want: true},
+		{value: uint64(42), want: true},
+		{value: int64(41), want: false},
+		{value: "42", want: false},
+		{value: nil, want: false},
+	} {
+		if got := EqualsInt64(42, test.value); got != test.want {
+			t.Errorf(
+				"EqualsInt64(42, %#v) = %v, want %v",
+				test.value,
+				got,
+				test.want,
+			)
+		}
+	}
+	if EqualsInt64(-1, uint64(math.MaxUint64)) {
+		t.Fatal("negative int64 equaled a large unsigned integer")
+	}
+}
+
 func assertArithmeticPanic(t *testing.T, fn func()) {
 	t.Helper()
 	defer func() {
