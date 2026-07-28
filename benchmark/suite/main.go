@@ -309,10 +309,14 @@ func benchmarkSuite(
 
 	for _, workload := range workloads {
 		source := filepath.Join(manifestDir, workload.File)
+		sourceData, err := os.ReadFile(source)
+		if err != nil {
+			return report, err
+		}
 		driver := filepath.Join(driverDir, workload.Name+".clj")
 		if err := os.WriteFile(
 			driver,
-			[]byte(driverSource(source, workload.Namespace)),
+			[]byte(driverSource(sourceData)),
 			0o644,
 		); err != nil {
 			return report, err
@@ -369,13 +373,8 @@ func benchmarkSuite(
 	return report, nil
 }
 
-func driverSource(source, namespace string) string {
-	quotedSource, _ := json.Marshal(filepath.ToSlash(source))
-	return fmt.Sprintf(
-		"(load-file %s)\n(in-ns '%s)\n(println (pr-str (run)))\n",
-		quotedSource,
-		namespace,
-	)
+func driverSource(source []byte) string {
+	return string(source) + "\n\n(println (pr-str (run)))\n"
 }
 
 func invoke(

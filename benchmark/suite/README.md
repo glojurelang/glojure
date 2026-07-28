@@ -83,6 +83,51 @@ without those costs:
 go run ./benchmark/suite/aot -count 5 -benchtime 2s
 ```
 
+## Six-way revision comparison
+
+The repository script builds all requested implementations from source and
+prints one Markdown table covering every manifest workload:
+
+```sh
+scripts/benchmark-suite-compare > /tmp/benchmark-comparison.md
+```
+
+Its columns are:
+
+1. current `HEAD` Glojure interpreter;
+2. current `HEAD` Glojure AOT;
+3. latest `origin/main` Glojure interpreter;
+4. latest `origin/main` Glojure AOT;
+5. GraalVM native-image;
+6. let-go AOT.
+
+Each cell reports median wall milliseconds followed by median process CPU
+milliseconds in parentheses. The script validates all results before timing
+and rotates implementation order across runs. If an implementation cannot
+compile or execute a particular portable feature, that cell is marked
+`ERROR`; a semantic disagreement is marked `WRONG RESULT`, and the remaining
+cells and workloads continue. By default it fetches
+`origin/main`, uses the sibling `../let-go` checkout, auto-detects
+`native-image` (including YAMLStar's local GraalVM installation), performs one
+warmup and five timed runs, then cleans its detached main worktree and build
+directory.
+
+Useful overrides:
+
+```sh
+scripts/benchmark-suite-compare \
+  -main-ref main \
+  -fetch=false \
+  -let-go-root /path/to/let-go \
+  -native-image /path/to/native-image \
+  -runs 9 \
+  -warmup 2 \
+  -keep
+```
+
+This is intentionally a full, relatively expensive comparison. Use
+`-runs 1 -warmup 0` for build and compatibility smoke testing.
+
 ## Design rules
 
 Keep the suite portable enough to run unchanged on JVM Clojure and developing

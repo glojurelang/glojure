@@ -63,10 +63,10 @@ func TestSelectWorkloadsMatchesNamesAndTags(t *testing.T) {
 }
 
 func TestDriverSource(t *testing.T) {
-	got := driverSource("/tmp/a benchmark.clj", "bench.example")
+	got := driverSource([]byte("(ns bench.example)\n(defn run [] 42)\n"))
 	for _, expected := range []string{
-		`(load-file "/tmp/a benchmark.clj")`,
-		`(in-ns 'bench.example)`,
+		`(ns bench.example)`,
+		`(defn run [] 42)`,
 		`(println (pr-str (run)))`,
 	} {
 		if !strings.Contains(got, expected) {

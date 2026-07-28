@@ -21,7 +21,15 @@
     0.0017237240570597112]
    [15.379697114850917 -25.919314609987964 0.17925877295037118
     0.18263479008236158 1.0057408190378983 -0.034755955504078104
-    0.0020336868699246304]])
+   0.0020336868699246304]])
+
+(defn square-root [value]
+  (loop [iteration 0
+         estimate (if (> value 1.0) value 1.0)]
+    (if (= iteration 20)
+      estimate
+      (recur (inc iteration)
+             (* 0.5 (+ estimate (/ value estimate)))))))
 
 (defn offset-momentum [bodies]
   (let [[px py pz]
@@ -50,7 +58,7 @@
         distance-squared (+ (* dx dx) (* dy dy) (* dz dz))
         magnitude (/ dt
                      (* distance-squared
-                        (Math/sqrt distance-squared)))
+                        (square-root distance-squared)))
         left-mass (nth left 6)
         right-mass (nth right 6)
         left-factor (* right-mass magnitude)
@@ -101,7 +109,8 @@
               dx (- (nth left 0) (nth right 0))
               dy (- (nth left 1) (nth right 1))
               dz (- (nth left 2) (nth right 2))
-              distance (Math/sqrt (+ (* dx dx) (* dy dy) (* dz dz)))]
+              distance (square-root
+                         (+ (* dx dx) (* dy dy) (* dz dz)))]
           (- total (/ (* (nth left 6) (nth right 6)) distance))))
       kinetic
       pairs)))
