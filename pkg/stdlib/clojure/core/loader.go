@@ -11762,12 +11762,8 @@ func LoadNS() {
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(v4, "isDirectory")
-				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("isDirectory is not a function")))
-				}
-				tmp6 := lang.Apply0(tmp5)
-				return tmp6
+				tmp5 := v4.(interface{ IsDirectory() bool }).IsDirectory()
+				return tmp5
 			})
 			var tmp4 lang.FnFunc1
 			tmp4 = lang.FnFunc1(func(p0 any) any {
@@ -20529,7 +20525,7 @@ func LoadNS() {
 				{ // let
 					// let binding "a"
 					tmp6 := reflect.TypeOf((*lang.ArrayList)(nil)).Elem()
-					tmp7 := reflect.New(tmp6).Interface()
+					tmp7 := lang.NewHostInstance(tmp6)
 					var v8 any = tmp7
 					_ = v8
 					// let binding "pv"
@@ -24882,7 +24878,7 @@ func LoadNS() {
 					var tmp22 any
 					if lang.IsTruthy(v21) {
 						var tmp23 any
-						tmp24 := aotDirectFn225(nil, v21)
+						tmp24 := lang.IsInstance[error](v21)
 						if lang.IsTruthy(tmp24) {
 							tmp25 := lang.Apply2(v19, v8, v21)
 							tmp23 = tmp25
@@ -27155,7 +27151,7 @@ func LoadNS() {
 					return tmp7
 				})
 				tmp5 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
-				tmp6 := reflect.New(tmp5).Interface()
+				tmp6 := lang.NewHostInstance(tmp5)
 				tmp7 := aotDirectFn115(v2, v3)
 				tmp8 := lang.Apply2(tmp4, tmp6, tmp7)
 				return tmp8
@@ -34383,7 +34379,7 @@ func LoadNS() {
 				{ // let
 					// let binding "a"
 					tmp5 := reflect.TypeOf((*lang.Agent)(nil))
-					tmp6 := reflect.New(tmp5).Interface()
+					tmp6 := lang.NewHostInstance(tmp5, v2)
 					var v7 any = tmp6
 					_ = v7
 					// let binding "opts"
@@ -48402,7 +48398,7 @@ func LoadNS() {
 				{ // let
 					// let binding "s__0__auto__"
 					tmp4 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
-					tmp5 := reflect.New(tmp4).Interface()
+					tmp5 := lang.NewHostInstance(tmp4)
 					var v6 any = tmp5
 					_ = v6
 					var tmp7 any
@@ -48496,7 +48492,7 @@ func LoadNS() {
 				{ // let
 					// let binding "s__0__auto__"
 					tmp4 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
-					tmp5 := reflect.New(tmp4).Interface()
+					tmp5 := lang.NewHostInstance(tmp4)
 					var v6 any = tmp5
 					_ = v6
 					var tmp7 any
@@ -48584,7 +48580,7 @@ func LoadNS() {
 				{ // let
 					// let binding "s__0__auto__"
 					tmp4 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
-					tmp5 := reflect.New(tmp4).Interface()
+					tmp5 := lang.NewHostInstance(tmp4)
 					var v6 any = tmp5
 					_ = v6
 					var tmp7 any
@@ -48678,7 +48674,7 @@ func LoadNS() {
 				{ // let
 					// let binding "s__0__auto__"
 					tmp4 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
-					tmp5 := reflect.New(tmp4).Interface()
+					tmp5 := lang.NewHostInstance(tmp4)
 					var v6 any = tmp5
 					_ = v6
 					var tmp7 any
@@ -50949,7 +50945,7 @@ func LoadNS() {
 					_ = v6
 					// let binding "sw"
 					tmp7 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
-					tmp8 := reflect.New(tmp7).Interface()
+					tmp8 := lang.NewHostInstance(tmp7)
 					var v9 any = tmp8
 					_ = v9
 					var tmp10 any

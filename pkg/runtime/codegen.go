@@ -2213,7 +2213,14 @@ func staticInstanceType(invoke *ast.InvokeNode) (reflect.Type, bool) {
 		vr.Symbol().String() != "instance?" {
 		return nil, false
 	}
-	typ, ok := invoke.Args[0].Sub.(*ast.ConstNode).Value.(reflect.Type)
+	return unwrappedReflectType(invoke.Args[0].Sub.(*ast.ConstNode).Value)
+}
+
+func unwrappedReflectType(value any) (reflect.Type, bool) {
+	if class, ok := value.(*lang.Class); ok {
+		return class.Type, class.Type != nil
+	}
+	typ, ok := value.(reflect.Type)
 	return typ, ok && typ != nil
 }
 
@@ -3242,14 +3249,7 @@ func inferredHostType(target *ast.Node) (reflect.Type, bool) {
 	if !ok {
 		return nil, false
 	}
-	switch value := value.(type) {
-	case reflect.Type:
-		return value, true
-	case *lang.Class:
-		return value.Type, value.Type != nil
-	default:
-		return nil, false
-	}
+	return unwrappedReflectType(value)
 }
 
 func (g *Generator) hostMethodInterfaceExpr(

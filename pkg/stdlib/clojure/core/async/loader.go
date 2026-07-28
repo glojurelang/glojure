@@ -894,7 +894,7 @@ func LoadNS() {
 			{ // let
 				// let binding "def"
 				tmp3 := reflect.TypeOf((*reflect.SelectCase)(nil)).Elem()
-				tmp4 := reflect.New(tmp3).Interface()
+				tmp4 := lang.NewHostInstance(tmp3)
 				var v5 any = tmp4
 				_ = v5
 				// set! host field
@@ -1148,7 +1148,7 @@ func LoadNS() {
 				_ = v13
 				// let binding "select-case"
 				tmp14 := reflect.TypeOf((*reflect.SelectCase)(nil)).Elem()
-				tmp15 := reflect.New(tmp14).Interface()
+				tmp15 := lang.NewHostInstance(tmp14)
 				var v16 any = tmp15
 				_ = v16
 				tmp17 := reflect.ValueOf(v9)
@@ -1376,7 +1376,7 @@ func LoadNS() {
 			{ // let
 				// let binding "sc"
 				tmp4 := reflect.TypeOf((*reflect.SelectCase)(nil)).Elem()
-				tmp5 := reflect.New(tmp4).Interface()
+				tmp5 := lang.NewHostInstance(tmp4)
 				var v6 any = tmp5
 				_ = v6
 				// let binding "_"
@@ -1440,7 +1440,7 @@ func LoadNS() {
 				_ = v10
 				// let binding "def"
 				tmp11 := reflect.TypeOf((*reflect.SelectCase)(nil)).Elem()
-				tmp12 := reflect.New(tmp11).Interface()
+				tmp12 := lang.NewHostInstance(tmp11)
 				var v13 any = tmp12
 				_ = v13
 				// let binding "_"

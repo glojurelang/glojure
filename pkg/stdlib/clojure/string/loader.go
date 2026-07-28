@@ -620,7 +620,7 @@ func LoadNS() {
 			{ // let
 				// let binding "sb"
 				tmp8 := reflect.TypeOf((*strings5.Builder)(nil)).Elem()
-				tmp9 := reflect.New(tmp8).Interface()
+				tmp9 := lang.NewHostInstance(tmp8)
 				var v10 any = tmp9
 				_ = v10
 				var tmp11 any
@@ -1145,7 +1145,7 @@ func LoadNS() {
 					{ // let
 						// let binding "buffer"
 						tmp12 := reflect.TypeOf((*strings5.Builder)(nil)).Elem()
-						tmp13 := reflect.New(tmp12).Interface()
+						tmp13 := lang.NewHostInstance(tmp12)
 						var v14 any = tmp13
 						_ = v14
 						var tmp15 any
@@ -1339,7 +1339,7 @@ func LoadNS() {
 					{ // let
 						// let binding "buffer"
 						tmp12 := reflect.TypeOf((*strings5.Builder)(nil)).Elem()
-						tmp13 := reflect.New(tmp12).Interface()
+						tmp13 := lang.NewHostInstance(tmp12)
 						var v14 any = tmp13
 						_ = v14
 						// let binding "rep"
