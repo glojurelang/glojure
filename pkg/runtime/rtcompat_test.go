@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestSubsUsesCharacterOffsets(t *testing.T) {
+func TestSubsUsesByteOffsets(t *testing.T) {
 	const s = "a֎🙂z"
 
 	tests := []struct {
@@ -15,9 +15,10 @@ func TestSubsUsesCharacterOffsets(t *testing.T) {
 		want  string
 	}{
 		{name: "suffix", start: 1, end: -1, want: "֎🙂z"},
-		{name: "unicode range", start: 1, end: 3, want: "֎🙂"},
-		{name: "empty end", start: 4, end: -1, want: ""},
-		{name: "empty range", start: 2, end: 2, want: ""},
+		{name: "unicode range", start: 1, end: 7, want: "֎🙂"},
+		{name: "empty end", start: len(s), end: -1, want: ""},
+		{name: "empty range", start: 3, end: 3, want: ""},
+		{name: "individual byte", start: 1, end: 2, want: string([]byte{0xd6})},
 	}
 
 	for _, test := range tests {
@@ -37,10 +38,10 @@ func TestSubsUsesCharacterOffsets(t *testing.T) {
 
 func TestSubsFindsUnicodeAfterASCIIBlock(t *testing.T) {
 	const s = "abcdefgh🙂z"
-	if got := RT.SubsEnd(s, 8, 9); got != "🙂" {
+	if got := RT.SubsEnd(s, 8, 12); got != "🙂" {
 		t.Fatalf("got %q, want emoji", got)
 	}
-	if got := RT.Subs(s, 9); got != "z" {
+	if got := RT.Subs(s, 12); got != "z" {
 		t.Fatalf("got %q, want z", got)
 	}
 }

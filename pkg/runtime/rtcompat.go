@@ -10,7 +10,6 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
-	"unicode/utf8"
 
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
@@ -209,77 +208,17 @@ func (rt *RTMethods) Get(coll, key any, notFound ...any) any {
 }
 
 func (rt *RTMethods) Subs(s string, start int) string {
-	byteStart, _, ok := stringRuneByteRange(s, start, -1)
-	if !ok {
+	if start < 0 || start > len(s) {
 		panic(lang.NewIllegalArgumentError("String index out of range"))
 	}
-	return s[byteStart:]
+	return s[start:]
 }
 
 func (rt *RTMethods) SubsEnd(s string, start, end int) string {
-	byteStart, byteEnd, ok := stringRuneByteRange(s, start, end)
-	if !ok {
+	if start < 0 || end < start || end > len(s) {
 		panic(lang.NewIllegalArgumentError("String index out of range"))
 	}
-	return s[byteStart:byteEnd]
-}
-
-// stringRuneByteRange translates character offsets to UTF-8 byte offsets
-// without materializing a []rune. An end of -1 means the end of the string.
-// ASCII prefixes map directly and avoid decoding entirely.
-func stringRuneByteRange(s string, start, end int) (byteStart, byteEnd int, ok bool) {
-	if start < 0 || (end >= 0 && end < start) {
-		return 0, 0, false
-	}
-
-	limit := start
-	if end >= 0 {
-		limit = end
-	}
-
-	if limit <= len(s) {
-		ascii := true
-		i := 0
-		for ; i+8 <= limit; i += 8 {
-			if s[i]|s[i+1]|s[i+2]|s[i+3]|
-				s[i+4]|s[i+5]|s[i+6]|s[i+7] >= utf8.RuneSelf {
-				ascii = false
-				break
-			}
-		}
-		for ; ascii && i < limit; i++ {
-			if s[i] >= utf8.RuneSelf {
-				ascii = false
-				break
-			}
-		}
-		if ascii {
-			if end < 0 {
-				return start, len(s), true
-			}
-			return start, end, true
-		}
-	}
-
-	bytePos := 0
-	byteStart = -1
-	for runePos := 0; runePos <= limit; runePos++ {
-		if runePos == start {
-			byteStart = bytePos
-		}
-		if runePos == limit {
-			if end < 0 {
-				return byteStart, len(s), true
-			}
-			return byteStart, bytePos, true
-		}
-		if bytePos >= len(s) {
-			return 0, 0, false
-		}
-		_, size := utf8.DecodeRuneInString(s[bytePos:])
-		bytePos += size
-	}
-	panic("unreachable")
+	return s[start:end]
 }
 
 func (rt *RTMethods) Subvec(v IPersistentVector, start, end any) IPersistentVector {
