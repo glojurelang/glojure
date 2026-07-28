@@ -112,12 +112,35 @@ func main() {
 		fmt.Fprintf(&out, "\treturn f.Invoke(%s)\n", params)
 		fmt.Fprintln(&out, "}")
 		fmt.Fprintln(&out)
+
+		fmt.Fprintf(&out, "func (m *MultiFn) Invoke%d(%s) any {\n", arity, typedParams)
+		fmt.Fprintf(&out, "\tif !hasDirectFixedArity(m.dispatchFn, %d) {\n", arity)
+		fmt.Fprintf(&out, "\t\treturn m.invokeArgs([]any{%s})\n", params)
+		fmt.Fprintln(&out, "\t}")
+		fmt.Fprintf(&out, "\ttarget := m.getFn(Apply%d(m.dispatchFn, %s))\n", arity, params)
+		fmt.Fprintf(&out, "\tif hasDirectFixedArity(target, %d) {\n", arity)
+		fmt.Fprintf(&out, "\t\treturn Apply%d(target, %s)\n", arity, params)
+		fmt.Fprintln(&out, "\t}")
+		fmt.Fprintf(&out, "\treturn target.Invoke(%s)\n", params)
+		fmt.Fprintln(&out, "}")
+		fmt.Fprintln(&out)
+
+		fmt.Fprintf(
+			&out,
+			"func (protocolDispatchFn) Invoke%d(%s) any {\n",
+			arity,
+			typedParams,
+		)
+		fmt.Fprintln(&out, "\treturn protocolDispatchValue(a0)")
+		fmt.Fprintln(&out, "}")
+		fmt.Fprintln(&out)
 	}
 
 	fmt.Fprintln(&out, "var (")
 	for arity := 6; arity <= maxFixedArity; arity++ {
 		fmt.Fprintf(&out, "\t_ IFn = FnFunc%d(nil)\n", arity)
 		fmt.Fprintf(&out, "\t_ FixedArityFn%d = ArityFn{}\n", arity)
+		fmt.Fprintf(&out, "\t_ FixedArityFn%d = (*MultiFn)(nil)\n", arity)
 	}
 	fmt.Fprintln(&out, ")")
 

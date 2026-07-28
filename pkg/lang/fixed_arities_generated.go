@@ -77,6 +77,21 @@ func (f ArityFn) Invoke6(a0, a1, a2, a3, a4, a5 any) any {
 	return f.Invoke(a0, a1, a2, a3, a4, a5)
 }
 
+func (m *MultiFn) Invoke6(a0, a1, a2, a3, a4, a5 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 6) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5})
+	}
+	target := m.getFn(Apply6(m.dispatchFn, a0, a1, a2, a3, a4, a5))
+	if hasDirectFixedArity(target, 6) {
+		return Apply6(target, a0, a1, a2, a3, a4, a5)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5)
+}
+
+func (protocolDispatchFn) Invoke6(a0, a1, a2, a3, a4, a5 any) any {
+	return protocolDispatchValue(a0)
+}
+
 type FixedArityFn7 interface {
 	Invoke7(any, any, any, any, any, any, any) any
 }
@@ -126,6 +141,21 @@ func (f ArityFn) Invoke7(a0, a1, a2, a3, a4, a5, a6 any) any {
 		return Apply7(method, a0, a1, a2, a3, a4, a5, a6)
 	}
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6)
+}
+
+func (m *MultiFn) Invoke7(a0, a1, a2, a3, a4, a5, a6 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 7) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6})
+	}
+	target := m.getFn(Apply7(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6))
+	if hasDirectFixedArity(target, 7) {
+		return Apply7(target, a0, a1, a2, a3, a4, a5, a6)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6)
+}
+
+func (protocolDispatchFn) Invoke7(a0, a1, a2, a3, a4, a5, a6 any) any {
+	return protocolDispatchValue(a0)
 }
 
 type FixedArityFn8 interface {
@@ -181,6 +211,21 @@ func (f ArityFn) Invoke8(a0, a1, a2, a3, a4, a5, a6, a7 any) any {
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7)
 }
 
+func (m *MultiFn) Invoke8(a0, a1, a2, a3, a4, a5, a6, a7 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 8) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7})
+	}
+	target := m.getFn(Apply8(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7))
+	if hasDirectFixedArity(target, 8) {
+		return Apply8(target, a0, a1, a2, a3, a4, a5, a6, a7)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7)
+}
+
+func (protocolDispatchFn) Invoke8(a0, a1, a2, a3, a4, a5, a6, a7 any) any {
+	return protocolDispatchValue(a0)
+}
+
 type FixedArityFn9 interface {
 	Invoke9(any, any, any, any, any, any, any, any, any) any
 }
@@ -232,6 +277,21 @@ func (f ArityFn) Invoke9(a0, a1, a2, a3, a4, a5, a6, a7, a8 any) any {
 		return Apply9(method, a0, a1, a2, a3, a4, a5, a6, a7, a8)
 	}
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8)
+}
+
+func (m *MultiFn) Invoke9(a0, a1, a2, a3, a4, a5, a6, a7, a8 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 9) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8})
+	}
+	target := m.getFn(Apply9(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8))
+	if hasDirectFixedArity(target, 9) {
+		return Apply9(target, a0, a1, a2, a3, a4, a5, a6, a7, a8)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8)
+}
+
+func (protocolDispatchFn) Invoke9(a0, a1, a2, a3, a4, a5, a6, a7, a8 any) any {
+	return protocolDispatchValue(a0)
 }
 
 type FixedArityFn10 interface {
@@ -289,6 +349,21 @@ func (f ArityFn) Invoke10(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 any) any {
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
 }
 
+func (m *MultiFn) Invoke10(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 10) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9})
+	}
+	target := m.getFn(Apply10(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9))
+	if hasDirectFixedArity(target, 10) {
+		return Apply10(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
+}
+
+func (protocolDispatchFn) Invoke10(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 any) any {
+	return protocolDispatchValue(a0)
+}
+
 type FixedArityFn11 interface {
 	Invoke11(any, any, any, any, any, any, any, any, any, any, any) any
 }
@@ -342,6 +417,21 @@ func (f ArityFn) Invoke11(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 any) any {
 		return Apply11(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
 	}
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
+}
+
+func (m *MultiFn) Invoke11(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 11) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10})
+	}
+	target := m.getFn(Apply11(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10))
+	if hasDirectFixedArity(target, 11) {
+		return Apply11(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
+}
+
+func (protocolDispatchFn) Invoke11(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 any) any {
+	return protocolDispatchValue(a0)
 }
 
 type FixedArityFn12 interface {
@@ -399,6 +489,21 @@ func (f ArityFn) Invoke12(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 any) 
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
 }
 
+func (m *MultiFn) Invoke12(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 12) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11})
+	}
+	target := m.getFn(Apply12(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11))
+	if hasDirectFixedArity(target, 12) {
+		return Apply12(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
+}
+
+func (protocolDispatchFn) Invoke12(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 any) any {
+	return protocolDispatchValue(a0)
+}
+
 type FixedArityFn13 interface {
 	Invoke13(any, any, any, any, any, any, any, any, any, any, any, any, any) any
 }
@@ -452,6 +557,21 @@ func (f ArityFn) Invoke13(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 
 		return Apply13(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
 	}
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
+}
+
+func (m *MultiFn) Invoke13(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 13) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12})
+	}
+	target := m.getFn(Apply13(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12))
+	if hasDirectFixedArity(target, 13) {
+		return Apply13(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
+}
+
+func (protocolDispatchFn) Invoke13(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 any) any {
+	return protocolDispatchValue(a0)
 }
 
 type FixedArityFn14 interface {
@@ -509,6 +629,21 @@ func (f ArityFn) Invoke14(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12,
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13)
 }
 
+func (m *MultiFn) Invoke14(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 14) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13})
+	}
+	target := m.getFn(Apply14(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13))
+	if hasDirectFixedArity(target, 14) {
+		return Apply14(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13)
+}
+
+func (protocolDispatchFn) Invoke14(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13 any) any {
+	return protocolDispatchValue(a0)
+}
+
 type FixedArityFn15 interface {
 	Invoke15(any, any, any, any, any, any, any, any, any, any, any, any, any, any, any) any
 }
@@ -562,6 +697,21 @@ func (f ArityFn) Invoke15(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12,
 		return Apply15(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14)
 	}
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14)
+}
+
+func (m *MultiFn) Invoke15(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 15) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14})
+	}
+	target := m.getFn(Apply15(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14))
+	if hasDirectFixedArity(target, 15) {
+		return Apply15(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14)
+}
+
+func (protocolDispatchFn) Invoke15(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14 any) any {
+	return protocolDispatchValue(a0)
 }
 
 type FixedArityFn16 interface {
@@ -619,6 +769,21 @@ func (f ArityFn) Invoke16(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12,
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15)
 }
 
+func (m *MultiFn) Invoke16(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 16) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15})
+	}
+	target := m.getFn(Apply16(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15))
+	if hasDirectFixedArity(target, 16) {
+		return Apply16(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15)
+}
+
+func (protocolDispatchFn) Invoke16(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15 any) any {
+	return protocolDispatchValue(a0)
+}
+
 type FixedArityFn17 interface {
 	Invoke17(any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any) any
 }
@@ -672,6 +837,21 @@ func (f ArityFn) Invoke17(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12,
 		return Apply17(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)
 	}
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)
+}
+
+func (m *MultiFn) Invoke17(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 17) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16})
+	}
+	target := m.getFn(Apply17(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16))
+	if hasDirectFixedArity(target, 17) {
+		return Apply17(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)
+}
+
+func (protocolDispatchFn) Invoke17(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16 any) any {
+	return protocolDispatchValue(a0)
 }
 
 type FixedArityFn18 interface {
@@ -729,6 +909,21 @@ func (f ArityFn) Invoke18(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12,
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17)
 }
 
+func (m *MultiFn) Invoke18(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 18) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17})
+	}
+	target := m.getFn(Apply18(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17))
+	if hasDirectFixedArity(target, 18) {
+		return Apply18(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17)
+}
+
+func (protocolDispatchFn) Invoke18(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17 any) any {
+	return protocolDispatchValue(a0)
+}
+
 type FixedArityFn19 interface {
 	Invoke19(any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any, any) any
 }
@@ -782,6 +977,21 @@ func (f ArityFn) Invoke19(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12,
 		return Apply19(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18)
 	}
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18)
+}
+
+func (m *MultiFn) Invoke19(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 19) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18})
+	}
+	target := m.getFn(Apply19(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18))
+	if hasDirectFixedArity(target, 19) {
+		return Apply19(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18)
+}
+
+func (protocolDispatchFn) Invoke19(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18 any) any {
+	return protocolDispatchValue(a0)
 }
 
 type FixedArityFn20 interface {
@@ -839,35 +1049,65 @@ func (f ArityFn) Invoke20(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12,
 	return f.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19)
 }
 
+func (m *MultiFn) Invoke20(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 20) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19})
+	}
+	target := m.getFn(Apply20(m.dispatchFn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19))
+	if hasDirectFixedArity(target, 20) {
+		return Apply20(target, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19)
+}
+
+func (protocolDispatchFn) Invoke20(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19 any) any {
+	return protocolDispatchValue(a0)
+}
+
 var (
 	_ IFn            = FnFunc6(nil)
 	_ FixedArityFn6  = ArityFn{}
+	_ FixedArityFn6  = (*MultiFn)(nil)
 	_ IFn            = FnFunc7(nil)
 	_ FixedArityFn7  = ArityFn{}
+	_ FixedArityFn7  = (*MultiFn)(nil)
 	_ IFn            = FnFunc8(nil)
 	_ FixedArityFn8  = ArityFn{}
+	_ FixedArityFn8  = (*MultiFn)(nil)
 	_ IFn            = FnFunc9(nil)
 	_ FixedArityFn9  = ArityFn{}
+	_ FixedArityFn9  = (*MultiFn)(nil)
 	_ IFn            = FnFunc10(nil)
 	_ FixedArityFn10 = ArityFn{}
+	_ FixedArityFn10 = (*MultiFn)(nil)
 	_ IFn            = FnFunc11(nil)
 	_ FixedArityFn11 = ArityFn{}
+	_ FixedArityFn11 = (*MultiFn)(nil)
 	_ IFn            = FnFunc12(nil)
 	_ FixedArityFn12 = ArityFn{}
+	_ FixedArityFn12 = (*MultiFn)(nil)
 	_ IFn            = FnFunc13(nil)
 	_ FixedArityFn13 = ArityFn{}
+	_ FixedArityFn13 = (*MultiFn)(nil)
 	_ IFn            = FnFunc14(nil)
 	_ FixedArityFn14 = ArityFn{}
+	_ FixedArityFn14 = (*MultiFn)(nil)
 	_ IFn            = FnFunc15(nil)
 	_ FixedArityFn15 = ArityFn{}
+	_ FixedArityFn15 = (*MultiFn)(nil)
 	_ IFn            = FnFunc16(nil)
 	_ FixedArityFn16 = ArityFn{}
+	_ FixedArityFn16 = (*MultiFn)(nil)
 	_ IFn            = FnFunc17(nil)
 	_ FixedArityFn17 = ArityFn{}
+	_ FixedArityFn17 = (*MultiFn)(nil)
 	_ IFn            = FnFunc18(nil)
 	_ FixedArityFn18 = ArityFn{}
+	_ FixedArityFn18 = (*MultiFn)(nil)
 	_ IFn            = FnFunc19(nil)
 	_ FixedArityFn19 = ArityFn{}
+	_ FixedArityFn19 = (*MultiFn)(nil)
 	_ IFn            = FnFunc20(nil)
 	_ FixedArityFn20 = ArityFn{}
+	_ FixedArityFn20 = (*MultiFn)(nil)
 )

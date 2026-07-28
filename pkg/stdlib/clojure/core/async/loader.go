@@ -195,7 +195,6 @@ func LoadNS() {
 	sym__AMP_ := lang.NewSymbolUnchecked("&")
 	sym__LT__BANG_ := lang.NewSymbolUnchecked("<!")
 	sym__LT__BANG__BANG_ := lang.NewSymbolUnchecked("<!!")
-	sym__EQ_ := lang.NewSymbolUnchecked("=")
 	sym__GT__BANG_ := lang.NewSymbolUnchecked(">!")
 	sym__GT__BANG__BANG_ := lang.NewSymbolUnchecked(">!!")
 	sym_alt_BANG_ := lang.NewSymbolUnchecked("alt!")
@@ -338,8 +337,6 @@ func LoadNS() {
 	var_clojure_DOT_core_DOT_async_try_DASH_put := lang.InternVarName(sym_clojure_DOT_core_DOT_async, sym_try_DASH_put)
 	// var clojure.core.async/try-take
 	var_clojure_DOT_core_DOT_async_try_DASH_take := lang.InternVarName(sym_clojure_DOT_core_DOT_async, sym_try_DASH_take)
-	// var clojure.core/=
-	var_clojure_DOT_core__EQ_ := lang.InternVarName(sym_clojure_DOT_core, sym__EQ_)
 	// var clojure.core/apply
 	var_clojure_DOT_core_apply := lang.InternVarName(sym_clojure_DOT_core, sym_apply)
 	// var clojure.core/concat
@@ -404,7 +401,6 @@ func LoadNS() {
 	aotExternalFn26 := aotLinkFn1(var_clojure_DOT_core_rest)
 	aotExternalFn27 := aotLinkFn1(var_clojure_DOT_core_vec)
 	aotExternalFn28 := aotLinkFn2(var_clojure_DOT_core_contains_QMARK_)
-	aotExternalFn29 := aotLinkFn2(var_clojure_DOT_core__EQ_)
 	aotExternalFn3 := aotLinkFn1(var_clojure_DOT_core_seq_QMARK_)
 	aotExternalFn30 := aotLinkFn0(var_clojure_DOT_core_concat)
 	aotExternalFn5 := aotLinkFn1(var_clojure_DOT_core_to_DASH_array)
@@ -1354,7 +1350,7 @@ func LoadNS() {
 				tmp18 := runtime.RT.NthDefault(v13, lang.IntCast(int64(2)), nil)
 				var v19 any = tmp18
 				_ = v19
-				tmp20 := aotExternalFn29(int64(0), v15)
+				tmp20 := lang.EqualsInt64(int64(0), v15)
 				tmp4 = tmp20
 			} // end let
 			return tmp4
@@ -1492,7 +1488,7 @@ func LoadNS() {
 				var v25 any = tmp24
 				_ = v25
 				var tmp26 any
-				tmp27 := aotExternalFn29(int64(1), v21)
+				tmp27 := lang.EqualsInt64(int64(1), v21)
 				if lang.IsTruthy(tmp27) {
 				} else {
 					var tmp28 any
@@ -1602,7 +1598,7 @@ func LoadNS() {
 					tmp34 = tmp37
 				} else {
 					var tmp38 any
-					tmp39 := aotExternalFn29(v9, v27)
+					tmp39 := lang.Equals(v9, v27)
 					if lang.IsTruthy(tmp39) {
 						tmp40 := kw_default.Invoke1(v3)
 						tmp41 := lang.NewVector(tmp40, kw_default)

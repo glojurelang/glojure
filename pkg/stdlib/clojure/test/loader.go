@@ -36,6 +36,22 @@ var aotDirectFn19 lang.FnFunc1
 var aotDirectFn20 lang.FnFunc0
 var aotDirectFn21 lang.FnFunc1
 
+var aotKeywordMapShape0 = lang.NewKeywordMapShape("type", "message", "expected", "actual")
+
+type aotKeywordMapStorage0 struct {
+	lang.Map
+	values [4]any
+}
+
+func aotKeywordMapNew0(v0 any, v1 any, v2 any, v3 any) *lang.Map {
+	storage := &aotKeywordMapStorage0{}
+	storage.values = [4]any{v0, v1, v2, v3}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape0,
+		storage.values[:],
+	)
+}
 func aotLinkFn0(vr *lang.Var) lang.FnFunc0 {
 	if vr.IsBound() {
 		return aotLinkBoundFn0(vr)
@@ -1405,7 +1421,7 @@ func LoadNS() {
 											if lang.CatchMatches(r, lang.Builtins["any"]) {
 												v22 := r
 												_ = v22
-												tmp23 := lang.NewMap(kw_type, kw_error, kw_message, "Uncaught exception, not in assertion.", kw_expected, nil, kw_actual, v22)
+												tmp23 := aotKeywordMapNew0(kw_error, "Uncaught exception, not in assertion.", nil, v22)
 												tmp24 := aotDirectFn5(tmp23)
 												tmp21 = tmp24
 											} else {
@@ -1441,6 +1457,7 @@ func LoadNS() {
 	// use-fixtures
 	{
 		tmp0 := sym_use_DASH_fixtures
+		// MultiFn use-fixtures
 		var tmp2 lang.ArityFn
 		tmp2 = lang.NewArityFn(
 			nil,
@@ -1457,7 +1474,6 @@ func LoadNS() {
 			}),
 			1,
 		)
-		// MultiFn use-fixtures
 		tmp1 := lang.NewMultiFn("use-fixtures", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.ArityFn
 		tmp3 = lang.NewArityFn(
@@ -1570,7 +1586,7 @@ func LoadNS() {
 						{ // let
 							// let binding "and__0__auto__"
 							tmp13 := lang.Count(v4)
-							tmp14 := lang.Numbers.IsPos(tmp13)
+							tmp14 := (lang.AsInt64(tmp13) > 0)
 							var v15 any = tmp14
 							_ = v15
 							var tmp16 any
@@ -1579,7 +1595,7 @@ func LoadNS() {
 								{ // let
 									// let binding "and__0__auto__"
 									tmp18 := lang.Count(v6)
-									tmp19 := lang.Numbers.IsPos(tmp18)
+									tmp19 := (lang.AsInt64(tmp18) > 0)
 									var v20 any = tmp19
 									_ = v20
 									var tmp21 any
@@ -1747,6 +1763,7 @@ func LoadNS() {
 	// assert-expr
 	{
 		tmp0 := sym_assert_DASH_expr
+		// MultiFn assert-expr
 		var tmp2 lang.FnFunc2
 		tmp2 = lang.FnFunc2(func(p0, p1 any) any {
 			v3 := p0
@@ -1770,7 +1787,6 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		// MultiFn assert-expr
 		tmp1 := lang.NewMultiFn("assert-expr", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc2
 		tmp3 = lang.FnFunc2(func(p0, p1 any) any {
@@ -3400,7 +3416,7 @@ func LoadNS() {
 				_ = v11
 				for {
 					var tmp12 any
-					tmp13 := lang.Numbers.Lt(v11, v10)
+					tmp13 := (lang.AsInt64(v11) < lang.AsInt64(v10))
 					if lang.IsTruthy(tmp13) {
 						var tmp14 any
 						{ // let
@@ -3449,7 +3465,7 @@ func LoadNS() {
 										_ = v36
 										for {
 											var tmp37 any
-											tmp38 := lang.Numbers.Lt(v36, v35)
+											tmp38 := (lang.AsInt64(v36) < lang.AsInt64(v35))
 											if lang.IsTruthy(tmp38) {
 												var tmp39 any
 												{ // let
@@ -3475,7 +3491,7 @@ func LoadNS() {
 													var tmp47 any = v33
 													var tmp48 any = v34
 													var tmp49 any = v35
-													tmp51 := lang.Numbers.Unchecked_inc(v36)
+													tmp51 := (lang.AsInt64(v36) + 1)
 													var tmp50 any = tmp51
 													v33 = tmp47
 													v34 = tmp48
@@ -3579,7 +3595,7 @@ func LoadNS() {
 							var tmp22 any = v8
 							var tmp23 any = v9
 							var tmp24 any = v10
-							tmp26 := lang.Numbers.Unchecked_inc(v11)
+							tmp26 := (lang.AsInt64(v11) + 1)
 							var tmp25 any = tmp26
 							v8 = tmp22
 							v9 = tmp23
@@ -3674,7 +3690,7 @@ func LoadNS() {
 														_ = v46
 														for {
 															var tmp47 any
-															tmp48 := lang.Numbers.Lt(v46, v45)
+															tmp48 := (lang.AsInt64(v46) < lang.AsInt64(v45))
 															if lang.IsTruthy(tmp48) {
 																var tmp49 any
 																{ // let
@@ -3700,7 +3716,7 @@ func LoadNS() {
 																	var tmp57 any = v43
 																	var tmp58 any = v44
 																	var tmp59 any = v45
-																	tmp61 := lang.Numbers.Unchecked_inc(v46)
+																	tmp61 := (lang.AsInt64(v46) + 1)
 																	var tmp60 any = tmp61
 																	v43 = tmp57
 																	v44 = tmp58

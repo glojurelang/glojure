@@ -922,6 +922,56 @@ var aotInt64Fn534 func(int64) (int64, bool)
 var aotInt64Fn538 func(int64, int64) (int64, bool)
 var aotInt64Fn544 func(int64, int64) (int64, bool)
 
+var aotKeywordMapShape0 = lang.NewKeywordMapShape("parents", "ancestors", "descendants")
+
+type aotKeywordMapStorage0 struct {
+	lang.Map
+	values [3]any
+}
+
+func aotKeywordMapNew0(v0 any, v1 any, v2 any) *lang.Map {
+	storage := &aotKeywordMapStorage0{}
+	storage.values = [3]any{v0, v1, v2}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape0,
+		storage.values[:],
+	)
+}
+
+var aotKeywordMapShape1 = lang.NewKeywordMapShape("url", "conflict", "mappings")
+
+type aotKeywordMapStorage1 struct {
+	lang.Map
+	values [3]any
+}
+
+func aotKeywordMapNew1(v0 any, v1 any, v2 any) *lang.Map {
+	storage := &aotKeywordMapStorage1{}
+	storage.values = [3]any{v0, v1, v2}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape1,
+		storage.values[:],
+	)
+}
+
+var aotKeywordMapShape2 = lang.NewKeywordMapShape("parents", "descendants", "ancestors")
+
+type aotKeywordMapStorage2 struct {
+	lang.Map
+	values [3]any
+}
+
+func aotKeywordMapNew2(v0 any, v1 any, v2 any) *lang.Map {
+	storage := &aotKeywordMapStorage2{}
+	storage.values = [3]any{v0, v1, v2}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape2,
+		storage.values[:],
+	)
+}
 func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
 	if vr.IsBound() {
 		return aotLinkBoundFn2(vr)
@@ -1050,6 +1100,7 @@ func LoadNS() {
 	sym__DOT_Deref := lang.NewSymbolUnchecked(".Deref")
 	sym__DOT_Equals := lang.NewSymbolUnchecked(".Equals")
 	sym__DOT_HasRoot := lang.NewSymbolUnchecked(".HasRoot")
+	sym__DOT_IsProtocol := lang.NewSymbolUnchecked(".IsProtocol")
 	sym__DOT_ResetMeta := lang.NewSymbolUnchecked(".ResetMeta")
 	sym__DOT_UnixNano := lang.NewSymbolUnchecked(".UnixNano")
 	sym__DOT_nth := lang.NewSymbolUnchecked(".nth")
@@ -1280,7 +1331,6 @@ func LoadNS() {
 	sym_clojure_DOT_core_SLASH_chunk_DASH_first := lang.NewSymbolUnchecked("clojure.core/chunk-first")
 	sym_clojure_DOT_core_SLASH_chunk_DASH_rest := lang.NewSymbolUnchecked("clojure.core/chunk-rest")
 	sym_clojure_DOT_core_SLASH_chunked_DASH_seq_QMARK_ := lang.NewSymbolUnchecked("clojure.core/chunked-seq?")
-	sym_clojure_DOT_core_SLASH_class := lang.NewSymbolUnchecked("clojure.core/class")
 	sym_clojure_DOT_core_SLASH_commute := lang.NewSymbolUnchecked("clojure.core/commute")
 	sym_clojure_DOT_core_SLASH_compare := lang.NewSymbolUnchecked("clojure.core/compare")
 	sym_clojure_DOT_core_SLASH_concat := lang.NewSymbolUnchecked("clojure.core/concat")
@@ -1291,7 +1341,6 @@ func LoadNS() {
 	sym_clojure_DOT_core_SLASH_count := lang.NewSymbolUnchecked("clojure.core/count")
 	sym_clojure_DOT_core_SLASH_create_DASH_struct := lang.NewSymbolUnchecked("clojure.core/create-struct")
 	sym_clojure_DOT_core_SLASH_decP := lang.NewSymbolUnchecked("clojure.core/decP")
-	sym_clojure_DOT_core_SLASH_defmulti := lang.NewSymbolUnchecked("clojure.core/defmulti")
 	sym_clojure_DOT_core_SLASH_defn := lang.NewSymbolUnchecked("clojure.core/defn")
 	sym_clojure_DOT_core_SLASH_deref := lang.NewSymbolUnchecked("clojure.core/deref")
 	sym_clojure_DOT_core_SLASH_dosync := lang.NewSymbolUnchecked("clojure.core/dosync")
@@ -1308,6 +1357,7 @@ func LoadNS() {
 	sym_clojure_DOT_core_SLASH_future_DASH_call := lang.NewSymbolUnchecked("clojure.core/future-call")
 	sym_clojure_DOT_core_SLASH_gen_DASH_class := lang.NewSymbolUnchecked("clojure.core/gen-class")
 	sym_clojure_DOT_core_SLASH_get := lang.NewSymbolUnchecked("clojure.core/get")
+	sym_clojure_DOT_core_SLASH_global_DASH_hierarchy := lang.NewSymbolUnchecked("clojure.core/global-hierarchy")
 	sym_clojure_DOT_core_SLASH_gt := lang.NewSymbolUnchecked("clojure.core/gt")
 	sym_clojure_DOT_core_SLASH_gte := lang.NewSymbolUnchecked("clojure.core/gte")
 	sym_clojure_DOT_core_SLASH_hash_DASH_map := lang.NewSymbolUnchecked("clojure.core/hash-map")
@@ -1595,6 +1645,7 @@ func LoadNS() {
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap := lang.NewSymbolUnchecked("github.com:glojurelang:glojure:pkg:lang.NewMap")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn := lang.NewSymbolUnchecked("github.com:glojurelang:glojure:pkg:lang.NewMultiFn")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc := lang.NewSymbolUnchecked("github.com:glojurelang:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewProtocolMultiFn := lang.NewSymbolUnchecked("github.com:glojurelang:glojure:pkg:lang.NewProtocolMultiFn")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers := lang.NewSymbolUnchecked("github.com:glojurelang:glojure:pkg:lang.Numbers")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_PopThreadBindings := lang.NewSymbolUnchecked("github.com:glojurelang:glojure:pkg:lang.PopThreadBindings")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_PushThreadBindings := lang.NewSymbolUnchecked("github.com:glojurelang:glojure:pkg:lang.PushThreadBindings")
@@ -1648,7 +1699,6 @@ func LoadNS() {
 	sym_int_QMARK_ := lang.NewSymbolUnchecked("int?")
 	sym_intCast := lang.NewSymbolUnchecked("intCast")
 	sym_integer_QMARK_ := lang.NewSymbolUnchecked("integer?")
-	sym_interface_DASH_or_DASH_naive_DASH_reduce := lang.NewSymbolUnchecked("interface-or-naive-reduce")
 	sym_interleave := lang.NewSymbolUnchecked("interleave")
 	sym_intern := lang.NewSymbolUnchecked("intern")
 	sym_internal_DASH_reduce := lang.NewSymbolUnchecked("internal-reduce")
@@ -2001,7 +2051,6 @@ func LoadNS() {
 	sym_sep := lang.NewSymbolUnchecked("sep")
 	sym_seq := lang.NewSymbolUnchecked("seq")
 	sym_seq_DASH_exprs := lang.NewSymbolUnchecked("seq-exprs")
-	sym_seq_DASH_reduce := lang.NewSymbolUnchecked("seq-reduce")
 	sym_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring := lang.NewSymbolUnchecked("seq-to-map-for-destructuring")
 	sym_seq_QMARK_ := lang.NewSymbolUnchecked("seq?")
 	sym_seqable_QMARK_ := lang.NewSymbolUnchecked("seqable?")
@@ -2099,7 +2148,6 @@ func LoadNS() {
 	sym_the_DASH_ns := lang.NewSymbolUnchecked("the-ns")
 	sym_then := lang.NewSymbolUnchecked("then")
 	sym_thens := lang.NewSymbolUnchecked("thens")
-	sym_this := lang.NewSymbolUnchecked("this")
 	sym_thread_DASH_bound_QMARK_ := lang.NewSymbolUnchecked("thread-bound?")
 	sym_throw := lang.NewSymbolUnchecked("throw")
 	sym_throw_DASH_if := lang.NewSymbolUnchecked("throw-if")
@@ -2230,7 +2278,6 @@ func LoadNS() {
 	kw_coll_DASH_reduce := lang.NewKeyword("coll-reduce")
 	kw_column := lang.NewKeyword("column")
 	kw_compact := lang.NewKeyword("compact")
-	kw_conflict := lang.NewKeyword("conflict")
 	kw_content := lang.NewKeyword("content")
 	kw_continue := lang.NewKeyword("continue")
 	kw_data := lang.NewKeyword("data")
@@ -2275,7 +2322,6 @@ func LoadNS() {
 	kw_macro := lang.NewKeyword("macro")
 	kw_main := lang.NewKeyword("main")
 	kw_major := lang.NewKeyword("major")
-	kw_mappings := lang.NewKeyword("mappings")
 	kw_max_DASH_history := lang.NewKeyword("max-history")
 	kw_message := lang.NewKeyword("message")
 	kw_meta := lang.NewKeyword("meta")
@@ -2329,12 +2375,8 @@ func LoadNS() {
 	kw_while := lang.NewKeyword("while")
 	// var clojure.core.protocols/coll-reduce
 	var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce := lang.InternVarName(sym_clojure_DOT_core_DOT_protocols, sym_coll_DASH_reduce)
-	// var clojure.core.protocols/interface-or-naive-reduce
-	var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce := lang.InternVarName(sym_clojure_DOT_core_DOT_protocols, sym_interface_DASH_or_DASH_naive_DASH_reduce)
 	// var clojure.core.protocols/kv-reduce
 	var_clojure_DOT_core_DOT_protocols_kv_DASH_reduce := lang.InternVarName(sym_clojure_DOT_core_DOT_protocols, sym_kv_DASH_reduce)
-	// var clojure.core.protocols/seq-reduce
-	var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce := lang.InternVarName(sym_clojure_DOT_core_DOT_protocols, sym_seq_DASH_reduce)
 	// var clojure.core/NaN?
 	var_clojure_DOT_core_NaN_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_NaN_QMARK_)
 	// var clojure.core/StackTraceElement->vec
@@ -3729,10 +3771,10 @@ func LoadNS() {
 	var_glojure_DOT_go_DOT_io_copy := lang.InternVarName(sym_glojure_DOT_go_DOT_io, sym_copy)
 	// var glojure.go.io/reader
 	var_glojure_DOT_go_DOT_io_reader := lang.InternVarName(sym_glojure_DOT_go_DOT_io, sym_reader)
-	aotExternalFn0 := aotLinkFn2(var_glojure_DOT_go_DOT_io_copy)
-	aotExternalFn1 := aotLinkFn2(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
-	aotExternalFn2 := aotLinkFn3(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
-	aotExternalFn3 := aotLinkFn3(var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce)
+	aotExternalFn0 := aotLinkFn2(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
+	aotExternalFn1 := aotLinkFn3(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
+	aotExternalFn2 := aotLinkFn3(var_clojure_DOT_core_DOT_protocols_kv_DASH_reduce)
+	aotExternalFn3 := aotLinkFn2(var_glojure_DOT_go_DOT_io_copy)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -3751,16 +3793,7 @@ func LoadNS() {
 	var closed16 any
 	var closed17 any
 	var closed18 any
-	var closed19 any
 	var closed2 any
-	var closed20 any
-	var closed21 any
-	var closed22 any
-	var closed23 any
-	var closed24 any
-	var closed25 any
-	var closed26 any
-	var closed27 any
 	var closed3 any
 	var closed4 any
 	var closed5 any
@@ -3775,326 +3808,22 @@ func LoadNS() {
 		closed1 = sym_multiply
 	}
 	{
-		var tmp0 lang.ArityFn
-		tmp0 = lang.NewArityFn(
-			nil,
-			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				tmp3 := v1.(interface{ Reduce(lang.IFn) any }).Reduce(lang.MustHostCast[lang.IFn](v2))
-				return tmp3
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				v3 := p2
-				_ = v3
-				tmp4 := v1.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v2), v3)
-				return tmp4
-			}),
-			nil,
-			nil,
-			0,
-		)
-		closed10 = tmp0
+		closed10 = sym_and
 	}
 	{
-		var tmp0 lang.ArityFn
-		tmp0 = lang.NewArityFn(
-			nil,
-			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				tmp3 := aotExternalFn1(v1, v2)
-				return tmp3
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				v3 := p2
-				_ = v3
-				tmp4 := aotExternalFn2(v1, v2, v3)
-				return tmp4
-			}),
-			nil,
-			nil,
-			0,
-		)
-		closed11 = tmp0
+		closed11 = sym_andNot
 	}
 	{
-		var tmp0 lang.ArityFn
-		tmp0 = lang.NewArityFn(
-			nil,
-			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				tmp3 := aotExternalFn1(v1, v2)
-				return tmp3
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				v3 := p2
-				_ = v3
-				tmp4 := aotExternalFn2(v1, v2, v3)
-				return tmp4
-			}),
-			nil,
-			nil,
-			0,
-		)
-		closed12 = tmp0
+		closed12 = sym_or
 	}
 	{
-		var tmp0 lang.ArityFn
-		tmp0 = lang.NewArityFn(
-			nil,
-			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				tmp3 := aotExternalFn1(v1, v2)
-				return tmp3
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				v3 := p2
-				_ = v3
-				tmp4 := aotExternalFn2(v1, v2, v3)
-				return tmp4
-			}),
-			nil,
-			nil,
-			0,
-		)
-		closed13 = tmp0
+		closed13 = sym_xor
 	}
 	{
-		var tmp0 lang.FnFunc3
-		tmp0 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v1 := p0
-			_ = v1
-			v2 := p1
-			_ = v2
-			v3 := p2
-			_ = v3
-			return v3
-		})
-		closed14 = tmp0
+		closed14 = sym_max
 	}
 	{
-		var tmp0 lang.FnFunc3
-		tmp0 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v1 := p0
-			_ = v1
-			v2 := p1
-			_ = v2
-			v3 := p2
-			_ = v3
-		recur_loop_2880:
-			var tmp4 any
-			{ // let
-				// let binding "temp__0__auto__"
-				tmp5 := aotDirectFn447(v1)
-				var v6 any = tmp5
-				_ = v6
-				var tmp7 any
-				if lang.IsTruthy(v6) {
-					var tmp8 any
-					{ // let
-						// let binding "s"
-						var v9 any = v6
-						_ = v9
-						var tmp10 any
-						tmp11 := aotDirectFn99(v9)
-						if lang.IsTruthy(tmp11) {
-							var tmp12 any
-							{ // let
-								// let binding "ret"
-								tmp13 := aotDirectFn96(v9)
-								tmp14, _ := lang.FieldOrMethod(tmp13, "ReduceInit")
-								if reflect.TypeOf(tmp14).Kind() != reflect.Func {
-									panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReduceInit is not a function")))
-								}
-								tmp15 := lang.Apply2(tmp14, v2, v3)
-								var v16 any = tmp15
-								_ = v16
-								var tmp17 any
-								tmp18 := lang.IsReduced(v16)
-								if lang.IsTruthy(tmp18) {
-									tmp19 := aotDirectFn132Arity1(v16)
-									tmp17 = tmp19
-								} else {
-									tmp21 := aotDirectFn97(v9)
-									var tmp20 any = tmp21
-									var tmp22 any = v2
-									var tmp23 any = v16
-									v1 = tmp20
-									v2 = tmp22
-									v3 = tmp23
-									goto recur_loop_2880
-								}
-								tmp12 = tmp17
-							} // end let
-							tmp10 = tmp12
-						} else {
-							tmp13 := aotExternalFn3(v9, v2, v3)
-							tmp10 = tmp13
-						}
-						tmp8 = tmp10
-					} // end let
-					tmp7 = tmp8
-				} else {
-					tmp7 = v3
-				}
-				tmp4 = tmp7
-			} // end let
-			return tmp4
-		})
-		closed15 = tmp0
-	}
-	{
-		var tmp0 lang.FnFunc3
-		tmp0 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v1 := p0
-			_ = v1
-			v2 := p1
-			_ = v2
-			v3 := p2
-			_ = v3
-			var tmp4 any
-			{ // let
-				// let binding "cls"
-				tmp5 := aotDirectFn100(v1)
-				var v6 any = tmp5
-				_ = v6
-				// let binding "s"
-				var v7 any = v1
-				_ = v7
-				// let binding "f"
-				var v8 any = v2
-				_ = v8
-				// let binding "val"
-				var v9 any = v3
-				_ = v9
-				for {
-					var tmp10 any
-					{ // let
-						// let binding "temp__0__auto__"
-						tmp11 := aotDirectFn447(v7)
-						var v12 any = tmp11
-						_ = v12
-						var tmp13 any
-						if lang.IsTruthy(v12) {
-							var tmp14 any
-							{ // let
-								// let binding "s"
-								var v15 any = v12
-								_ = v15
-								var tmp16 any
-								tmp17 := aotDirectFn100(v15)
-								tmp18 := aotDirectFn216(tmp17, v6)
-								if lang.IsTruthy(tmp18) {
-									var tmp19 any
-									{ // let
-										// let binding "ret"
-										tmp20 := aotDirectFn183(v15)
-										tmp21 := lang.Apply2(v8, v9, tmp20)
-										var v22 any = tmp21
-										_ = v22
-										var tmp23 any
-										tmp24 := lang.IsReduced(v22)
-										if lang.IsTruthy(tmp24) {
-											tmp25 := aotDirectFn132Arity1(v22)
-											tmp23 = tmp25
-										} else {
-											var tmp26 any = v6
-											tmp28 := aotDirectFn299(v15)
-											var tmp27 any = tmp28
-											var tmp29 any = v8
-											var tmp30 any = v22
-											v6 = tmp26
-											v7 = tmp27
-											v8 = tmp29
-											v9 = tmp30
-											continue
-										}
-										tmp19 = tmp23
-									} // end let
-									tmp16 = tmp19
-								} else {
-									tmp20 := aotExternalFn3(v15, v8, v9)
-									tmp16 = tmp20
-								}
-								tmp14 = tmp16
-							} // end let
-							tmp13 = tmp14
-						} else {
-							tmp13 = v9
-						}
-						tmp10 = tmp13
-					} // end let
-					tmp4 = tmp10
-					break
-				}
-			} // end let
-			return tmp4
-		})
-		closed16 = tmp0
-	}
-	{
-		var tmp0 lang.FnFunc1
-		tmp0 = lang.FnFunc1(func(p0 any) any {
-			v1 := p0
-			_ = v1
-			return nil
-		})
-		closed17 = tmp0
-	}
-	{
-		closed18 = sym_divide
-	}
-	{
-		closed19 = sym_and
-	}
-	{
-		closed2 = sym_multiplyP
-	}
-	{
-		closed20 = sym_andNot
-	}
-	{
-		closed21 = sym_or
-	}
-	{
-		closed22 = sym_xor
-	}
-	{
-		closed23 = sym_max
-	}
-	{
-		closed24 = sym_min
+		closed15 = sym_min
 	}
 	{
 		var tmp0 lang.FnFunc1
@@ -4109,7 +3838,7 @@ func LoadNS() {
 			}
 			return tmp2
 		})
-		closed25 = tmp0
+		closed16 = tmp0
 	}
 	{
 		var tmp0 lang.FnFunc2
@@ -4118,7 +3847,7 @@ func LoadNS() {
 			_ = v1
 			v2 := p1
 			_ = v2
-		recur_loop_2081:
+		recur_loop_2070:
 			var tmp3 any
 			{ // let
 				// let binding "temp__0__auto__"
@@ -4148,7 +3877,7 @@ func LoadNS() {
 								var tmp15 any = tmp16
 								v1 = tmp14
 								v2 = tmp15
-								goto recur_loop_2081
+								goto recur_loop_2070
 							}
 							tmp9 = tmp13
 						} // end let
@@ -4161,7 +3890,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		closed26 = tmp0
+		closed17 = tmp0
 	}
 	{
 		var tmp0 lang.FnFunc2
@@ -4170,7 +3899,7 @@ func LoadNS() {
 			_ = v1
 			v2 := p1
 			_ = v2
-		recur_loop_2080:
+		recur_loop_2069:
 			var tmp3 any
 			tmp4 := aotDirectFn447(v2)
 			tmp5 := lang.Identical(tmp4, nil)
@@ -4186,7 +3915,7 @@ func LoadNS() {
 					var tmp10 any = tmp11
 					v1 = tmp9
 					v2 = tmp10
-					goto recur_loop_2080
+					goto recur_loop_2069
 				} else {
 					tmp6 = false
 				}
@@ -4194,7 +3923,10 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		closed27 = tmp0
+		closed18 = tmp0
+	}
+	{
+		closed2 = sym_multiplyP
 	}
 	{
 		closed3 = sym_UncheckedAdd
@@ -4215,32 +3947,7 @@ func LoadNS() {
 		closed8 = sym_minusP
 	}
 	{
-		var tmp0 lang.ArityFn
-		tmp0 = lang.NewArityFn(
-			nil,
-			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				tmp3 := lang.Apply0(v2)
-				return tmp3
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v1 := p0
-				_ = v1
-				v2 := p1
-				_ = v2
-				v3 := p2
-				_ = v3
-				return v3
-			}),
-			nil,
-			nil,
-			0,
-		)
-		closed9 = tmp0
+		closed9 = sym_divide
 	}
 	// StackTraceElement->vec
 	{
@@ -4578,284 +4285,12 @@ func LoadNS() {
 	// -protocols
 	{
 		tmp0 := sym__DASH_protocols
-		var tmp4 lang.ArityFn
-		tmp4 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v5 := args[0]
-				_ = v5
-				var v6 any = rest
-				_ = v6
-				tmp7 := aotDirectFn100(v5)
-				return tmp7
-			}),
-			1,
-		)
-		// MultiFn coll-reduce
-		tmp3 := lang.NewMultiFn("coll-reduce", tmp4, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp5 lang.ArityFn
-		tmp5 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v6 := args[0]
-				_ = v6
-				var v7 any = rest
-				_ = v7
-				tmp8 := aotDirectFn115(v6, v7)
-				tmp9 := aotDirectFn35Arity2(closed9, tmp8)
-				return tmp9
-			}),
-			1,
-		)
-		tmp3.AddMethod(nil, tmp5)
-		tmp6 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-		var tmp7 lang.ArityFn
-		tmp7 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v8 := args[0]
-				_ = v8
-				var v9 any = rest
-				_ = v9
-				tmp10 := aotDirectFn115(v8, v9)
-				tmp11 := aotDirectFn35Arity2(closed10, tmp10)
-				return tmp11
-			}),
-			1,
-		)
-		tmp3.AddMethod(tmp6, tmp7)
-		tmp8 := reflect.TypeOf((*lang.LazySeq)(nil))
-		var tmp9 lang.ArityFn
-		tmp9 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v10 := args[0]
-				_ = v10
-				var v11 any = rest
-				_ = v11
-				tmp12 := aotDirectFn115(v10, v11)
-				tmp13 := aotDirectFn35Arity2(closed11, tmp12)
-				return tmp13
-			}),
-			1,
-		)
-		tmp3.AddMethod(tmp8, tmp9)
-		tmp10 := reflect.TypeOf((*lang.Vector)(nil))
-		var tmp11 lang.ArityFn
-		tmp11 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v12 := args[0]
-				_ = v12
-				var v13 any = rest
-				_ = v13
-				tmp14 := aotDirectFn115(v12, v13)
-				tmp15 := aotDirectFn35Arity2(closed12, tmp14)
-				return tmp15
-			}),
-			1,
-		)
-		tmp3.AddMethod(tmp10, tmp11)
-		tmp12 := reflect.TypeOf("")
-		var tmp13 lang.ArityFn
-		tmp13 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v14 := args[0]
-				_ = v14
-				var v15 any = rest
-				_ = v15
-				tmp16 := aotDirectFn115(v14, v15)
-				tmp17 := aotDirectFn35Arity2(closed13, tmp16)
-				return tmp17
-			}),
-			1,
-		)
-		tmp3.AddMethod(tmp12, tmp13)
-		tmp2 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_coll_DASH_reduce, tmp3), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_coll_DASH_reduce, lang.NewVector(sym_coll, sym_f), lang.NewVector(sym_coll, sym_f, sym_val)))))
-		var tmp16 lang.ArityFn
-		tmp16 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v17 := args[0]
-				_ = v17
-				var v18 any = rest
-				_ = v18
-				tmp19 := aotDirectFn100(v17)
-				return tmp19
-			}),
-			1,
-		)
-		// MultiFn internal-reduce
-		tmp15 := lang.NewMultiFn("internal-reduce", tmp16, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp17 lang.ArityFn
-		tmp17 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v18 := args[0]
-				_ = v18
-				var v19 any = rest
-				_ = v19
-				tmp20 := aotDirectFn115(v18, v19)
-				tmp21 := aotDirectFn35Arity2(closed14, tmp20)
-				return tmp21
-			}),
-			1,
-		)
-		tmp15.AddMethod(nil, tmp17)
-		tmp18 := reflect.TypeOf((*lang.IChunkedSeq)(nil)).Elem()
-		var tmp19 lang.ArityFn
-		tmp19 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v20 := args[0]
-				_ = v20
-				var v21 any = rest
-				_ = v21
-				tmp22 := aotDirectFn115(v20, v21)
-				tmp23 := aotDirectFn35Arity2(closed15, tmp22)
-				return tmp23
-			}),
-			1,
-		)
-		tmp15.AddMethod(tmp18, tmp19)
-		tmp20 := reflect.TypeOf((*lang.Object)(nil)).Elem()
-		var tmp21 lang.ArityFn
-		tmp21 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v22 := args[0]
-				_ = v22
-				var v23 any = rest
-				_ = v23
-				tmp24 := aotDirectFn115(v22, v23)
-				tmp25 := aotDirectFn35Arity2(closed16, tmp24)
-				return tmp25
-			}),
-			1,
-		)
-		tmp15.AddMethod(tmp20, tmp21)
-		tmp14 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_internal_DASH_reduce, tmp15), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_internal_DASH_reduce, lang.NewVector(sym_seq, sym_f, sym_start)))))
-		var tmp24 lang.ArityFn
-		tmp24 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v25 := args[0]
-				_ = v25
-				var v26 any = rest
-				_ = v26
-				tmp27 := aotDirectFn100(v25)
-				return tmp27
-			}),
-			1,
-		)
-		// MultiFn kv-reduce
-		tmp23 := lang.NewMultiFn("kv-reduce", tmp24, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp22 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_kv_DASH_reduce, tmp23), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_kv_DASH_reduce, lang.NewVector(sym_amap, sym_f, sym_init)))))
-		var tmp27 lang.ArityFn
-		tmp27 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v28 := args[0]
-				_ = v28
-				var v29 any = rest
-				_ = v29
-				tmp30 := aotDirectFn100(v28)
-				return tmp30
-			}),
-			1,
-		)
-		// MultiFn datafy
-		tmp26 := lang.NewMultiFn("datafy", tmp27, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp28 lang.ArityFn
-		tmp28 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v29 := args[0]
-				_ = v29
-				var v30 any = rest
-				_ = v30
-				tmp31 := aotDirectFn115(v29, v30)
-				tmp32 := aotDirectFn35Arity2(closed17, tmp31)
-				return tmp32
-			}),
-			1,
-		)
-		tmp26.AddMethod(nil, tmp28)
-		tmp25 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_datafy, tmp26), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_datafy, lang.NewVector(sym_o), "return a representation of o as data (default identity)"))))
-		var tmp31 lang.ArityFn
-		tmp31 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v32 := args[0]
-				_ = v32
-				var v33 any = rest
-				_ = v33
-				tmp34 := aotDirectFn100(v32)
-				return tmp34
-			}),
-			1,
-		)
-		// MultiFn nav
-		tmp30 := lang.NewMultiFn("nav", tmp31, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp29 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_nav, tmp30), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_nav, lang.NewVector(sym_coll, sym_k, sym_v), "return (possibly transformed) v in the context of coll and k (a key/index or nil),\ndefaults to returning v."))))
-		tmp1 := lang.NewAtom(lang.NewMap(sym_CollReduce, tmp2, sym_InternalReduce, tmp14, sym_IKVReduce, tmp22, sym_Datafiable, tmp25, sym_Navigable, tmp29))
+		tmp2 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_coll_DASH_reduce, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols).FindInternedVar(sym_coll_DASH_reduce)), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_coll_DASH_reduce, lang.NewVector(sym_coll, sym_f), lang.NewVector(sym_coll, sym_f, sym_val)))))
+		tmp3 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_internal_DASH_reduce, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols).FindInternedVar(sym_internal_DASH_reduce)), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_internal_DASH_reduce, lang.NewVector(sym_seq, sym_f, sym_start)))))
+		tmp4 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_kv_DASH_reduce, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols).FindInternedVar(sym_kv_DASH_reduce)), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_kv_DASH_reduce, lang.NewVector(sym_amap, sym_f, sym_init)))))
+		tmp5 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_datafy, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols).FindInternedVar(sym_datafy)), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_datafy, lang.NewVector(sym_o), "return a representation of o as data (default identity)"))))
+		tmp6 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_nav, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols).FindInternedVar(sym_nav)), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_nav, lang.NewVector(sym_coll, sym_k, sym_v), "return (possibly transformed) v in the context of coll and k (a key/index or nil),\ndefaults to returning v."))))
+		tmp1 := lang.NewAtom(lang.NewMap(sym_CollReduce, tmp2, sym_InternalReduce, tmp3, sym_IKVReduce, tmp4, sym_Datafiable, tmp5, sym_Navigable, tmp6))
 		var_clojure_DOT_core__DASH_protocols = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__DASH_protocols.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_private, true, kw_doc, "Private store of protocols. Go's reflection capabilities\n    don't yet support a native interface-based implementation, so\n    protocols are implemented in Glojure as maps from type to protocol\n    method implementations.", kw_file, "clojure/core_deftype.glj", kw_line, int(21), kw_column, int(3), kw_end_DASH_line, int(26), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -6061,7 +5496,7 @@ func LoadNS() {
 					_ = v5
 					var v6 any = rest
 					_ = v6
-				recur_loop_1625:
+				recur_loop_1614:
 					var tmp7 any
 					{ // let
 						// let binding "ret"
@@ -6084,7 +5519,7 @@ func LoadNS() {
 								v4 = tmp14
 								v5 = tmp16
 								v6 = tmp18
-								goto recur_loop_1625
+								goto recur_loop_1614
 							} else {
 								tmp20 := lang.Apply1(lang.NewIllegalArgumentError, "assoc expects even number of arguments after map/vector, found odd number")
 								panic(tmp20)
@@ -6149,7 +5584,7 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-			recur_loop_2212:
+			recur_loop_2201:
 				var tmp6 any
 				{ // let
 					// let binding "ret"
@@ -6169,7 +5604,7 @@ func LoadNS() {
 						v3 = tmp11
 						v4 = tmp13
 						v5 = tmp15
-						goto recur_loop_2212
+						goto recur_loop_2201
 					} else {
 						tmp9 = v8
 					}
@@ -6357,7 +5792,7 @@ func LoadNS() {
 							_ = v19
 							for {
 								var tmp20 any
-								tmp21 := lang.Numbers.Lt(v19, v18)
+								tmp21 := (lang.AsInt64(v19) < lang.AsInt64(v18))
 								if lang.IsTruthy(tmp21) {
 									var tmp22 any
 									{ // let
@@ -6370,7 +5805,7 @@ func LoadNS() {
 										var tmp26 any = v16
 										var tmp27 any = v17
 										var tmp28 any = v18
-										tmp30 := lang.Numbers.Unchecked_inc(v19)
+										tmp30 := (lang.AsInt64(v19) + 1)
 										var tmp29 any = tmp30
 										v16 = tmp26
 										v17 = tmp27
@@ -6575,7 +6010,7 @@ func LoadNS() {
 							_ = v20
 							for {
 								var tmp21 any
-								tmp22 := lang.Numbers.Lt(v20, v19)
+								tmp22 := (lang.AsInt64(v20) < lang.AsInt64(v19))
 								if lang.IsTruthy(tmp22) {
 									var tmp23 any
 									{ // let
@@ -6588,7 +6023,7 @@ func LoadNS() {
 										var tmp27 any = v17
 										var tmp28 any = v18
 										var tmp29 any = v19
-										tmp31 := lang.Numbers.Unchecked_inc(v20)
+										tmp31 := (lang.AsInt64(v20) + 1)
 										var tmp30 any = tmp31
 										v17 = tmp27
 										v18 = tmp28
@@ -7262,7 +6697,7 @@ func LoadNS() {
 				var tmp7 any
 				{ // let
 					// let binding "i"
-					var v8 any = int64(0)
+					var v8 int64 = int64(0)
 					_ = v8
 					// let binding "s"
 					tmp9 := aotDirectFn447(v3)
@@ -7285,8 +6720,8 @@ func LoadNS() {
 							tmp12 = tmp14
 						} // end let
 						if lang.IsTruthy(tmp12) {
-							tmp14 := lang.Numbers.Inc(v8)
-							var tmp13 any = tmp14
+							tmp14 := lang.CheckedAddInt64(v8, 1)
+							var tmp13 int64 = tmp14
 							tmp16 := aotDirectFn299(v10)
 							var tmp15 any = tmp16
 							v8 = tmp13
@@ -8105,7 +7540,7 @@ func LoadNS() {
 					_ = v4
 					var v5 any = rest
 					_ = v5
-				recur_loop_1611:
+				recur_loop_1600:
 					var tmp6 any
 					if lang.IsTruthy(v5) {
 						tmp8 := lang.Apply2(lang.Conj, v3, v4)
@@ -8117,7 +7552,7 @@ func LoadNS() {
 						v3 = tmp7
 						v4 = tmp9
 						v5 = tmp11
-						goto recur_loop_1611
+						goto recur_loop_1600
 					} else {
 						tmp13 := lang.Apply2(lang.Conj, v3, v4)
 						tmp6 = tmp13
@@ -8978,7 +8413,7 @@ func LoadNS() {
 						tmp46 := lang.Apply5(v25, tmp45, v3, v21, v4, v23)
 						tmp47 := kw_descendants.Invoke1(v2)
 						tmp48 := lang.Apply5(v25, tmp47, v4, v23, v3, v21)
-						tmp49 := lang.NewMap(kw_parents, tmp44, kw_ancestors, tmp46, kw_descendants, tmp48)
+						tmp49 := aotKeywordMapNew0(tmp44, tmp46, tmp48)
 						tmp27 = tmp49
 					}
 					var v50 any = tmp27
@@ -9045,7 +8480,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_1904:
+			recur_loop_1893:
 				var tmp5 any
 				if lang.IsTruthy(v2) {
 					var tmp6 any
@@ -9064,7 +8499,7 @@ func LoadNS() {
 							v2 = tmp10
 							v3 = tmp11
 							v4 = tmp13
-							goto recur_loop_1904
+							goto recur_loop_1893
 						} else {
 							tmp9 = v8
 						}
@@ -9125,7 +8560,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_2218:
+			recur_loop_2207:
 				var tmp5 any
 				{ // let
 					// let binding "ret"
@@ -9142,7 +8577,7 @@ func LoadNS() {
 						v2 = tmp9
 						v3 = tmp10
 						v4 = tmp12
-						goto recur_loop_2218
+						goto recur_loop_2207
 					} else {
 						tmp8 = v7
 					}
@@ -9188,7 +8623,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_1901:
+			recur_loop_1890:
 				var tmp5 any
 				{ // let
 					// let binding "ret"
@@ -9205,7 +8640,7 @@ func LoadNS() {
 						v2 = tmp9
 						v3 = tmp10
 						v4 = tmp12
-						goto recur_loop_1901
+						goto recur_loop_1890
 					} else {
 						tmp8 = v7
 					}
@@ -9258,7 +8693,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_2214:
+			recur_loop_2203:
 				var tmp5 any
 				{ // let
 					// let binding "ret"
@@ -9275,7 +8710,7 @@ func LoadNS() {
 						v2 = tmp9
 						v3 = tmp10
 						v4 = tmp12
-						goto recur_loop_2214
+						goto recur_loop_2203
 					} else {
 						tmp8 = v7
 					}
@@ -9372,7 +8807,7 @@ func LoadNS() {
 								_ = v10
 								v11 := p1
 								_ = v11
-							recur_loop_2480:
+							recur_loop_2469:
 								var tmp12 any
 								{ // let
 									// let binding "vec__425"
@@ -9406,7 +8841,7 @@ func LoadNS() {
 													var tmp27 any = v11
 													v10 = tmp25
 													v11 = tmp27
-													goto recur_loop_2480
+													goto recur_loop_2469
 												} else {
 													tmp28 := aotDirectFn432(v22)
 													tmp29 := aotDirectFn113Arity2(v11, v15)
@@ -9645,7 +9080,7 @@ func LoadNS() {
 		aotDirectFn145Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-		recur_loop_2182:
+		recur_loop_2171:
 			var tmp3 any
 			{ // let
 				// let binding "temp__0__auto__"
@@ -9662,7 +9097,7 @@ func LoadNS() {
 						tmp10 := aotDirectFn299(v8)
 						var tmp9 any = tmp10
 						v2 = tmp9
-						goto recur_loop_2182
+						goto recur_loop_2171
 					} // end let
 					tmp6 = tmp7
 				} else {
@@ -9676,7 +9111,7 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-		recur_loop_2183:
+		recur_loop_2172:
 			var tmp4 any
 			var tmp5 any
 			{ // let
@@ -9700,7 +9135,7 @@ func LoadNS() {
 				var tmp8 any = tmp9
 				v2 = tmp6
 				v3 = tmp8
-				goto recur_loop_2183
+				goto recur_loop_2172
 			} else {
 			}
 			return tmp4
@@ -9856,7 +9291,7 @@ func LoadNS() {
 						_ = v9
 						v10 := p1
 						_ = v10
-					recur_loop_2142:
+					recur_loop_2131:
 						var tmp11 any
 						{ // let
 							// let binding "s"
@@ -9885,7 +9320,7 @@ func LoadNS() {
 								var tmp18 any = tmp19
 								v9 = tmp16
 								v10 = tmp18
-								goto recur_loop_2142
+								goto recur_loop_2131
 							} else {
 								tmp14 = v13
 							}
@@ -10056,7 +9491,7 @@ func LoadNS() {
 					_ = v6
 					v7 := p1
 					_ = v7
-				recur_loop_2155:
+				recur_loop_2144:
 					var tmp8 any
 					{ // let
 						// let binding "s"
@@ -10085,7 +9520,7 @@ func LoadNS() {
 							var tmp14 any = tmp15
 							v6 = tmp13
 							v7 = tmp14
-							goto recur_loop_2155
+							goto recur_loop_2144
 						} else {
 							tmp11 = v10
 						}
@@ -10228,7 +9663,7 @@ func LoadNS() {
 			tmp4 := aotDirectFn119(v2)
 			if lang.IsTruthy(tmp4) {
 				tmp5 := aotDirectFn118(v2)
-				tmp6 := lang.Numbers.IsZero(tmp5)
+				tmp6 := (lang.AsInt64(tmp5) == 0)
 				tmp3 = tmp6
 			} else {
 				tmp7 := aotDirectFn447(v2)
@@ -11239,7 +10674,7 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-		recur_loop_2080:
+		recur_loop_2069:
 			var tmp4 any
 			tmp5 := aotDirectFn447(v3)
 			tmp6 := lang.Identical(tmp5, nil)
@@ -11255,7 +10690,7 @@ func LoadNS() {
 					var tmp11 any = tmp12
 					v2 = tmp10
 					v3 = tmp11
-					goto recur_loop_2080
+					goto recur_loop_2069
 				} else {
 					tmp7 = false
 				}
@@ -11421,7 +10856,7 @@ func LoadNS() {
 					_ = v10
 					for {
 						var tmp11 any
-						tmp12 := lang.Numbers.Lt(v10, v9)
+						tmp12 := (lang.AsInt64(v10) < lang.AsInt64(v9))
 						if lang.IsTruthy(tmp12) {
 							var tmp13 any
 							{ // let
@@ -11466,29 +10901,12 @@ func LoadNS() {
 										var v32 any = tmp31
 										_ = v32
 										tmp33 := aotDirectFn132Arity1(v17)
-										tmp34 := lang.NewVector(kw_multis, v30)
-										tmp35 := aotDirectFn204Arity2(tmp33, tmp34)
-										var tmp36 lang.ArityFn
-										tmp36 = lang.NewArityFn(
-											nil,
-											nil,
-											nil,
-											nil,
-											nil,
-											lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-												v37 := args[0]
-												_ = v37
-												var v38 any = rest
-												_ = v38
-												tmp39 := aotDirectFn115(v37, v38)
-												tmp40 := aotDirectFn35Arity2(v32, tmp39)
-												return tmp40
-											}),
-											1,
-										)
-										tmp37 := tmp35.(interface {
+										tmp34 := lang.Get(tmp33, kw_multis)
+										tmp35 := lang.Get(tmp34, v30)
+										tmp36 := aotDirectFn132Arity1(tmp35)
+										tmp37 := tmp36.(interface {
 											AddMethod(any, lang.IFn) *lang.MultiFn
-										}).AddMethod(v2, lang.MustHostCast[lang.IFn](tmp36))
+										}).AddMethod(v2, lang.MustHostCast[lang.IFn](v32))
 										tmp27 = tmp37
 									} // end let
 									return tmp27
@@ -11498,7 +10916,7 @@ func LoadNS() {
 								var tmp26 any = v7
 								var tmp27 any = v8
 								var tmp28 any = v9
-								tmp30 := lang.Numbers.Unchecked_inc(v10)
+								tmp30 := (lang.AsInt64(v10) + 1)
 								var tmp29 any = tmp30
 								v7 = tmp26
 								v8 = tmp27
@@ -11589,29 +11007,12 @@ func LoadNS() {
 														var v42 any = tmp41
 														_ = v42
 														tmp43 := aotDirectFn132Arity1(v27)
-														tmp44 := lang.NewVector(kw_multis, v40)
-														tmp45 := aotDirectFn204Arity2(tmp43, tmp44)
-														var tmp46 lang.ArityFn
-														tmp46 = lang.NewArityFn(
-															nil,
-															nil,
-															nil,
-															nil,
-															nil,
-															lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-																v47 := args[0]
-																_ = v47
-																var v48 any = rest
-																_ = v48
-																tmp49 := aotDirectFn115(v47, v48)
-																tmp50 := aotDirectFn35Arity2(v42, tmp49)
-																return tmp50
-															}),
-															1,
-														)
-														tmp47 := tmp45.(interface {
+														tmp44 := lang.Get(tmp43, kw_multis)
+														tmp45 := lang.Get(tmp44, v40)
+														tmp46 := aotDirectFn132Arity1(tmp45)
+														tmp47 := tmp46.(interface {
 															AddMethod(any, lang.IFn) *lang.MultiFn
-														}).AddMethod(v2, lang.MustHostCast[lang.IFn](tmp46))
+														}).AddMethod(v2, lang.MustHostCast[lang.IFn](v42))
 														tmp37 = tmp47
 													} // end let
 													return tmp37
@@ -11651,7 +11052,7 @@ func LoadNS() {
 		aotDirectFn172 = tmp1
 		var_clojure_DOT_core_extend = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_extend.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(116), kw_column, int(7), kw_end_DASH_line, int(116), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_atype, sym__AMP_, sym_proto_PLUS_mmaps)), kw_doc, "Implementations of protocol methods can be provided using the extend construct:\n\n  (extend AType\n    AProtocol\n     {:foo an-existing-fn\n      :bar (fn [a b] ...)\n      :baz (fn ([a]...) ([a b] ...)...)}\n    BProtocol \n      {...} \n    ...)\n \n  extend takes a type/class (or interface, see below), and one or more\n  protocol + method map pairs. It will extend the polymorphism of the\n  protocol's methods to call the supplied methods when an AType is\n  provided as the first argument. \n\n  Method maps are maps of the keyword-ized method names to ordinary\n  fns. This facilitates easy reuse of existing fns and fn maps, for\n  code reuse/mixins without derivation or composition. You can extend\n  an interface to a protocol. This is primarily to facilitate interop\n  with the host (e.g. Java) but opens the door to incidental multiple\n  inheritance of implementation since a class can inherit from more\n  than one interface, both of which extend the protocol. It is TBD how\n  to specify which impl to use. You can extend a protocol on nil.\n\n  If you are supplying the definitions explicitly (i.e. not reusing\n  exsting functions or mixin maps), you may find it more convenient to\n  use the extend-type or extend-protocol macros.\n\n  Note that multiple independent extend clauses can exist for the same\n  type, not all protocols need be defined in a single extend call.\n\n  See also:\n  extends?, satisfies?, extenders", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(131), kw_column, int(7), kw_end_DASH_line, int(131), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_atype, sym__AMP_, sym_proto_PLUS_mmaps)), kw_doc, "Implementations of protocol methods can be provided using the extend construct:\n\n  (extend AType\n    AProtocol\n     {:foo an-existing-fn\n      :bar (fn [a b] ...)\n      :baz (fn ([a]...) ([a b] ...)...)}\n    BProtocol \n      {...} \n    ...)\n \n  extend takes a type/class (or interface, see below), and one or more\n  protocol + method map pairs. It will extend the polymorphism of the\n  protocol's methods to call the supplied methods when an AType is\n  provided as the first argument. \n\n  Method maps are maps of the keyword-ized method names to ordinary\n  fns. This facilitates easy reuse of existing fns and fn maps, for\n  code reuse/mixins without derivation or composition. You can extend\n  an interface to a protocol. This is primarily to facilitate interop\n  with the host (e.g. Java) but opens the door to incidental multiple\n  inheritance of implementation since a class can inherit from more\n  than one interface, both of which extend the protocol. It is TBD how\n  to specify which impl to use. You can extend a protocol on nil.\n\n  If you are supplying the definitions explicitly (i.e. not reusing\n  exsting functions or mixin maps), you may find it more convenient to\n  use the extend-type or extend-protocol macros.\n\n  Note that multiple independent extend clauses can exist for the same\n  type, not all protocols need be defined in a single extend call.\n\n  See also:\n  extends?, satisfies?, extenders", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
 	// extend-protocol
@@ -11680,7 +11081,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_extend_DASH_protocol = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_extend_DASH_protocol.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(212), kw_column, int(11), kw_end_DASH_line, int(212), kw_end_DASH_column, int(25), kw_arglists, lang.NewList(lang.NewVector(sym_p, sym__AMP_, sym_specs)), kw_doc, "Useful when you want to provide several implementations of the same\n  protocol all at once. Takes a single protocol and the implementation\n  of that protocol for one or more types.\n\n  (extend-protocol Protocol\n    AType\n      (foo [x] ...)\n      (bar [x y] ...)\n    BType\n      (foo [x] ...)\n      (bar [x y] ...)\n    AClass\n      (foo [x] ...)\n      (bar [x y] ...)\n    nil\n      (foo [x] ...)\n      (bar [x y] ...))\n\n  expands into:\n\n  (do\n   (clojure.core/extend-type AType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type BType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type AClass Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type nil Protocol \n     (foo [x] ...) \n     (bar [x y] ...)))", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_macro, true)
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(228), kw_column, int(11), kw_end_DASH_line, int(228), kw_end_DASH_column, int(25), kw_arglists, lang.NewList(lang.NewVector(sym_p, sym__AMP_, sym_specs)), kw_doc, "Useful when you want to provide several implementations of the same\n  protocol all at once. Takes a single protocol and the implementation\n  of that protocol for one or more types.\n\n  (extend-protocol Protocol\n    AType\n      (foo [x] ...)\n      (bar [x y] ...)\n    BType\n      (foo [x] ...)\n      (bar [x y] ...)\n    AClass\n      (foo [x] ...)\n      (bar [x y] ...)\n    nil\n      (foo [x] ...)\n      (bar [x y] ...))\n\n  expands into:\n\n  (do\n   (clojure.core/extend-type AType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type BType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type AClass Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type nil Protocol \n     (foo [x] ...) \n     (bar [x y] ...)))", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_macro, true)
 		})
 	}
 	// extend-type
@@ -11709,7 +11110,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_extend_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_extend_DASH_type.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(180), kw_column, int(11), kw_end_DASH_line, int(180), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_t, sym__AMP_, sym_specs)), kw_doc, "A macro that expands into an extend call. Useful when you are\n  supplying the definitions explicitly inline, extend-type\n  automatically creates the maps required by extend.  Propagates the\n  class as a type hint on the first argument of all fns.\n\n  (extend-type MyType \n    Countable\n      (cnt [c] ...)\n    Foo\n      (bar [x y] ...)\n      (baz ([x] ...) ([x y & zs] ...)))\n\n  expands into:\n\n  (extend MyType\n   Countable\n     {:cnt (fn [c] ...)}\n   Foo\n     {:baz (fn ([x] ...) ([x y & zs] ...))\n      :bar (fn [x y] ...)})", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_macro, true)
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(196), kw_column, int(11), kw_end_DASH_line, int(196), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_t, sym__AMP_, sym_specs)), kw_doc, "A macro that expands into an extend call. Useful when you are\n  supplying the definitions explicitly inline, extend-type\n  automatically creates the maps required by extend.  Propagates the\n  class as a type hint on the first argument of all fns.\n\n  (extend-type MyType \n    Countable\n      (cnt [c] ...)\n    Foo\n      (bar [x y] ...)\n      (baz ([x] ...) ([x y & zs] ...)))\n\n  expands into:\n\n  (extend MyType\n   Countable\n     {:cnt (fn [c] ...)}\n   Foo\n     {:baz (fn ([x] ...) ([x y & zs] ...))\n      :bar (fn [x y] ...)})", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_macro, true)
 		})
 	}
 	// false?
@@ -11883,7 +11284,7 @@ func LoadNS() {
 										var tmp23 any
 										{ // let
 											// let binding "i"
-											var v24 any = int64(0)
+											var v24 int64 = int64(0)
 											_ = v24
 											for {
 												var tmp25 any
@@ -11909,8 +11310,8 @@ func LoadNS() {
 														tmp27 = tmp31
 													} // end let
 													_ = tmp27
-													tmp29 := lang.Numbers.Unchecked_inc(v24)
-													var tmp28 any = tmp29
+													tmp29 := (v24 + 1)
+													var tmp28 int64 = tmp29
 													v24 = tmp28
 													continue
 												} else {
@@ -13937,7 +13338,7 @@ func LoadNS() {
 																		var v38 any = true
 																		_ = v38
 																		// let binding "i"
-																		var v39 any = int64(0)
+																		var v39 int64 = int64(0)
 																		_ = v39
 																		for {
 																			var tmp40 any
@@ -13964,8 +13365,8 @@ func LoadNS() {
 																				tmp44 := lang.Apply1(v4, v39)
 																				tmp45 := aotDirectFn237Arity3(v2, tmp43, tmp44)
 																				var tmp42 any = tmp45
-																				tmp47 := lang.Numbers.Inc(v39)
-																				var tmp46 any = tmp47
+																				tmp47 := lang.CheckedAddInt64(v39, 1)
+																				var tmp46 int64 = tmp47
 																				v38 = tmp42
 																				v39 = tmp46
 																				continue
@@ -14487,7 +13888,7 @@ func LoadNS() {
 										var tmp23 any
 										{ // let
 											// let binding "i"
-											var v24 any = int64(0)
+											var v24 int64 = int64(0)
 											_ = v24
 											for {
 												var tmp25 any
@@ -14514,8 +13915,8 @@ func LoadNS() {
 														tmp27 = tmp32
 													} // end let
 													_ = tmp27
-													tmp29 := lang.Numbers.Unchecked_inc(v24)
-													var tmp28 any = tmp29
+													tmp29 := (v24 + 1)
+													var tmp28 int64 = tmp29
 													v24 = tmp28
 													continue
 												} else {
@@ -14712,7 +14113,7 @@ func LoadNS() {
 													var tmp29 any
 													{ // let
 														// let binding "i"
-														var v30 any = int64(0)
+														var v30 int64 = int64(0)
 														_ = v30
 														for {
 															var tmp31 any
@@ -14740,8 +14141,8 @@ func LoadNS() {
 																	tmp33 = tmp39
 																} // end let
 																_ = tmp33
-																tmp35 := lang.Numbers.Unchecked_inc(v30)
-																var tmp34 any = tmp35
+																tmp35 := (v30 + 1)
+																var tmp34 int64 = tmp35
 																v30 = tmp34
 																continue
 															} else {
@@ -14936,14 +14337,14 @@ func LoadNS() {
 			tmp1 = lang.FnFunc1(func(p0 any) any {
 				v3 := p0
 				_ = v3
-			recur_loop_1633:
+			recur_loop_1622:
 				var tmp4 any
 				tmp5 := aotDirectFn299(v3)
 				if lang.IsTruthy(tmp5) {
 					tmp7 := aotDirectFn299(v3)
 					var tmp6 any = tmp7
 					v3 = tmp6
-					goto recur_loop_1633
+					goto recur_loop_1622
 				} else {
 					tmp8 := aotDirectFn183(v3)
 					tmp4 = tmp8
@@ -15390,7 +14791,7 @@ func LoadNS() {
 					_ = v8
 					for {
 						var tmp9 any
-						tmp10 := lang.Numbers.Lt(v8, v7)
+						tmp10 := (lang.AsInt64(v8) < lang.AsInt64(v7))
 						if lang.IsTruthy(tmp10) {
 							var tmp11 any
 							{ // let
@@ -15464,7 +14865,7 @@ func LoadNS() {
 								var tmp15 any = v5
 								var tmp16 any = v6
 								var tmp17 any = v7
-								tmp19 := lang.Numbers.Unchecked_inc(v8)
+								tmp19 := (lang.AsInt64(v8) + 1)
 								var tmp18 any = tmp19
 								v5 = tmp15
 								v6 = tmp16
@@ -15827,7 +15228,7 @@ func LoadNS() {
 												tmp54 = tmp57
 											} // end let
 											if lang.IsTruthy(tmp54) {
-												tmp55 := lang.NewMap(kw_url, v3, kw_conflict, v41, kw_mappings, v36)
+												tmp55 := aotKeywordMapNew1(v3, v41, v36)
 												tmp56 := aotDirectFn170Arity2("Conflicting data-reader mapping", tmp55)
 												panic(tmp56)
 											} else {
@@ -16262,7 +15663,7 @@ func LoadNS() {
 						var tmp19 any
 						{ // let
 							// let binding "i"
-							var v20 any = int64(0)
+							var v20 int64 = int64(0)
 							_ = v20
 							for {
 								var tmp21 any
@@ -16271,8 +15672,8 @@ func LoadNS() {
 									tmp23 := runtime.RT.Nth(v7, lang.IntCast(v20))
 									tmp24 := aotDirectFn44Arity3(v14, v20, tmp23)
 									_ = tmp24
-									tmp26 := lang.Numbers.Unchecked_inc(v20)
-									var tmp25 any = tmp26
+									tmp26 := (v20 + 1)
+									var tmp25 int64 = tmp26
 									v20 = tmp25
 									continue
 								} else {
@@ -16309,7 +15710,7 @@ func LoadNS() {
 			tmp2 := lang.NewMap()
 			tmp3 := lang.NewMap()
 			tmp4 := lang.NewMap()
-			tmp5 := lang.NewMap(kw_parents, tmp2, kw_descendants, tmp3, kw_ancestors, tmp4)
+			tmp5 := aotKeywordMapNew2(tmp2, tmp3, tmp4)
 			return tmp5
 		})
 		aotDirectFn270 = tmp1
@@ -16445,7 +15846,7 @@ func LoadNS() {
 													var tmp30 any
 													{ // let
 														// let binding "i"
-														var v31 any = int64(0)
+														var v31 int64 = int64(0)
 														_ = v31
 														for {
 															var tmp32 any
@@ -16460,8 +15861,8 @@ func LoadNS() {
 																tmp37 := lang.Apply2(v2, tmp34, tmp36)
 																tmp38 := aotDirectFn93(v26, tmp37)
 																_ = tmp38
-																tmp40 := lang.Numbers.Unchecked_inc(v31)
-																var tmp39 any = tmp40
+																tmp40 := (v31 + 1)
+																var tmp39 int64 = tmp40
 																v31 = tmp39
 																continue
 															} else {
@@ -16607,9 +16008,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed23
+							tmp6 = closed14
 						} else {
-							tmp6 = closed23
+							tmp6 = closed14
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -16642,9 +16043,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed23
+							tmp7 = closed14
 						} else {
-							tmp7 = closed23
+							tmp7 = closed14
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -16683,9 +16084,9 @@ func LoadNS() {
 						var tmp8 any
 						tmp9 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp9) {
-							tmp8 = closed23
+							tmp8 = closed14
 						} else {
-							tmp8 = closed23
+							tmp8 = closed14
 						}
 						var v10 any = tmp8
 						_ = v10
@@ -17468,7 +16869,7 @@ func LoadNS() {
 					_ = v18
 					tmp19 := aotDirectFn442(v18)
 					tmp20 := aotDirectFn118(tmp19)
-					tmp21 := lang.Numbers.Lt(int64(1), tmp20)
+					tmp21 := (int64(1) < lang.AsInt64(tmp20))
 					return tmp21
 				})
 				tmp18 := aotDirectFn176Arity2(tmp17, v8)
@@ -17701,9 +17102,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed24
+							tmp6 = closed15
 						} else {
-							tmp6 = closed24
+							tmp6 = closed15
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -17736,9 +17137,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed24
+							tmp7 = closed15
 						} else {
-							tmp7 = closed24
+							tmp7 = closed15
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -17777,9 +17178,9 @@ func LoadNS() {
 						var tmp8 any
 						tmp9 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp9) {
-							tmp8 = closed24
+							tmp8 = closed15
 						} else {
-							tmp8 = closed24
+							tmp8 = closed15
 						}
 						var v10 any = tmp8
 						_ = v10
@@ -18562,15 +17963,15 @@ func LoadNS() {
 		tmp0 := sym_not_DASH_any_QMARK_
 		var tmp1 lang.ArityFn
 		aotDirectFn305Arity0 = lang.FnFunc0(func() any {
-			tmp2 := lang.Apply0(closed26)
-			tmp3 := lang.Apply1(closed25, tmp2)
+			tmp2 := lang.Apply0(closed17)
+			tmp3 := lang.Apply1(closed16, tmp2)
 			return tmp3
 		})
 		aotDirectFn305Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(closed26, v2)
-			tmp4 := lang.Apply1(closed25, tmp3)
+			tmp3 := lang.Apply1(closed17, v2)
+			tmp4 := lang.Apply1(closed16, tmp3)
 			return tmp4
 		})
 		aotDirectFn305Arity2 = lang.FnFunc2(func(p0, p1 any) any {
@@ -18578,8 +17979,8 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply2(closed26, v2, v3)
-			tmp5 := lang.Apply1(closed25, tmp4)
+			tmp4 := lang.Apply2(closed17, v2, v3)
+			tmp5 := lang.Apply1(closed16, tmp4)
 			return tmp5
 		})
 		aotDirectFn305Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
@@ -18589,8 +17990,8 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := lang.Apply3(closed26, v2, v3, v4)
-			tmp6 := lang.Apply1(closed25, tmp5)
+			tmp5 := lang.Apply3(closed17, v2, v3, v4)
+			tmp6 := lang.Apply1(closed16, tmp5)
 			return tmp6
 		})
 		tmp1 = lang.NewArityFn(
@@ -18608,8 +18009,8 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-				tmp6 := aotDirectFn35Arity5(closed26, v2, v3, v4, v5)
-				tmp7 := lang.Apply1(closed25, tmp6)
+				tmp6 := aotDirectFn35Arity5(closed17, v2, v3, v4, v5)
+				tmp7 := lang.Apply1(closed16, tmp6)
 				return tmp7
 			}),
 			3,
@@ -18647,15 +18048,15 @@ func LoadNS() {
 		tmp0 := sym_not_DASH_every_QMARK_
 		var tmp1 lang.ArityFn
 		aotDirectFn307Arity0 = lang.FnFunc0(func() any {
-			tmp2 := lang.Apply0(closed27)
-			tmp3 := lang.Apply1(closed25, tmp2)
+			tmp2 := lang.Apply0(closed18)
+			tmp3 := lang.Apply1(closed16, tmp2)
 			return tmp3
 		})
 		aotDirectFn307Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(closed27, v2)
-			tmp4 := lang.Apply1(closed25, tmp3)
+			tmp3 := lang.Apply1(closed18, v2)
+			tmp4 := lang.Apply1(closed16, tmp3)
 			return tmp4
 		})
 		aotDirectFn307Arity2 = lang.FnFunc2(func(p0, p1 any) any {
@@ -18663,8 +18064,8 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply2(closed27, v2, v3)
-			tmp5 := lang.Apply1(closed25, tmp4)
+			tmp4 := lang.Apply2(closed18, v2, v3)
+			tmp5 := lang.Apply1(closed16, tmp4)
 			return tmp5
 		})
 		aotDirectFn307Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
@@ -18674,8 +18075,8 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := lang.Apply3(closed27, v2, v3, v4)
-			tmp6 := lang.Apply1(closed25, tmp5)
+			tmp5 := lang.Apply3(closed18, v2, v3, v4)
+			tmp6 := lang.Apply1(closed16, tmp5)
 			return tmp6
 		})
 		tmp1 = lang.NewArityFn(
@@ -18693,8 +18094,8 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-				tmp6 := aotDirectFn35Arity5(closed27, v2, v3, v4, v5)
-				tmp7 := lang.Apply1(closed25, tmp6)
+				tmp6 := aotDirectFn35Arity5(closed18, v2, v3, v4, v5)
+				tmp7 := lang.Apply1(closed16, tmp6)
 				return tmp7
 			}),
 			3,
@@ -21589,7 +20990,7 @@ func LoadNS() {
 						{ // let
 							// let binding "and__0__auto__"
 							tmp12 := aotDirectFn118(v9)
-							tmp13 := lang.Numbers.IsPos(tmp12)
+							tmp13 := (lang.AsInt64(tmp12) > 0)
 							var v14 any = tmp13
 							_ = v14
 							var tmp15 any
@@ -22128,7 +21529,7 @@ func LoadNS() {
 		aotDirectFn374 = tmp1
 		var_clojure_DOT_core_protocol_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_protocol_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(110), kw_column, int(8), kw_end_DASH_line, int(110), kw_end_DASH_column, int(16), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_maybe_DASH_p)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(125), kw_column, int(8), kw_end_DASH_line, int(125), kw_end_DASH_column, int(16), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_maybe_DASH_p)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
 	// push-thread-bindings
@@ -22678,7 +22079,7 @@ func LoadNS() {
 						var v11 any = tmp10
 						_ = v11
 						// let binding "c"
-						var v12 any = int64(0)
+						var v12 int64 = int64(0)
 						_ = v12
 						for {
 							var tmp13 any
@@ -22687,8 +22088,8 @@ func LoadNS() {
 								tmp16 := v2.(interface{ GroupInt(int) any }).GroupInt(lang.IntCast(v12))
 								tmp17 := aotDirectFn113Arity2(v11, tmp16)
 								var tmp15 any = tmp17
-								tmp19 := lang.Numbers.Inc(v12)
-								var tmp18 any = tmp19
+								tmp19 := lang.CheckedAddInt64(v12, 1)
+								var tmp18 int64 = tmp19
 								v11 = tmp15
 								v12 = tmp18
 								continue
@@ -22930,6 +22331,59 @@ func LoadNS() {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(7622), kw_column, int(7), kw_end_DASH_line, int(7622), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if a value has been produced for a promise, delay, future or lazy sequence.", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
+	// reduce
+	{
+		tmp0 := sym_reduce
+		var tmp1 lang.ArityFn
+		aotDirectFn402Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			var tmp4 any
+			tmp5 := lang.IsInstance[lang.IReduce](v3)
+			if lang.IsTruthy(tmp5) {
+				tmp6 := v3.(interface{ Reduce(lang.IFn) any }).Reduce(lang.MustHostCast[lang.IFn](v2))
+				tmp4 = tmp6
+			} else {
+				tmp7 := aotExternalFn0(v3, v2)
+				tmp4 = tmp7
+			}
+			return tmp4
+		})
+		aotDirectFn402Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			var tmp5 any
+			tmp6 := lang.IsInstance[lang.IReduceInit](v4)
+			if lang.IsTruthy(tmp6) {
+				tmp7 := v4.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v2), v3)
+				tmp5 = tmp7
+			} else {
+				tmp8 := aotExternalFn1(v4, v2, v3)
+				tmp5 = tmp8
+			}
+			return tmp5
+		})
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			aotDirectFn402Arity2,
+			aotDirectFn402Arity3,
+			nil,
+			nil,
+			0,
+		)
+		aotDirectFn402 = tmp1
+		var_clojure_DOT_core_reduce = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_core_reduce.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(6923), kw_column, int(7), kw_end_DASH_line, int(6923), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_val, sym_coll)), kw_doc, "f should be a function of 2 arguments. If val is not supplied,\n  returns the result of applying f to the first 2 items in coll, then\n  applying f to that result and the 3rd item, etc. If coll contains no\n  items, f must accept no arguments as well, and reduce returns the\n  result of calling f with no arguments.  If coll has only 1 item, it\n  is returned and f is not called.  If val is supplied, returns the\n  result of applying f to val and the first item in coll, then\n  applying f to that result and the 2nd item, etc. If coll contains no\n  items, returns val and f is not called.", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+		})
+	}
 	// reduce1
 	{
 		tmp0 := sym_reduce1
@@ -22966,7 +22420,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-		recur_loop_1757:
+		recur_loop_1746:
 			var tmp5 any
 			{ // let
 				// let binding "s"
@@ -22991,7 +22445,7 @@ func LoadNS() {
 						v2 = tmp11
 						v3 = tmp12
 						v4 = tmp16
-						goto recur_loop_1757
+						goto recur_loop_1746
 					} else {
 						var tmp18 any = v2
 						tmp20 := aotDirectFn183(v7)
@@ -23002,7 +22456,7 @@ func LoadNS() {
 						v2 = tmp18
 						v3 = tmp19
 						v4 = tmp22
-						goto recur_loop_1757
+						goto recur_loop_1746
 					}
 					tmp8 = tmp9
 				} else {
@@ -23025,6 +22479,26 @@ func LoadNS() {
 		var_clojure_DOT_core_reduce1 = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reduce1.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(925), kw_column, int(7), kw_end_DASH_line, int(926), kw_end_DASH_column, int(9), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_val, sym_coll)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+		})
+	}
+	// reduce-kv
+	{
+		tmp0 := sym_reduce_DASH_kv
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			tmp5 := aotExternalFn2(v4, v2, v3)
+			return tmp5
+		})
+		aotDirectFn403 = tmp1
+		var_clojure_DOT_core_reduce_DASH_kv = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_core_reduce_DASH_kv.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(6945), kw_column, int(7), kw_end_DASH_line, int(6945), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_init, sym_coll)), kw_doc, "Reduces an associative collection. f should be a function of 3\n  arguments. Returns the result of applying f to init, the first key\n  and the first value in coll, then applying f to that result and the\n  2nd key and value, etc. If coll contains no entries, returns init\n  and f is not called. Note that reduce-kv is supported on vectors,\n  where the keys will be the ordinals.", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
 	// reduced
@@ -23544,7 +23018,7 @@ func LoadNS() {
 						_ = v31
 						for {
 							var tmp32 any
-							tmp33 := lang.Numbers.Lt(v31, v30)
+							tmp33 := (lang.AsInt64(v31) < lang.AsInt64(v30))
 							if lang.IsTruthy(tmp33) {
 								var tmp34 any
 								{ // let
@@ -23596,7 +23070,7 @@ func LoadNS() {
 									var tmp40 any = v28
 									var tmp41 any = v29
 									var tmp42 any = v30
-									tmp44 := lang.Numbers.Unchecked_inc(v31)
+									tmp44 := (lang.AsInt64(v31) + 1)
 									var tmp43 any = tmp44
 									v28 = tmp40
 									v29 = tmp41
@@ -25924,7 +25398,7 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-		recur_loop_2081:
+		recur_loop_2070:
 			var tmp4 any
 			{ // let
 				// let binding "temp__0__auto__"
@@ -25954,7 +25428,7 @@ func LoadNS() {
 								var tmp16 any = tmp17
 								v2 = tmp15
 								v3 = tmp16
-								goto recur_loop_2081
+								goto recur_loop_2070
 							}
 							tmp10 = tmp14
 						} // end let
@@ -27131,7 +26605,7 @@ func LoadNS() {
 					_ = v5
 					v6 := p1
 					_ = v6
-				recur_loop_1675:
+				recur_loop_1664:
 					var tmp7 any
 					if lang.IsTruthy(v6) {
 						tmp9 := aotDirectFn183(v6)
@@ -27147,7 +26621,7 @@ func LoadNS() {
 						var tmp13 any = tmp14
 						v5 = tmp8
 						v6 = tmp13
-						goto recur_loop_1675
+						goto recur_loop_1664
 					} else {
 						tmp15 := v5.(interface{ String() string }).String()
 						tmp7 = tmp15
@@ -28506,7 +27980,7 @@ func LoadNS() {
 				var tmp11 any
 				{ // let
 					// let binding "i"
-					var v12 any = int64(0)
+					var v12 int64 = int64(0)
 					_ = v12
 					// let binding "xs"
 					tmp13 := aotDirectFn447(v2)
@@ -28519,8 +27993,8 @@ func LoadNS() {
 							tmp17 := aotDirectFn517(tmp16)
 							tmp18 := aotDirectFn38Arity3(v10, v12, tmp17)
 							_ = tmp18
-							tmp20 := lang.Numbers.Inc(v12)
-							var tmp19 any = tmp20
+							tmp20 := lang.CheckedAddInt64(v12, 1)
+							var tmp19 int64 = tmp20
 							tmp22 := aotDirectFn299(v14)
 							var tmp21 any = tmp22
 							v12 = tmp19
@@ -28550,7 +28024,7 @@ func LoadNS() {
 		aotDirectFn519Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-		recur_loop_2676:
+		recur_loop_2665:
 			var tmp3 any
 			{ // let
 				// let binding "ret"
@@ -28562,7 +28036,7 @@ func LoadNS() {
 				if lang.IsTruthy(tmp7) {
 					var tmp8 any = v5
 					v2 = tmp8
-					goto recur_loop_2676
+					goto recur_loop_2665
 				} else {
 					tmp6 = v5
 				}
@@ -28595,6 +28069,68 @@ func LoadNS() {
 		var_clojure_DOT_core_trampoline = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_trampoline.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(6350), kw_column, int(7), kw_end_DASH_line, int(6350), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym__AMP_, sym_args)), kw_doc, "trampoline can be used to convert algorithms requiring mutual\n  recursion without stack consumption. Calls f with supplied args, if\n  any. If f returns a fn, calls that fn with no arguments, and\n  continues to repeat, until the return value is not a fn, then\n  returns that non-fn value. Note that if you want to return a fn as a\n  final value, you must wrap it in some data structure and unpack it\n  after trampoline returns.", kw_added, "1.0", kw_static, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+		})
+	}
+	// transduce
+	{
+		tmp0 := sym_transduce
+		var tmp1 lang.ArityFn
+		aotDirectFn520Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			tmp5 := lang.Apply0(v3)
+			tmp6 := aotDirectFn520Arity4(v2, v3, tmp5, v4)
+			return tmp6
+		})
+		aotDirectFn520Arity4 = lang.FnFunc4(func(p0, p1, p2, p3 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			v5 := p3
+			_ = v5
+			var tmp6 any
+			{ // let
+				// let binding "f"
+				tmp7 := lang.Apply1(v2, v3)
+				var v8 any = tmp7
+				_ = v8
+				// let binding "ret"
+				var tmp9 any
+				tmp10 := lang.IsInstance[lang.IReduceInit](v5)
+				if lang.IsTruthy(tmp10) {
+					tmp11 := v5.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v8), v4)
+					tmp9 = tmp11
+				} else {
+					tmp12 := aotExternalFn1(v5, v8, v4)
+					tmp9 = tmp12
+				}
+				var v13 any = tmp9
+				_ = v13
+				tmp14 := lang.Apply1(v8, v13)
+				tmp6 = tmp14
+			} // end let
+			return tmp6
+		})
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			aotDirectFn520Arity3,
+			aotDirectFn520Arity4,
+			nil,
+			0,
+		)
+		aotDirectFn520 = tmp1
+		var_clojure_DOT_core_transduce = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_core_transduce.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(6968), kw_column, int(7), kw_end_DASH_line, int(6968), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_xform, sym_f, sym_coll), lang.NewVector(sym_xform, sym_f, sym_init, sym_coll)), kw_doc, "reduce with a transformation of f (xf). If init is not\n  supplied, (f) will be called to produce it. f should be a reducing\n  step function that accepts both 1 and 2 arguments, if it accepts\n  only 2 you can add the arity-1 with 'completing'. Returns the result\n  of applying (the transformed) xf to init and the first item in coll,\n  then applying xf to that result and the 2nd item, etc. If coll\n  contains no items, returns init and f is not called. Note that\n  certain transforms may inject or skip items.", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
 	// transient
@@ -31770,7 +31306,7 @@ func LoadNS() {
 						_ = v12
 						for {
 							var tmp13 any
-							tmp14 := lang.Numbers.Lt(v12, v11)
+							tmp14 := (lang.AsInt64(v12) < lang.AsInt64(v11))
 							if lang.IsTruthy(tmp14) {
 								var tmp15 any
 								{ // let
@@ -31795,7 +31331,7 @@ func LoadNS() {
 									var tmp24 any = v9
 									var tmp25 any = v10
 									var tmp26 any = v11
-									tmp28 := lang.Numbers.Unchecked_inc(v12)
+									tmp28 := (lang.AsInt64(v12) + 1)
 									var tmp27 any = tmp28
 									v9 = tmp24
 									v10 = tmp25
@@ -32740,7 +32276,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_1727:
+			recur_loop_1716:
 				var tmp5 any
 				tmp6 := lang.Equiv(v2, v3)
 				if lang.IsTruthy(tmp6) {
@@ -32755,7 +32291,7 @@ func LoadNS() {
 						v2 = tmp9
 						v3 = tmp10
 						v4 = tmp12
-						goto recur_loop_1727
+						goto recur_loop_1716
 					} else {
 						tmp14 := aotDirectFn183(v4)
 						tmp15 := lang.Equiv(v3, tmp14)
@@ -32830,7 +32366,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_1807:
+			recur_loop_1796:
 				var tmp5 any
 				tmp6 := lang.Numbers.Equiv(v2, v3)
 				if lang.IsTruthy(tmp6) {
@@ -32845,7 +32381,7 @@ func LoadNS() {
 						v2 = tmp9
 						v3 = tmp10
 						v4 = tmp12
-						goto recur_loop_1807
+						goto recur_loop_1796
 					} else {
 						tmp14 := aotDirectFn183(v4)
 						tmp15 := lang.Numbers.Equiv(v3, tmp14)
@@ -32924,7 +32460,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_1799:
+			recur_loop_1788:
 				var tmp5 any
 				tmp6 := lang.Numbers.Gt(v2, v3)
 				if lang.IsTruthy(tmp6) {
@@ -32939,7 +32475,7 @@ func LoadNS() {
 						v2 = tmp9
 						v3 = tmp10
 						v4 = tmp12
-						goto recur_loop_1799
+						goto recur_loop_1788
 					} else {
 						tmp14 := aotDirectFn183(v4)
 						tmp15 := lang.Numbers.Gt(v3, tmp14)
@@ -33018,7 +32554,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_1803:
+			recur_loop_1792:
 				var tmp5 any
 				tmp6 := lang.Numbers.Gte(v2, v3)
 				if lang.IsTruthy(tmp6) {
@@ -33033,7 +32569,7 @@ func LoadNS() {
 						v2 = tmp9
 						v3 = tmp10
 						v4 = tmp12
-						goto recur_loop_1803
+						goto recur_loop_1792
 					} else {
 						tmp14 := aotDirectFn183(v4)
 						tmp15 := lang.Numbers.Gte(v3, tmp14)
@@ -33112,7 +32648,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_1751:
+			recur_loop_1740:
 				var tmp5 any
 				tmp6 := lang.Numbers.Lt(v2, v3)
 				if lang.IsTruthy(tmp6) {
@@ -33127,7 +32663,7 @@ func LoadNS() {
 						v2 = tmp9
 						v3 = tmp10
 						v4 = tmp12
-						goto recur_loop_1751
+						goto recur_loop_1740
 					} else {
 						tmp14 := aotDirectFn183(v4)
 						tmp15 := lang.Numbers.Lt(v3, tmp14)
@@ -33206,7 +32742,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-			recur_loop_1795:
+			recur_loop_1784:
 				var tmp5 any
 				tmp6 := lang.Numbers.Lte(v2, v3)
 				if lang.IsTruthy(tmp6) {
@@ -33221,7 +32757,7 @@ func LoadNS() {
 						v2 = tmp9
 						v3 = tmp10
 						v4 = tmp12
-						goto recur_loop_1795
+						goto recur_loop_1784
 					} else {
 						tmp14 := aotDirectFn183(v4)
 						tmp15 := lang.Numbers.Lte(v3, tmp14)
@@ -33713,9 +33249,9 @@ func LoadNS() {
 						var tmp5 any
 						tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp6) {
-							tmp5 = closed18
+							tmp5 = closed9
 						} else {
-							tmp5 = closed18
+							tmp5 = closed9
 						}
 						var v7 any = tmp5
 						_ = v7
@@ -33748,9 +33284,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed18
+							tmp6 = closed9
 						} else {
-							tmp6 = closed18
+							tmp6 = closed9
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -33789,9 +33325,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed18
+							tmp7 = closed9
 						} else {
-							tmp7 = closed18
+							tmp7 = closed9
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -35542,9 +35078,9 @@ func LoadNS() {
 						var tmp5 any
 						tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp6) {
-							tmp5 = closed19
+							tmp5 = closed10
 						} else {
-							tmp5 = closed19
+							tmp5 = closed10
 						}
 						var v7 any = tmp5
 						_ = v7
@@ -35577,9 +35113,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed19
+							tmp6 = closed10
 						} else {
-							tmp6 = closed19
+							tmp6 = closed10
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -35618,9 +35154,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed19
+							tmp7 = closed10
 						} else {
-							tmp7 = closed19
+							tmp7 = closed10
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -35728,9 +35264,9 @@ func LoadNS() {
 						var tmp5 any
 						tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp6) {
-							tmp5 = closed20
+							tmp5 = closed11
 						} else {
-							tmp5 = closed20
+							tmp5 = closed11
 						}
 						var v7 any = tmp5
 						_ = v7
@@ -35763,9 +35299,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed20
+							tmp6 = closed11
 						} else {
-							tmp6 = closed20
+							tmp6 = closed11
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -35804,9 +35340,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed20
+							tmp7 = closed11
 						} else {
-							tmp7 = closed20
+							tmp7 = closed11
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -35955,9 +35491,9 @@ func LoadNS() {
 						var tmp5 any
 						tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp6) {
-							tmp5 = closed21
+							tmp5 = closed12
 						} else {
-							tmp5 = closed21
+							tmp5 = closed12
 						}
 						var v7 any = tmp5
 						_ = v7
@@ -35990,9 +35526,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed21
+							tmp6 = closed12
 						} else {
-							tmp6 = closed21
+							tmp6 = closed12
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -36031,9 +35567,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed21
+							tmp7 = closed12
 						} else {
-							tmp7 = closed21
+							tmp7 = closed12
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -36235,9 +35771,9 @@ func LoadNS() {
 						var tmp5 any
 						tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp6) {
-							tmp5 = closed22
+							tmp5 = closed13
 						} else {
-							tmp5 = closed22
+							tmp5 = closed13
 						}
 						var v7 any = tmp5
 						_ = v7
@@ -36270,9 +35806,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed22
+							tmp6 = closed13
 						} else {
-							tmp6 = closed22
+							tmp6 = closed13
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -36311,9 +35847,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed22
+							tmp7 = closed13
 						} else {
-							tmp7 = closed22
+							tmp7 = closed13
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -36810,7 +36346,7 @@ func LoadNS() {
 					_ = v36
 					var tmp37 any
 					tmp38 := aotDirectFn118(v5)
-					tmp39 := lang.Numbers.Gt(int64(2), tmp38)
+					tmp39 := (int64(2) > lang.AsInt64(tmp38))
 					if lang.IsTruthy(tmp39) {
 						tmp40 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp41 := lang.Apply1(tmp40, sym_clojure_DOT_core_SLASH_let)
@@ -38760,7 +38296,7 @@ func LoadNS() {
 						_ = v20
 						v21 := p1
 						_ = v21
-					recur_loop_1662:
+					recur_loop_1651:
 						var tmp22 any
 						tmp23 := lang.Identical(v21, nil)
 						if lang.IsTruthy(tmp23) {
@@ -38785,7 +38321,7 @@ func LoadNS() {
 									var tmp33 any = tmp34
 									v20 = tmp30
 									v21 = tmp33
-									goto recur_loop_1662
+									goto recur_loop_1651
 								}
 								tmp24 = tmp27
 							} // end let
@@ -39540,78 +39076,149 @@ func LoadNS() {
 						tmp91 := lang.Apply1(tmp90, sym_do)
 						tmp92 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp93 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp94 := lang.Apply1(tmp93, sym_clojure_DOT_core_SLASH_defmulti)
+						tmp94 := lang.Apply1(tmp93, sym_clojure_DOT_core_SLASH_let)
 						tmp95 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp96 := aotDirectFn183(v89)
-						tmp97 := lang.Apply1(tmp95, tmp96)
-						tmp98 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp96 := checkDerefVar(var_clojure_DOT_core_vector)
+						tmp97 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp98 := lang.Apply1(tmp97, sym_v__0__auto__)
 						tmp99 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp100 := lang.Apply1(tmp99, sym_clojure_DOT_core_SLASH_fn)
-						tmp101 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp102 := checkDerefVar(var_clojure_DOT_core_vector)
-						tmp103 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp104 := lang.Apply1(tmp103, sym_this)
-						tmp105 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp106 := lang.Apply1(tmp105, sym__AMP_)
-						tmp107 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp108 := lang.Apply1(tmp107, sym_args)
-						tmp109 := aotDirectFn112.Invoke3(tmp104, tmp106, tmp108)
-						tmp110 := aotDirectFn447(tmp109)
-						tmp111 := aotDirectFn35Arity2(tmp102, tmp110)
-						tmp112 := lang.Apply1(tmp101, tmp111)
+						tmp100 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp101 := lang.Apply1(tmp100, sym_def)
+						tmp102 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp103 := aotDirectFn183(v89)
+						tmp104 := lang.Apply1(tmp102, tmp103)
+						tmp105 := aotDirectFn112Arity2(tmp101, tmp104)
+						tmp106 := aotDirectFn447(tmp105)
+						tmp107 := lang.Apply1(tmp99, tmp106)
+						tmp108 := aotDirectFn112Arity2(tmp98, tmp107)
+						tmp109 := aotDirectFn447(tmp108)
+						tmp110 := aotDirectFn35Arity2(tmp96, tmp109)
+						tmp111 := lang.Apply1(tmp95, tmp110)
+						tmp112 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp113 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp114 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp115 := lang.Apply1(tmp114, sym_clojure_DOT_core_SLASH_class)
+						tmp114 := lang.Apply1(tmp113, sym_clojure_DOT_core_SLASH_when_DASH_not)
+						tmp115 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp116 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp117 := lang.Apply1(tmp116, sym_this)
-						tmp118 := aotDirectFn112Arity2(tmp115, tmp117)
-						tmp119 := aotDirectFn447(tmp118)
-						tmp120 := lang.Apply1(tmp113, tmp119)
-						tmp121 := aotDirectFn112.Invoke3(tmp100, tmp112, tmp120)
-						tmp122 := aotDirectFn447(tmp121)
-						tmp123 := lang.Apply1(tmp98, tmp122)
-						tmp124 := aotDirectFn112.Invoke3(tmp94, tmp97, tmp123)
-						tmp125 := aotDirectFn447(tmp124)
-						tmp126 := lang.Apply1(tmp92, tmp125)
+						tmp117 := lang.Apply1(tmp116, sym_clojure_DOT_core_SLASH_and)
+						tmp118 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp119 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp120 := lang.Apply1(tmp119, sym__DOT_HasRoot)
+						tmp121 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp122 := lang.Apply1(tmp121, sym_v__0__auto__)
+						tmp123 := aotDirectFn112Arity2(tmp120, tmp122)
+						tmp124 := aotDirectFn447(tmp123)
+						tmp125 := lang.Apply1(tmp118, tmp124)
+						tmp126 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp127 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp128 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp129 := lang.Apply1(tmp128, sym_clojure_DOT_core_SLASH_swap_BANG_)
-						tmp130 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp131 := lang.Apply1(tmp130, v4)
+						tmp128 := lang.Apply1(tmp127, sym_clojure_DOT_core_SLASH_instance_QMARK_)
+						tmp129 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp130 := lang.Apply1(tmp129, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
+						tmp131 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp132 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp133 := lang.Apply1(tmp132, sym_clojure_DOT_core_SLASH_assoc_DASH_in)
+						tmp133 := lang.Apply1(tmp132, sym_clojure_DOT_core_SLASH_deref)
 						tmp134 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp135 := checkDerefVar(var_clojure_DOT_core_vector)
-						tmp136 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp137 := lang.Apply1(tmp136, kw_multis)
-						tmp138 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp139 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp140 := lang.Apply1(tmp139, sym_clojure_DOT_core_SLASH_keyword)
-						tmp141 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp135 := lang.Apply1(tmp134, sym_v__0__auto__)
+						tmp136 := aotDirectFn112Arity2(tmp133, tmp135)
+						tmp137 := aotDirectFn447(tmp136)
+						tmp138 := lang.Apply1(tmp131, tmp137)
+						tmp139 := aotDirectFn112.Invoke3(tmp128, tmp130, tmp138)
+						tmp140 := aotDirectFn447(tmp139)
+						tmp141 := lang.Apply1(tmp126, tmp140)
 						tmp142 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp143 := lang.Apply1(tmp142, sym_quote)
-						tmp144 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp145 := aotDirectFn183(v89)
-						tmp146 := lang.Apply1(tmp144, tmp145)
-						tmp147 := aotDirectFn112Arity2(tmp143, tmp146)
-						tmp148 := aotDirectFn447(tmp147)
-						tmp149 := lang.Apply1(tmp141, tmp148)
-						tmp150 := aotDirectFn112Arity2(tmp140, tmp149)
+						tmp143 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp144 := lang.Apply1(tmp143, sym__DOT_IsProtocol)
+						tmp145 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp146 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp147 := lang.Apply1(tmp146, sym_clojure_DOT_core_SLASH_deref)
+						tmp148 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp149 := lang.Apply1(tmp148, sym_v__0__auto__)
+						tmp150 := aotDirectFn112Arity2(tmp147, tmp149)
 						tmp151 := aotDirectFn447(tmp150)
-						tmp152 := lang.Apply1(tmp138, tmp151)
-						tmp153 := aotDirectFn112Arity2(tmp137, tmp152)
+						tmp152 := lang.Apply1(tmp145, tmp151)
+						tmp153 := aotDirectFn112Arity2(tmp144, tmp152)
 						tmp154 := aotDirectFn447(tmp153)
-						tmp155 := aotDirectFn35Arity2(tmp135, tmp154)
-						tmp156 := lang.Apply1(tmp134, tmp155)
-						tmp157 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp158 := aotDirectFn183(v89)
-						tmp159 := lang.Apply1(tmp157, tmp158)
-						tmp160 := aotDirectFn112.Invoke5(tmp129, tmp131, tmp133, tmp156, tmp159)
-						tmp161 := aotDirectFn447(tmp160)
-						tmp162 := lang.Apply1(tmp127, tmp161)
-						tmp163 := aotDirectFn112.Invoke3(tmp91, tmp126, tmp162)
-						tmp164 := aotDirectFn447(tmp163)
-						return tmp164
+						tmp155 := lang.Apply1(tmp142, tmp154)
+						tmp156 := aotDirectFn112.Invoke4(tmp117, tmp125, tmp141, tmp155)
+						tmp157 := aotDirectFn447(tmp156)
+						tmp158 := lang.Apply1(tmp115, tmp157)
+						tmp159 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp160 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp161 := lang.Apply1(tmp160, sym_def)
+						tmp162 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp163 := aotDirectFn183(v89)
+						tmp164 := lang.Apply1(tmp162, tmp163)
+						tmp165 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp166 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp167 := lang.Apply1(tmp166, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewProtocolMultiFn)
+						tmp168 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp169 := aotDirectFn183(v89)
+						tmp170 := aotDirectFn292(tmp169)
+						tmp171 := lang.Apply1(tmp168, tmp170)
+						tmp172 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp173 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp174 := lang.Apply1(tmp173, sym_var)
+						tmp175 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp176 := lang.Apply1(tmp175, sym_clojure_DOT_core_SLASH_global_DASH_hierarchy)
+						tmp177 := aotDirectFn112Arity2(tmp174, tmp176)
+						tmp178 := aotDirectFn447(tmp177)
+						tmp179 := lang.Apply1(tmp172, tmp178)
+						tmp180 := aotDirectFn112.Invoke3(tmp167, tmp171, tmp179)
+						tmp181 := aotDirectFn447(tmp180)
+						tmp182 := lang.Apply1(tmp165, tmp181)
+						tmp183 := aotDirectFn112.Invoke3(tmp161, tmp164, tmp182)
+						tmp184 := aotDirectFn447(tmp183)
+						tmp185 := lang.Apply1(tmp159, tmp184)
+						tmp186 := aotDirectFn112.Invoke3(tmp114, tmp158, tmp185)
+						tmp187 := aotDirectFn447(tmp186)
+						tmp188 := lang.Apply1(tmp112, tmp187)
+						tmp189 := aotDirectFn112.Invoke3(tmp94, tmp111, tmp188)
+						tmp190 := aotDirectFn447(tmp189)
+						tmp191 := lang.Apply1(tmp92, tmp190)
+						tmp192 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp193 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp194 := lang.Apply1(tmp193, sym_clojure_DOT_core_SLASH_swap_BANG_)
+						tmp195 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp196 := lang.Apply1(tmp195, v4)
+						tmp197 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp198 := lang.Apply1(tmp197, sym_clojure_DOT_core_SLASH_assoc_DASH_in)
+						tmp199 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp200 := checkDerefVar(var_clojure_DOT_core_vector)
+						tmp201 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp202 := lang.Apply1(tmp201, kw_multis)
+						tmp203 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp204 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp205 := lang.Apply1(tmp204, sym_clojure_DOT_core_SLASH_keyword)
+						tmp206 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp207 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp208 := lang.Apply1(tmp207, sym_quote)
+						tmp209 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp210 := aotDirectFn183(v89)
+						tmp211 := lang.Apply1(tmp209, tmp210)
+						tmp212 := aotDirectFn112Arity2(tmp208, tmp211)
+						tmp213 := aotDirectFn447(tmp212)
+						tmp214 := lang.Apply1(tmp206, tmp213)
+						tmp215 := aotDirectFn112Arity2(tmp205, tmp214)
+						tmp216 := aotDirectFn447(tmp215)
+						tmp217 := lang.Apply1(tmp203, tmp216)
+						tmp218 := aotDirectFn112Arity2(tmp202, tmp217)
+						tmp219 := aotDirectFn447(tmp218)
+						tmp220 := aotDirectFn35Arity2(tmp200, tmp219)
+						tmp221 := lang.Apply1(tmp199, tmp220)
+						tmp222 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp223 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp224 := lang.Apply1(tmp223, sym_var)
+						tmp225 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp226 := aotDirectFn183(v89)
+						tmp227 := lang.Apply1(tmp225, tmp226)
+						tmp228 := aotDirectFn112Arity2(tmp224, tmp227)
+						tmp229 := aotDirectFn447(tmp228)
+						tmp230 := lang.Apply1(tmp222, tmp229)
+						tmp231 := aotDirectFn112.Invoke5(tmp194, tmp196, tmp198, tmp221, tmp230)
+						tmp232 := aotDirectFn447(tmp231)
+						tmp233 := lang.Apply1(tmp192, tmp232)
+						tmp234 := aotDirectFn112.Invoke3(tmp91, tmp191, tmp233)
+						tmp235 := aotDirectFn447(tmp234)
+						return tmp235
 					})
 					tmp89 := aotDirectFn271Arity2(tmp88, v20)
 					tmp90 := checkDerefVar(var_clojure_DOT_core_list)
@@ -39826,7 +39433,7 @@ func LoadNS() {
 										var v28 any = tmp27
 										_ = v28
 										// let binding "n"
-										var v29 any = int64(0)
+										var v29 int64 = int64(0)
 										_ = v29
 										// let binding "bs"
 										var v30 any = v14
@@ -39850,7 +39457,7 @@ func LoadNS() {
 														tmp40 := aotDirectFn442(v30)
 														tmp41 := lang.Apply3(v7, v28, tmp40, v20)
 														var tmp39 any = tmp41
-														var tmp42 any = v29
+														var tmp42 int64 = v29
 														tmp44 := aotDirectFn302(v30)
 														var tmp43 any = tmp44
 														var tmp45 any = true
@@ -39901,8 +39508,8 @@ func LoadNS() {
 																}
 																tmp70 := lang.Apply3(v7, tmp53, v36, tmp67)
 																var tmp52 any = tmp70
-																tmp72 := lang.Numbers.Inc(v29)
-																var tmp71 any = tmp72
+																tmp72 := lang.CheckedAddInt64(v29, 1)
+																var tmp71 int64 = tmp72
 																tmp74 := aotDirectFn299(v30)
 																var tmp73 any = tmp74
 																var tmp75 any = v31
@@ -41274,7 +40881,7 @@ func LoadNS() {
 		aotDirectFn154 = tmp1
 		var_clojure_DOT_core_emit_DASH_extend_DASH_protocol = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_emit_DASH_extend_DASH_protocol.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(205), kw_column, int(8), kw_end_DASH_line, int(205), kw_end_DASH_column, int(27), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_p, sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(221), kw_column, int(8), kw_end_DASH_line, int(221), kw_end_DASH_column, int(27), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_p, sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
 	// emit-hinted-impl
@@ -41413,7 +41020,7 @@ func LoadNS() {
 		aotDirectFn156 = tmp1
 		var_clojure_DOT_core_emit_DASH_hinted_DASH_impl = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_emit_DASH_hinted_DASH_impl.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(163), kw_column, int(8), kw_end_DASH_line, int(163), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_c, lang.NewVector(sym_p, sym_fs))), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(179), kw_column, int(8), kw_end_DASH_line, int(179), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_c, lang.NewVector(sym_p, sym_fs))), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
 	// fits-table?
@@ -41819,7 +41426,7 @@ func LoadNS() {
 								tmp77 := checkDerefVar(var_clojure_DOT_core_list)
 								var tmp78 any
 								tmp79 := aotDirectFn118(v62)
-								tmp80 := lang.Numbers.Lt(int64(1), tmp79)
+								tmp80 := (int64(1) < lang.AsInt64(tmp79))
 								if lang.IsTruthy(tmp80) {
 									tmp81 := checkDerefVar(var_clojure_DOT_core_list)
 									tmp82 := lang.Apply1(tmp81, sym_do)
@@ -44836,7 +44443,7 @@ func LoadNS() {
 										_ = v102
 										for {
 											var tmp103 any
-											tmp104 := lang.Numbers.Lt(v102, v101)
+											tmp104 := (lang.AsInt64(v102) < lang.AsInt64(v101))
 											if lang.IsTruthy(tmp104) {
 												var tmp105 any
 												{ // let
@@ -44852,7 +44459,7 @@ func LoadNS() {
 													var tmp112 any = v99
 													var tmp113 any = v100
 													var tmp114 any = v101
-													tmp116 := lang.Numbers.Unchecked_inc(v102)
+													tmp116 := (lang.AsInt64(v102) + 1)
 													var tmp115 any = tmp116
 													v99 = tmp112
 													v100 = tmp113
@@ -45036,7 +44643,7 @@ func LoadNS() {
 						_ = v23
 						for {
 							var tmp24 any
-							tmp25 := lang.Numbers.Lt(v23, v22)
+							tmp25 := (lang.AsInt64(v23) < lang.AsInt64(v22))
 							if lang.IsTruthy(tmp25) {
 								var tmp26 any
 								{ // let
@@ -45095,7 +44702,7 @@ func LoadNS() {
 												_ = v51
 												for {
 													var tmp52 any
-													tmp53 := lang.Numbers.Lt(v51, v50)
+													tmp53 := (lang.AsInt64(v51) < lang.AsInt64(v50))
 													if lang.IsTruthy(tmp53) {
 														var tmp54 any
 														{ // let
@@ -45110,7 +44717,7 @@ func LoadNS() {
 															var tmp60 any = v48
 															var tmp61 any = v49
 															var tmp62 any = v50
-															tmp64 := lang.Numbers.Unchecked_inc(v51)
+															tmp64 := (lang.AsInt64(v51) + 1)
 															var tmp63 any = tmp64
 															v48 = tmp60
 															v49 = tmp61
@@ -45202,7 +44809,7 @@ func LoadNS() {
 									var tmp35 any = v20
 									var tmp36 any = v21
 									var tmp37 any = v22
-									tmp39 := lang.Numbers.Unchecked_inc(v23)
+									tmp39 := (lang.AsInt64(v23) + 1)
 									var tmp38 any = tmp39
 									v20 = tmp35
 									v21 = tmp36
@@ -45307,7 +44914,7 @@ func LoadNS() {
 																_ = v61
 																for {
 																	var tmp62 any
-																	tmp63 := lang.Numbers.Lt(v61, v60)
+																	tmp63 := (lang.AsInt64(v61) < lang.AsInt64(v60))
 																	if lang.IsTruthy(tmp63) {
 																		var tmp64 any
 																		{ // let
@@ -45322,7 +44929,7 @@ func LoadNS() {
 																			var tmp70 any = v58
 																			var tmp71 any = v59
 																			var tmp72 any = v60
-																			tmp74 := lang.Numbers.Unchecked_inc(v61)
+																			tmp74 := (lang.AsInt64(v61) + 1)
 																			var tmp73 any = tmp74
 																			v58 = tmp70
 																			v59 = tmp71
@@ -45815,7 +45422,7 @@ func LoadNS() {
 										var tmp24 any
 										{ // let
 											// let binding "i"
-											var v25 any = int64(0)
+											var v25 int64 = int64(0)
 											_ = v25
 											for {
 												var tmp26 any
@@ -45829,8 +45436,8 @@ func LoadNS() {
 													tmp30 := lang.Apply1(v2, tmp29)
 													tmp31 := aotDirectFn93(v20, tmp30)
 													_ = tmp31
-													tmp33 := lang.Numbers.Unchecked_inc(v25)
-													var tmp32 any = tmp33
+													tmp33 := (v25 + 1)
+													var tmp32 int64 = tmp33
 													v25 = tmp32
 													continue
 												} else {
@@ -46744,7 +46351,7 @@ func LoadNS() {
 			{ // let
 				// let binding "ret"
 				tmp4 := lang.NewMap()
-				var v5 any = tmp4
+				var v5 any = tmp4.(lang.IEditableCollection).AsTransient()
 				_ = v5
 				// let binding "s"
 				var v6 any = v2
@@ -46757,18 +46364,18 @@ func LoadNS() {
 						tmp11 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
 						tmp12 := aotDirectFn299(v6)
 						tmp13 := aotDirectFn512Arity2(tmp11, tmp12)
-						var tmp14 any = v5
-						tmp14 = lang.Assoc(tmp14, tmp10, tmp13)
-						var tmp9 any = tmp14
-						tmp16 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-						tmp17 := aotDirectFn299(v6)
-						tmp18 := aotDirectFn152Arity2(tmp16, tmp17)
-						var tmp15 any = tmp18
+						v5.(*lang.TransientMap).Assoc(tmp10, tmp13)
+						var tmp9 any = v5
+						tmp15 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
+						tmp16 := aotDirectFn299(v6)
+						tmp17 := aotDirectFn152Arity2(tmp15, tmp16)
+						var tmp14 any = tmp17
 						v5 = tmp9
-						v6 = tmp15
+						v6 = tmp14
 						continue
 					} else {
-						tmp7 = v5
+						tmp18 := v5.(*lang.TransientMap).Persistent()
+						tmp7 = tmp18
 					}
 					tmp3 = tmp7
 					break
@@ -48277,7 +47884,7 @@ func LoadNS() {
 		aotDirectFn155 = tmp1
 		var_clojure_DOT_core_emit_DASH_extend_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_emit_DASH_extend_DASH_type.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(175), kw_column, int(8), kw_end_DASH_line, int(175), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core_deftype.glj", kw_line, int(191), kw_column, int(8), kw_end_DASH_line, int(191), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
 	// flush
@@ -48340,7 +47947,7 @@ func LoadNS() {
 				_ = v2
 				var v3 any = rest
 				_ = v3
-			recur_loop_2274:
+			recur_loop_2263:
 				tmp4 := checkDerefVar(var_clojure_DOT_core_pr)
 				tmp5 := lang.Apply1(tmp4, v2)
 				_ = tmp5
@@ -48365,7 +47972,7 @@ func LoadNS() {
 							var tmp16 any = v13
 							v2 = tmp14
 							v3 = tmp16
-							goto recur_loop_2274
+							goto recur_loop_2263
 						} // end let
 						tmp11 = tmp12
 					} else {
@@ -48746,6 +48353,7 @@ func LoadNS() {
 	// print-method
 	{
 		tmp0 := sym_print_DASH_method
+		// MultiFn print-method
 		var tmp2 lang.FnFunc2
 		tmp2 = lang.FnFunc2(func(p0, p1 any) any {
 			v3 := p0
@@ -48771,7 +48379,6 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		// MultiFn print-method
 		tmp1 := lang.NewMultiFn("print-method", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc2
 		tmp3 = lang.FnFunc2(func(p0, p1 any) any {
@@ -48985,7 +48592,7 @@ func LoadNS() {
 					var tmp30 any
 					{ // let
 						// let binding "n"
-						var v31 any = int64(0)
+						var v31 int64 = int64(0)
 						_ = v31
 						for {
 							var tmp32 any
@@ -49013,8 +48620,8 @@ func LoadNS() {
 									tmp34 = tmp40
 								} // end let
 								_ = tmp34
-								tmp36 := lang.Numbers.Unchecked_inc(v31)
-								var tmp35 any = tmp36
+								tmp36 := (v31 + 1)
+								var tmp35 int64 = tmp36
 								v31 = tmp35
 								continue
 							} else {
@@ -49854,7 +49461,7 @@ func LoadNS() {
 									_ = v50
 									for {
 										var tmp51 any
-										tmp52 := lang.Numbers.Lt(v50, v49)
+										tmp52 := (lang.AsInt64(v50) < lang.AsInt64(v49))
 										if lang.IsTruthy(tmp52) {
 											var tmp53 any
 											{ // let
@@ -49869,7 +49476,7 @@ func LoadNS() {
 												var tmp58 any = v47
 												var tmp59 any = v48
 												var tmp60 any = v49
-												tmp62 := lang.Numbers.Unchecked_inc(v50)
+												tmp62 := (lang.AsInt64(v50) + 1)
 												var tmp61 any = tmp62
 												v47 = tmp58
 												v48 = tmp59
@@ -50004,7 +49611,7 @@ func LoadNS() {
 									_ = v55
 									for {
 										var tmp56 any
-										tmp57 := lang.Numbers.Lt(v55, v54)
+										tmp57 := (lang.AsInt64(v55) < lang.AsInt64(v54))
 										if lang.IsTruthy(tmp57) {
 											var tmp58 any
 											{ // let
@@ -50020,7 +49627,7 @@ func LoadNS() {
 												var tmp64 any = v52
 												var tmp65 any = v53
 												var tmp66 any = v54
-												tmp68 := lang.Numbers.Unchecked_inc(v55)
+												tmp68 := (lang.AsInt64(v55) + 1)
 												var tmp67 any = tmp68
 												v52 = tmp64
 												v53 = tmp65
@@ -50132,6 +49739,7 @@ func LoadNS() {
 	// print-dup
 	{
 		tmp0 := sym_print_DASH_dup
+		// MultiFn print-dup
 		var tmp2 lang.FnFunc2
 		tmp2 = lang.FnFunc2(func(p0, p1 any) any {
 			v3 := p0
@@ -50141,7 +49749,6 @@ func LoadNS() {
 			tmp5 := aotDirectFn100(v3)
 			return tmp5
 		})
-		// MultiFn print-dup
 		tmp1 := lang.NewMultiFn("print-dup", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc2
 		tmp3 = lang.FnFunc2(func(p0, p1 any) any {
@@ -50850,82 +50457,6 @@ func LoadNS() {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(3828), kw_column, int(7), kw_end_DASH_line, int(3828), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_stream), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value, sym_recursive_QMARK_), lang.NewVector(sym_opts, sym_stream)), kw_doc, "Like read, and taking the same args. stream must be a LineNumberingPushbackReader.\n  Returns a vector containing the object read and the (whitespace-trimmed) string read.", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
-	// reduce
-	{
-		tmp0 := sym_reduce
-		var tmp1 lang.ArityFn
-		aotDirectFn402Arity2 = lang.FnFunc2(func(p0, p1 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			var tmp4 any
-			tmp5 := lang.IsInstance[lang.IReduce](v3)
-			if lang.IsTruthy(tmp5) {
-				tmp6 := v3.(interface{ Reduce(lang.IFn) any }).Reduce(lang.MustHostCast[lang.IFn](v2))
-				tmp4 = tmp6
-			} else {
-				tmp7 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
-				tmp8 := lang.Apply2(tmp7, v3, v2)
-				tmp4 = tmp8
-			}
-			return tmp4
-		})
-		aotDirectFn402Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			v4 := p2
-			_ = v4
-			var tmp5 any
-			tmp6 := lang.IsInstance[lang.IReduceInit](v4)
-			if lang.IsTruthy(tmp6) {
-				tmp7 := v4.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v2), v3)
-				tmp5 = tmp7
-			} else {
-				tmp8 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
-				tmp9 := lang.Apply3(tmp8, v4, v2, v3)
-				tmp5 = tmp9
-			}
-			return tmp5
-		})
-		tmp1 = lang.NewArityFn(
-			nil,
-			nil,
-			aotDirectFn402Arity2,
-			aotDirectFn402Arity3,
-			nil,
-			nil,
-			0,
-		)
-		aotDirectFn402 = tmp1
-		var_clojure_DOT_core_reduce = ns.InternWithValue(tmp0, tmp1, true)
-		var_clojure_DOT_core_reduce.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(6923), kw_column, int(7), kw_end_DASH_line, int(6923), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_val, sym_coll)), kw_doc, "f should be a function of 2 arguments. If val is not supplied,\n  returns the result of applying f to the first 2 items in coll, then\n  applying f to that result and the 3rd item, etc. If coll contains no\n  items, f must accept no arguments as well, and reduce returns the\n  result of calling f with no arguments.  If coll has only 1 item, it\n  is returned and f is not called.  If val is supplied, returns the\n  result of applying f to val and the first item in coll, then\n  applying f to that result and the 2nd item, etc. If coll contains no\n  items, returns val and f is not called.", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
-		})
-	}
-	// reduce-kv
-	{
-		tmp0 := sym_reduce_DASH_kv
-		var tmp1 lang.FnFunc3
-		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			v4 := p2
-			_ = v4
-			tmp5 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_kv_DASH_reduce)
-			tmp6 := lang.Apply3(tmp5, v4, v2, v3)
-			return tmp6
-		})
-		aotDirectFn403 = tmp1
-		var_clojure_DOT_core_reduce_DASH_kv = ns.InternWithValue(tmp0, tmp1, true)
-		var_clojure_DOT_core_reduce_DASH_kv.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(6945), kw_column, int(7), kw_end_DASH_line, int(6945), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_init, sym_coll)), kw_doc, "Reduces an associative collection. f should be a function of 3\n  arguments. Returns the result of applying f to init, the first key\n  and the first value in coll, then applying f to that result and the\n  2nd key and value, etc. If coll contains no entries, returns init\n  and f is not called. Note that reduce-kv is supported on vectors,\n  where the keys will be the ordinals.", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
-		})
-	}
 	// slurp
 	{
 		tmp0 := sym_slurp
@@ -50975,7 +50506,7 @@ func LoadNS() {
 								}
 								_ = tmp16
 							}()
-							tmp17 := aotExternalFn0(v13, v9)
+							tmp17 := aotExternalFn3(v13, v9)
 							_ = tmp17
 							tmp18 := lang.ToString(v9)
 							tmp14 = tmp18
@@ -50993,69 +50524,6 @@ func LoadNS() {
 		var_clojure_DOT_core_slurp.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(7045), kw_column, int(7), kw_end_DASH_line, int(7045), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym__AMP_, sym_opts)), kw_doc, "Opens a reader on f and reads all its contents, returning a string.\n  See clojure.java.io/reader for a complete list of supported arguments.", kw_added, "1.0", kw_tag, tmp2, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
-		})
-	}
-	// transduce
-	{
-		tmp0 := sym_transduce
-		var tmp1 lang.ArityFn
-		aotDirectFn520Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			v4 := p2
-			_ = v4
-			tmp5 := lang.Apply0(v3)
-			tmp6 := aotDirectFn520Arity4(v2, v3, tmp5, v4)
-			return tmp6
-		})
-		aotDirectFn520Arity4 = lang.FnFunc4(func(p0, p1, p2, p3 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			v4 := p2
-			_ = v4
-			v5 := p3
-			_ = v5
-			var tmp6 any
-			{ // let
-				// let binding "f"
-				tmp7 := lang.Apply1(v2, v3)
-				var v8 any = tmp7
-				_ = v8
-				// let binding "ret"
-				var tmp9 any
-				tmp10 := lang.IsInstance[lang.IReduceInit](v5)
-				if lang.IsTruthy(tmp10) {
-					tmp11 := v5.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v8), v4)
-					tmp9 = tmp11
-				} else {
-					tmp12 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
-					tmp13 := lang.Apply3(tmp12, v5, v8, v4)
-					tmp9 = tmp13
-				}
-				var v14 any = tmp9
-				_ = v14
-				tmp15 := lang.Apply1(v8, v14)
-				tmp6 = tmp15
-			} // end let
-			return tmp6
-		})
-		tmp1 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			aotDirectFn520Arity3,
-			aotDirectFn520Arity4,
-			nil,
-			0,
-		)
-		aotDirectFn520 = tmp1
-		var_clojure_DOT_core_transduce = ns.InternWithValue(tmp0, tmp1, true)
-		var_clojure_DOT_core_transduce.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(6968), kw_column, int(7), kw_end_DASH_line, int(6968), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_xform, sym_f, sym_coll), lang.NewVector(sym_xform, sym_f, sym_init, sym_coll)), kw_doc, "reduce with a transformation of f (xf). If init is not\n  supplied, (f) will be called to produce it. f should be a reducing\n  step function that accepts both 1 and 2 arguments, if it accepts\n  only 2 you can add the arity-1 with 'completing'. Returns the result\n  of applying (the transformed) xf to init and the first item in coll,\n  then applying xf to that result and the 2nd item, etc. If coll\n  contains no items, returns init and f is not called. Note that\n  certain transforms may inject or skip items.", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
 }

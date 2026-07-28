@@ -18,12 +18,19 @@ type MultiFn struct {
 	preferTable        IPersistentMap
 	methodCache        IPersistentMap
 	cachedHierarchy    any
+	protocol           bool
 
 	mtx sync.RWMutex
 }
 
 var (
-	_ IFn = (*MultiFn)(nil)
+	_ IFn           = (*MultiFn)(nil)
+	_ FixedArityFn0 = (*MultiFn)(nil)
+	_ FixedArityFn1 = (*MultiFn)(nil)
+	_ FixedArityFn2 = (*MultiFn)(nil)
+	_ FixedArityFn3 = (*MultiFn)(nil)
+	_ FixedArityFn4 = (*MultiFn)(nil)
+	_ FixedArityFn5 = (*MultiFn)(nil)
 
 	varIsA = InternVarName(NSCore.Name(), NewSymbol("isa?"))
 )
@@ -40,6 +47,26 @@ func NewMultiFn(name string, dispatchFn IFn, defaultDispatchVal any, hierarchy I
 	}
 	registerWellKnownMethods(mf)
 	return mf
+}
+
+// NewProtocolMultiFn returns a multimethod whose dispatch value is the
+// concrete type of its first argument. Protocol extension remains dynamic,
+// while fixed-arity calls avoid the variadic dispatch wrapper used by
+// defmulti.
+func NewProtocolMultiFn(name string, hierarchy IRef) *MultiFn {
+	mf := NewMultiFn(
+		name,
+		protocolDispatchFn{},
+		NewKeyword("default"),
+		hierarchy,
+	)
+	mf.protocol = true
+	return mf
+}
+
+// IsProtocol reports whether m uses protocol type dispatch.
+func (m *MultiFn) IsProtocol() bool {
+	return m.protocol
 }
 
 // registerWellKnownMethods seeds a freshly created MultiFn with any
@@ -182,11 +209,88 @@ func (m *MultiFn) prefers(hierarchy, x, y any) (res bool) {
 }
 
 func (m *MultiFn) Invoke(args ...any) any {
+	switch len(args) {
+	case 0:
+		return m.Invoke0()
+	case 1:
+		return m.Invoke1(args[0])
+	case 2:
+		return m.Invoke2(args[0], args[1])
+	case 3:
+		return m.Invoke3(args[0], args[1], args[2])
+	case 4:
+		return m.Invoke4(args[0], args[1], args[2], args[3])
+	case 5:
+		return m.Invoke5(args[0], args[1], args[2], args[3], args[4])
+	}
+	return m.invokeArgs(args)
+}
+
+func (m *MultiFn) invokeArgs(args []any) any {
 	return m.getFn(m.dispatchFn.Invoke(args...)).Invoke(args...)
 }
 
+func (m *MultiFn) Invoke0() any {
+	return Apply0(m.getFn(Apply0(m.dispatchFn)))
+}
+
+func (m *MultiFn) Invoke1(a0 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 1) {
+		return m.invokeArgs([]any{a0})
+	}
+	target := m.getFn(Apply1(m.dispatchFn, a0))
+	if hasDirectFixedArity(target, 1) {
+		return Apply1(target, a0)
+	}
+	return target.Invoke(a0)
+}
+
+func (m *MultiFn) Invoke2(a0, a1 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 2) {
+		return m.invokeArgs([]any{a0, a1})
+	}
+	target := m.getFn(Apply2(m.dispatchFn, a0, a1))
+	if hasDirectFixedArity(target, 2) {
+		return Apply2(target, a0, a1)
+	}
+	return target.Invoke(a0, a1)
+}
+
+func (m *MultiFn) Invoke3(a0, a1, a2 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 3) {
+		return m.invokeArgs([]any{a0, a1, a2})
+	}
+	target := m.getFn(Apply3(m.dispatchFn, a0, a1, a2))
+	if hasDirectFixedArity(target, 3) {
+		return Apply3(target, a0, a1, a2)
+	}
+	return target.Invoke(a0, a1, a2)
+}
+
+func (m *MultiFn) Invoke4(a0, a1, a2, a3 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 4) {
+		return m.invokeArgs([]any{a0, a1, a2, a3})
+	}
+	target := m.getFn(Apply4(m.dispatchFn, a0, a1, a2, a3))
+	if hasDirectFixedArity(target, 4) {
+		return Apply4(target, a0, a1, a2, a3)
+	}
+	return target.Invoke(a0, a1, a2, a3)
+}
+
+func (m *MultiFn) Invoke5(a0, a1, a2, a3, a4 any) any {
+	if !hasDirectFixedArity(m.dispatchFn, 5) {
+		return m.invokeArgs([]any{a0, a1, a2, a3, a4})
+	}
+	target := m.getFn(Apply5(m.dispatchFn, a0, a1, a2, a3, a4))
+	if hasDirectFixedArity(target, 5) {
+		return Apply5(target, a0, a1, a2, a3, a4)
+	}
+	return target.Invoke(a0, a1, a2, a3, a4)
+}
+
 func (m *MultiFn) ApplyTo(args ISeq) any {
-	return m.Invoke(seqToSlice(args)...)
+	return m.getFn(m.dispatchFn.ApplyTo(args)).ApplyTo(args)
 }
 
 func (m *MultiFn) getMethod(dispatchVal any) IFn {
@@ -267,4 +371,57 @@ func (m *MultiFn) isA(h, x, y any) bool {
 
 func (m *MultiFn) dominates(h, x, y any) bool {
 	return m.prefers(h, x, y) || m.isA(h, x, y)
+}
+
+type protocolDispatchFn struct{}
+
+func (protocolDispatchFn) Invoke(args ...any) any {
+	if len(args) == 0 {
+		panic(NewIllegalArgumentError("protocol method requires a target"))
+	}
+	return protocolDispatchValue(args[0])
+}
+
+func (protocolDispatchFn) Invoke1(a0 any) any {
+	return protocolDispatchValue(a0)
+}
+
+func (protocolDispatchFn) Invoke2(a0, _ any) any {
+	return protocolDispatchValue(a0)
+}
+
+func (protocolDispatchFn) Invoke3(a0, _, _ any) any {
+	return protocolDispatchValue(a0)
+}
+
+func (protocolDispatchFn) Invoke4(a0, _, _, _ any) any {
+	return protocolDispatchValue(a0)
+}
+
+func (protocolDispatchFn) Invoke5(a0, _, _, _, _ any) any {
+	return protocolDispatchValue(a0)
+}
+
+func (protocolDispatchFn) ApplyTo(args ISeq) any {
+	if args == nil {
+		panic(NewIllegalArgumentError("protocol method requires a target"))
+	}
+	return protocolDispatchValue(args.First())
+}
+
+func (protocolDispatchFn) Meta() IPersistentMap {
+	return nil
+}
+
+func (p protocolDispatchFn) WithMeta(IPersistentMap) any {
+	return p
+}
+
+func (protocolDispatchFn) IsFnValue() {}
+
+func protocolDispatchValue(target any) any {
+	if target == nil {
+		return nil
+	}
+	return reflect.TypeOf(target)
 }

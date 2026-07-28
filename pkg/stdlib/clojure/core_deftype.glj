@@ -100,8 +100,23 @@
          (swap! -protocols assoc '~name ~name)
          ~@(map
             (fn [sig]
-              `(do (defmulti ~(first sig) (fn [~'this & ~'args] (class ~'this)))
-                   (swap! ~name assoc-in [:multis (keyword '~(first sig))] ~(first sig))))
+              `(do (let [v# (def ~(first sig))]
+                     (when-not
+                       (and
+                         (.HasRoot v#)
+                         (instance?
+                           github.com:glojurelang:glojure:pkg:lang.*MultiFn
+                           (deref v#))
+                         (.IsProtocol
+                           ^github.com:glojurelang:glojure:pkg:lang.*MultiFn
+                           (deref v#)))
+                       (def ~(first sig)
+                         (github.com:glojurelang:glojure:pkg:lang.NewProtocolMultiFn
+                           ~(clojure.core/name (first sig))
+                           #'global-hierarchy))))
+                   (swap! ~name assoc-in
+                     [:multis (keyword '~(first sig))]
+                     (var ~(first sig)))))
             ;; (throw (fmt.Errorf "No implementation of method: %v of protocol: %v found for type: %T"
             ;;                    ~'method-name (var ~name) ~'this))
             sigs)
@@ -154,10 +169,11 @@
     (when-not (protocol? proto)
       (throw (errors.New (str proto " is not a protocol"))))
     (reduce1 (fn [_ [k v]]
-               (defmethod
-                 (get-in @proto [:multis k])
-                 atype [this & args]
-                 (apply v (cons this args))))
+               (.AddMethod
+                 ^github.com:glojurelang:glojure:pkg:lang.*MultiFn
+                 (deref (get-in @proto [:multis k]))
+                 atype
+                 v))
              nil mmap)))
 
 (defn- emit-hinted-impl [c [p fs]]
@@ -247,5 +263,3 @@
 
   [p & specs]
   (emit-extend-protocol p specs))
-
-

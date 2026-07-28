@@ -1318,19 +1318,27 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 	// Allocate a variable for the MultiFn
 	mfVar := g.allocateTempVar()
 
-	// Generate the dispatch function
-	dispatchFnVar := g.generateValue(mf.GetDispatchFn())
-
-	// Generate the default dispatch value
-	defaultValVar := g.generateValue(mf.GetDefaultDispatchVal())
-
 	// Generate the hierarchy reference
 	hierarchyVar := g.generateValue(mf.GetHierarchy())
 
 	// Create the MultiFn
 	g.writef("// MultiFn %s\n", mf.GetName())
-	g.writef("%s := lang.NewMultiFn(%#v, %s, %s, %s)\n",
-		mfVar, mf.GetName(), dispatchFnVar, defaultValVar, hierarchyVar)
+	if mf.IsProtocol() {
+		g.writef("%s := lang.NewProtocolMultiFn(%#v, %s)\n",
+			mfVar, mf.GetName(), hierarchyVar)
+	} else {
+		// Generate the dispatch function and default value only for ordinary
+		// multimethods. Protocols use their fixed-arity type dispatcher.
+		dispatchFnVar := g.generateValue(mf.GetDispatchFn())
+		defaultValVar := g.generateValue(mf.GetDefaultDispatchVal())
+		g.writef("%s := lang.NewMultiFn(%#v, %s, %s, %s)\n",
+			mfVar,
+			mf.GetName(),
+			dispatchFnVar,
+			defaultValVar,
+			hierarchyVar,
+		)
+	}
 
 	// Add all methods from the method table. Skip entries that
 	// lang.NewMultiFn already seeds via registerWellKnownMethods: their

@@ -1,0 +1,15 @@
+(ns codegen.test.protocol)
+
+(defprotocol Combine
+  (combine [this left right]))
+
+(extend-protocol Combine
+  nil
+  (combine [_ left right] (+ left right))
+
+  go/string
+  (combine [target left right] (str target (+ left right))))
+
+(defn ^{:expected-output [42 "sum=42"]} -main []
+  [(combine nil 20 22)
+   (combine "sum=" 20 22)])

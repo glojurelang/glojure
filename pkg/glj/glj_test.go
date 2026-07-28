@@ -28,6 +28,30 @@ func TestCoreSlurpLazilyLoadsIONamespace(t *testing.T) {
 	}
 }
 
+func TestProtocolExtensionSurvivesDefinitionReload(t *testing.T) {
+	eval := Var("clojure.core", "eval")
+	result := eval.Invoke(Read(`
+		(do
+		  (defprotocol CodexReloadProtocol
+		    (codex-reload-method [this value]))
+		  (extend-protocol CodexReloadProtocol
+		    nil
+		    (codex-reload-method [_ value] (+ value 1))
+		    go/string
+		    (codex-reload-method [target value] (str target value)))
+		  (let [before [(codex-reload-method nil 4)
+		                (codex-reload-method "x" 7)]]
+		    (defprotocol CodexReloadProtocol
+		      (codex-reload-method [this value]))
+		    [before
+		     (codex-reload-method nil 40)
+		     (codex-reload-method "y" 2)]))`))
+
+	if got, want := lang.PrintString(result), `[[5 "x7"] 41 "y2"]`; got != want {
+		t.Fatalf("protocol reload result = %s, want %s", got, want)
+	}
+}
+
 // TestFnQmarkRecognizesFnFuncN verifies that clojure.core/fn? returns true
 // for all FnFuncN fixed-arity types introduced in Round 4 optimizations.
 // Previously fn? only checked for *runtime.Fn and FnFunc (variadic), causing

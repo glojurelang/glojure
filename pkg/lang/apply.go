@@ -260,6 +260,82 @@ func Apply5(fn interface{}, a0, a1, a2, a3, a4 any) any {
 	}
 }
 
+func hasDirectFixedArity(fn IFn, arity int) bool {
+	switch f := fn.(type) {
+	case ArityFn:
+		return f.fixedMethod(arity) != nil
+	case *ArityFn:
+		return f.fixedMethod(arity) != nil
+	}
+	switch arity {
+	case 0:
+		_, ok := fn.(FixedArityFn0)
+		return ok
+	case 1:
+		_, ok := fn.(FixedArityFn1)
+		return ok
+	case 2:
+		_, ok := fn.(FixedArityFn2)
+		return ok
+	case 3:
+		_, ok := fn.(FixedArityFn3)
+		return ok
+	case 4:
+		_, ok := fn.(FixedArityFn4)
+		return ok
+	case 5:
+		_, ok := fn.(FixedArityFn5)
+		return ok
+	case 6:
+		_, ok := fn.(FixedArityFn6)
+		return ok
+	case 7:
+		_, ok := fn.(FixedArityFn7)
+		return ok
+	case 8:
+		_, ok := fn.(FixedArityFn8)
+		return ok
+	case 9:
+		_, ok := fn.(FixedArityFn9)
+		return ok
+	case 10:
+		_, ok := fn.(FixedArityFn10)
+		return ok
+	case 11:
+		_, ok := fn.(FixedArityFn11)
+		return ok
+	case 12:
+		_, ok := fn.(FixedArityFn12)
+		return ok
+	case 13:
+		_, ok := fn.(FixedArityFn13)
+		return ok
+	case 14:
+		_, ok := fn.(FixedArityFn14)
+		return ok
+	case 15:
+		_, ok := fn.(FixedArityFn15)
+		return ok
+	case 16:
+		_, ok := fn.(FixedArityFn16)
+		return ok
+	case 17:
+		_, ok := fn.(FixedArityFn17)
+		return ok
+	case 18:
+		_, ok := fn.(FixedArityFn18)
+		return ok
+	case 19:
+		_, ok := fn.(FixedArityFn19)
+		return ok
+	case 20:
+		_, ok := fn.(FixedArityFn20)
+		return ok
+	default:
+		return false
+	}
+}
+
 func asStringSlice(value any) []string {
 	if values, ok := value.([]string); ok {
 		return values

@@ -84,6 +84,53 @@ func TestCodegen(t *testing.T) {
 	})
 }
 
+func TestCodegenPreservesProtocolDispatcher(t *testing.T) {
+	if !runtime.GetUseAOT() {
+		t.Skip("requires the AOT stdlib; source bootstrap is covered separately")
+	}
+
+	runtime.AddLoadPath(os.DirFS("testdata"))
+	require := glj.Var("clojure.core", "require")
+	require.Invoke(lang.NewSymbol("codegen.test.protocol"))
+
+	ns := lang.FindNamespace(lang.NewSymbol("codegen.test.protocol"))
+	if ns == nil {
+		t.Fatal("protocol fixture namespace was not loaded")
+	}
+
+	var buf bytes.Buffer
+	gen := runtime.NewGenerator(&buf)
+	if err := gen.Generate(ns); err != nil {
+		t.Fatalf("generate protocol fixture: %v", err)
+	}
+	generated := buf.String()
+	if !strings.Contains(generated, `lang.NewProtocolMultiFn("combine"`) {
+		t.Fatalf("generated protocol did not retain its native dispatcher:\n%s", generated)
+	}
+	if count := strings.Count(generated, `lang.NewProtocolMultiFn("combine"`); count != 1 {
+		t.Fatalf(
+			"generated protocol serialized %d dispatchers, want one shared through its method Var:\n%s",
+			count,
+			generated,
+		)
+	}
+	if !strings.Contains(generated, ".FindInternedVar(sym_combine)") {
+		t.Fatalf("generated protocol metadata did not retain its method Var:\n%s", generated)
+	}
+	if strings.Contains(generated, "lang.NewVariadicFn") {
+		t.Fatalf("generated fixed-arity protocol retained a variadic wrapper:\n%s", generated)
+	}
+
+	mainVar := ns.FindInternedVar(lang.NewSymbol("-main"))
+	if mainVar == nil {
+		t.Fatal("protocol fixture has no -main")
+	}
+	want := lang.NewVector(int64(42), "sum=42")
+	if got := mainVar.Invoke(); !lang.Equals(got, want) {
+		t.Fatalf("protocol fixture returned %v, want %v", got, want)
+	}
+}
+
 func generateAndTestNamespace(t *testing.T, ns *lang.Namespace, goldenFile string) {
 	t.Helper()
 

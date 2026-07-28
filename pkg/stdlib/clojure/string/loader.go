@@ -151,7 +151,6 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.string"
 func LoadNS() {
-	sym__EQ_ := lang.NewSymbolUnchecked("=")
 	sym_apply := lang.NewSymbolUnchecked("apply")
 	sym_atom := lang.NewSymbolUnchecked("atom")
 	sym_blank_QMARK_ := lang.NewSymbolUnchecked("blank?")
@@ -200,7 +199,6 @@ func LoadNS() {
 	sym_split_DASH_lines := lang.NewSymbolUnchecked("split-lines")
 	sym_starts_DASH_with_QMARK_ := lang.NewSymbolUnchecked("starts-with?")
 	sym_str := lang.NewSymbolUnchecked("str")
-	sym_subs := lang.NewSymbolUnchecked("subs")
 	sym_substr := lang.NewSymbolUnchecked("substr")
 	sym_trim := lang.NewSymbolUnchecked("trim")
 	sym_trim_DASH_newline := lang.NewSymbolUnchecked("trim-newline")
@@ -220,8 +218,6 @@ func LoadNS() {
 	kw_ns := lang.NewKeyword("ns")
 	kw_private := lang.NewKeyword("private")
 	kw_tag := lang.NewKeyword("tag")
-	// var clojure.core/=
-	var_clojure_DOT_core__EQ_ := lang.InternVarName(sym_clojure_DOT_core, sym__EQ_)
 	// var clojure.core/apply
 	var_clojure_DOT_core_apply := lang.InternVarName(sym_clojure_DOT_core, sym_apply)
 	// var clojure.core/atom
@@ -250,8 +246,6 @@ func LoadNS() {
 	var_clojure_DOT_core_reset_BANG_ := lang.InternVarName(sym_clojure_DOT_core, sym_reset_BANG_)
 	// var clojure.core/str
 	var_clojure_DOT_core_str := lang.InternVarName(sym_clojure_DOT_core, sym_str)
-	// var clojure.core/subs
-	var_clojure_DOT_core_subs := lang.InternVarName(sym_clojure_DOT_core, sym_subs)
 	// var clojure.core/unchecked-int
 	var_clojure_DOT_core_unchecked_DASH_int := lang.InternVarName(sym_clojure_DOT_core, sym_unchecked_DASH_int)
 	// var clojure.string/blank?
@@ -306,7 +300,6 @@ func LoadNS() {
 	var_clojure_DOT_string_trimr := lang.InternVarName(sym_clojure_DOT_string, sym_trimr)
 	// var clojure.string/upper-case
 	var_clojure_DOT_string_upper_DASH_case := lang.InternVarName(sym_clojure_DOT_string, sym_upper_DASH_case)
-	aotExternalFn0 := aotLinkFn2(var_clojure_DOT_core__EQ_)
 	aotExternalFn10 := aotLinkFn1(var_clojure_DOT_core_chunk_DASH_rest)
 	aotExternalFn14 := aotLinkFn1(var_clojure_DOT_core_unchecked_DASH_int)
 	aotExternalFn15 := aotLinkFn2(var_clojure_DOT_core_apply)
@@ -322,8 +315,6 @@ func LoadNS() {
 	aotExternalFn24 := aotLinkFn1(var_clojure_DOT_core_re_DASH_pattern)
 	aotExternalFn3 := aotLinkFn1(var_clojure_DOT_core_str)
 	aotExternalFn4 := aotLinkFn2(var_clojure_DOT_core_str)
-	aotExternalFn5 := aotLinkFn3(var_clojure_DOT_core_subs)
-	aotExternalFn6 := aotLinkFn2(var_clojure_DOT_core_subs)
 	aotExternalFn8 := aotLinkFn1(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
 	aotExternalFn9 := aotLinkFn1(var_clojure_DOT_core_chunk_DASH_first)
 	// reference fmt to avoid unused import error
@@ -425,7 +416,7 @@ func LoadNS() {
 					for {
 						var tmp7 any
 						tmp8 := lang.Count(v2)
-						tmp9 := aotExternalFn0(tmp8, v6)
+						tmp9 := lang.Equals(tmp8, v6)
 						if lang.IsTruthy(tmp9) {
 							tmp7 = true
 						} else {
@@ -522,18 +513,18 @@ func LoadNS() {
 				// let binding "s"
 				tmp4 := aotDirectFn2(v2)
 				tmp5 := aotExternalFn3(tmp4)
-				var v6 any = tmp5
+				var v6 string = any(tmp5).(string)
 				_ = v6
 				var tmp7 any
 				tmp8 := lang.Count(v6)
-				tmp9 := lang.Numbers.Lt(tmp8, int64(2))
+				tmp9 := (lang.AsInt64(tmp8) < int64(2))
 				if lang.IsTruthy(tmp9) {
 					tmp10 := lang.Apply1(strings5.ToUpper, v6)
 					tmp7 = tmp10
 				} else {
-					tmp11 := aotExternalFn5(v6, int64(0), int64(1))
+					tmp11 := runtime.RT.SubsEnd(any(v6).(string), lang.IntCast(int64(0)), lang.IntCast(int64(1)))
 					tmp12 := lang.Apply1(strings5.ToUpper, tmp11)
-					tmp13 := aotExternalFn6(v6, int64(1))
+					tmp13 := runtime.RT.Subs(any(v6).(string), lang.IntCast(int64(1)))
 					tmp14 := lang.Apply1(strings5.ToLower, tmp13)
 					tmp15 := aotExternalFn4(tmp12, tmp14)
 					tmp7 = tmp15
@@ -640,7 +631,7 @@ func LoadNS() {
 					_ = v16
 					for {
 						var tmp17 any
-						tmp18 := lang.Numbers.Lt(v16, v15)
+						tmp18 := (lang.AsInt64(v16) < lang.AsInt64(v15))
 						if lang.IsTruthy(tmp18) {
 							var tmp19 any
 							{ // let
@@ -677,7 +668,7 @@ func LoadNS() {
 								var tmp23 any = v13
 								var tmp24 any = v14
 								var tmp25 any = v15
-								tmp27 := lang.Numbers.Unchecked_inc(v16)
+								tmp27 := (lang.AsInt64(v16) + 1)
 								var tmp26 any = tmp27
 								v13 = tmp23
 								v14 = tmp24
@@ -854,7 +845,7 @@ func LoadNS() {
 				var v12 any = tmp7
 				_ = v12
 				var tmp13 any
-				tmp14 := aotExternalFn0(v12, int64(-1))
+				tmp14 := lang.EqualsInt64(int64(-1), v12)
 				if lang.IsTruthy(tmp14) {
 				} else {
 					tmp15 := lang.Apply1(lang.Builtins["int64"], v12)
@@ -882,8 +873,8 @@ func LoadNS() {
 				_ = v10
 				// let binding "s"
 				tmp11 := aotDirectFn2(v2)
-				tmp12 := aotExternalFn6(tmp11, v10)
-				var v13 any = tmp12
+				tmp12 := runtime.RT.Subs(any(tmp11).(string), lang.IntCast(v10))
+				var v13 string = tmp12
 				_ = v13
 				// let binding "result"
 				var tmp14 any
@@ -899,7 +890,7 @@ func LoadNS() {
 				var v19 any = tmp14
 				_ = v19
 				var tmp20 any
-				tmp21 := aotExternalFn0(v19, int64(-1))
+				tmp21 := lang.EqualsInt64(int64(-1), v19)
 				if lang.IsTruthy(tmp21) {
 				} else {
 					tmp22 := lang.Numbers.Add(v19, v10)
@@ -945,7 +936,7 @@ func LoadNS() {
 				var v9 any = tmp8
 				_ = v9
 				var tmp10 any
-				tmp11 := aotExternalFn0(v9, int64(-1))
+				tmp11 := lang.EqualsInt64(int64(-1), v9)
 				if lang.IsTruthy(tmp11) {
 				} else {
 					tmp12 := lang.Apply1(lang.Builtins["int64"], v9)
@@ -974,8 +965,8 @@ func LoadNS() {
 				_ = v11
 				// let binding "s"
 				tmp12 := aotDirectFn2(v2)
-				tmp13 := aotExternalFn5(tmp12, int64(0), v11)
-				var v14 any = tmp13
+				tmp13 := runtime.RT.SubsEnd(any(tmp12).(string), lang.IntCast(int64(0)), lang.IntCast(v11))
+				var v14 string = tmp13
 				_ = v14
 				// let binding "result"
 				tmp15 := aotExternalFn3(v3)
@@ -983,7 +974,7 @@ func LoadNS() {
 				var v17 any = tmp16
 				_ = v17
 				var tmp18 any
-				tmp19 := aotExternalFn0(v17, int64(-1))
+				tmp19 := lang.EqualsInt64(int64(-1), v17)
 				if lang.IsTruthy(tmp19) {
 				} else {
 					tmp20 := lang.Apply1(lang.Builtins["int64"], v17)
@@ -1400,13 +1391,13 @@ func LoadNS() {
 				var v10 any = tmp9
 				_ = v10
 				var tmp11 any
-				tmp12 := aotExternalFn0(int64(-1), v10)
+				tmp12 := lang.EqualsInt64(int64(-1), v10)
 				if lang.IsTruthy(tmp12) {
 					tmp11 = v7
 				} else {
-					tmp13 := aotExternalFn5(v7, int64(0), v10)
+					tmp13 := runtime.RT.SubsEnd(any(v7).(string), lang.IntCast(int64(0)), lang.IntCast(v10))
 					tmp14 := lang.Numbers.Inc(v10)
-					tmp15 := aotExternalFn6(v7, tmp14)
+					tmp15 := runtime.RT.Subs(any(v7).(string), lang.IntCast(tmp14))
 					tmp16 := aotExternalFn23(tmp13, v4, tmp15)
 					tmp11 = tmp16
 				}
@@ -1442,14 +1433,14 @@ func LoadNS() {
 				var v9 any = tmp8
 				_ = v9
 				var tmp10 any
-				tmp11 := aotExternalFn0(int64(-1), v9)
+				tmp11 := lang.EqualsInt64(int64(-1), v9)
 				if lang.IsTruthy(tmp11) {
 					tmp10 = v7
 				} else {
-					tmp12 := aotExternalFn5(v7, int64(0), v9)
+					tmp12 := runtime.RT.SubsEnd(any(v7).(string), lang.IntCast(int64(0)), lang.IntCast(v9))
 					tmp13 := lang.Count(v3)
 					tmp14 := lang.Numbers.Add(v9, tmp13)
-					tmp15 := aotExternalFn6(v7, tmp14)
+					tmp15 := runtime.RT.Subs(any(v7).(string), lang.IntCast(tmp14))
 					tmp16 := aotExternalFn23(tmp12, v4, tmp15)
 					tmp10 = tmp16
 				}
