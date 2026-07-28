@@ -108,6 +108,18 @@ type IRStringJoinPlan struct {
 	Stack     *lang.Symbol
 }
 
+// IROwnedMapReducePlan represents a reduce whose inline callback carries one
+// map accumulator through a chain of update-in calls without exposing any
+// intermediate map identity.
+type IROwnedMapReducePlan struct {
+	ReduceVar    *lang.Var
+	UpdateInVars []*lang.Var
+	Reducer      *ast.Node
+	Initial      *ast.Node
+	Source       *ast.Node
+	Updates      []*ast.Node
+}
+
 type IRPipelineConsumerKind uint8
 
 const (
@@ -187,6 +199,13 @@ type IRFacts struct {
 	Append   *IRStackAppendPlan
 	Join     *IRStringJoinPlan
 	Pipeline *IRPipelinePlan
+
+	OwnedMapReduce *IROwnedMapReducePlan
+
+	// OwnedMapUpdateIn marks an update-in call inside an owned map reduction.
+	// Backends may mutate the private accumulator representation while
+	// preserving the persistent map observed by callbacks and at the boundary.
+	OwnedMapUpdateIn bool
 
 	// OwnedMapAssoc marks an assoc whose target is a uniquely owned
 	// loop-carried map. Backends may update a transient representation after
@@ -498,6 +517,14 @@ func (ir *TypedIR) visit(node *ast.Node) {
 		facts.Pipeline = AnalyzePipeline(node)
 	}
 	ir.facts[node] = facts
+	if node.Op == ast.OpInvoke {
+		if plan := ir.analyzeOwnedMapReduce(node); plan != nil {
+			facts = ir.facts[node]
+			facts.OwnedMapReduce = plan
+			facts.Type = IRType{Kind: IRMap}
+			ir.facts[node] = facts
+		}
+	}
 }
 
 func (ir *TypedIR) inferInvoke(node *ast.Node, facts *IRFacts) {

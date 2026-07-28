@@ -9,7 +9,10 @@ import (
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
-var boxedInt64Sink interface{}
+var (
+	boxedInt64Sink interface{}
+	nativeFnilSink interface{}
+)
 
 type testBlockingDeref struct {
 	value interface{}
@@ -733,6 +736,141 @@ func TestNativeCoreUpdateInPreservesCollectionAndVarSemantics(t *testing.T) {
 	)
 	if got := lang.Get(lang.Get(created, outer), inner); got != int64(7) {
 		t.Fatalf("created value = %v, want 7", got)
+	}
+}
+
+func TestNativeCoreFnilMatchesClojureArities(t *testing.T) {
+	capture := lang.FnFunc(func(args ...interface{}) interface{} {
+		return lang.NewVector(args...)
+	})
+	fnil := nativeCoreFnil{}
+
+	one := fnil.Invoke2(capture, "x").(lang.IFn)
+	if got, want := one.Invoke(nil), lang.NewVector("x"); !lang.Equals(got, want) {
+		t.Fatalf("one-default fnil = %v, want %v", got, want)
+	}
+	if got, want := one.Invoke(nil, "b", "c", "d", "e"),
+		lang.NewVector("x", "b", "c", "d", "e"); !lang.Equals(got, want) {
+		t.Fatalf("variadic one-default fnil = %v, want %v", got, want)
+	}
+	args := []interface{}{nil, "b", "c", "d", "e"}
+	one.Invoke(args...)
+	if args[0] != nil {
+		t.Fatalf("variadic fnil mutated its caller's argument slice: %v", args)
+	}
+
+	two := fnil.Invoke3(capture, "x", "y").(lang.IFn)
+	if got, want := two.Invoke(nil, nil), lang.NewVector("x", "y"); !lang.Equals(got, want) {
+		t.Fatalf("two-default fnil = %v, want %v", got, want)
+	}
+
+	three := fnil.Invoke4(capture, "x", "y", "z").(lang.IFn)
+	if got, want := three.Invoke(nil, nil, nil),
+		lang.NewVector("x", "y", "z"); !lang.Equals(got, want) {
+		t.Fatalf("three-default fnil = %v, want %v", got, want)
+	}
+}
+
+func TestNativeCoreFnilAllocatesOneWrapper(t *testing.T) {
+	identity := lang.FnFunc1(func(value interface{}) interface{} { return value })
+	allocs := testing.AllocsPerRun(1_000, func() {
+		nativeFnilSink = (nativeCoreFnil{}).Invoke2(identity, int64(0))
+	})
+	if allocs > 1 {
+		t.Fatalf("native fnil allocated %v objects, want at most one wrapper", allocs)
+	}
+}
+
+func TestReduceOwnedMapKeepsNestedUpdatesPrivateUntilReturn(t *testing.T) {
+	service := lang.NewKeyword("api")
+	requests := lang.NewKeyword("requests")
+	initialNested := lang.NewMap(requests, int64(10))
+	initial := lang.NewMap(service, initialNested)
+	increment := lang.FnFunc1(func(value interface{}) interface{} {
+		return lang.Numbers.Inc(value)
+	})
+	path := lang.NewVector(service, requests)
+	reducer := lang.FnFunc2(func(result, _ interface{}) interface{} {
+		return UpdateOwnedMap3(result, path, increment)
+	})
+
+	result := ReduceOwnedMap(
+		nativeCoreReduce{},
+		reducer,
+		initial,
+		lang.NewVector(nil, nil, nil),
+	)
+
+	if got := lang.Get(lang.Get(result, service), requests); got != int64(13) {
+		t.Fatalf("owned nested result = %v, want 13", got)
+	}
+	if got := lang.Get(lang.Get(initial, service), requests); got != int64(10) {
+		t.Fatalf("owned reduction mutated its persistent input: %v", got)
+	}
+	if _, ok := result.(lang.IPersistentMap); !ok {
+		t.Fatalf("owned reduction leaked %T instead of a persistent map", result)
+	}
+}
+
+func TestUpdateOwnedMapPassesPersistentMapAtLeaf(t *testing.T) {
+	outer := lang.NewKeyword("outer")
+	leaf := lang.NewKeyword("leaf")
+	innerKey := lang.NewKeyword("inner")
+	initialLeaf := lang.NewMap(innerKey, int64(1))
+	initial := lang.NewMap(outer, lang.NewMap(leaf, initialLeaf))
+	var observed interface{}
+	capture := lang.FnFunc1(func(value interface{}) interface{} {
+		observed = value
+		return value
+	})
+	reducer := lang.FnFunc2(func(result, _ interface{}) interface{} {
+		return UpdateOwnedMap3(
+			result,
+			lang.NewVector(outer, leaf),
+			capture,
+		)
+	})
+
+	result := ReduceOwnedMap(
+		nativeCoreReduce{},
+		reducer,
+		initial,
+		lang.NewVector(nil),
+	)
+	if _, ok := observed.(lang.IPersistentMap); !ok {
+		t.Fatalf("update callback observed transient representation %T", observed)
+	}
+	if !lang.Equals(lang.Get(lang.Get(result, outer), leaf), initialLeaf) {
+		t.Fatalf("leaf map changed: %v", result)
+	}
+}
+
+func TestReduceOwnedMapPreservesNestedMapMetadata(t *testing.T) {
+	outer := lang.NewKeyword("outer")
+	leaf := lang.NewKeyword("leaf")
+	metaKey := lang.NewKeyword("source")
+	meta := lang.NewMap(metaKey, "test")
+	nested := lang.NewMap(leaf, int64(1)).(lang.IObj).WithMeta(meta)
+	initial := lang.NewMap(outer, nested)
+	reducer := lang.FnFunc2(func(result, _ interface{}) interface{} {
+		return UpdateOwnedMap3(
+			result,
+			lang.NewVector(outer, leaf),
+			lang.FnFunc1(func(value interface{}) interface{} {
+				return lang.Numbers.Inc(value)
+			}),
+		)
+	})
+
+	result := ReduceOwnedMap(
+		nativeCoreReduce{},
+		reducer,
+		initial,
+		lang.NewVector(nil),
+	)
+	got := lang.Get(result, outer).(lang.IMeta).Meta()
+	if !lang.Equals(got, meta) {
+		t.Fatalf("nested metadata = %v, want %v", got, meta)
 	}
 }
 

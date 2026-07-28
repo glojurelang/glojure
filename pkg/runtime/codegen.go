@@ -171,11 +171,12 @@ type Generator struct {
 	directLink             bool
 
 	// Fields for handling closures
-	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
-	liftedCounter int                        // Counter for closed0, closed1...
-	currentFnEnv  lang.Environment           // Current function's captured env
-	currentIR     *compiler.TypedIR          // typed facts for the current AST
-	currentVector *vectorAOTAnalysis         // transient-vector AOT region
+	liftedValues    map[liftedKey]*liftedValue // Dedupe by composite key
+	liftedCounter   int                        // Counter for closed0, closed1...
+	currentFnEnv    lang.Environment           // Current function's captured env
+	currentIR       *compiler.TypedIR          // typed facts for the current AST
+	ownedMapUpdates map[*ast.Node]bool         // update-in nodes in an owned reduce
+	currentVector   *vectorAOTAnalysis         // transient-vector AOT region
 
 	// specializationTarget is non-nil only while generating the root function
 	// value for a Var. Nested function literals retain the generic code path.
@@ -2059,6 +2060,14 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
+	if result, ok := g.generateIROwnedMapUpdateIn(node); ok {
+		return result
+	}
+	if plan := g.currentIR.Facts(node).OwnedMapReduce; plan != nil {
+		if result, ok := g.generateIROwnedMapReduce(invokeNode, plan); ok {
+			return result
+		}
+	}
 	if result, ok := g.generateVectorAOTInvoke(node); ok {
 		return result
 	}

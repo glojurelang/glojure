@@ -3,6 +3,7 @@ package runtime
 import (
 	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -24,6 +25,7 @@ func (nativeCoreReduce) IsFnValue()     {}
 func (nativeCoreSwap) IsFnValue()       {}
 func (nativeCoreApply) IsFnValue()      {}
 func (nativeCoreUpdateIn) IsFnValue()   {}
+func (nativeCoreFnil) IsFnValue()       {}
 func (nativeCoreRequire) IsFnValue()    {}
 
 // nativeCoreAdd preserves clojure.core/+'s public arities while giving
@@ -101,6 +103,158 @@ func (nativeCoreSubtract) Invoke(args ...interface{}) interface{} {
 		}
 		return result
 	}
+}
+
+// nativeCoreFnil models Clojure's single wrapper object rather than lowering
+// each call to an ArityFn plus several captured closures.
+type nativeCoreFnil struct{}
+
+func (fn nativeCoreFnil) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 2:
+		return fn.Invoke2(args[0], args[1])
+	case 3:
+		return fn.Invoke3(args[0], args[1], args[2])
+	case 4:
+		return fn.Invoke4(args[0], args[1], args[2], args[3])
+	default:
+		panic(lang.NewIllegalArgumentError(
+			"wrong number of arguments (" + strconv.Itoa(len(args)) + ")",
+		))
+	}
+}
+
+func (nativeCoreFnil) Invoke2(fn, x interface{}) interface{} {
+	return &nativeFnilFn{fn: fn, defaults: [3]interface{}{x}, defaultCount: 1}
+}
+
+func (nativeCoreFnil) Invoke3(fn, x, y interface{}) interface{} {
+	return &nativeFnilFn{fn: fn, defaults: [3]interface{}{x, y}, defaultCount: 2}
+}
+
+func (nativeCoreFnil) Invoke4(fn, x, y, z interface{}) interface{} {
+	return &nativeFnilFn{fn: fn, defaults: [3]interface{}{x, y, z}, defaultCount: 3}
+}
+
+func (fn nativeCoreFnil) ApplyTo(args lang.ISeq) interface{} {
+	return fn.Invoke(seqToSlice(args)...)
+}
+
+type nativeFnilFn struct {
+	fn           interface{}
+	defaults     [3]interface{}
+	defaultCount int
+	meta         lang.IPersistentMap
+}
+
+func (fn *nativeFnilFn) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 1:
+		return fn.Invoke1(args[0])
+	case 2:
+		return fn.Invoke2(args[0], args[1])
+	case 3:
+		return fn.Invoke3(args[0], args[1], args[2])
+	case 4:
+		return fn.Invoke4(args[0], args[1], args[2], args[3])
+	default:
+		if len(args) < fn.minimumArity() {
+			panic(lang.NewIllegalArgumentError(
+				"wrong number of arguments (" + strconv.Itoa(len(args)) + ")",
+			))
+		}
+		return lang.Apply(fn.fn, fn.patched(args))
+	}
+}
+
+func (fn *nativeFnilFn) Invoke1(a interface{}) interface{} {
+	if fn.defaultCount != 1 {
+		fn.wrongArity(1)
+	}
+	return lang.Apply1(fn.fn, fn.defaultAt(0, a))
+}
+
+func (fn *nativeFnilFn) Invoke2(a, b interface{}) interface{} {
+	if fn.defaultCount < 1 {
+		fn.wrongArity(2)
+	}
+	return lang.Apply2(fn.fn, fn.defaultAt(0, a), fn.defaultAt(1, b))
+}
+
+func (fn *nativeFnilFn) Invoke3(a, b, c interface{}) interface{} {
+	if fn.defaultCount < 1 {
+		fn.wrongArity(3)
+	}
+	return lang.Apply3(
+		fn.fn,
+		fn.defaultAt(0, a),
+		fn.defaultAt(1, b),
+		fn.defaultAt(2, c),
+	)
+}
+
+func (fn *nativeFnilFn) Invoke4(a, b, c, d interface{}) interface{} {
+	return lang.Apply4(
+		fn.fn,
+		fn.defaultAt(0, a),
+		fn.defaultAt(1, b),
+		fn.defaultAt(2, c),
+		d,
+	)
+}
+
+func (fn *nativeFnilFn) ApplyTo(args lang.ISeq) interface{} {
+	values := make([]interface{}, 0, 4)
+	for ; args != nil; args = args.Next() {
+		values = append(values, args.First())
+	}
+	return fn.Invoke(values...)
+}
+
+func (fn *nativeFnilFn) Meta() lang.IPersistentMap { return fn.meta }
+
+func (fn *nativeFnilFn) WithMeta(meta lang.IPersistentMap) interface{} {
+	copy := *fn
+	copy.meta = meta
+	return &copy
+}
+
+func (*nativeFnilFn) IsFnValue() {}
+
+func (fn *nativeFnilFn) minimumArity() int {
+	if fn.defaultCount == 1 {
+		return 1
+	}
+	return 2
+}
+
+func (fn *nativeFnilFn) defaultAt(index int, value interface{}) interface{} {
+	if index < fn.defaultCount && lang.IsNil(value) {
+		return fn.defaults[index]
+	}
+	return value
+}
+
+func (fn *nativeFnilFn) patched(args []interface{}) []interface{} {
+	result := args
+	copied := false
+	for i := 0; i < len(args) && i < fn.defaultCount; i++ {
+		if !lang.IsNil(args[i]) {
+			continue
+		}
+		if !copied {
+			result = append([]interface{}(nil), args...)
+			copied = true
+		}
+		result[i] = fn.defaults[i]
+	}
+	return result
+}
+
+func (fn *nativeFnilFn) wrongArity(arity int) {
+	panic(lang.NewIllegalArgumentError(
+		"wrong number of arguments (" + strconv.Itoa(arity) + ")",
+	))
 }
 
 func (nativeCoreSubtract) Invoke1(a interface{}) interface{} {
@@ -953,6 +1107,9 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 			apply: core.FindInternedVar(lang.NewSymbol("apply")),
 		})
 	}
+	if fnil := core.FindInternedVar(lang.NewSymbol("fnil")); fnil != nil {
+		fnil.BindRoot(nativeCoreFnil{})
+	}
 	if require := core.FindInternedVar(lang.NewSymbol("require")); require != nil {
 		if fallback, ok := require.Get().(lang.IFn); ok {
 			require.BindRoot(nativeCoreRequire{
@@ -977,7 +1134,7 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 func recordOptimizableCoreRoots(core *lang.Namespace) {
 	recordDefaultCoreRoots(core,
 		"*", "+", "assoc", "atom", "cons", "conj", "count", "dec", "deref",
-		"empty?", "even?", "filter", "first", "get", "identity", "inc", "map",
+		"empty?", "even?", "filter", "first", "fnil", "get", "identity", "inc", "map",
 		"neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
 		"reduce", "reset!", "seq", "swap!", "take", "zero?",
 	)

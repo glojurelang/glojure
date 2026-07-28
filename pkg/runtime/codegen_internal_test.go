@@ -1100,6 +1100,63 @@ func TestDirectLinkingUsesCompilerOptions(t *testing.T) {
 	})
 }
 
+func TestGenerateOwnedMapReduceUsesSharedIRWithDirectLinking(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.owned-map-reduce"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn summarize [values]
+		  (reduce
+		    (fn [totals value]
+		      (-> totals
+		          (update-in [(:service value) :count] (fnil inc 0))
+		          (update-in [(:service value) :sum] (fnil + 0) (:n value))))
+		    {}
+		    values))`)
+
+	var output bytes.Buffer
+	if err := newGenerator(&output, true).Generate(ns); err != nil {
+		t.Fatalf("generate owned map reduce: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"runtime.ReduceOwnedMap(",
+		"runtime.UpdateOwnedMap3(",
+		"runtime.UpdateOwnedMap4(",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("owned map reduce omitted %q:\n%s", expected, generated)
+		}
+	}
+
+	output.Reset()
+	if err := newGenerator(&output, false).Generate(ns); err != nil {
+		t.Fatalf("generate non-direct owned map reduce: %v", err)
+	}
+	generated = output.String()
+	if strings.Contains(generated, "runtime.ReduceOwnedMap(") ||
+		strings.Contains(generated, "runtime.UpdateOwnedMap") {
+		t.Fatalf("owned map reduction ignored disabled direct linking:\n%s", generated)
+	}
+
+	updateIn := lang.NSCore.FindInternedVar(lang.NewSymbol("update-in"))
+	originalMeta := updateIn.Meta()
+	updateIn.SetMeta(originalMeta.Assoc(lang.KWRedef, true).(lang.IPersistentMap))
+	defer updateIn.SetMeta(originalMeta)
+	output.Reset()
+	if err := newGenerator(&output, true).Generate(ns); err != nil {
+		t.Fatalf("generate redefinable owned map reduce: %v", err)
+	}
+	if generated = output.String(); strings.Contains(
+		generated,
+		"runtime.ReduceOwnedMap(",
+	) {
+		t.Fatalf("owned map reduction bypassed ^:redef update-in:\n%s", generated)
+	}
+}
+
 func TestCoreDirectLinkingHonorsRedefMetadata(t *testing.T) {
 	identity := lang.NSCore.FindInternedVar(lang.NewSymbol("identity"))
 	originalMeta := identity.Meta()

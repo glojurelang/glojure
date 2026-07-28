@@ -368,6 +368,81 @@ func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
 	}
 }
 
+func TestTypedIRProvesOwnedMapReduceUpdateChain(t *testing.T) {
+	totals := lang.NewSymbol("totals")
+	value := lang.NewSymbol("value")
+	pathA := &ast.Node{
+		Op: ast.OpVector,
+		Sub: &ast.VectorNode{
+			Items: []*ast.Node{typedIRConst(lang.NewKeyword("a"))},
+		},
+	}
+	pathB := &ast.Node{
+		Op: ast.OpVector,
+		Sub: &ast.VectorNode{
+			Items: []*ast.Node{typedIRConst(lang.NewKeyword("b"))},
+		},
+	}
+	first := typedIRInvoke(
+		typedIRCoreVar("update-in"),
+		typedIRLocal(totals),
+		pathA,
+		typedIRVar(typedIRCoreVar("inc")),
+	)
+	second := typedIRInvoke(
+		typedIRCoreVar("update-in"),
+		first,
+		pathB,
+		typedIRVar(typedIRCoreVar("+")),
+		typedIRLocal(value),
+	)
+	reducer := &ast.Node{
+		Op: ast.OpFn,
+		Sub: &ast.FnNode{
+			MaxFixedArity: 2,
+			Methods: []*ast.Node{{
+				Op: ast.OpFnMethod,
+				Sub: &ast.FnMethodNode{
+					FixedArity: 2,
+					Params: []*ast.Node{
+						typedIRBinding(totals, nil),
+						typedIRBinding(value, nil),
+					},
+					Body: second,
+				},
+			}},
+		},
+	}
+	reduce := typedIRInvoke(
+		typedIRCoreVar("reduce"),
+		reducer,
+		&ast.Node{Op: ast.OpMap, Sub: &ast.MapNode{}},
+		&ast.Node{
+			Op:  ast.OpLocal,
+			Sub: &ast.LocalNode{Name: lang.NewSymbol("values")},
+		},
+	)
+
+	ir := BuildTypedIR(reduce)
+	if plan := ir.Facts(reduce).OwnedMapReduce; plan == nil {
+		t.Fatal("owned map reduction was not represented")
+	}
+	if !ir.Facts(first).OwnedMapUpdateIn ||
+		!ir.Facts(second).OwnedMapUpdateIn {
+		t.Fatal("owned update-in chain was not marked")
+	}
+
+	observer := lang.FindOrCreateNamespace(lang.NewSymbol("typed-ir-test")).
+		Intern(lang.NewSymbol("observe-map"))
+	method := reducer.Sub.(*ast.FnNode).
+		Methods[0].Sub.(*ast.FnMethodNode)
+	method.Body = typedIRInvoke(observer, typedIRLocal(totals))
+	ir = BuildTypedIR(reduce)
+	if plan := ir.Facts(reduce).OwnedMapReduce; plan != nil {
+		t.Fatalf("escaping reducer accumulator was marked owned: %#v", plan)
+	}
+}
+
 func typedIRConst(value any) *ast.Node {
 	return &ast.Node{
 		Op:  ast.OpConst,
