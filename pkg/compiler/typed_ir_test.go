@@ -726,6 +726,107 @@ func TestTypedIRAppliesGuardedCallSignatures(t *testing.T) {
 	}
 }
 
+func TestTypedIRChecksGuardSafetyInEvaluationOrder(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("typed-ir-guard-order"))
+	combine := ns.Intern(lang.NewSymbol("combine"))
+	unknown := ns.Intern(lang.NewSymbol("unknown"))
+	signature := IRCallSignature{
+		Params: []IRType{
+			{Kind: IRNil},
+			{Kind: IRFloat},
+			{Kind: IRFloat},
+		},
+		Result: IRType{Kind: IRFloat},
+	}
+	build := func(body *ast.Node) *TypedIR {
+		root := &ast.Node{
+			Op: ast.OpFn,
+			Sub: &ast.FnNode{
+				Methods: []*ast.Node{{
+					Op: ast.OpFnMethod,
+					Sub: &ast.FnMethodNode{
+						FixedArity: 0,
+						Body:       body,
+					},
+				}},
+			},
+		}
+		return BuildTypedIRWithOptions(root, TypedIROptions{
+			CallSignatures: map[*lang.Var][]IRCallSignature{
+				combine: {signature},
+			},
+		})
+	}
+	resolvedCall := func() *ast.Node {
+		return typedIRInvoke(
+			combine,
+			typedIRConst(nil),
+			typedIRConst(float64(1.25)),
+			typedIRConst(float64(2.5)),
+		)
+	}
+	unknownCall := func() *ast.Node {
+		return typedIRInvoke(unknown)
+	}
+	do := func(first, second *ast.Node) *ast.Node {
+		return &ast.Node{
+			Op: ast.OpDo,
+			Sub: &ast.DoNode{
+				Statements: []*ast.Node{first},
+				Ret:        second,
+			},
+		}
+	}
+
+	if ir := build(do(resolvedCall(), unknownCall())); !ir.GuardedCallsSafe() {
+		t.Fatal("an unknown call after the final resolved call blocked guarding")
+	}
+	if ir := build(do(unknownCall(), resolvedCall())); ir.GuardedCallsSafe() {
+		t.Fatal("an unknown call before a resolved call was accepted")
+	}
+	nested := &ast.Node{
+		Op: ast.OpFn,
+		Sub: &ast.FnNode{
+			Methods: []*ast.Node{{
+				Op: ast.OpFnMethod,
+				Sub: &ast.FnMethodNode{
+					FixedArity: 0,
+					Body:       resolvedCall(),
+				},
+			}},
+		},
+	}
+	if got := build(nested).ResolvedCallVars(); len(got) != 0 {
+		t.Fatalf("nested resolved calls escaped their function: %v", got)
+	}
+
+	loopID := lang.NewSymbol("guarded-loop")
+	loop := &ast.Node{
+		Op: ast.OpLoop,
+		Sub: &ast.LetNode{
+			LoopID: loopID,
+			Body: &ast.Node{
+				Op: ast.OpDo,
+				Sub: &ast.DoNode{
+					Statements: []*ast.Node{
+						resolvedCall(),
+						unknownCall(),
+					},
+					Ret: &ast.Node{
+						Op: ast.OpRecur,
+						Sub: &ast.RecurNode{
+							LoopID: loopID,
+						},
+					},
+				},
+			},
+		},
+	}
+	if ir := build(loop); ir.GuardedCallsSafe() {
+		t.Fatal("a call between resolved calls on loop iterations was accepted")
+	}
+}
+
 func TestTypedIRSeedsGuardedParameterTypes(t *testing.T) {
 	name := lang.NewSymbol("value")
 	param := typedIRBinding(name, nil)

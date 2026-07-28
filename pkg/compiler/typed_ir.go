@@ -332,7 +332,6 @@ type TypedIR struct {
 	bindings       map[*ast.Node]IRBindingFacts
 	callSignatures map[*lang.Var][]IRCallSignature
 	parameterTypes map[*lang.Symbol]IRType
-	resolvedCalls  map[*lang.Var]bool
 }
 
 func BuildTypedIR(root *ast.Node) *TypedIR {
@@ -349,7 +348,6 @@ func BuildTypedIRWithOptions(
 		bindings:       make(map[*ast.Node]IRBindingFacts),
 		callSignatures: options.CallSignatures,
 		parameterTypes: options.ParameterTypes,
-		resolvedCalls:  make(map[*lang.Var]bool),
 	}
 	ir.visit(root)
 	for {
@@ -364,11 +362,39 @@ func BuildTypedIRWithOptions(
 }
 
 func (ir *TypedIR) ResolvedCallVars() []*lang.Var {
-	if ir == nil || len(ir.resolvedCalls) == 0 {
+	if ir == nil || ir.root == nil {
 		return nil
 	}
-	result := make([]*lang.Var, 0, len(ir.resolvedCalls))
-	for vr := range ir.resolvedCalls {
+	vars := make(map[*lang.Var]struct{})
+	var collect func(*ast.Node, bool)
+	collect = func(node *ast.Node, root bool) {
+		if node == nil {
+			return
+		}
+		if node.Op == ast.OpFn {
+			if !root {
+				return
+			}
+			for _, methodNode := range node.Sub.(*ast.FnNode).Methods {
+				method := methodNode.Sub.(*ast.FnMethodNode)
+				collect(method.Body, false)
+			}
+			return
+		}
+		facts := ir.facts[node]
+		if facts.Signature != nil && facts.Call.Var != nil {
+			vars[facts.Call.Var] = struct{}{}
+		}
+		for _, child := range irChildren(node) {
+			collect(child, false)
+		}
+	}
+	collect(ir.root, true)
+	if len(vars) == 0 {
+		return nil
+	}
+	result := make([]*lang.Var, 0, len(vars))
+	for vr := range vars {
 		result = append(result, vr)
 	}
 	return result
@@ -495,38 +521,251 @@ func AnalyzeFixedVectorResult(root *ast.Node) *IRFixedVectorResultPlan {
 	}
 }
 
-// GuardedCallsSafe reports whether a function can select guarded call
-// targets once at entry without hiding an in-function mutation of those
-// targets. It is deliberately conservative; unsupported calls retain the
-// ordinary dynamic path.
+// GuardedCallsSafe reports whether every resolved call can use targets
+// selected by a guard at function entry. Potentially mutating work only
+// invalidates a resolved call when it can run before that call. Work after
+// the final resolved call is irrelevant. Loops remain deliberately
+// conservative because work later in one iteration can precede a resolved
+// call in the next iteration.
 func (ir *TypedIR) GuardedCallsSafe() bool {
-	if ir == nil {
+	if ir == nil || ir.root == nil {
 		return false
 	}
-	for node, facts := range ir.facts {
-		switch node.Op {
-		case ast.OpSetBang, ast.OpGo, ast.OpNew, ast.OpHostInterop:
-			return false
-		case ast.OpHostCall:
-			call := node.Sub.(*ast.HostCallNode)
-			if call.Target == nil || call.Target.Op != ast.OpConst {
-				return false
-			}
-			target := call.Target.Sub.(*ast.ConstNode)
-			if target.Value != lang.Numbers &&
-				(target.HostSymbol == nil ||
-					target.HostSymbol.String() !=
-						"github.com:glojurelang:glojure:pkg:lang.Numbers") {
-				return false
-			}
-		case ast.OpInvoke:
-			if facts.Signature == nil &&
-				!irGuardedCoreCallSafe(facts.Call) {
+	if ir.root.Op == ast.OpFn {
+		for _, methodNode := range ir.root.Sub.(*ast.FnNode).Methods {
+			method := methodNode.Sub.(*ast.FnMethodNode)
+			if _, safe := ir.guardedCallsSafeBefore(
+				method.Body,
+				false,
+			); !safe {
 				return false
 			}
 		}
+		return true
 	}
-	return true
+	_, safe := ir.guardedCallsSafeBefore(ir.root, false)
+	return safe
+}
+
+// guardedCallsSafeBefore walks evaluation order backwards. guardedAfter means
+// that a resolved call can execute later on the current path. The returned
+// boolean records whether a resolved call can execute before node.
+func (ir *TypedIR) guardedCallsSafeBefore(
+	node *ast.Node,
+	guardedAfter bool,
+) (guardedBefore bool, safe bool) {
+	if node == nil {
+		return guardedAfter, true
+	}
+	switch node.Op {
+	case ast.OpFn:
+		// Constructing a nested function does not execute its body. It will
+		// receive its own guarded specialization when generated.
+		return guardedAfter, true
+	case ast.OpFnMethod:
+		return ir.guardedCallsSafeBefore(
+			node.Sub.(*ast.FnMethodNode).Body,
+			guardedAfter,
+		)
+	case ast.OpLet:
+		let := node.Sub.(*ast.LetNode)
+		need, ok := ir.guardedCallsSafeBefore(let.Body, guardedAfter)
+		if !ok {
+			return false, false
+		}
+		for index := len(let.Bindings) - 1; index >= 0; index-- {
+			init := let.Bindings[index].Sub.(*ast.BindingNode).Init
+			need, ok = ir.guardedCallsSafeBefore(init, need)
+			if !ok {
+				return false, false
+			}
+		}
+		return need, true
+	case ast.OpLoop:
+		return ir.guardedLoopCallsSafeBefore(
+			node.Sub.(*ast.LetNode),
+			guardedAfter,
+		)
+	case ast.OpDo:
+		do := node.Sub.(*ast.DoNode)
+		need, ok := ir.guardedCallsSafeBefore(do.Ret, guardedAfter)
+		if !ok {
+			return false, false
+		}
+		for index := len(do.Statements) - 1; index >= 0; index-- {
+			need, ok = ir.guardedCallsSafeBefore(
+				do.Statements[index],
+				need,
+			)
+			if !ok {
+				return false, false
+			}
+		}
+		return need, true
+	case ast.OpIf:
+		conditional := node.Sub.(*ast.IfNode)
+		thenNeed, ok := ir.guardedCallsSafeBefore(
+			conditional.Then,
+			guardedAfter,
+		)
+		if !ok {
+			return false, false
+		}
+		elseNeed, ok := ir.guardedCallsSafeBefore(
+			conditional.Else,
+			guardedAfter,
+		)
+		if !ok {
+			return false, false
+		}
+		return ir.guardedCallsSafeBefore(
+			conditional.Test,
+			thenNeed || elseNeed,
+		)
+	case ast.OpCase:
+		caseNode := node.Sub.(*ast.CaseNode)
+		branchNeed, ok := ir.guardedCallsSafeBefore(
+			caseNode.Default,
+			guardedAfter,
+		)
+		if !ok {
+			return false, false
+		}
+		for _, entry := range caseNode.Entries {
+			resultNeed, resultOK := ir.guardedCallsSafeBefore(
+				entry.ResultExpr,
+				guardedAfter,
+			)
+			if !resultOK {
+				return false, false
+			}
+			branchNeed = branchNeed || resultNeed
+		}
+		return ir.guardedCallsSafeBefore(caseNode.Test, branchNeed)
+	case ast.OpTry:
+		tryNode := node.Sub.(*ast.TryNode)
+		need, ok := ir.guardedCallsSafeBefore(
+			tryNode.Finally,
+			guardedAfter,
+		)
+		if !ok {
+			return false, false
+		}
+		for _, catchNode := range tryNode.Catches {
+			catch := catchNode.Sub.(*ast.CatchNode)
+			catchNeed, catchOK := ir.guardedCallsSafeBefore(
+				catch.Body,
+				need,
+			)
+			if !catchOK {
+				return false, false
+			}
+			need = need || catchNeed
+		}
+		return ir.guardedCallsSafeBefore(tryNode.Body, need)
+	}
+
+	need := guardedAfter
+	facts := ir.facts[node]
+	if facts.Signature != nil {
+		need = true
+	} else if ir.guardedCallUnsafe(node, facts) && need {
+		return false, false
+	}
+	children := irGuardedEvaluationChildren(node)
+	for index := len(children) - 1; index >= 0; index-- {
+		var ok bool
+		need, ok = ir.guardedCallsSafeBefore(children[index], need)
+		if !ok {
+			return false, false
+		}
+	}
+	return need, true
+}
+
+func (ir *TypedIR) guardedLoopCallsSafeBefore(
+	loop *ast.LetNode,
+	guardedAfter bool,
+) (bool, bool) {
+	bodyGuarded, bodyUnsafe := ir.guardedLoopContents(loop.Body)
+	if bodyGuarded && bodyUnsafe || bodyUnsafe && guardedAfter {
+		return false, false
+	}
+	need := guardedAfter || bodyGuarded
+	for index := len(loop.Bindings) - 1; index >= 0; index-- {
+		init := loop.Bindings[index].Sub.(*ast.BindingNode).Init
+		var ok bool
+		need, ok = ir.guardedCallsSafeBefore(init, need)
+		if !ok {
+			return false, false
+		}
+	}
+	return need, true
+}
+
+func (ir *TypedIR) guardedLoopContents(node *ast.Node) (
+	guarded bool,
+	unsafe bool,
+) {
+	if node == nil || node.Op == ast.OpFn {
+		return false, false
+	}
+	facts := ir.facts[node]
+	guarded = facts.Signature != nil
+	unsafe = facts.Signature == nil && ir.guardedCallUnsafe(node, facts)
+	for _, child := range irChildren(node) {
+		childGuarded, childUnsafe := ir.guardedLoopContents(child)
+		guarded = guarded || childGuarded
+		unsafe = unsafe || childUnsafe
+	}
+	return guarded, unsafe
+}
+
+func (ir *TypedIR) guardedCallUnsafe(node *ast.Node, facts IRFacts) bool {
+	switch node.Op {
+	case ast.OpDef, ast.OpSetBang, ast.OpGo, ast.OpNew, ast.OpHostInterop:
+		return true
+	case ast.OpHostCall:
+		call := node.Sub.(*ast.HostCallNode)
+		if call.Target == nil || call.Target.Op != ast.OpConst {
+			return true
+		}
+		target := call.Target.Sub.(*ast.ConstNode)
+		return target.Value != lang.Numbers &&
+			(target.HostSymbol == nil ||
+				target.HostSymbol.String() !=
+					"github.com:glojurelang:glojure:pkg:lang.Numbers")
+	case ast.OpInvoke:
+		return facts.Signature == nil &&
+			!irGuardedCoreCallSafe(facts.Call)
+	default:
+		return false
+	}
+}
+
+func irGuardedEvaluationChildren(node *ast.Node) []*ast.Node {
+	if node == nil {
+		return nil
+	}
+	switch node.Op {
+	case ast.OpMap:
+		m := node.Sub.(*ast.MapNode)
+		result := make([]*ast.Node, 0, len(m.Keys)+len(m.Vals))
+		for index := range m.Keys {
+			result = append(result, m.Keys[index], m.Vals[index])
+		}
+		return result
+	case ast.OpAssoc:
+		assoc := node.Sub.(*ast.AssocNode)
+		result := make([]*ast.Node, 0, 1+2*len(assoc.Entries))
+		result = append(result, assoc.Target)
+		for _, entry := range assoc.Entries {
+			result = append(result, entry.Key, entry.Val)
+		}
+		return result
+	default:
+		return irChildren(node)
+	}
 }
 
 // irGuardedCoreCallSafe identifies calls which cannot replace a guarded
@@ -695,7 +934,6 @@ func (ir *TypedIR) refineTypes(node *ast.Node) bool {
 		); signature != nil {
 			typ = signature.Result
 			facts.Signature = signature
-			ir.resolvedCalls[facts.Call.Var] = true
 		} else {
 			facts.Signature = nil
 		}
@@ -898,7 +1136,6 @@ func (ir *TypedIR) inferInvoke(node *ast.Node, facts *IRFacts) {
 	if signature := ir.resolveCallSignature(invoke); signature != nil {
 		facts.Type = signature.Result
 		facts.Signature = signature
-		ir.resolvedCalls[vr] = true
 	}
 
 	if namespace == "clojure.string" {

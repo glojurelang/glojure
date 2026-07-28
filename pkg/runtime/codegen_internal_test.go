@@ -666,6 +666,22 @@ func TestGenerateDirectProtocolLinkCanBeDisabled(t *testing.T) {
 		    (if (= i 100)
 		      total
 		      (recur (inc i) (combine nil total i)))))
+		(defn combine-float-loop []
+		  (let [result
+		        (loop [i 0
+		               value 0.25
+		               checksum 0.0]
+		          (if (= i 100)
+		            [value checksum]
+		            (let [input (* 0.000001 (- (mod i 20) 10))
+		                  next-value (combine nil value input)]
+		              (recur (inc i)
+		                     next-value
+		                     (+ checksum next-value)))))
+		        value (nth result 0)
+		        checksum (nth result 1)]
+		    [(long (* 1000000.0 value))
+		     (long checksum)]))
 		(defn mutate-and-call []
 		  (extend-protocol Combine
 		    nil
@@ -687,12 +703,15 @@ func TestGenerateDirectProtocolLinkCanBeDisabled(t *testing.T) {
 	if got := strings.Count(
 		generated,
 		"aotProtocolFn0.ProtocolGeneration() == aotProtocolGeneration0",
-	); got != 1 {
+	); got != 2 {
 		t.Fatalf(
-			"generated %d guarded protocol regions, want only the pure loop:\n%s",
+			"generated %d guarded protocol regions, want both pure loops:\n%s",
 			got,
 			generated,
 		)
+	}
+	if !strings.Contains(generated, "aotProtocolMethod3For0(nil") {
+		t.Fatalf("float protocol loop retained boxed dispatch:\n%s", generated)
 	}
 
 	output.Reset()
