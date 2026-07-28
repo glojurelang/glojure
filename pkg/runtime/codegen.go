@@ -37,16 +37,18 @@ type varScope struct {
 	names             map[string]string // maps Clojure names to Go variable names
 	localAtoms        map[string]bool   // local atoms proven not to escape
 	localStringStacks map[string]bool   // confined string stacks
+	ownedStringParts  map[string]bool   // private loop-carried str arguments
 	ownedMaps         map[string]bool   // uniquely owned loop-carried maps
 	localTypes        map[string]compiler.IRValueKind
 }
 
 // recurContext represents the context for a loop/recur form
 type recurContext struct {
-	loopID   *lang.Symbol // The loop ID to match recur with its loop
-	bindings []string     // Go variable names for loop bindings (in order)
-	types    []compiler.IRValueKind
-	useGoto  bool // Whether to use Go's "goto" for recur
+	loopID           *lang.Symbol // The loop ID to match recur with its loop
+	bindings         []string     // Go variable names for loop bindings (in order)
+	types            []compiler.IRValueKind
+	ownedStringParts []bool
+	useGoto          bool // Whether to use Go's "goto" for recur
 }
 
 // liftedKey is a composite key for deduplicating lifted values
@@ -232,9 +234,13 @@ func newGenerator(w io.Writer, directLink bool) *Generator {
 		originalWriter: w,
 		currentWriter:  w,
 		varScopes: []varScope{{
-			nextNum:    0,
-			names:      make(map[string]string),
-			localTypes: make(map[string]compiler.IRValueKind),
+			nextNum:           0,
+			names:             make(map[string]string),
+			localAtoms:        make(map[string]bool),
+			localStringStacks: make(map[string]bool),
+			ownedStringParts:  make(map[string]bool),
+			ownedMaps:         make(map[string]bool),
+			localTypes:        make(map[string]compiler.IRValueKind),
 		}},
 		recurStack:             []recurContext{},
 		imports:                make(map[string]string),
@@ -1714,7 +1720,7 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 	if methodNode.LoopID != nil && nodeRecurs(methodNode.Body, methodNode.LoopID.Name()) {
 		g.writef("recur_%s:\n", methodNode.LoopID.Name())
 
-		g.pushRecurContext(methodNode.LoopID, paramVars, nil, true)
+		g.pushRecurContext(methodNode.LoopID, paramVars, nil, nil, true)
 		defer g.popRecurContext()
 	}
 
@@ -1756,7 +1762,7 @@ func (g *Generator) generateFnMethodSplit(
 	if methodNode.LoopID != nil && nodeRecurs(methodNode.Body, methodNode.LoopID.Name()) {
 		g.writef("recur_%s:\n", methodNode.LoopID.Name())
 
-		g.pushRecurContext(methodNode.LoopID, paramVars, nil, true)
+		g.pushRecurContext(methodNode.LoopID, paramVars, nil, nil, true)
 		defer g.popRecurContext()
 	}
 
@@ -1794,7 +1800,7 @@ func (g *Generator) generateFnMethodFixed(methodNode *ast.FnMethodNode, paramVar
 	if methodNode.LoopID != nil && nodeRecurs(methodNode.Body, methodNode.LoopID.Name()) {
 		g.writef("recur_%s:\n", methodNode.LoopID.Name())
 
-		g.pushRecurContext(methodNode.LoopID, paramVars, nil, true)
+		g.pushRecurContext(methodNode.LoopID, paramVars, nil, nil, true)
 		defer g.popRecurContext()
 	}
 
@@ -2150,6 +2156,9 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 	if result, ok := g.generateIRStringStack(node); ok {
 		return result
 	}
+	if result, ok := g.generateIROwnedStringParts(node); ok {
+		return result
+	}
 	if result, ok := g.generateLocalAtomInvoke(invokeNode); ok {
 		return result
 	}
@@ -2471,10 +2480,19 @@ func (g *Generator) generateDo(node *ast.Node) string {
 		}
 		stmtResult := g.generateASTNode(stmt)
 		g.writeAssign("_", stmtResult) // Prevent unused variable warning
+		if g.currentIR != nil &&
+			g.currentIR.Facts(stmt).NeverReturns {
+			return ""
+		}
 	}
 
 	// Return the final expression
-	return g.generateASTNode(doNode.Ret)
+	result := g.generateASTNode(doNode.Ret)
+	if g.currentIR != nil &&
+		g.currentIR.Facts(doNode.Ret).NeverReturns {
+		return ""
+	}
+	return result
 }
 
 // generateIf generates code for an If node
@@ -2483,29 +2501,42 @@ func (g *Generator) generateIf(node *ast.Node) string {
 
 	// Allocate result variable
 	resultVar := g.allocateTempVar()
+	neverReturns := g.currentIR != nil &&
+		g.currentIR.Facts(node).NeverReturns
 
 	// Emit the if statement to g.w
 	resultType := "any"
-	if g.currentOwnedVector != nil {
+	if g.irHasInt64Representation(node) {
+		resultType = "int64"
+	} else if g.currentOwnedVector != nil {
 		resultType = ownedVectorAOTGoType(g.currentOwnedVector.values[node])
 	} else if g.currentVector != nil {
 		resultType = vectorAOTGoType(g.currentVector.values[node])
 	}
-	g.writef("var %s %s\n", resultVar, resultType)
+	if !neverReturns {
+		g.writef("var %s %s\n", resultVar, resultType)
+	}
 	testExpr := g.generateTruthyTest(ifNode.Test)
 	g.writef("if %s {\n", testExpr)
 	thenExpr := g.generateASTNode(ifNode.Then)
-	g.writeAssign(resultVar, thenExpr)
+	if !neverReturns {
+		g.writeAssign(resultVar, thenExpr)
+	}
 	g.writef("} else {\n")
 	if ifNode.Else != nil {
 		elsExpr := g.generateASTNode(ifNode.Else)
-		g.writeAssign(resultVar, elsExpr)
-	} else {
+		if !neverReturns {
+			g.writeAssign(resultVar, elsExpr)
+		}
+	} else if !neverReturns {
 		g.writef("  %s = nil\n", resultVar)
 	}
 	g.writef("}\n")
 
 	// Return the r-value
+	if neverReturns {
+		return ""
+	}
 	return resultVar
 }
 
@@ -2554,9 +2585,17 @@ func (g *Generator) generateCase(node *ast.Node) string {
 
 	testExpr := g.generateASTNode(caseNode.Test)
 	resultVar := g.allocateTempVar()
+	neverReturns := g.currentIR != nil &&
+		g.currentIR.Facts(node).NeverReturns
 
 	g.writef("// case\n")
-	g.writef("var %s any\n", resultVar)
+	resultType := "any"
+	if g.irHasInt64Representation(node) {
+		resultType = "int64"
+	}
+	if !neverReturns {
+		g.writef("var %s %s\n", resultVar, resultType)
+	}
 	// implement as if-else chain; evaluation of case clauses is order-dependent
 	// case tests are evaluated lazily, so we need to generate them in the if conditions
 	// moreover, the text expressions may produce multiple statements, so we need to generate them inline
@@ -2680,6 +2719,9 @@ func (g *Generator) generateCase(node *ast.Node) string {
 		g.writef("}\n")
 	}
 
+	if neverReturns {
+		return ""
+	}
 	return resultVar
 }
 
@@ -2689,13 +2731,19 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 
 	// Push a new variable scope for the let bindings
 	resultId := g.allocateTempVar()
+	neverReturns := g.currentIR != nil &&
+		g.currentIR.Facts(node).NeverReturns
 	resultType := "any"
-	if g.currentOwnedVector != nil {
+	if g.irHasInt64Representation(node) {
+		resultType = "int64"
+	} else if g.currentOwnedVector != nil {
 		resultType = ownedVectorAOTGoType(g.currentOwnedVector.values[node])
 	} else if g.currentVector != nil {
 		resultType = vectorAOTGoType(g.currentVector.values[node])
 	}
-	g.writef("var %s %s\n", resultId, resultType)
+	if !neverReturns {
+		g.writef("var %s %s\n", resultId, resultType)
+	}
 
 	g.writef("{ // let\n")
 	g.pushVarScope()
@@ -2707,13 +2755,15 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	// Collect binding variable names for recur context if this is a loop
 	var bindingVars []string
 	var bindingTypes []compiler.IRValueKind
+	var bindingOwnedStringParts []bool
 	if isLoop {
 		bindingVars = make([]string, 0, len(letNode.Bindings))
 		bindingTypes = make([]compiler.IRValueKind, 0, len(letNode.Bindings))
+		bindingOwnedStringParts = make([]bool, len(letNode.Bindings))
 	}
 
 	// Emit bindings directly to g.w
-	for _, binding := range letNode.Bindings {
+	for bindingIndex, binding := range letNode.Bindings {
 		bindingNode := binding.Sub.(*ast.BindingNode)
 		name := bindingNode.Name.Name()
 		init := bindingNode.Init
@@ -2722,12 +2772,27 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		g.writef("// let binding \"%s\"\n", name)
 
 		// Generate initialization code
+		if g.currentIR.Facts(init).NeverReturns {
+			g.generateASTNode(init)
+			return ""
+		}
 		bindingFacts := g.currentIR.BindingFacts(binding)
 		if bindingFacts.StringStack {
 			varName := g.allocateLocal(name)
 			g.writef("var %s []string\n", varName)
 			g.markLocalStringStack(name)
 			g.writeAssign("_", varName)
+			continue
+		}
+		if isLoop && bindingFacts.OwnedStringParts &&
+			g.irOwnedStringPartsEnabled() {
+			varName := g.allocateLocal(name)
+			g.writef("var %s []any\n", varName)
+			g.markOwnedStringParts(name)
+			g.writeAssign("_", varName)
+			bindingVars = append(bindingVars, varName)
+			bindingTypes = append(bindingTypes, compiler.IRDynamic)
+			bindingOwnedStringParts[bindingIndex] = true
 			continue
 		}
 		if isLoop && bindingFacts.OwnedMap {
@@ -2875,6 +2940,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			letNode.LoopID,
 			bindingVars,
 			bindingTypes,
+			bindingOwnedStringParts,
 			false,
 		)
 		defer g.popRecurContext()
@@ -2885,11 +2951,16 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	// Return the body expression (r-value)
 	result := g.generateASTNode(letNode.Body)
 	if isLoop {
-		g.writeAssign(resultId, result)
-		g.writef("  break\n") // Break out of the loop after the body
+		if !neverReturns {
+			g.writeAssign(resultId, result)
+			g.writef("  break\n") // Break out of the loop after the body
+		}
 		g.writef("}\n")
-	} else {
+	} else if !neverReturns {
 		g.writeAssign(resultId, result)
+	}
+	if neverReturns {
+		return ""
 	}
 	return resultId
 }
@@ -2960,7 +3031,13 @@ func (g *Generator) generateRecur(node *ast.Node) string {
 		tempVar := g.allocateTempVar()
 		tempVars[i] = tempVar
 		exprCode := g.generateASTNode(expr)
-		if ctx.types[i] == compiler.IRInt {
+		if ctx.ownedStringParts[i] {
+			g.writef(
+				"var %s []any = %s\n",
+				tempVar,
+				exprCode,
+			)
+		} else if ctx.types[i] == compiler.IRInt {
 			g.writef(
 				"var %s int64 = %s\n",
 				tempVar,
@@ -4012,6 +4089,7 @@ func (g *Generator) pushVarScope() {
 		names:             make(map[string]string),
 		localAtoms:        make(map[string]bool),
 		localStringStacks: make(map[string]bool),
+		ownedStringParts:  make(map[string]bool),
 		ownedMaps:         make(map[string]bool),
 		localTypes:        make(map[string]compiler.IRValueKind),
 	})
@@ -4149,6 +4227,20 @@ func (g *Generator) getLocalStringStack(name string) (string, bool) {
 	return "", false
 }
 
+func (g *Generator) markOwnedStringParts(name string) {
+	g.varScopes[len(g.varScopes)-1].ownedStringParts[name] = true
+}
+
+func (g *Generator) getOwnedStringParts(name string) (string, bool) {
+	for i := len(g.varScopes) - 1; i >= 0; i-- {
+		scope := &g.varScopes[i]
+		if varName, ok := scope.names[name]; ok {
+			return varName, scope.ownedStringParts[name]
+		}
+	}
+	return "", false
+}
+
 func (g *Generator) markOwnedMap(name string) {
 	g.varScopes[len(g.varScopes)-1].ownedMaps[name] = true
 }
@@ -4248,16 +4340,21 @@ func (g *Generator) pushRecurContext(
 	loopID *lang.Symbol,
 	bindings []string,
 	types []compiler.IRValueKind,
+	ownedStringParts []bool,
 	useGoto bool,
 ) {
 	if len(types) == 0 {
 		types = make([]compiler.IRValueKind, len(bindings))
 	}
+	if len(ownedStringParts) == 0 {
+		ownedStringParts = make([]bool, len(bindings))
+	}
 	g.recurStack = append(g.recurStack, recurContext{
-		loopID:   loopID,
-		bindings: bindings,
-		types:    types,
-		useGoto:  useGoto,
+		loopID:           loopID,
+		bindings:         bindings,
+		types:            types,
+		ownedStringParts: ownedStringParts,
+		useGoto:          useGoto,
 	})
 }
 

@@ -68,7 +68,7 @@ func (g *Generator) generateAOTInlineIndexedPipeline(
 	plan *compiler.IRPipelinePlan,
 ) (string, bool) {
 	if !g.directLink || invoke == nil || plan == nil ||
-		!aotOwnedMapVarCanDirectLink(plan.ConsumerVar) {
+		!aotVarCanDirectLink(plan.ConsumerVar) {
 		return "", false
 	}
 	target := g.aotExternalInvokeTarget(invoke)

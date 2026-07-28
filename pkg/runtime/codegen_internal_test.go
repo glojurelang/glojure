@@ -1299,6 +1299,88 @@ func TestGenerateTypedIRDoesNotFuseNonStringStackValues(t *testing.T) {
 	}
 }
 
+func TestGenerateOwnedLoopStringParts(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.owned-string-parts"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn concatenate [values]
+		  (loop [remaining (seq values)
+		         parts []]
+		    (if remaining
+		      (recur (next remaining)
+		             (conj parts (first remaining)))
+		      (apply str parts))))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate owned string parts: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"[]any",
+		" = append(",
+		"runtime.ConcatStringParts(",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("owned string-parts lowering omitted %q:\n%s",
+				expected, generated)
+		}
+	}
+
+	var fallback bytes.Buffer
+	if err := newGenerator(&fallback, false).Generate(ns); err != nil {
+		t.Fatalf("generate string parts without direct linking: %v", err)
+	}
+	if strings.Contains(fallback.String(), "runtime.ConcatStringParts(") {
+		t.Fatalf(
+			"disabled direct linking retained owned string parts:\n%s",
+			fallback.String(),
+		)
+	}
+}
+
+func TestGenerateUniformIntegerCaseWithPrimitiveResult(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.primitive-case-result"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn weighted-sum [values]
+		  (loop [remaining (seq values)
+		         total 0]
+		    (if remaining
+		      (recur (next remaining)
+		             (+ total
+		                (case (first remaining)
+		                  \A 1
+		                  \C 2
+		                  \G 3
+		                  \T 4)))
+		      total)))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate primitive case result: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "CheckedAddInt64(") {
+		t.Fatalf("uniform integer case did not preserve primitive arithmetic:\n%s",
+			generated)
+	}
+	if strings.Contains(generated, "lang.Numbers.Add(") {
+		t.Fatalf("uniform integer case retained boxed arithmetic:\n%s",
+			generated)
+	}
+}
+
 func TestGenerateSeqTruthinessWithoutSequenceAllocation(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.seq-truthiness"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)

@@ -131,6 +131,18 @@ type IRStringJoinPlan struct {
 	Stack     *lang.Symbol
 }
 
+// IROwnedStringPartsAppendPlan records a conj into a loop-carried vector
+// whose only observable consumer is (apply str ...). The backing vector can
+// be replaced by an append-only private parts buffer.
+type IROwnedStringPartsAppendPlan struct {
+	Parts *lang.Symbol
+	Value *ast.Node
+}
+
+type IROwnedStringPartsFinishPlan struct {
+	Parts *lang.Symbol
+}
+
 // IROwnedMapReducePlan represents a reduce whose inline callback carries one
 // map accumulator through a chain of update-in calls without exposing any
 // intermediate map identity.
@@ -216,17 +228,23 @@ type IRPipelinePlan struct {
 }
 
 type IRFacts struct {
-	Type      IRType
-	Effects   IREffect
-	Escape    IREscape
-	Shape     IRShape
-	Call      IRCall
-	Signature *IRCallSignature
-	GetIn     *IRGetInPlan
-	Swap      *IRSwapPlan
-	Append    *IRStackAppendPlan
-	Join      *IRStringJoinPlan
-	Pipeline  *IRPipelinePlan
+	Type    IRType
+	Effects IREffect
+	// NeverReturns means evaluating this expression cannot produce a value
+	// for its enclosing expression. Throw and recur are the primitive cases;
+	// compound control flow propagates the fact conservatively.
+	NeverReturns      bool
+	Escape            IREscape
+	Shape             IRShape
+	Call              IRCall
+	Signature         *IRCallSignature
+	GetIn             *IRGetInPlan
+	Swap              *IRSwapPlan
+	Append            *IRStackAppendPlan
+	Join              *IRStringJoinPlan
+	StringPartsAppend *IROwnedStringPartsAppendPlan
+	StringPartsFinish *IROwnedStringPartsFinishPlan
+	Pipeline          *IRPipelinePlan
 
 	OwnedMapReduce *IROwnedMapReducePlan
 
@@ -253,11 +271,12 @@ type IRFacts struct {
 }
 
 type IRBindingFacts struct {
-	Escape       IREscape
-	AtomInit     *ast.Node
-	StringStack  bool
-	OwnedMap     bool
-	OwnedMapMode IROwnedMapMode
+	Escape           IREscape
+	AtomInit         *ast.Node
+	StringStack      bool
+	OwnedStringParts bool
+	OwnedMap         bool
+	OwnedMapMode     IROwnedMapMode
 	// StableType is a representation-relevant type proved to hold at loop
 	// entry and at every recur edge for this binding.
 	StableType IRType
@@ -473,19 +492,12 @@ func (ir *TypedIR) refineTypes(node *ast.Node) bool {
 		typ = ir.facts[node.Sub.(*ast.LetNode).Body].Type
 	case ast.OpIf:
 		ifNode := node.Sub.(*ast.IfNode)
-		thenType := ir.facts[ifNode.Then].Type
-		elseType := ir.facts[ifNode.Else].Type
-		if thenType.Kind == elseType.Kind {
-			goType := thenType.GoType
-			if goType != elseType.GoType {
-				goType = nil
-			}
-			typ = IRType{
-				Kind:     thenType.Kind,
-				Nullable: thenType.Nullable || elseType.Nullable,
-				GoType:   goType,
-			}
-		}
+		typ = irJoinBranchTypes(
+			ir.facts[ifNode.Then],
+			ir.facts[ifNode.Else],
+		)
+	case ast.OpCase:
+		typ = ir.caseResultType(node.Sub.(*ast.CaseNode))
 	case ast.OpAssoc:
 		if ir.facts[node.Sub.(*ast.AssocNode).Target].Type.Kind == IRMap {
 			typ = IRType{Kind: IRMap}
@@ -632,24 +644,41 @@ func (ir *TypedIR) visit(node *ast.Node) {
 		facts.Type = IRType{Kind: IRFunction}
 		facts.Effects |= IREffectAllocate
 	case ast.OpDo:
-		facts.Type = ir.facts[node.Sub.(*ast.DoNode).Ret].Type
+		do := node.Sub.(*ast.DoNode)
+		facts.Type = ir.facts[do.Ret].Type
+		for _, statement := range do.Statements {
+			facts.NeverReturns = facts.NeverReturns ||
+				ir.facts[statement].NeverReturns
+		}
+		facts.NeverReturns = facts.NeverReturns ||
+			ir.facts[do.Ret].NeverReturns
 	case ast.OpLet, ast.OpLoop:
-		facts.Type = ir.facts[node.Sub.(*ast.LetNode).Body].Type
+		let := node.Sub.(*ast.LetNode)
+		facts.Type = ir.facts[let.Body].Type
+		for _, binding := range let.Bindings {
+			init := binding.Sub.(*ast.BindingNode).Init
+			facts.NeverReturns = facts.NeverReturns ||
+				ir.facts[init].NeverReturns
+		}
+		facts.NeverReturns = facts.NeverReturns ||
+			ir.facts[let.Body].NeverReturns
 	case ast.OpIf:
 		ifNode := node.Sub.(*ast.IfNode)
-		thenType := ir.facts[ifNode.Then].Type
-		elseType := ir.facts[ifNode.Else].Type
-		if thenType.Kind == elseType.Kind {
-			goType := thenType.GoType
-			if goType != elseType.GoType {
-				goType = nil
-			}
-			facts.Type = IRType{
-				Kind:     thenType.Kind,
-				Nullable: thenType.Nullable || elseType.Nullable,
-				GoType:   goType,
-			}
-		}
+		facts.Type = irJoinBranchTypes(
+			ir.facts[ifNode.Then],
+			ir.facts[ifNode.Else],
+		)
+		facts.NeverReturns = ir.facts[ifNode.Then].NeverReturns &&
+			ifNode.Else != nil && ir.facts[ifNode.Else].NeverReturns
+	case ast.OpCase:
+		caseNode := node.Sub.(*ast.CaseNode)
+		facts.Type = ir.caseResultType(caseNode)
+		facts.NeverReturns = ir.caseNeverReturns(caseNode)
+	case ast.OpThrow:
+		facts.NeverReturns = true
+		facts.Effects |= IREffectMayThrow
+	case ast.OpRecur:
+		facts.NeverReturns = true
 	case ast.OpHostCall:
 		if inferred, ok := irResolvedCallType(
 			node.Sub.(*ast.HostCallNode).ResolvedMethod,
@@ -847,6 +876,13 @@ func (ir *TypedIR) analyzeBindings(node *ast.Node) {
 			if ir.analyzeStringStack(binding, let.Body) {
 				result.Escape = IRDoesNotEscape
 				result.StringStack = true
+			}
+			if node.Op == ast.OpLoop {
+				result.OwnedStringParts =
+					ir.analyzeOwnedStringParts(binding, i, let)
+			}
+			if result.OwnedStringParts {
+				result.Escape = IRDoesNotEscape
 			}
 			if node.Op == ast.OpLoop {
 				result.OwnedMapMode = ir.analyzeOwnedMap(binding, i, let)
@@ -1155,6 +1191,59 @@ func irConstType(value any) IRType {
 	default:
 		return IRType{Kind: IRDynamic, Nullable: true}
 	}
+}
+
+func irJoinTypes(types ...IRType) IRType {
+	if len(types) == 0 {
+		return IRType{Kind: IRDynamic, Nullable: true}
+	}
+	result := types[0]
+	for _, typ := range types[1:] {
+		if result.Kind != typ.Kind {
+			return IRType{Kind: IRDynamic, Nullable: true}
+		}
+		result.Nullable = result.Nullable || typ.Nullable
+		if result.GoType != typ.GoType {
+			result.GoType = nil
+		}
+	}
+	return result
+}
+
+func irJoinBranchTypes(branches ...IRFacts) IRType {
+	types := make([]IRType, 0, len(branches))
+	for _, branch := range branches {
+		if !branch.NeverReturns {
+			types = append(types, branch.Type)
+		}
+	}
+	return irJoinTypes(types...)
+}
+
+func (ir *TypedIR) caseResultType(node *ast.CaseNode) IRType {
+	if node == nil || len(node.Entries) == 0 {
+		return IRType{Kind: IRDynamic, Nullable: true}
+	}
+	branches := make([]IRFacts, 0, len(node.Entries)+1)
+	for _, entry := range node.Entries {
+		branches = append(branches, ir.facts[entry.ResultExpr])
+	}
+	if node.Default != nil {
+		branches = append(branches, ir.facts[node.Default])
+	}
+	return irJoinBranchTypes(branches...)
+}
+
+func (ir *TypedIR) caseNeverReturns(node *ast.CaseNode) bool {
+	if node == nil || len(node.Entries) == 0 {
+		return false
+	}
+	for _, entry := range node.Entries {
+		if !ir.facts[entry.ResultExpr].NeverReturns {
+			return false
+		}
+	}
+	return node.Default == nil || ir.facts[node.Default].NeverReturns
 }
 
 func irResolvedCallType(callable any) (IRType, bool) {

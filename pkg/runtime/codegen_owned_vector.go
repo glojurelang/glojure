@@ -467,7 +467,7 @@ func ownedVectorCoreVarAvailable(invoke *ast.InvokeNode) bool {
 		return false
 	}
 	vr := invoke.Fn.Sub.(*ast.VarNode).Var
-	return aotOwnedMapVarCanDirectLink(vr) && IsDefaultCoreVar(vr)
+	return aotVarCanDirectLink(vr) && IsDefaultCoreVar(vr)
 }
 
 func (a *ownedVectorAOTAnalyzer) ownedCallee(

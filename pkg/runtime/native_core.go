@@ -1133,10 +1133,10 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 
 func recordOptimizableCoreRoots(core *lang.Namespace) {
 	recordDefaultCoreRoots(core,
-		"*", "+", "assoc", "assoc-in", "atom", "cons", "conj", "count", "dec", "deref",
+		"*", "+", "apply", "assoc", "assoc-in", "atom", "cons", "conj", "count", "dec", "deref",
 		"empty?", "even?", "filter", "first", "fnil", "get", "identity", "inc", "map",
 		"mapv", "neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
-		"reduce", "reset!", "seq", "swap!", "take", "zero?",
+		"reduce", "reset!", "seq", "str", "swap!", "take", "zero?",
 	)
 }
 

@@ -330,6 +330,43 @@ func TestTypedIRProvesStableLoopBindingTypes(t *testing.T) {
 	}
 }
 
+func TestTypedIRJoinsUniformCaseResultTypes(t *testing.T) {
+	caseNode := &ast.Node{
+		Op: ast.OpCase,
+		Sub: &ast.CaseNode{
+			Test:    typedIRConst(int64(0)),
+			Default: typedIRConst(int64(3)),
+			Entries: []ast.CaseEntry{
+				{Key: 0, ResultExpr: typedIRConst(int64(1))},
+				{Key: 1, ResultExpr: typedIRConst(int64(2))},
+			},
+		},
+	}
+	if got := BuildTypedIR(caseNode).Facts(caseNode).Type.Kind; got != IRInt {
+		t.Fatalf("uniform case result type = %v, want int", got)
+	}
+
+	throwNode := &ast.Node{
+		Op: ast.OpThrow,
+		Sub: &ast.ThrowNode{
+			Exception: typedIRConst("no matching clause"),
+		},
+	}
+	caseNode.Sub.(*ast.CaseNode).Default = throwNode
+	ir := BuildTypedIR(caseNode)
+	if got := ir.Facts(caseNode).Type.Kind; got != IRInt {
+		t.Fatalf("case with throwing default type = %v, want int", got)
+	}
+	if !ir.Facts(throwNode).NeverReturns {
+		t.Fatal("throw was not marked as never returning")
+	}
+
+	caseNode.Sub.(*ast.CaseNode).Default = typedIRConst("mixed")
+	if got := BuildTypedIR(caseNode).Facts(caseNode).Type.Kind; got != IRDynamic {
+		t.Fatalf("mixed case result type = %v, want dynamic", got)
+	}
+}
+
 func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
 	index := lang.NewSymbol("index")
 	counts := lang.NewSymbol("counts")
@@ -466,6 +503,91 @@ func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
 	}
 	if ir.Facts(get).OwnedMapGet {
 		t.Fatal("failed owned-map analysis left a lookup fact behind")
+	}
+}
+
+func TestTypedIRProvesOwnedLoopStringParts(t *testing.T) {
+	remaining := lang.NewSymbol("remaining")
+	parts := lang.NewSymbol("parts")
+	loopID := lang.NewSymbol("string-parts-loop")
+	partsBinding := typedIRBinding(
+		parts,
+		&ast.Node{Op: ast.OpVector, Sub: &ast.VectorNode{}},
+	)
+	appendPart := typedIRInvoke(
+		typedIRCoreVar("conj"),
+		typedIRLocal(parts),
+		typedIRConst("x"),
+	)
+	recur := &ast.Node{
+		Op: ast.OpRecur,
+		Sub: &ast.RecurNode{
+			LoopID: loopID,
+			Exprs: []*ast.Node{
+				typedIRNumbersCall(
+					"Dec",
+					typedIRLocal(remaining),
+				),
+				appendPart,
+			},
+		},
+	}
+	finish := typedIRInvoke(
+		typedIRCoreVar("apply"),
+		typedIRVar(typedIRCoreVar("str")),
+		typedIRLocal(parts),
+	)
+	body := &ast.Node{
+		Op: ast.OpIf,
+		Sub: &ast.IfNode{
+			Test: typedIRConst(true),
+			Then: finish,
+			Else: recur,
+		},
+	}
+	loop := &ast.Node{
+		Op: ast.OpLoop,
+		Sub: &ast.LetNode{
+			Bindings: []*ast.Node{
+				typedIRBinding(remaining, typedIRConst(int64(2))),
+				partsBinding,
+			},
+			Body:   body,
+			LoopID: loopID,
+		},
+	}
+
+	ir := BuildTypedIR(loop)
+	facts := ir.BindingFacts(partsBinding)
+	if !facts.OwnedStringParts || facts.Escape != IRDoesNotEscape {
+		t.Fatalf("string-parts binding facts = %#v, want owned parts", facts)
+	}
+	if plan := ir.Facts(appendPart).StringPartsAppend; plan == nil ||
+		plan.Parts != parts ||
+		plan.Value != appendPart.Sub.(*ast.InvokeNode).Args[1] {
+		t.Fatalf("string-parts append plan = %#v", plan)
+	}
+	if plan := ir.Facts(finish).StringPartsFinish; plan == nil ||
+		plan.Parts != parts {
+		t.Fatalf("string-parts finish plan = %#v", plan)
+	}
+	if got := ir.Facts(finish).Type.Kind; got != IRString {
+		t.Fatalf("string-parts result type = %v, want string", got)
+	}
+
+	// Any observation other than the proven append and apply-str boundary
+	// exposes vector semantics and must retain the persistent representation.
+	body.Sub.(*ast.IfNode).Test = typedIRInvoke(
+		typedIRCoreVar("count"),
+		typedIRLocal(parts),
+	)
+	ir = BuildTypedIR(loop)
+	if facts := ir.BindingFacts(partsBinding); facts.OwnedStringParts {
+		t.Fatalf("observable parts were marked owned: %#v", facts)
+	}
+	if ir.Facts(appendPart).StringPartsAppend != nil ||
+		ir.Facts(finish).StringPartsFinish != nil {
+		t.Fatal("failed string-parts analysis left operation facts behind")
 	}
 }
 

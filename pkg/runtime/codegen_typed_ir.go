@@ -284,6 +284,30 @@ func (g *Generator) irHasInt64Representation(node *ast.Node) bool {
 	case ast.OpLocal:
 		name := node.Sub.(*ast.LocalNode).Name
 		return name != nil && g.getLocalType(name.Name()) == compiler.IRInt
+	case ast.OpDo:
+		if g.currentIR == nil ||
+			g.currentIR.Facts(node).Type.Kind != compiler.IRInt {
+			return false
+		}
+		return g.irHasInt64Representation(
+			node.Sub.(*ast.DoNode).Ret,
+		)
+	case ast.OpLet, ast.OpLoop:
+		if g.currentIR == nil ||
+			g.currentIR.Facts(node).Type.Kind != compiler.IRInt {
+			return false
+		}
+		return g.irHasInt64Representation(
+			node.Sub.(*ast.LetNode).Body,
+		)
+	case ast.OpIf:
+		if g.currentIR == nil ||
+			g.currentIR.Facts(node).Type.Kind != compiler.IRInt {
+			return false
+		}
+		ifNode := node.Sub.(*ast.IfNode)
+		return g.irInt64BranchHasRepresentation(ifNode.Then) &&
+			g.irInt64BranchHasRepresentation(ifNode.Else)
 	case ast.OpHostCall:
 		call := node.Sub.(*ast.HostCallNode)
 		if call.Target == nil || call.Target.Op != ast.OpConst ||
@@ -309,9 +333,30 @@ func (g *Generator) irHasInt64Representation(node *ast.Node) bool {
 			facts.Call.Var.Namespace().Name().String() == "clojure.core" &&
 			!facts.Call.Var.IsDynamic() &&
 			!RT.BooleanCast(lang.Get(facts.Call.Var.Meta(), lang.KWRedef))
+	case ast.OpCase:
+		if g.currentIR == nil ||
+			g.currentIR.Facts(node).Type.Kind != compiler.IRInt {
+			return false
+		}
+		caseNode := node.Sub.(*ast.CaseNode)
+		for _, entry := range caseNode.Entries {
+			if !g.irInt64BranchHasRepresentation(entry.ResultExpr) {
+				return false
+			}
+		}
+		return caseNode.Default == nil ||
+			g.irInt64BranchHasRepresentation(caseNode.Default)
 	default:
 		return false
 	}
+}
+
+func (g *Generator) irInt64BranchHasRepresentation(node *ast.Node) bool {
+	if node == nil || g.currentIR == nil {
+		return false
+	}
+	return g.currentIR.Facts(node).NeverReturns ||
+		g.irHasInt64Representation(node)
 }
 
 func (g *Generator) irHasFloat64Representation(node *ast.Node) bool {
@@ -467,6 +512,51 @@ func (g *Generator) generateIRStringStack(node *ast.Node) (string, bool) {
 	g.writef("%s := %s.Join(%s, any(%s).(string))\n",
 		result, stringsPackage, parts, separator)
 	return result, true
+}
+
+func (g *Generator) generateIROwnedStringParts(
+	node *ast.Node,
+) (string, bool) {
+	if g.currentIR == nil {
+		return "", false
+	}
+	facts := g.currentIR.Facts(node)
+	if facts.StringPartsAppend != nil {
+		parts, ok := g.getOwnedStringParts(
+			facts.StringPartsAppend.Parts.Name(),
+		)
+		if !ok {
+			return "", false
+		}
+		value := g.generateASTNode(facts.StringPartsAppend.Value)
+		g.writef("%s = append(%s, %s)\n", parts, parts, value)
+		return parts, true
+	}
+	if facts.StringPartsFinish == nil {
+		return "", false
+	}
+	parts, ok := g.getOwnedStringParts(
+		facts.StringPartsFinish.Parts.Name(),
+	)
+	if !ok {
+		return "", false
+	}
+	result := g.allocateTempVar()
+	g.writef("%s := runtime.ConcatStringParts(%s)\n", result, parts)
+	return result, true
+}
+
+func (g *Generator) irOwnedStringPartsEnabled() bool {
+	if !g.directLink {
+		return false
+	}
+	for _, name := range []string{"apply", "conj", "str"} {
+		vr := lang.NSCore.FindInternedVar(lang.NewSymbol(name))
+		if !aotVarCanDirectLink(vr) || !IsDefaultCoreVar(vr) {
+			return false
+		}
+	}
+	return true
 }
 
 func (g *Generator) irScalarAtomInit(binding *ast.Node) *ast.Node {

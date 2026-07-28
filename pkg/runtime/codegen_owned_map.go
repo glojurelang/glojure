@@ -14,11 +14,11 @@ func (g *Generator) generateIROwnedMapReduce(
 	invoke *ast.InvokeNode,
 	plan *compiler.IROwnedMapReducePlan,
 ) (string, bool) {
-	if !g.directLink || !aotOwnedMapVarCanDirectLink(plan.ReduceVar) {
+	if !g.directLink || !aotVarCanDirectLink(plan.ReduceVar) {
 		return "", false
 	}
 	for _, vr := range plan.UpdateInVars {
-		if !aotOwnedMapVarCanDirectLink(vr) {
+		if !aotVarCanDirectLink(vr) {
 			return "", false
 		}
 	}
@@ -77,7 +77,7 @@ func (g *Generator) generateIROwnedMapUpdateIn(
 	return result, true
 }
 
-func aotOwnedMapVarCanDirectLink(vr *lang.Var) bool {
+func aotVarCanDirectLink(vr *lang.Var) bool {
 	return vr != nil && vr.IsBound() && !vr.IsMacro() && !vr.IsDynamic() &&
 		!RT.BooleanCast(lang.Get(vr.Meta(), lang.KWRedef))
 }
