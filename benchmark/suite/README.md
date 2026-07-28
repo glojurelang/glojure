@@ -16,6 +16,27 @@ benchmark families. They take inspiration from the Computer Language
 Benchmarks Game and the older Clojure benchmark suites, but do not copy their
 host-specific harnesses or source.
 
+## Corpus
+
+| Workload | Primary coverage |
+| --- | --- |
+| `binary-trees` | recursive allocation, records, keyword field lookup |
+| `event-analytics` | nested persistent maps, keywords, `update-in` |
+| `fannkuch-redux` | vector updates, indexed access, nested integer loops |
+| `fasta` | deterministic generation, strings, characters, frequencies |
+| `game-of-life` | vector traversal, nested calls, simulation |
+| `k-nucleotide` | substrings, persistent maps, reduction, sorting |
+| `mandelbrot` | nested numeric loops and function calls |
+| `multimethod-dispatch` | multimethod dispatch over composite values |
+| `n-body` | floating-point math and persistent vector updates |
+| `persistent-map` | HAMT construction, lookup, update, and removal |
+| `prime-workload` | lazy sequences, factorization, `mapcat`, reduction |
+| `protocol-dispatch` | protocol extension and dynamic dispatch |
+| `regex-dna` | regular expressions and string replacement |
+| `sorting` | large vector construction and comparator-driven sorting |
+| `spectral-norm` | floating-point kernels and nested function calls |
+| `transducers` | composed transducers and reducing functions |
+
 ## End-to-end comparison
 
 Build Glojure, then name any script-compatible Clojure executables to compare:

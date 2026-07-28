@@ -22,8 +22,8 @@ func TestReadManifest(t *testing.T) {
 	}
 	path := filepath.Join(filepath.Dir(file), "..", "manifest.json")
 	suite, _ := readManifest(path)
-	if len(suite.Workloads) < 6 {
-		t.Fatalf("manifest has %d workloads, want at least 6", len(suite.Workloads))
+	if len(suite.Workloads) < 16 {
+		t.Fatalf("manifest has %d workloads, want at least 16", len(suite.Workloads))
 	}
 	for _, workload := range suite.Workloads {
 		if workload.alias == "" || workload.importPath == "" {

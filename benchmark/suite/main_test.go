@@ -46,8 +46,8 @@ func TestManifestIsValid(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(suite.Workloads) < 6 {
-		t.Fatalf("manifest has %d workloads, want at least 6", len(suite.Workloads))
+	if len(suite.Workloads) < 16 {
+		t.Fatalf("manifest has %d workloads, want at least 16", len(suite.Workloads))
 	}
 }
 

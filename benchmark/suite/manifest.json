@@ -42,6 +42,76 @@
       "file": "workloads/protocol-dispatch.clj",
       "expected": "[-10628 -106280]",
       "tags": ["protocols", "floating-point", "dispatch"]
+    },
+    {
+      "name": "prime-workload",
+      "namespace": "benchmark.suite.prime-workload",
+      "file": "workloads/prime-workload.clj",
+      "expected": "[26211025 157818800]",
+      "tags": ["lazy-sequences", "integer-arithmetic", "reduce", "function-calls"]
+    },
+    {
+      "name": "event-analytics",
+      "namespace": "benchmark.suite.event-analytics",
+      "file": "workloads/event-analytics.clj",
+      "expected": "[[:api 15000 7059 6842400 377972500] [:worker 15000 7941 6793391 377927500] [:billing 15000 7059 6826364 377957500] [:search 15000 7059 6776536 378037500] [:notifications 15000 7942 6810328 377942500]]",
+      "tags": ["persistent-maps", "keywords", "update-in", "lazy-sequences"]
+    },
+    {
+      "name": "game-of-life",
+      "namespace": "benchmark.suite.game-of-life",
+      "file": "workloads/game-of-life.clj",
+      "expected": "273414",
+      "tags": ["vectors", "nested-loops", "function-calls", "simulation"]
+    },
+    {
+      "name": "mandelbrot",
+      "namespace": "benchmark.suite.mandelbrot",
+      "file": "workloads/mandelbrot.clj",
+      "expected": "5521320",
+      "tags": ["integer-arithmetic", "nested-loops", "function-calls"]
+    },
+    {
+      "name": "n-body",
+      "namespace": "benchmark.suite.n-body",
+      "file": "workloads/n-body.clj",
+      "expected": "[-175401254 -175395565]",
+      "tags": ["floating-point", "vectors", "assoc-in", "simulation"]
+    },
+    {
+      "name": "fasta",
+      "namespace": "benchmark.suite.fasta",
+      "file": "workloads/fasta.clj",
+      "expected": "[180000 [45000 45000 45000 45000] 40500180000]",
+      "tags": ["strings", "vectors", "integer-arithmetic", "generation"]
+    },
+    {
+      "name": "regex-dna",
+      "namespace": "benchmark.suite.regex-dna",
+      "file": "workloads/regex-dna.clj",
+      "expected": "[251114 238000 [14000 0 0 0 0] 238000]",
+      "tags": ["regex", "strings", "reduce", "text"]
+    },
+    {
+      "name": "transducers",
+      "namespace": "benchmark.suite.transducers",
+      "file": "workloads/transducers.clj",
+      "expected": "[166666666650000 6667100002]",
+      "tags": ["transducers", "reduce", "higher-order-functions", "integer-arithmetic"]
+    },
+    {
+      "name": "multimethod-dispatch",
+      "namespace": "benchmark.suite.multimethod-dispatch",
+      "file": "workloads/multimethod-dispatch.clj",
+      "expected": "300127059",
+      "tags": ["multimethods", "dispatch", "keywords", "persistent-maps"]
+    },
+    {
+      "name": "sorting",
+      "namespace": "benchmark.suite.sorting",
+      "file": "workloads/sorting.clj",
+      "expected": "[-999956 999993 -333738 -999956 -1938393450328 -724711496873]",
+      "tags": ["sorting", "vectors", "comparators", "integer-arithmetic"]
     }
   ]
 }

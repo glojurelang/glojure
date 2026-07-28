@@ -168,17 +168,17 @@ replace github.com/glojurelang/glojure => %s
 }
 
 func compileSources(root, temp, glj string, workloads []workload) {
-	namespaces := make([]string, len(workloads))
-	for i, workload := range workloads {
-		namespaces[i] = "'" + workload.Namespace
-	}
-	expression := "(mapv compile [" + strings.Join(namespaces, " ") + "])"
 	env := append(os.Environ(),
 		"GLJ_CLASSPATH="+filepath.Join(temp, "src"),
 		"GLOJURE_STDLIB_PATH="+filepath.Join(root, "pkg", "stdlib"),
 		"GLOJURE_USE_AOT=false",
 	)
-	run(temp, env, glj, "-e", expression)
+	// Compile each independent workload in a fresh process. Besides bounding
+	// compiler state and memory, this makes a failure identify the exact
+	// workload instead of aborting an opaque batch expression.
+	for _, workload := range workloads {
+		run(temp, env, glj, "-e", "(compile '"+workload.Namespace+")")
+	}
 }
 
 func writeBenchmark(temp string, workloads []workload) {
