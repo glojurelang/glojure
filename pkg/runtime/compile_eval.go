@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -17,6 +18,7 @@ type threadedEvalCompiler struct {
 	localSlots  map[*lang.Symbol]localSlot
 	nextLetSlot int
 	typedLoop   bool
+	ir          *compiler.TypedIR
 }
 
 type localSlotKind uint8
@@ -61,9 +63,17 @@ func compileMethodEval(body *ast.Node, params []*ast.Node) evalFn {
 	return (threadedEvalCompiler{localSlots: slots}).compile(body)
 }
 
-func compileLoopEval(body *ast.Node, bindings []*ast.Node) evalFn {
+func compileLoopEval(
+	body *ast.Node,
+	bindings []*ast.Node,
+	ir *compiler.TypedIR,
+) evalFn {
 	slots := make(map[*lang.Symbol]localSlot, min(len(bindings), len(loopFrame{}.args)))
-	compiler := threadedEvalCompiler{localSlots: slots, typedLoop: true}
+	compiler := threadedEvalCompiler{
+		localSlots: slots,
+		typedLoop:  true,
+		ir:         ir,
+	}
 	for i, binding := range bindings {
 		if i == len(loopFrame{}.args) {
 			break
@@ -87,10 +97,15 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 	case ast.OpLocal:
 		sym := n.Sub.(*ast.LocalNode).Name
 		if slot, ok := c.localSlots[sym]; ok {
+			persist := c.ir != nil && c.ir.Facts(n).PersistOwnedMap
 			switch slot.kind {
 			case loopLocalSlot:
 				return func(env *environment) (interface{}, error) {
-					return env.loopFrame.args[slot.index], nil
+					value := env.loopFrame.args[slot.index]
+					if persist {
+						return value.(*lang.TransientMap).Persistent(), nil
+					}
+					return value, nil
 				}
 			case letLocalSlot:
 				return func(env *environment) (interface{}, error) {
@@ -348,6 +363,7 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 				return nil
 			}
 		}
+		owned := c.ir != nil && c.ir.Facts(n).OwnedMapAssoc
 		return func(env *environment) (res interface{}, err error) {
 			defer env.recoverOptimizedInvoke(
 				assoc.Meta,
@@ -371,11 +387,18 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 				}
 			}
 			for i := range keys {
-				result = lang.Assoc(
-					result,
-					keyValues[i*2],
-					keyValues[i*2+1],
-				)
+				if owned {
+					result.(*lang.TransientMap).Assoc(
+						keyValues[i*2],
+						keyValues[i*2+1],
+					)
+				} else {
+					result = lang.Assoc(
+						result,
+						keyValues[i*2],
+						keyValues[i*2+1],
+					)
+				}
 			}
 			return result, nil
 		}

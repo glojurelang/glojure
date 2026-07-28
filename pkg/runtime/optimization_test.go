@@ -149,6 +149,37 @@ func TestFixedArityTwoFunctionUsesCompiledParameterSlots(t *testing.T) {
 	}
 }
 
+func TestInterpreterOwnedLoopMapReturnsPersistentValue(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("runtime.owned-loop-map"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn histogram [values]
+		  (loop [remaining (seq values)
+		         counts {}]
+		    (if remaining
+		      (let [value (first remaining)]
+		        (recur (next remaining)
+		               (assoc counts value (inc (get counts value 0)))))
+		      counts)))`)
+	histogram := ns.FindInternedVar(lang.NewSymbol("histogram")).Get()
+	result := lang.Apply1(
+		histogram,
+		lang.NewVector("a", "b", "a", "c", "a"),
+	)
+	counts, ok := result.(lang.IPersistentMap)
+	if !ok {
+		t.Fatalf("histogram returned %T, want persistent map", result)
+	}
+	for key, want := range map[string]int64{"a": 3, "b": 1, "c": 1} {
+		if got := counts.ValAt(key); got != want {
+			t.Fatalf("histogram[%q] = %v, want %d", key, got, want)
+		}
+	}
+}
+
 func TestNativeCoreAddApplyToReducibleSequence(t *testing.T) {
 	args := lang.NewLongRange(0, 1_000, 1)
 

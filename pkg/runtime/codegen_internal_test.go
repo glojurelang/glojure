@@ -153,6 +153,56 @@ func TestGenerateNestedClosureCapturedAtLoadTime(t *testing.T) {
 	}
 }
 
+func TestGenerateOwnedLoopMapUsesTransientRepresentation(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.owned-loop-map"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn histogram [values]
+		  (loop [remaining (seq values)
+		         counts {}]
+		    (if remaining
+		      (let [value (first remaining)]
+		        (recur (next remaining)
+		               (assoc counts value (inc (get counts value 0)))))
+		      counts)))
+		(defn escaping [values observe]
+		  (loop [remaining (seq values)
+		         counts {}]
+		    (if remaining
+		      (do
+		        (observe counts)
+		        (recur (next remaining)
+		               (assoc counts (first remaining) 1)))
+		      counts)))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate owned map loop: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		".(lang.IEditableCollection).AsTransient()",
+		".(*lang.TransientMap).Assoc(",
+		".(*lang.TransientMap).Persistent()",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("owned map lowering omitted %q:\n%s", expected, generated)
+		}
+	}
+	if got := strings.Count(
+		generated,
+		".(lang.IEditableCollection).AsTransient()",
+	); got != 1 {
+		t.Fatalf(
+			"generated %d transient map regions, want only non-escaping histogram",
+			got,
+		)
+	}
+}
+
 func TestGenerateFixedArityFunctionsThroughTwenty(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.fixed-arity-twenty"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)

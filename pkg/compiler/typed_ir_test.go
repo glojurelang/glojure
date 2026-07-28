@@ -214,10 +214,125 @@ func TestTypedIRPreservesPipelineStageOrder(t *testing.T) {
 	}
 }
 
+func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
+	index := lang.NewSymbol("index")
+	counts := lang.NewSymbol("counts")
+	key := lang.NewSymbol("key")
+	loopID := lang.NewSymbol("loop")
+
+	indexBinding := typedIRBinding(index, typedIRConst(int64(0)))
+	mapBinding := typedIRBinding(counts, &ast.Node{
+		Op:  ast.OpMap,
+		Sub: &ast.MapNode{},
+	})
+	keyBinding := typedIRBinding(key, typedIRLocal(index))
+	get := &ast.Node{
+		Op: ast.OpHostCall,
+		Sub: &ast.HostCallNode{
+			Target: &ast.Node{
+				Op: ast.OpConst,
+				Sub: &ast.ConstNode{
+					HostSymbol: lang.NewSymbol(
+						"github.com:glojurelang:glojure:pkg:runtime.RT",
+					),
+				},
+			},
+			Method: lang.NewSymbol("Get"),
+			Args: []*ast.Node{
+				typedIRLocal(counts),
+				typedIRLocal(key),
+				typedIRConst(int64(0)),
+			},
+		},
+	}
+	update := &ast.Node{
+		Op: ast.OpAssoc,
+		Sub: &ast.AssocNode{
+			Target: typedIRLocal(counts),
+			Entries: []ast.AssocEntry{{
+				Key: typedIRLocal(key),
+				Val: get,
+			}},
+		},
+	}
+	recur := &ast.Node{
+		Op: ast.OpRecur,
+		Sub: &ast.RecurNode{
+			LoopID: loopID,
+			Exprs: []*ast.Node{
+				typedIRLocal(index),
+				update,
+			},
+		},
+	}
+	body := &ast.Node{
+		Op: ast.OpIf,
+		Sub: &ast.IfNode{
+			Test: typedIRConst(true),
+			Then: typedIRLocal(counts),
+			Else: &ast.Node{
+				Op: ast.OpLet,
+				Sub: &ast.LetNode{
+					Bindings: []*ast.Node{keyBinding},
+					Body:     recur,
+				},
+			},
+		},
+	}
+	loop := &ast.Node{
+		Op: ast.OpLoop,
+		Sub: &ast.LetNode{
+			Bindings: []*ast.Node{indexBinding, mapBinding},
+			Body:     body,
+			LoopID:   loopID,
+		},
+	}
+
+	ir := BuildTypedIR(loop)
+	if facts := ir.BindingFacts(mapBinding); !facts.OwnedMap ||
+		facts.Escape != IRDoesNotEscape {
+		t.Fatalf("map binding facts = %#v, want owned non-escaping map", facts)
+	}
+	if !ir.Facts(update).OwnedMapAssoc {
+		t.Fatal("loop-carried assoc was not marked as an owned update")
+	}
+	exit := body.Sub.(*ast.IfNode).Then
+	if !ir.Facts(exit).PersistOwnedMap {
+		t.Fatal("terminal map result was not marked for persistence")
+	}
+
+	// Passing the map to an unknown operation makes its identity observable and
+	// must disable the ownership optimization.
+	unknown := lang.FindOrCreateNamespace(lang.NewSymbol("typed-ir-test")).
+		Intern(lang.NewSymbol("observe"))
+	body.Sub.(*ast.IfNode).Test = typedIRInvoke(unknown, typedIRLocal(counts))
+	ir = BuildTypedIR(loop)
+	if facts := ir.BindingFacts(mapBinding); facts.OwnedMap {
+		t.Fatalf("escaping map was marked owned: %#v", facts)
+	}
+}
+
 func typedIRConst(value any) *ast.Node {
 	return &ast.Node{
 		Op:  ast.OpConst,
 		Sub: &ast.ConstNode{Value: value},
+	}
+}
+
+func typedIRBinding(name *lang.Symbol, init *ast.Node) *ast.Node {
+	return &ast.Node{
+		Op: ast.OpBinding,
+		Sub: &ast.BindingNode{
+			Name: name,
+			Init: init,
+		},
+	}
+}
+
+func typedIRLocal(name *lang.Symbol) *ast.Node {
+	return &ast.Node{
+		Op:  ast.OpLocal,
+		Sub: &ast.LocalNode{Name: name},
 	}
 }
 

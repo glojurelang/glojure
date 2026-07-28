@@ -779,6 +779,10 @@ func (env *environment) EvalASTDo(n *ast.Node) (interface{}, error) {
 
 func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error) {
 	letNode := n.Sub.(*ast.LetNode)
+	var plan *compiledLoopPlan
+	if isLoop {
+		plan = env.getCompiledLoopPlan(n)
+	}
 
 	newEnv := env
 
@@ -786,7 +790,7 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 	var bindNameVals []interface{}
 
 	bindings := letNode.Bindings
-	for _, binding := range bindings {
+	for bindingIndex, binding := range bindings {
 		bindingNode := binding.Sub.(*ast.BindingNode)
 
 		name := bindingNode.Name
@@ -794,6 +798,10 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 		initVal, err := newEnv.EvalAST(init)
 		if err != nil {
 			return nil, err
+		}
+		if plan != nil && plan.ownedMaps[bindingIndex] {
+			initVal = initVal.(lang.IEditableCollection).
+				AsTransient().(*lang.TransientMap)
 		}
 		if _, ok := boundNames[name.Name()]; ok || newEnv == env {
 			// avoid overwriting a name in the same scope, or binding in the
@@ -811,7 +819,6 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 		return newEnv.EvalAST(letNode.Body)
 	}
 
-	plan := env.getCompiledLoopPlan(n)
 	if plan.numeric != nil {
 		if result, ok := plan.numeric.run(bindNameVals); ok {
 			return result, nil

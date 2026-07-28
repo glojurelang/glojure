@@ -182,12 +182,22 @@ type IRFacts struct {
 	Append   *IRStackAppendPlan
 	Join     *IRStringJoinPlan
 	Pipeline *IRPipelinePlan
+
+	// OwnedMapAssoc marks an assoc whose target is a uniquely owned
+	// loop-carried map. Backends may update a transient representation after
+	// evaluating every key and value.
+	OwnedMapAssoc bool
+
+	// PersistOwnedMap marks a terminal local whose transient representation
+	// must be frozen before it leaves its ownership region.
+	PersistOwnedMap bool
 }
 
 type IRBindingFacts struct {
 	Escape      IREscape
 	AtomInit    *ast.Node
 	StringStack bool
+	OwnedMap    bool
 }
 
 // TypedIR is a side-effect-free analysis layer built after the shared AST
@@ -458,6 +468,11 @@ func (ir *TypedIR) analyzeBindings(node *ast.Node) {
 			if ir.analyzeStringStack(binding, let.Body) {
 				result.Escape = IRDoesNotEscape
 				result.StringStack = true
+			}
+			if node.Op == ast.OpLoop &&
+				ir.analyzeOwnedMap(binding, i, let) {
+				result.Escape = IRDoesNotEscape
+				result.OwnedMap = true
 			}
 			ir.bindings[binding] = result
 		}

@@ -37,6 +37,7 @@ type varScope struct {
 	names             map[string]string // maps Clojure names to Go variable names
 	localAtoms        map[string]bool   // local atoms proven not to escape
 	localStringStacks map[string]bool   // confined string stacks
+	ownedMaps         map[string]bool   // uniquely owned loop-carried maps
 }
 
 // recurContext represents the context for a loop/recur form
@@ -1794,7 +1795,18 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 	case ast.OpLocal:
 		localNode := node.Sub.(*ast.LocalNode)
 		// Look up the variable in our scope
-		return g.getLocal(localNode.Name.Name())
+		local := g.getLocal(localNode.Name.Name())
+		if g.currentIR != nil &&
+			g.currentIR.Facts(node).PersistOwnedMap {
+			result := g.allocateTempVar()
+			g.writef(
+				"%s := %s.(*lang.TransientMap).Persistent()\n",
+				result,
+				local,
+			)
+			return result
+		}
+		return local
 	case ast.OpDo:
 		return g.generateDo(node)
 	case ast.OpLet:
@@ -1850,6 +1862,18 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 				keys[i] = g.generateASTNode(entry.Key)
 			}
 			values[i] = g.generateASTNode(entry.Val)
+		}
+		if g.currentIR != nil &&
+			g.currentIR.Facts(node).OwnedMapAssoc {
+			for i := range keys {
+				g.writef(
+					"%s.(*lang.TransientMap).Assoc(%s, %s)\n",
+					target,
+					keys[i],
+					values[i],
+				)
+			}
+			return target
 		}
 		if useRecordHelper {
 			helper := g.allocKeywordAssocHelper(staticNames)
@@ -2532,6 +2556,20 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			g.writef("var %s []string\n", varName)
 			g.markLocalStringStack(name)
 			g.writeAssign("_", varName)
+			continue
+		}
+		if isLoop && bindingFacts.OwnedMap {
+			initCode := g.generateASTNode(init)
+			varName := g.allocateLocal(name)
+			g.writef(
+				"var %s any = %s.(lang.IEditableCollection)."+
+					"AsTransient()\n",
+				varName,
+				initCode,
+			)
+			g.markOwnedMap(name)
+			g.writeAssign("_", varName)
+			bindingVars = append(bindingVars, varName)
 			continue
 		}
 
@@ -3650,6 +3688,7 @@ func (g *Generator) pushVarScope() {
 		names:             make(map[string]string),
 		localAtoms:        make(map[string]bool),
 		localStringStacks: make(map[string]bool),
+		ownedMaps:         make(map[string]bool),
 	})
 }
 
@@ -3780,6 +3819,20 @@ func (g *Generator) getLocalStringStack(name string) (string, bool) {
 		scope := &g.varScopes[i]
 		if varName, ok := scope.names[name]; ok {
 			return varName, scope.localStringStacks[name]
+		}
+	}
+	return "", false
+}
+
+func (g *Generator) markOwnedMap(name string) {
+	g.varScopes[len(g.varScopes)-1].ownedMaps[name] = true
+}
+
+func (g *Generator) getOwnedMap(name string) (string, bool) {
+	for i := len(g.varScopes) - 1; i >= 0; i-- {
+		scope := &g.varScopes[i]
+		if varName, ok := scope.names[name]; ok {
+			return varName, scope.ownedMaps[name]
 		}
 	}
 	return "", false

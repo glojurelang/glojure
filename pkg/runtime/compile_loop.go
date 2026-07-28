@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -23,6 +24,7 @@ type int64BoolExpr func(*[4]int64) bool
 type compiledLoopPlan struct {
 	numeric   *compiledInt64Loop
 	evaluator evalFn
+	ownedMaps []bool
 }
 
 func (env *environment) getCompiledLoopPlan(n *ast.Node) *compiledLoopPlan {
@@ -30,9 +32,16 @@ func (env *environment) getCompiledLoopPlan(n *ast.Node) *compiledLoopPlan {
 		return cached.(*compiledLoopPlan)
 	}
 	letNode := n.Sub.(*ast.LetNode)
+	ir := compiler.BuildTypedIR(n)
 	plan := &compiledLoopPlan{
 		numeric:   compileInt64Loop(letNode),
-		evaluator: compileLoopEval(letNode.Body, letNode.Bindings),
+		evaluator: compileLoopEval(letNode.Body, letNode.Bindings, ir),
+		ownedMaps: make([]bool, len(letNode.Bindings)),
+	}
+	if plan.evaluator != nil {
+		for i, binding := range letNode.Bindings {
+			plan.ownedMaps[i] = ir.BindingFacts(binding).OwnedMap
+		}
 	}
 	actual, _ := env.loopPlans.LoadOrStore(n, plan)
 	return actual.(*compiledLoopPlan)
