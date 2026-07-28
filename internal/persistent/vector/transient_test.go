@@ -36,6 +36,35 @@ func TestTransientNew(t *testing.T) {
 	}
 }
 
+func TestTransientUpdateRegionUsesProportionalTailStorage(t *testing.T) {
+	persistent := NewPersistent(0, 1, 2, 3, 4, 5, 6, 7, 8)
+	builder := NewTransient(&persistent)
+	if got, want := len(builder.tail), nodeSize; got != want {
+		t.Fatalf("builder tail length = %d, want %d", got, want)
+	}
+	if got, want := cap(builder.tail), nodeSize; got != want {
+		t.Fatalf("builder tail capacity = %d, want %d", got, want)
+	}
+
+	transient := NewUpdateTransient(&persistent)
+	if got, want := len(transient.tail), 9; got != want {
+		t.Fatalf("update tail length = %d, want %d", got, want)
+	}
+	if got, want := cap(transient.tail), 9; got != want {
+		t.Fatalf("update tail capacity = %d, want %d", got, want)
+	}
+
+	transient.Assoc(4, 40)
+	transient.Conj(9)
+	result := transient.Persistent()
+	if got, _ := result.Index(4); got != 40 {
+		t.Fatalf("associated value = %v, want 40", got)
+	}
+	if got, _ := result.Index(9); got != 9 {
+		t.Fatalf("conjoined value = %v, want 9", got)
+	}
+}
+
 func FuzzTransient(f *testing.F) {
 	f.Add([]byte(`[
 		["conj", 1],

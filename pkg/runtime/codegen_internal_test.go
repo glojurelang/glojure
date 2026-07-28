@@ -203,6 +203,120 @@ func TestGenerateOwnedLoopMapUsesTransientRepresentation(t *testing.T) {
 	}
 }
 
+func TestGenerateDirectLinkedInt64VectorUpdateRegion(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.vector-update-region"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn exchange [values left right]
+		  (let [left-value (nth values left)
+		        right-value (nth values right)]
+		    (assoc (assoc values left right-value) right left-value)))
+		(defn reverse-owned [values length]
+		  (loop [result values left 0 right (dec length)]
+		    (if (>= left right)
+		      result
+		      (recur (exchange result left right)
+		             (inc left)
+		             (dec right)))))
+		(defn flip-score [values]
+		  (loop [owned values score 0]
+		    (let [first-value (nth owned 0)]
+		      (if (zero? first-value)
+		        score
+		        (recur (reverse-owned owned (inc first-value))
+		               (inc score))))))`)
+
+	var output bytes.Buffer
+	generator := newGenerator(&output, true)
+	if err := generator.Generate(ns); err != nil {
+		t.Fatalf("generate vector update region: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"lang.CanTransientlyUpdateInt64Vector(",
+		".AsTransientForUpdate()",
+		"*lang.TransientVector",
+		".AssocN(",
+		".Persistent()",
+		"aotVectorFn",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("vector update lowering omitted %q:\n%s", expected, generated)
+		}
+	}
+	if !strings.Contains(generated, "lang.Assoc(") {
+		t.Fatalf("vector specialization omitted the dynamic fallback:\n%s", generated)
+	}
+
+	output.Reset()
+	if err := newGenerator(&output, false).Generate(ns); err != nil {
+		t.Fatalf("generate without direct linking: %v", err)
+	}
+	if strings.Contains(output.String(), "aotVectorFn") {
+		t.Fatalf(
+			"vector specialization ignored disabled direct linking:\n%s",
+			output.String(),
+		)
+	}
+}
+
+func TestVectorUpdateRegionOnlyFreezesAtTerminalEscape(t *testing.T) {
+	tests := []struct {
+		name       string
+		namespace  string
+		source     string
+		specialize bool
+	}{
+		{
+			name:      "terminal escape",
+			namespace: "codegen.vector-terminal-escape",
+			source: `
+				(defn update-and-return [values]
+				  [(assoc values 0 1)])`,
+			specialize: true,
+		},
+		{
+			name:      "early escape",
+			namespace: "codegen.vector-early-escape",
+			source: `
+				(defn expose-then-update [values]
+				  (do
+				    [values]
+				    (assoc values 0 1)))`,
+			specialize: false,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			ns := lang.FindOrCreateNamespace(lang.NewSymbol(test.namespace))
+			ns.ReferAllSnapshot(lang.NSCore, nil)
+			lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+			defer lang.PopThreadBindings()
+			ReadEval(test.source)
+
+			var output bytes.Buffer
+			if err := newGenerator(&output, true).Generate(ns); err != nil {
+				t.Fatalf("generate: %v", err)
+			}
+			generated := output.String()
+			if got := strings.Contains(
+				generated,
+				".AsTransientForUpdate()",
+			); got != test.specialize {
+				t.Fatalf(
+					"specialization present = %v, want %v:\n%s",
+					got,
+					test.specialize,
+					generated,
+				)
+			}
+		})
+	}
+}
+
 func TestGenerateTypedStringOwnedMapOperations(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.typed-string-map"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)

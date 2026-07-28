@@ -52,12 +52,30 @@ type Transient struct {
 
 // NewTransient returns a new transient vector.
 func NewTransient(vi Vector) *Transient {
+	return newTransient(vi, false)
+}
+
+// NewUpdateTransient returns a transient intended for an assoc-heavy update
+// region. Unlike the ordinary builder representation, its partial tail does
+// not reserve unused slots.
+func NewUpdateTransient(vi Vector) *Transient {
+	return newTransient(vi, true)
+}
+
+func newTransient(vi Vector, compactTail bool) *Transient {
 	v := vi.(*Persistent)
+	tailLen := v.tailLen()
+	tailSize := nodeSize
+	tailCapacity := nodeSize
+	if compactTail {
+		tailSize = tailLen
+		tailCapacity = tailLen
+	}
 	t := &Transient{
 		count:  v.count,
 		height: v.height,
 		root:   v.root,
-		tail:   make([]interface{}, nodeSize),
+		tail:   make([]interface{}, tailSize, tailCapacity),
 	}
 	base := v.baseTail()
 	copy(t.tail, base)
@@ -103,7 +121,12 @@ func (t *Transient) Conj(v interface{}) *Transient {
 
 	// room in tail?
 	if uint(i)-t.tailoff() < nodeSize {
-		t.tail[i&chunkMask] = v
+		index := i & chunkMask
+		if index < len(t.tail) {
+			t.tail[index] = v
+		} else {
+			t.tail = append(t.tail, v)
+		}
 		t.count++
 		return t
 	}
@@ -114,7 +137,6 @@ func (t *Transient) Conj(v interface{}) *Transient {
 	}
 
 	t.tail = make([]interface{}, nodeSize)
-
 	t.tail[0] = v
 	newheight := t.height
 

@@ -5,6 +5,33 @@ import (
 	"testing"
 )
 
+func TestCanTransientlyUpdateInt64Vector(t *testing.T) {
+	if !CanTransientlyUpdateInt64Vector(
+		NewVector(int64(0), int64(1), int64(2)),
+	) {
+		t.Fatal("small int64 vector rejected")
+	}
+	if CanTransientlyUpdateInt64Vector(NewVector(int64(0), 1)) {
+		t.Fatal("mixed-representation vector accepted")
+	}
+
+	values := make([]any, 33)
+	for i := range values {
+		values[i] = int64(i)
+	}
+	if CanTransientlyUpdateInt64Vector(NewVector(values...)) {
+		t.Fatal("tree-backed vector accepted before transient COW is supported")
+	}
+}
+
+func TestVectorUpdateTransientRejectsObservableMetadata(t *testing.T) {
+	meta := NewMap(NewKeyword("source"), "test").(IPersistentMap)
+	original := NewVector(int64(1), int64(2)).WithMeta(meta).(*Vector)
+	if CanTransientlyUpdateInt64Vector(original) {
+		t.Fatal("vector with observable metadata accepted")
+	}
+}
+
 func TestSmallVectorAssocUsesIndependentPersistentStorage(t *testing.T) {
 	original := NewVector(1, 2, 3)
 	updated := original.AssocN(1, 20).(*Vector)

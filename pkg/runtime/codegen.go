@@ -97,6 +97,8 @@ type aotSpecializationTarget struct {
 	int64Analysis   *int64AOTAnalysis
 	float64FnVar    string
 	float64Analysis *float64AOTAnalysis
+	vectorFnVar     string
+	vectorAnalysis  *vectorAOTAnalysis
 	rootVersionVar  string
 }
 
@@ -173,6 +175,7 @@ type Generator struct {
 	liftedCounter int                        // Counter for closed0, closed1...
 	currentFnEnv  lang.Environment           // Current function's captured env
 	currentIR     *compiler.TypedIR          // typed facts for the current AST
+	currentVector *vectorAOTAnalysis         // transient-vector AOT region
 
 	// specializationTarget is non-nil only while generating the root function
 	// value for a Var. Nested function literals retain the generic code path.
@@ -1461,7 +1464,8 @@ func (g *Generator) generateFn(fn *Fn) string {
 		// Supported single arity: emit FnFuncN with direct named params.
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
 		paramNames := fixedParamNames(fixedArity)
-		if !g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+		if !g.generateVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+			!g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
 			sig := ""
 			if fixedArity > 0 {
@@ -1731,6 +1735,10 @@ func (g *Generator) generateFnMethodFixed(methodNode *ast.FnMethodNode, paramVar
 	for i, param := range methodNode.Params {
 		paramNode := param.Sub.(*ast.BindingNode)
 		paramVar := g.allocateLocal(paramNode.Name.Name())
+		if g.currentVector != nil &&
+			g.currentVector.paramMask&(uint32(1)<<i) == 0 {
+			g.markLocalType(paramNode.Name.Name(), compiler.IRInt)
+		}
 		g.writef("%s := %s\n", paramVar, paramVarNames[i])
 		g.writeAssign("_", paramVar) // Prevent unused variable warning
 		paramVars[i] = paramVar
@@ -1857,6 +1865,9 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		}
 		return result
 	case ast.OpAssoc:
+		if result, ok := g.generateVectorAOTAssoc(node); ok {
+			return result
+		}
 		assoc := node.Sub.(*ast.AssocNode)
 		target := g.generateASTNode(assoc.Target)
 		staticNames, staticKeys := staticKeywordMapNames(keysFromAssoc(assoc))
@@ -2022,6 +2033,9 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
+	if result, ok := g.generateVectorAOTInvoke(node); ok {
+		return result
+	}
 	if result, ok := g.generateIRGetIn(node); ok {
 		return result
 	}
@@ -2344,7 +2358,11 @@ func (g *Generator) generateIf(node *ast.Node) string {
 	resultVar := g.allocateTempVar()
 
 	// Emit the if statement to g.w
-	g.writef("var %s any\n", resultVar)
+	resultType := "any"
+	if g.currentVector != nil {
+		resultType = vectorAOTGoType(g.currentVector.values[node])
+	}
+	g.writef("var %s %s\n", resultVar, resultType)
 	testExpr := g.generateTruthyTest(ifNode.Test)
 	g.writef("if %s {\n", testExpr)
 	thenExpr := g.generateASTNode(ifNode.Then)
@@ -2542,7 +2560,11 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 
 	// Push a new variable scope for the let bindings
 	resultId := g.allocateTempVar()
-	g.writef("var %s any\n", resultId)
+	resultType := "any"
+	if g.currentVector != nil {
+		resultType = vectorAOTGoType(g.currentVector.values[node])
+	}
+	g.writef("var %s %s\n", resultId, resultType)
 
 	g.writef("{ // let\n")
 	g.pushVarScope()
@@ -2590,6 +2612,35 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			g.writeAssign("_", varName)
 			bindingVars = append(bindingVars, varName)
 			bindingTypes = append(bindingTypes, compiler.IRDynamic)
+			continue
+		}
+		if g.currentVector != nil &&
+			g.currentVector.values[init].transient {
+			initCode := g.generateASTNode(init)
+			varName := g.allocateLocal(name)
+			g.writef(
+				"var %s *lang.TransientVector = %s\n",
+				varName,
+				initCode,
+			)
+			g.writeAssign("_", varName)
+			if isLoop {
+				bindingVars = append(bindingVars, varName)
+				bindingTypes = append(bindingTypes, compiler.IRVector)
+			}
+			continue
+		}
+		if g.currentVector != nil &&
+			g.currentVector.values[init].int64 {
+			initCode := g.generateASTNode(init)
+			varName := g.allocateLocal(name)
+			g.writef("var %s int64 = %s\n", varName, initCode)
+			g.markLocalType(name, compiler.IRInt)
+			g.writeAssign("_", varName)
+			if isLoop {
+				bindingVars = append(bindingVars, varName)
+				bindingTypes = append(bindingTypes, compiler.IRInt)
+			}
 			continue
 		}
 		if isLoop &&
@@ -2751,6 +2802,14 @@ func (g *Generator) generateRecur(node *ast.Node) string {
 				tempVar,
 				g.irStringExpr(expr, exprCode),
 			)
+		} else if ctx.types[i] == compiler.IRVector &&
+			g.currentVector != nil &&
+			g.currentVector.values[expr].transient {
+			g.writef(
+				"var %s *lang.TransientVector = %s\n",
+				tempVar,
+				exprCode,
+			)
 		} else {
 			g.writef("var %s any = %s\n", tempVar, exprCode)
 		}
@@ -2901,6 +2960,9 @@ func (g *Generator) generateVector(node *ast.Node) string {
 	itemIds := make([]string, len(vectorNode.Items))
 	for i, item := range vectorNode.Items {
 		itemId := g.generateASTNode(item)
+		if g.currentVector != nil && g.currentVector.freeze[item] {
+			itemId = itemId + ".Persistent()"
+		}
 		itemIds[i] = itemId
 	}
 	vecId := g.allocateTempVar()
@@ -3113,6 +3175,12 @@ func (g *Generator) generateGoExportedName(pkg string) string {
 }
 
 func (g *Generator) generateHostCall(node *ast.Node) string {
+	if result, ok := g.generateVectorAOTNth(node); ok {
+		return result
+	}
+	if result, ok := g.generateVectorAOTNumber(node); ok {
+		return result
+	}
 	if result, ok := g.generateIRNumbersHostCall(node); ok {
 		return result
 	}

@@ -4,6 +4,7 @@ package runtime
 
 import (
 	"fmt"
+	"math/bits"
 	"sort"
 	"strings"
 
@@ -65,6 +66,7 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			directFnVar:    fmt.Sprintf("aotDirectFn%d", index),
 			int64FnVar:     fmt.Sprintf("aotInt64Fn%d", index),
 			float64FnVar:   fmt.Sprintf("aotFloat64Fn%d", index),
+			vectorFnVar:    fmt.Sprintf("aotVectorFn%d", index),
 			rootVersionVar: rootVersionVar,
 		}
 		directType := "lang.ArityFn"
@@ -122,6 +124,36 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 				continue
 			}
 			target.int64Analysis = analysis
+			changed = true
+		}
+		if !changed {
+			break
+		}
+	}
+	for {
+		changed := false
+		for _, named := range vars {
+			target := g.aotCallTargets[named.vr]
+			if target == nil || target.arityDispatch ||
+				target.arity > 4 || !target.directLinked {
+				continue
+			}
+			fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
+			method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
+			analysis := analyzeVectorAOTFunction(
+				target,
+				method,
+				g.aotCallTargets,
+			)
+			if analysis == nil {
+				continue
+			}
+			if target.vectorAnalysis != nil &&
+				bits.OnesCount32(target.vectorAnalysis.paramMask) >=
+					bits.OnesCount32(analysis.paramMask) {
+				continue
+			}
+			target.vectorAnalysis = analysis
 			changed = true
 		}
 		if !changed {
@@ -190,6 +222,16 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 				&g.aotDeclarations,
 				"var %s func(%s) (float64, bool)\n",
 				target.float64FnVar,
+				strings.Join(params, ", "),
+			)
+		}
+		if target.vectorAnalysis != nil &&
+			target.vectorAnalysis.result.transient {
+			params := vectorAOTParamTypes(target.vectorAnalysis)
+			fmt.Fprintf(
+				&g.aotDeclarations,
+				"var %s func(%s) *lang.TransientVector\n",
+				target.vectorFnVar,
 				strings.Join(params, ", "),
 			)
 		}

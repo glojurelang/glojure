@@ -65,6 +65,24 @@ func NewVector(values ...any) *Vector {
 	}
 }
 
+// CanTransientlyUpdateInt64Vector reports whether v can enter the typed
+// transient-vector update fast path. The element check is intentionally a
+// guard, not a coercion. Metadata takes the persistent fallback because the
+// transient representation does not retain it. The size limit keeps updates
+// in the independently copied tail until tree-backed transients use edit-token
+// copy-on-write.
+func CanTransientlyUpdateInt64Vector(v *Vector) bool {
+	if v.Count() > 32 || v.Meta() != nil {
+		return false
+	}
+	for i := 0; i < v.Count(); i++ {
+		if _, ok := v.Nth(i).(int64); !ok {
+			return false
+		}
+	}
+	return true
+}
+
 var (
 	_ APersistentVector = (*Vector)(nil)
 	_ IPersistentVector = (*Vector)(nil)
@@ -345,6 +363,14 @@ func (v *Vector) ensureAttrs() *vectorAttrs {
 func (v *Vector) AsTransient() ITransientCollection {
 	return &TransientVector{
 		vec: vector.NewTransient(&v.vec),
+	}
+}
+
+// AsTransientForUpdate creates the compact transient representation used by
+// compiler-proven assoc-heavy update regions.
+func (v *Vector) AsTransientForUpdate() *TransientVector {
+	return &TransientVector{
+		vec: vector.NewUpdateTransient(&v.vec),
 	}
 }
 
