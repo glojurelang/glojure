@@ -4925,10 +4925,7 @@
   {:added "1.0"
    :static true}
   [^regexp.*Regexp re s]
-  (let [m (re-matcher re s)]
-    ((fn step []
-       (when (. m (find))
-         (cons (re-groups m) (lazy-seq (step))))))))
+  (github.com:glojurelang:glojure:pkg:lang.NewRegexpSeq re s))
 
 (defn re-matches
   "Returns the match, if any, of string to pattern, using

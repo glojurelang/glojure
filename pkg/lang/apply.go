@@ -186,6 +186,8 @@ func Apply2(fn interface{}, a0, a1 any) any {
 		return f(asConser(a0), a1)
 	case func(*regexp.Regexp, string) *RegexpMatcher:
 		return f(a0.(*regexp.Regexp), a1.(string))
+	case func(*regexp.Regexp, string) ISeq:
+		return f(a0.(*regexp.Regexp), a1.(string))
 	case func([]string, string) string:
 		return f(asStringSlice(a0), a1.(string))
 	case func(io.Writer, any) io.Writer:

@@ -284,6 +284,78 @@ func TestNativeCoreStrPreservesNilAndStringConversion(t *testing.T) {
 	}
 }
 
+func TestNativeCoreStrConsumesIndexedMappedSequenceDirectly(t *testing.T) {
+	calls := 0
+	mapped := nativeMapIndexedSeq(
+		lang.FnFunc2(func(index, value interface{}) interface{} {
+			calls++
+			return lang.ToString(index) + value.(string)
+		}),
+		lang.NewRepeatN(3, "x"),
+		nil,
+	)
+
+	if got := (nativeCoreStr{}).ApplyTo(lang.Seq(mapped)); got != "0x1x2x" {
+		t.Fatalf("indexed mapped str = %q, want 0x1x2x", got)
+	}
+	if calls != 3 {
+		t.Fatalf("indexed mapping ran %d times, want 3", calls)
+	}
+}
+
+func TestNativeMapIndexedStringConsumptionCachesRealizedValues(t *testing.T) {
+	if !testCompilerAvailable {
+		t.Skip("source evaluator is unavailable in an AOT runtime build")
+	}
+	env := NewEnvironment()
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("runtime.native-map-indexed"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	result := ReadEval(`
+		(let [calls (atom 0)
+		      values (map-indexed
+		               (fn [index value]
+		                 (swap! calls inc)
+		                 (str index value))
+		               (repeat 3 "x"))
+		      joined (apply str values)]
+		  [joined
+		   (second values)
+		   @calls
+		   (vec (map-indexed (fn [index value] [index value])
+		                     ["a" "b"]))
+		   (into [] (map-indexed (fn [index value] [index value]))
+		         ["a" "b"])])`,
+		WithEnv(env),
+	).(lang.IPersistentVector)
+
+	if got := result.Nth(0); got != "0x1x2x" {
+		t.Fatalf("joined indexed values = %q, want 0x1x2x", got)
+	}
+	if got := result.Nth(1); got != "1x" {
+		t.Fatalf("second cached indexed value = %q, want 1x", got)
+	}
+	if got := result.Nth(2); got != int64(3) {
+		t.Fatalf("indexed callback calls = %v, want 3", got)
+	}
+	wantIndexed := lang.NewVector(
+		lang.NewVector(int64(0), "a"),
+		lang.NewVector(int64(1), "b"),
+	)
+	if got := result.Nth(3); !lang.Equals(got, wantIndexed) {
+		t.Fatalf("chunked map-indexed fallback = %v, want %v",
+			got, wantIndexed)
+	}
+	if got := result.Nth(4); !lang.Equals(got, wantIndexed) {
+		t.Fatalf("map-indexed transducer fallback = %v, want %v",
+			got, wantIndexed)
+	}
+}
+
 func TestNativeCoreRegexMatchPreservesClojureGroups(t *testing.T) {
 	find := nativeCoreRegexMatch{}
 	matches := nativeCoreRegexMatch{full: true}
@@ -299,6 +371,63 @@ func TestNativeCoreRegexMatchPreservesClojureGroups(t *testing.T) {
 	}
 	if got := matches.Invoke2(regexp.MustCompile(`b+`), "abbc"); got != nil {
 		t.Fatalf("partial re-matches = %v, want nil", got)
+	}
+}
+
+func TestNativeCoreRegexpSeqThroughCore(t *testing.T) {
+	if !testCompilerAvailable {
+		t.Skip("source evaluator is unavailable in an AOT runtime build")
+	}
+	env := NewEnvironment()
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("runtime.native-regexp-seq"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	result := ReadEval(`
+		(let [matches (re-seq #"[cgt]gggtaaa|tttaccc[acg]"
+		                      "xxcgggtaaayytttacccazz")]
+		  [(vec matches) (count matches) (counted? matches)])`,
+		WithEnv(env),
+	).(lang.IPersistentVector)
+
+	if got := result.Nth(0); !lang.Equals(
+		got,
+		lang.NewVector("cgggtaaa", "tttaccca"),
+	) {
+		t.Fatalf("core re-seq matches = %v", got)
+	}
+	if got := lang.MustAsInt(result.Nth(1)); got != 2 {
+		t.Fatalf("core re-seq count = %v, want 2", got)
+	}
+	if got := result.Nth(2); got != false {
+		t.Fatalf("core re-seq counted? = %v, want false", got)
+	}
+}
+
+func TestNativeStringReplaceUsesRegexpSemantics(t *testing.T) {
+	fn := nativeStringReplace{}
+	for _, test := range []struct {
+		pattern     string
+		input       string
+		replacement string
+	}{
+		{`a[NSt]|BY`, "aNtaStaStBY", "<2>"},
+		{`a+`, "caaab", "_"},
+		{`(ab)`, "xxabyy", "$1$1"},
+	} {
+		expression := regexp.MustCompile(test.pattern)
+		want := expression.ReplaceAllString(test.input, test.replacement)
+		if got := fn.Invoke3(
+			test.input,
+			expression,
+			test.replacement,
+		); got != want {
+			t.Fatalf("replace %q = %q, want %q",
+				test.pattern, got, want)
+		}
 	}
 }
 

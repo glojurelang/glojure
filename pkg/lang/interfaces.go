@@ -519,6 +519,8 @@ func Count(coll any) int {
 		// Go strings are immutable byte sequences. Text operations that need
 		// Unicode semantics decode UTF-8 explicitly.
 		return len(arg)
+	case fastCounter:
+		return arg.countFast()
 	case Counted:
 		return arg.Count()
 	}

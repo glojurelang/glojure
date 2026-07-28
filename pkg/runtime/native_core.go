@@ -16,6 +16,7 @@ func (nativeCoreAdd) IsFnValue()        {}
 func (nativeCoreSubtract) IsFnValue()   {}
 func (nativeCoreStr) IsFnValue()        {}
 func (nativeCoreRegexMatch) IsFnValue() {}
+func (nativeCoreRegexSeq) IsFnValue()   {}
 func (nativeCoreGetIn) IsFnValue()      {}
 func (nativeCoreAssoc) IsFnValue()      {}
 func (nativeStringIncludes) IsFnValue() {}
@@ -297,6 +298,10 @@ func (fn nativeCoreSubtract) ApplyTo(args lang.ISeq) interface{} {
 // preserves clojure.core/str's nil handling and ToString conversion.
 type nativeCoreStr struct{}
 
+type nativeStringAppender interface {
+	AppendStrings(*strings.Builder)
+}
+
 func (nativeCoreStr) Invoke(args ...interface{}) interface{} {
 	switch len(args) {
 	case 0:
@@ -347,6 +352,10 @@ func (nativeCoreStr) ApplyTo(args lang.ISeq) interface{} {
 		return ""
 	}
 	var builder strings.Builder
+	if appender, ok := args.(nativeStringAppender); ok {
+		appender.AppendStrings(&builder)
+		return builder.String()
+	}
 	for ; args != nil; args = args.Next() {
 		if value := args.First(); value != nil {
 			builder.WriteString(lang.ToString(value))
@@ -416,6 +425,23 @@ func (fn nativeCoreRegexMatch) Invoke2(pattern, value interface{}) interface{} {
 
 func (fn nativeCoreRegexMatch) ApplyTo(args lang.ISeq) interface{} {
 	return fn.Invoke(seqToSlice(args)...)
+}
+
+type nativeCoreRegexSeq struct{}
+
+func (nativeCoreRegexSeq) Invoke(args ...interface{}) interface{} {
+	if len(args) != 2 {
+		panic(lang.NewIllegalArgumentError("re-seq expects 2 arguments"))
+	}
+	return nativeCoreRegexSeq{}.Invoke2(args[0], args[1])
+}
+
+func (nativeCoreRegexSeq) Invoke2(pattern, value interface{}) interface{} {
+	return lang.NewRegexpSeq(pattern.(*regexp.Regexp), value.(string))
+}
+
+func (nativeCoreRegexSeq) ApplyTo(args lang.ISeq) interface{} {
+	return nativeCoreRegexSeq{}.Invoke(seqToSlice(args)...)
 }
 
 type nativeCoreGetIn struct{}
@@ -571,7 +597,7 @@ func (fn nativeStringReplace) Invoke3(value, match, replacement interface{}) int
 		}
 	case *regexp.Regexp:
 		if replacement, ok := replacement.(string); ok {
-			return match.ReplaceAllString(text, replacement)
+			return lang.ReplaceRegexpAllString(match, text, replacement)
 		}
 	}
 	return lang.Apply3(fn.fallback, value, match, replacement)
@@ -1077,6 +1103,9 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	if reMatches := core.FindInternedVar(lang.NewSymbol("re-matches")); reMatches != nil {
 		reMatches.BindRoot(nativeCoreRegexMatch{full: true})
 	}
+	if reSeq := core.FindInternedVar(lang.NewSymbol("re-seq")); reSeq != nil {
+		reSeq.BindRoot(nativeCoreRegexSeq{})
+	}
 	if getIn := core.FindInternedVar(lang.NewSymbol("get-in")); getIn != nil {
 		getIn.BindRoot(nativeCoreGetIn{})
 	}
@@ -1131,6 +1160,7 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 		}),
 	)
 	installFixedArityCoreFunction(core, "map", 2, lang.FnFunc2(nativeMapSeq))
+	installNativeMapIndexed(core)
 	installFixedArityCoreFunction(core, "mapv", 2, lang.FnFunc2(nativeMapv))
 	installFixedArityCoreFunction(
 		core,
@@ -1164,7 +1194,7 @@ func recordOptimizableCoreRoots(core *lang.Namespace) {
 		"*", "+", "apply", "assoc", "assoc-in", "atom", "cons", "conj", "count", "dec", "deref",
 		"empty?", "even?", "filter", "first", "fnil", "get", "identity", "inc", "map",
 		"mapv", "mod", "neg?", "next", "not", "nth", "odd?", "peek", "pop", "pos?", "range",
-		"reduce", "reset!", "seq", "str", "swap!", "take", "zero?",
+		"re-seq", "reduce", "reset!", "seq", "str", "swap!", "take", "zero?",
 	)
 }
 
@@ -1208,6 +1238,24 @@ func installFixedArityCoreFunction(
 	vr.BindRoot(lang.NewArityFn(
 		fixed[0], fixed[1], fixed[2], fixed[3], fixed[4],
 		original, 0,
+	))
+}
+
+func installNativeMapIndexed(core *lang.Namespace) {
+	mapIndexed := core.FindInternedVar(lang.NewSymbol("map-indexed"))
+	if mapIndexed == nil || !mapIndexed.IsBound() {
+		return
+	}
+	fallback, ok := mapIndexed.Get().(lang.IFn)
+	if !ok {
+		return
+	}
+	method := lang.FnFunc2(func(fn, coll any) any {
+		return nativeMapIndexedSeq(fn, coll, fallback)
+	})
+	mapIndexed.BindRoot(lang.NewArityFn(
+		nil, nil, method, nil, nil,
+		fallback, 0,
 	))
 }
 
@@ -1287,6 +1335,24 @@ func nativeMapSeq(fn, coll interface{}) interface{} {
 			nativeMapSeq(fn, seq.More()),
 		)
 	})
+}
+
+func nativeMapIndexedSeq(fn, coll, fallback interface{}) interface{} {
+	if seq, ok := coll.(lang.ISeq); ok {
+		_, lazy := seq.(*lang.LazySeq)
+		_, chunked := seq.(lang.IChunkedSeq)
+		if !lazy && !chunked {
+			if source := seq.Seq(); source != nil {
+				return lang.NewIndexedMappedSeq(fn, source)
+			}
+		}
+	}
+	if fallback == nil {
+		panic(lang.NewIllegalStateError(
+			"map-indexed fallback required for lazy or chunked input",
+		))
+	}
+	return lang.Apply2(fallback, fn, coll)
 }
 
 func nativeFilterSeq(pred, coll interface{}) interface{} {
