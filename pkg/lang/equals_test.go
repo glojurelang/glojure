@@ -5,6 +5,13 @@ import (
 	"testing"
 )
 
+type charEqualser struct{}
+
+func (charEqualser) Equals(value interface{}) bool {
+	_, ok := value.(Char)
+	return ok
+}
+
 func TestEquiv(t *testing.T) {
 	equivs := [][]any{
 		{nil, nil},
@@ -13,6 +20,7 @@ func TestEquiv(t *testing.T) {
 		{1, 1},
 		{1.0, 1.0},
 		{"a", "a"},
+		{NewChar('A'), BoxChar('A')},
 		{NewVector(), emptyList},
 		{NewVector(1, 2, 3), NewList(1, 2, 3)},
 		{NewPersistentHashMap(), emptyMap},
@@ -40,6 +48,38 @@ func TestEquiv(t *testing.T) {
 						t.Errorf("%v != %v, expected %v to hasheq to %v", hasheqI, hasheqJ, els[i], els[j])
 					}
 				}
+			}
+		})
+	}
+}
+
+func TestEqualsCharFastPath(t *testing.T) {
+	for _, test := range []struct {
+		name  string
+		left  any
+		right any
+		want  bool
+	}{
+		{name: "same", left: NewChar('A'), right: NewChar('A'), want: true},
+		{name: "different", left: NewChar('A'), right: NewChar('C')},
+		{name: "char-left", left: NewChar('A'), right: int64('A')},
+		{name: "char-right", left: int64('A'), right: NewChar('A')},
+		{
+			name:  "custom-left",
+			left:  charEqualser{},
+			right: NewChar('A'),
+			want:  true,
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if got := Equals(test.left, test.right); got != test.want {
+				t.Fatalf(
+					"Equals(%#v, %#v) = %v, want %v",
+					test.left,
+					test.right,
+					got,
+					test.want,
+				)
 			}
 		})
 	}

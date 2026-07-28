@@ -9,6 +9,11 @@ func Equiv(a, b any) bool {
 }
 
 func Equals(a, b any) bool {
+	if aChar, ok := a.(Char); ok {
+		bChar, ok := b.(Char)
+		return ok && aChar == bChar
+	}
+
 	// check functions first, because == panics on func comparison.
 	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)
 	if aVal.Kind() == reflect.Func || bVal.Kind() == reflect.Func {
