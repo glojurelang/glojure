@@ -100,6 +100,14 @@ func (k Keyword) Equals(v interface{}) bool {
 	return k == v
 }
 
+// EqualsKeyword compares a dynamically represented value with an unboxed
+// keyword. Generated dispatch paths use it to avoid boxing the known keyword
+// solely for an equality check.
+func EqualsKeyword(value any, keyword Keyword) bool {
+	got, ok := value.(Keyword)
+	return ok && got == keyword
+}
+
 func (k Keyword) Invoke(args ...interface{}) interface{} {
 	if len(args) == 0 || len(args) > 2 {
 		panic(fmt.Errorf("wrong number of args (%v) passed to: %v", len(args), k))

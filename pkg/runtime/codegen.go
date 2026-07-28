@@ -98,6 +98,8 @@ type aotSpecializationTarget struct {
 	int64FnVar          string
 	int64Analysis       *int64AOTAnalysis
 	int64Safe           bool
+	int64ParamFnVar     string
+	int64ParamAnalysis  *int64ParamAOTAnalysis
 	float64FnVar        string
 	float64Analysis     *float64AOTAnalysis
 	vectorFnVar         string
@@ -124,6 +126,27 @@ type aotProtocolCallTarget struct {
 	multiFnVar    string
 	generationVar string
 	methods       []*aotProtocolPrimitiveMethod
+}
+
+type aotMultiFnMethod struct {
+	fn         *Fn
+	components []any
+	helperVar  string
+}
+
+type aotMultiFnCallTarget struct {
+	vr            *lang.Var
+	multiFn       *lang.MultiFn
+	multiFnVar    string
+	generationVar string
+	exactVar      string
+	dispatchVar   string
+	fastFnVar     string
+	arity         int
+	dispatch      *Fn
+	dispatchPlan  *compiler.IRFixedVectorResultPlan
+	methods       []*aotMultiFnMethod
+	defaultMethod *aotMultiFnMethod
 }
 
 type aotExternalCallKey struct {
@@ -187,6 +210,9 @@ type Generator struct {
 	aotCallTargets         map[*lang.Var]*aotSpecializationTarget
 	aotProtocolCallTargets map[*lang.Var]*aotProtocolCallTarget
 	aotProtocolMethods     map[*Fn][]*aotProtocolPrimitiveMethod
+	aotMultiFnCallTargets  map[*lang.Var]*aotMultiFnCallTarget
+	aotMultiFnValues       map[*lang.MultiFn]*aotMultiFnCallTarget
+	aotMultiFnMethods      map[*Fn][]*aotMultiFnMethod
 	aotExternalCallTargets map[aotExternalCallKey]*aotExternalCallTarget
 	aotNamespace           *lang.Namespace
 	directLink             bool
@@ -259,6 +285,9 @@ func newGenerator(w io.Writer, directLink bool) *Generator {
 		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
 		aotProtocolCallTargets: make(map[*lang.Var]*aotProtocolCallTarget),
 		aotProtocolMethods:     make(map[*Fn][]*aotProtocolPrimitiveMethod),
+		aotMultiFnCallTargets:  make(map[*lang.Var]*aotMultiFnCallTarget),
+		aotMultiFnValues:       make(map[*lang.MultiFn]*aotMultiFnCallTarget),
+		aotMultiFnMethods:      make(map[*Fn][]*aotMultiFnMethod),
 		aotExternalCallTargets: make(map[aotExternalCallKey]*aotExternalCallTarget),
 		directLink:             directLink,
 	}
@@ -769,6 +798,11 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 			g.writef("%s = %s\n", target.multiFnVar, valueExpr)
 			g.writef("%s = %s.ProtocolGeneration()\n",
 				target.generationVar, valueExpr)
+		}
+		if target := g.aotMultiFnCallTargets[vr]; target != nil {
+			g.writef("%s = %s\n", target.multiFnVar, valueExpr)
+			g.writef("%s, %s = %s.ExactGeneration()\n",
+				target.generationVar, target.exactVar, valueExpr)
 		}
 		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, valueExpr)
 		if target := g.specializationTarget; target != nil && target.rootVersionVar != "" {
@@ -1398,6 +1432,9 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 				for _, primitive := range g.aotProtocolMethods[fn] {
 					g.generateAOTProtocolPrimitiveMethod(primitive)
 				}
+				for _, planned := range g.aotMultiFnMethods[fn] {
+					g.writef("%s = %s\n", planned.helperVar, methodVar)
+				}
 			}
 
 			g.writef("%s.AddMethod(%s, %s)\n", mfVar, dispatchValVar, methodVar)
@@ -1422,6 +1459,9 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 				g.writef("%s.PreferMethod(%s, %s)\n", mfVar, dispatchValXVar, dispatchValYVar)
 			}
 		}
+	}
+	if target := g.aotMultiFnValues[mf]; target != nil {
+		g.generateAOTMultiFnFastPath(target)
 	}
 
 	return mfVar
@@ -2158,6 +2198,12 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 		if result, ok := g.generateIROwnedMapReduce(invokeNode, plan); ok {
 			return result
 		}
+	}
+	if result, ok := g.generateAOTMultiFnInvoke(node); ok {
+		return result
+	}
+	if result, ok := g.generateAOTInt64ParameterInvoke(node); ok {
+		return result
 	}
 	if result, ok := g.generateAOTSafeInt64Invoke(node); ok {
 		return result

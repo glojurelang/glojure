@@ -1450,6 +1450,93 @@ func TestGenerateGuardedInt64ParameterRegion(t *testing.T) {
 	}
 }
 
+func TestGenerateTypedInt64ParameterDirectCallWithDynamicResult(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.typed-int64-parameter-call"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn make-event [index]
+		  {:value (mod (* index 37) 1000)})
+		(defn run-one []
+		  (make-event 7))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate typed parameter call: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"var aotInt64ParamFn",
+		"// direct int64 parameter call",
+		"lang.CheckedMultiplyInt64(",
+		"lang.ModInt64(",
+		".(int64)",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("typed parameter call omitted %q:\n%s",
+				expected, generated)
+		}
+	}
+
+	var fallback bytes.Buffer
+	if err := newGenerator(&fallback, false).Generate(ns); err != nil {
+		t.Fatalf("generate typed call without direct linking: %v", err)
+	}
+	if strings.Contains(fallback.String(), "aotInt64ParamFn") {
+		t.Fatalf("disabled direct linking retained typed parameter call:\n%s",
+			fallback.String())
+	}
+}
+
+func TestGenerateStableCompositeMultiFnDispatch(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.stable-composite-multifn"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defmulti choose
+		  (fn [event] [(:kind event) (:priority event)]))
+		(defmethod choose [:read :low] [event]
+		  (:value event))
+		(defmethod choose :default [_]
+		  0)
+		(defn run-one []
+		  (choose {:kind :read :priority :low :value 42}))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate composite multimethod: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"var aotMultiFnFast",
+		"var aotMultiFnDispatch",
+		".IsGeneration(",
+		"// scalar multimethod dispatch",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("scalar multimethod dispatch omitted %q:\n%s",
+				expected, generated)
+		}
+	}
+
+	var fallback bytes.Buffer
+	if err := newGenerator(&fallback, false).Generate(ns); err != nil {
+		t.Fatalf("generate multimethod without direct linking: %v", err)
+	}
+	if strings.Contains(fallback.String(), "aotMultiFnFast") {
+		t.Fatalf("disabled direct linking retained multimethod fast path:\n%s",
+			fallback.String())
+	}
+}
+
 func TestGenerateSeqTruthinessWithoutSequenceAllocation(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.seq-truthiness"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)

@@ -103,6 +103,24 @@ type IRCallSignature struct {
 	Result IRType
 }
 
+// IRDirectCallSite exposes the argument representations inferred at a
+// statically resolved Var call. Backends can use these shared facts to prepare
+// typed entry points without rediscovering caller-local types.
+type IRDirectCallSite struct {
+	Node          *ast.Node
+	Var           *lang.Var
+	ArgumentTypes []IRType
+}
+
+// IRFixedVectorResultPlan describes a fixed-arity function whose body returns
+// a vector assembled directly from expressions over its parameters. A backend
+// may consume the components without materializing the vector when the vector
+// itself cannot be observed.
+type IRFixedVectorResultPlan struct {
+	Method     *ast.FnMethodNode
+	Components []*ast.Node
+}
+
 type TypedIROptions struct {
 	CallSignatures map[*lang.Var][]IRCallSignature
 	// ParameterTypes seeds representation facts for a guarded function
@@ -348,6 +366,114 @@ func (ir *TypedIR) ResolvedCallCount() int {
 		}
 	}
 	return count
+}
+
+// RepresentationScore counts operations whose result has a concrete
+// representation. Constants and local reads are excluded: the score is used
+// to decide whether seeding parameter types unlocks useful work inside a
+// function rather than merely restating the parameter representation.
+func (ir *TypedIR) RepresentationScore() int {
+	if ir == nil {
+		return 0
+	}
+	score := 0
+	for node, facts := range ir.facts {
+		if facts.Type.Kind == IRDynamic {
+			continue
+		}
+		switch node.Op {
+		case ast.OpInvoke, ast.OpKeywordLookup, ast.OpAssoc,
+			ast.OpReplaceLast, ast.OpHostCall, ast.OpHostField,
+			ast.OpHostInterop, ast.OpIf, ast.OpCase:
+			score++
+		}
+	}
+	return score
+}
+
+// DirectCallSites returns statically resolved Var calls together with the
+// representation inferred for each argument.
+func (ir *TypedIR) DirectCallSites() []IRDirectCallSite {
+	if ir == nil {
+		return nil
+	}
+	var result []IRDirectCallSite
+	for node, facts := range ir.facts {
+		if node.Op != ast.OpInvoke || !facts.Call.Known ||
+			facts.Call.Var == nil {
+			continue
+		}
+		invoke := node.Sub.(*ast.InvokeNode)
+		types := make([]IRType, len(invoke.Args))
+		for index, argument := range invoke.Args {
+			types[index] = ir.facts[argument].Type
+		}
+		result = append(result, IRDirectCallSite{
+			Node:          node,
+			Var:           facts.Call.Var,
+			ArgumentTypes: types,
+		})
+	}
+	return result
+}
+
+// AnalyzeFixedVectorResult recognizes a deliberately small, composable region:
+// one fixed-arity method returning a literal vector whose component
+// expressions have no free locals or nested binding forms.
+func AnalyzeFixedVectorResult(root *ast.Node) *IRFixedVectorResultPlan {
+	if root == nil || root.Op != ast.OpFn {
+		return nil
+	}
+	fn := root.Sub.(*ast.FnNode)
+	if fn.IsVariadic || len(fn.Methods) != 1 || fn.Local != nil {
+		return nil
+	}
+	method := fn.Methods[0].Sub.(*ast.FnMethodNode)
+	if method.IsVariadic || method.FixedArity < 0 ||
+		method.FixedArity > 4 {
+		return nil
+	}
+	body := method.Body
+	if body.Op == ast.OpDo {
+		do := body.Sub.(*ast.DoNode)
+		if len(do.Statements) != 0 {
+			return nil
+		}
+		body = do.Ret
+	}
+	if body == nil || body.Op != ast.OpVector {
+		return nil
+	}
+	components := body.Sub.(*ast.VectorNode).Items
+	if len(components) == 0 || len(components) > 4 {
+		return nil
+	}
+	params := make(map[*lang.Symbol]struct{}, len(method.Params))
+	for _, parameter := range method.Params {
+		params[parameter.Sub.(*ast.BindingNode).Name] = struct{}{}
+	}
+	valid := true
+	for _, component := range components {
+		_, err := ast.Transform(component, func(node *ast.Node) (*ast.Node, error) {
+			switch node.Op {
+			case ast.OpLocal:
+				if _, ok := params[node.Sub.(*ast.LocalNode).Name]; !ok {
+					valid = false
+				}
+			case ast.OpFn, ast.OpFnMethod, ast.OpLet, ast.OpLetFn,
+				ast.OpLoop, ast.OpRecur:
+				valid = false
+			}
+			return node, nil
+		})
+		if err != nil || !valid {
+			return nil
+		}
+	}
+	return &IRFixedVectorResultPlan{
+		Method:     method,
+		Components: append([]*ast.Node(nil), components...),
+	}
 }
 
 // GuardedCallsSafe reports whether a function can select guarded call

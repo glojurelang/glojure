@@ -731,6 +731,104 @@ func TestTypedIRSeedsGuardedParameterTypes(t *testing.T) {
 	}
 }
 
+func TestTypedIRReportsCallArgumentTypesAndRepresentationScore(t *testing.T) {
+	target := lang.NewVar(
+		lang.FindOrCreateNamespace(lang.NewSymbol("typed-ir-test")),
+		lang.NewSymbol("target"),
+	)
+	parameter := lang.NewSymbol("value")
+	local := typedIRLocal(parameter)
+	one := typedIRConst(int64(1))
+	add := &ast.Node{
+		Op: ast.OpHostCall,
+		Sub: &ast.HostCallNode{
+			Target: typedIRConst(lang.Numbers),
+			Method: lang.NewSymbol("Add"),
+			Args:   []*ast.Node{local, one},
+		},
+	}
+	invoke := &ast.Node{
+		Op: ast.OpInvoke,
+		Sub: &ast.InvokeNode{
+			Fn: &ast.Node{
+				Op:  ast.OpVar,
+				Sub: &ast.VarNode{Var: target},
+			},
+			Args: []*ast.Node{add},
+		},
+	}
+	root := &ast.Node{
+		Op: ast.OpFn,
+		Sub: &ast.FnNode{
+			Methods: []*ast.Node{{
+				Op: ast.OpFnMethod,
+				Sub: &ast.FnMethodNode{
+					Params:     []*ast.Node{typedIRBinding(parameter, nil)},
+					FixedArity: 1,
+					Body:       invoke,
+				},
+			}},
+		},
+	}
+
+	base := BuildTypedIR(root)
+	optimized := BuildTypedIRWithOptions(root, TypedIROptions{
+		ParameterTypes: map[*lang.Symbol]IRType{
+			parameter: {Kind: IRInt},
+		},
+	})
+	if optimized.RepresentationScore() <= base.RepresentationScore() {
+		t.Fatalf(
+			"typed parameter score = %d, want greater than base %d",
+			optimized.RepresentationScore(),
+			base.RepresentationScore(),
+		)
+	}
+	sites := optimized.DirectCallSites()
+	if len(sites) != 1 || sites[0].Var != target ||
+		len(sites[0].ArgumentTypes) != 1 ||
+		sites[0].ArgumentTypes[0].Kind != IRInt {
+		t.Fatalf("direct call sites = %#v, want one int call", sites)
+	}
+}
+
+func TestAnalyzeFixedVectorResultRequiresParameterLocalComponents(t *testing.T) {
+	left := lang.NewSymbol("left")
+	right := lang.NewSymbol("right")
+	vector := &ast.Node{
+		Op: ast.OpVector,
+		Sub: &ast.VectorNode{Items: []*ast.Node{
+			typedIRLocal(left),
+			typedIRLocal(right),
+		}},
+	}
+	root := &ast.Node{
+		Op: ast.OpFn,
+		Sub: &ast.FnNode{Methods: []*ast.Node{{
+			Op: ast.OpFnMethod,
+			Sub: &ast.FnMethodNode{
+				Params: []*ast.Node{
+					typedIRBinding(left, nil),
+					typedIRBinding(right, nil),
+				},
+				FixedArity: 2,
+				Body:       vector,
+			},
+		}}},
+	}
+	plan := AnalyzeFixedVectorResult(root)
+	if plan == nil || plan.Method.FixedArity != 2 ||
+		len(plan.Components) != 2 {
+		t.Fatalf("fixed vector result plan = %#v", plan)
+	}
+
+	vector.Sub.(*ast.VectorNode).Items[1] =
+		typedIRLocal(lang.NewSymbol("captured"))
+	if got := AnalyzeFixedVectorResult(root); got != nil {
+		t.Fatalf("free-local vector result plan = %#v, want nil", got)
+	}
+}
+
 func typedIRConst(value any) *ast.Node {
 	return &ast.Node{
 		Op:  ast.OpConst,

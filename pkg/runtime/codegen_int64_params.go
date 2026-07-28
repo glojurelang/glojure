@@ -21,6 +21,70 @@ type int64ParamAOTAnalysis struct {
 	ir        *compiler.TypedIR
 }
 
+func (g *Generator) prepareInt64ParameterSpecializations() {
+	if !g.directLink {
+		return
+	}
+	candidates := make(
+		map[*aotSpecializationTarget]map[uint32]struct{},
+	)
+	for _, caller := range g.aotCallTargets {
+		if caller == nil || caller.fn == nil {
+			continue
+		}
+		ir := compiler.BuildTypedIR(caller.fn.ASTNode())
+		for _, call := range ir.DirectCallSites() {
+			target := g.aotCallTargets[call.Var]
+			if target == nil || !target.directLinked ||
+				target.arityDispatch || target.arity < 1 ||
+				target.arity > 4 ||
+				len(call.ArgumentTypes) != target.arity {
+				continue
+			}
+			var mask uint32
+			for index, typ := range call.ArgumentTypes {
+				if typ.Kind == compiler.IRInt {
+					mask |= uint32(1) << index
+				}
+			}
+			if mask == 0 {
+				continue
+			}
+			if candidates[target] == nil {
+				candidates[target] = make(map[uint32]struct{})
+			}
+			candidates[target][mask] = struct{}{}
+		}
+	}
+
+	for _, target := range g.aotCallTargets {
+		if target == nil || !target.directLinked ||
+			target.arityDispatch || target.arity < 1 ||
+			target.arity > 4 {
+			continue
+		}
+		if target.int64Analysis != nil ||
+			target.float64Analysis != nil ||
+			target.vectorAnalysis != nil ||
+			target.ownedVectorAnalysis != nil ||
+			target.recordAnalysis != nil {
+			continue
+		}
+		masks := candidates[target]
+		candidateMasks := make([]uint32, 0, len(masks))
+		for mask := range masks {
+			candidateMasks = append(candidateMasks, mask)
+		}
+		fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
+		method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
+		target.int64ParamAnalysis = g.analyzeInt64ParameterRegion(
+			target.fn,
+			method,
+			candidateMasks,
+		)
+	}
+}
+
 func (g *Generator) aotSafeInt64CallSignatures() map[*lang.Var][]compiler.IRCallSignature {
 	signatures := make(map[*lang.Var][]compiler.IRCallSignature)
 	for vr, target := range g.aotCallTargets {
@@ -42,6 +106,7 @@ func (g *Generator) aotSafeInt64CallSignatures() map[*lang.Var][]compiler.IRCall
 func (g *Generator) analyzeInt64ParameterRegion(
 	fn *Fn,
 	method *ast.FnMethodNode,
+	candidateMasks []uint32,
 ) *int64ParamAOTAnalysis {
 	if !g.directLink || fn == nil || method == nil ||
 		method.IsVariadic || method.FixedArity < 1 ||
@@ -49,7 +114,7 @@ func (g *Generator) analyzeInt64ParameterRegion(
 		return nil
 	}
 	signatures := g.aotSafeInt64CallSignatures()
-	if len(signatures) == 0 {
+	if len(candidateMasks) == 0 && len(signatures) == 0 {
 		return nil
 	}
 	root := fn.ASTNode()
@@ -57,12 +122,25 @@ func (g *Generator) analyzeInt64ParameterRegion(
 		root,
 		compiler.TypedIROptions{CallSignatures: signatures},
 	)
-	baseScore := base.ResolvedCallCount()
+	baseScore := base.RepresentationScore()
+	baseResolved := base.ResolvedCallCount()
 	bestScore := baseScore
 	bestBits := method.FixedArity + 1
 	var best *int64ParamAOTAnalysis
 	limit := uint32(1) << method.FixedArity
 	for mask := uint32(1); mask < limit; mask++ {
+		if len(candidateMasks) != 0 {
+			available := false
+			for _, candidate := range candidateMasks {
+				if candidate&mask == mask {
+					available = true
+					break
+				}
+			}
+			if !available {
+				continue
+			}
+		}
 		parameterTypes := make(map[*lang.Symbol]compiler.IRType)
 		for i, parameter := range method.Params {
 			if mask&(uint32(1)<<i) == 0 {
@@ -80,7 +158,11 @@ func (g *Generator) analyzeInt64ParameterRegion(
 				ParameterTypes: parameterTypes,
 			},
 		)
-		score := optimized.ResolvedCallCount()
+		score := optimized.RepresentationScore()
+		if len(candidateMasks) == 0 &&
+			optimized.ResolvedCallCount() <= baseResolved {
+			continue
+		}
 		bitCount := bits.OnesCount32(mask)
 		if score <= baseScore ||
 			score < bestScore ||
@@ -97,6 +179,17 @@ func (g *Generator) analyzeInt64ParameterRegion(
 	return best
 }
 
+func int64ParamAOTTypes(mask uint32, arity int) []string {
+	result := make([]string, arity)
+	for index := range result {
+		result[index] = "any"
+		if mask&(uint32(1)<<index) != 0 {
+			result[index] = "int64"
+		}
+	}
+	return result
+}
+
 func (g *Generator) generateInt64ParameterSpecializedFixedFn(
 	fn *Fn,
 	fnVar string,
@@ -107,10 +200,32 @@ func (g *Generator) generateInt64ParameterSpecializedFixedFn(
 	if target == nil || target.fn != fn {
 		return false
 	}
-	analysis := g.analyzeInt64ParameterRegion(fn, method)
+	analysis := target.int64ParamAnalysis
 	if analysis == nil {
 		return false
 	}
+
+	typedParams := make([]string, method.FixedArity)
+	typedSignature := make([]string, method.FixedArity)
+	paramTypes := make([]compiler.IRValueKind, method.FixedArity)
+	for index := range typedParams {
+		typedParams[index] = g.allocateTempVar()
+		typ := "any"
+		if analysis.paramMask&(uint32(1)<<index) != 0 {
+			typ = "int64"
+			paramTypes[index] = compiler.IRInt
+		}
+		typedSignature[index] = typedParams[index] + " " + typ
+	}
+	g.writef("%s = func(%s) any {\n",
+		target.int64ParamFnVar,
+		strings.Join(typedSignature, ", "),
+	)
+	plainIR := g.currentIR
+	g.currentIR = analysis.ir
+	g.generateFnMethodFixedWithTypes(method, typedParams, paramTypes)
+	g.currentIR = plainIR
+	g.writef("}\n")
 
 	signature := ""
 	if method.FixedArity > 0 {
@@ -120,7 +235,6 @@ func (g *Generator) generateInt64ParameterSpecializedFixedFn(
 		fnVar, method.FixedArity, signature)
 
 	typedNames := append([]string(nil), paramNames...)
-	paramTypes := make([]compiler.IRValueKind, method.FixedArity)
 	guards := make([]string, 0, bits.OnesCount32(analysis.paramMask))
 	for i, paramName := range paramNames {
 		if analysis.paramMask&(uint32(1)<<i) == 0 {
@@ -130,21 +244,59 @@ func (g *Generator) generateInt64ParameterSpecializedFixedFn(
 		ok := g.allocateTempVar()
 		g.writef("%s, %s := %s.(int64)\n", typed, ok, paramName)
 		typedNames[i] = typed
-		paramTypes[i] = compiler.IRInt
 		guards = append(guards, ok)
 	}
 	if len(guards) == 0 {
 		panic(fmt.Sprintf("empty int64 parameter guard for %v", target.vr))
 	}
 	g.writef("if %s {\n", strings.Join(guards, " && "))
-	plainIR := g.currentIR
-	g.currentIR = analysis.ir
-	g.generateFnMethodFixedWithTypes(method, typedNames, paramTypes)
-	g.currentIR = plainIR
+	g.writef("return %s(%s)\n",
+		target.int64ParamFnVar,
+		strings.Join(typedNames, ", "),
+	)
 	g.writef("}\n")
 	g.generateFnMethodFixed(method, paramNames)
 	g.writef("})\n")
 	return true
+}
+
+func (g *Generator) generateAOTInt64ParameterInvoke(
+	node *ast.Node,
+) (string, bool) {
+	if !g.directLink || g.currentIR == nil ||
+		node == nil || node.Op != ast.OpInvoke {
+		return "", false
+	}
+	invoke := node.Sub.(*ast.InvokeNode)
+	target := g.aotInvokeTarget(invoke)
+	if target == nil || !target.directLinked ||
+		target.int64ParamAnalysis == nil ||
+		len(invoke.Args) != target.arity {
+		return "", false
+	}
+	mask := target.int64ParamAnalysis.paramMask
+	for index, argument := range invoke.Args {
+		if mask&(uint32(1)<<index) != 0 &&
+			g.currentIR.Facts(argument).Type.Kind != compiler.IRInt {
+			return "", false
+		}
+	}
+	args := make([]string, len(invoke.Args))
+	for index, argument := range invoke.Args {
+		code := g.generateASTNode(argument)
+		args[index] = code
+		if mask&(uint32(1)<<index) != 0 {
+			args[index] = g.irInt64Expr(argument, code)
+		}
+	}
+	result := g.allocateTempVar()
+	g.writef("// direct int64 parameter call %s\n", target.vr)
+	g.writef("%s := %s(%s)\n",
+		result,
+		target.int64ParamFnVar,
+		strings.Join(args, ", "),
+	)
+	return result, true
 }
 
 func (g *Generator) generateAOTSafeInt64Invoke(

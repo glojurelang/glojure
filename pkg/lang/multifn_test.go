@@ -185,3 +185,55 @@ func TestMultiFnRefreshesHierarchyBeforeMethodSelection(t *testing.T) {
 		t.Fatalf("multimethod result = %v, want matched", got)
 	}
 }
+
+func TestMultiFnGenerationTracksMethodsAndHierarchy(t *testing.T) {
+	hierarchyVar := NewVar(NSCore, NewSymbol("test-multifn-generation"))
+	firstHierarchy := NewMap()
+	hierarchyVar.BindRoot(firstHierarchy)
+	mf := NewMultiFn(
+		"test-generation",
+		FnFunc1(func(value any) any { return value }),
+		NewKeyword("default"),
+		hierarchyVar,
+	)
+	mf.AddMethod("first", FnFunc1(func(any) any { return "first" }))
+
+	generation := mf.Generation()
+	if !mf.IsGeneration(generation) {
+		t.Fatal("fresh multimethod generation was not stable")
+	}
+	if exactGeneration, exact := mf.ExactGeneration(); !exact ||
+		exactGeneration != generation {
+		t.Fatalf("exact generation = (%d, %v), want (%d, true)",
+			exactGeneration, exact, generation)
+	}
+	if got := testing.AllocsPerRun(1_000, func() {
+		if !mf.IsGeneration(generation) {
+			panic("generation changed")
+		}
+	}); got != 0 {
+		t.Fatalf("stable generation check allocated %v objects, want 0", got)
+	}
+	mf.AddMethod("second", FnFunc1(func(any) any { return "second" }))
+	if mf.IsGeneration(generation) {
+		t.Fatal("adding a method did not invalidate the generation")
+	}
+
+	generation = mf.Generation()
+	if !mf.IsGeneration(generation) {
+		t.Fatal("updated multimethod generation was not stable")
+	}
+	hierarchyVar.BindRoot(NewMap(
+		NewKeyword("parents"),
+		NewMap("child", NewSet("parent")),
+	))
+	if mf.IsGeneration(generation) {
+		t.Fatal("changing the hierarchy did not invalidate the generation")
+	}
+	if mf.Generation() == generation {
+		t.Fatal("hierarchy invalidation did not advance the generation")
+	}
+	if _, exact := mf.ExactGeneration(); exact {
+		t.Fatal("nonempty hierarchy was reported as exact")
+	}
+}

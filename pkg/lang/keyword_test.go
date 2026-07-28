@@ -53,3 +53,20 @@ func TestKeywordFixedArityLookup(t *testing.T) {
 		t.Fatalf("keyword array-map lookup allocated %v objects, want 0", got)
 	}
 }
+
+func TestEqualsKeywordDoesNotBoxKnownKeyword(t *testing.T) {
+	keyword := NewKeyword("known")
+	var value any = keyword
+	if !EqualsKeyword(value, keyword) ||
+		EqualsKeyword(value, NewKeyword("other")) ||
+		EqualsKeyword("known", keyword) {
+		t.Fatal("fixed keyword equality returned the wrong result")
+	}
+	if got := testing.AllocsPerRun(1_000, func() {
+		if !EqualsKeyword(value, keyword) {
+			panic("keyword changed")
+		}
+	}); got != 0 {
+		t.Fatalf("fixed keyword equality allocated %v objects, want 0", got)
+	}
+}

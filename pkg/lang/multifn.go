@@ -26,6 +26,7 @@ type MultiFn struct {
 	methodCache        IPersistentMap
 	cachedHierarchy    any
 	protocol           bool
+	generation         atomic.Uint64
 	protocolGeneration atomic.Uint64
 	protocolMethod     atomic.Pointer[protocolMethodCache]
 
@@ -42,6 +43,10 @@ var (
 	_ FixedArityFn5 = (*MultiFn)(nil)
 
 	varIsA = InternVarName(NSCore.Name(), NewSymbol("isa?"))
+
+	multiFnParentsKeyword     = NewKeyword("parents")
+	multiFnAncestorsKeyword   = NewKeyword("ancestors")
+	multiFnDescendantsKeyword = NewKeyword("descendants")
 )
 
 func NewMultiFn(name string, dispatchFn IFn, defaultDispatchVal any, hierarchy IRef) *MultiFn {
@@ -121,10 +126,62 @@ func IsAutoRegisteredMethod(mfName string, dispatchVal any, method any) bool {
 func (m *MultiFn) resetCache() {
 	m.methodCache = emptyMap
 	m.cachedHierarchy = m.hierarchy.Deref()
+	m.generation.Add(1)
 	if m.protocol {
 		m.protocolGeneration.Add(1)
 		m.protocolMethod.Store(nil)
 	}
+}
+
+// Generation changes whenever method selection may change.
+func (m *MultiFn) Generation() uint64 {
+	return m.generation.Load()
+}
+
+// IsGeneration verifies both the method/preference generation and the
+// hierarchy snapshot. Compiled call sites use it before selecting a method
+// directly; a changed hierarchy invalidates the ordinary method cache and the
+// compiled fast path together.
+func (m *MultiFn) IsGeneration(expected uint64) bool {
+	if m.generation.Load() != expected {
+		return false
+	}
+	hierarchy := m.hierarchy.Deref()
+	m.mtx.Lock()
+	defer m.mtx.Unlock()
+	if m.generation.Load() != expected {
+		return false
+	}
+	if m.cachedHierarchy != hierarchy {
+		m.resetCache()
+		return false
+	}
+	return true
+}
+
+// ExactGeneration snapshots a generation only when method selection has no
+// preferences or hierarchy relationships. Compiled exact-value dispatchers
+// call this once when a namespace loads, then use IsGeneration at call sites.
+func (m *MultiFn) ExactGeneration() (uint64, bool) {
+	hierarchy := m.hierarchy.Deref()
+	m.mtx.Lock()
+	defer m.mtx.Unlock()
+	if m.cachedHierarchy != hierarchy {
+		m.resetCache()
+	}
+	exact := m.preferTable.Count() == 0
+	for _, keyword := range []Keyword{
+		multiFnParentsKeyword,
+		multiFnAncestorsKeyword,
+		multiFnDescendantsKeyword,
+	} {
+		value := Get(hierarchy, keyword)
+		if !IsNil(value) && Count(value) != 0 {
+			exact = false
+			break
+		}
+	}
+	return m.generation.Load(), exact
 }
 
 func (m *MultiFn) GetMethodTable() IPersistentMap {
