@@ -16,33 +16,48 @@ func (ir *TypedIR) analyzeOwnedMap(
 	binding *ast.Node,
 	bindingIndex int,
 	loop *ast.LetNode,
-) bool {
+) IROwnedMapMode {
 	bindingNode := binding.Sub.(*ast.BindingNode)
-	if ir.facts[bindingNode.Init].Type.Kind != IRMap {
-		return false
+	var mode IROwnedMapMode
+	switch ir.facts[bindingNode.Init].Type.Kind {
+	case IRMap:
+		mode = IROwnedMapTransient
+	case IRDynamic, IRNil:
+		mode = IROwnedMapAdaptive
+	default:
+		return IROwnedMapNone
 	}
 	usage := ownedMapUsage{
 		ir:           ir,
 		target:       bindingNode.Name,
 		bindingIndex: bindingIndex,
 		loopID:       loop.LoopID,
+		mode:         mode,
 		safe:         true,
 	}
 	usage.scanTail(loop.Body)
 	if !usage.safe || usage.updates == 0 || usage.exits == 0 {
-		return false
+		return IROwnedMapNone
 	}
 	for _, update := range usage.updateNodes {
 		facts := ir.facts[update]
 		facts.OwnedMapAssoc = true
+		facts.OwnedMapMode = mode
 		ir.facts[update] = facts
+	}
+	for _, get := range usage.getNodes {
+		facts := ir.facts[get]
+		facts.OwnedMapGet = true
+		facts.OwnedMapMode = mode
+		ir.facts[get] = facts
 	}
 	for _, exit := range usage.exitNodes {
 		facts := ir.facts[exit]
 		facts.PersistOwnedMap = true
+		facts.OwnedMapMode = mode
 		ir.facts[exit] = facts
 	}
-	return true
+	return mode
 }
 
 type ownedMapUsage struct {
@@ -50,10 +65,12 @@ type ownedMapUsage struct {
 	target       *lang.Symbol
 	bindingIndex int
 	loopID       *lang.Symbol
+	mode         IROwnedMapMode
 	safe         bool
 	updates      int
 	exits        int
 	updateNodes  []*ast.Node
+	getNodes     []*ast.Node
 	exitNodes    []*ast.Node
 }
 
@@ -143,9 +160,7 @@ func (u *ownedMapUsage) scanRead(node *ast.Node) {
 		if len(call.Args) > 0 &&
 			irLocalIs(call.Args[0], u.target) &&
 			isOwnedMapReadHostCall(call) {
-			facts := u.ir.facts[node]
-			facts.OwnedMapGet = true
-			u.ir.facts[node] = facts
+			u.getNodes = append(u.getNodes, node)
 			for _, argument := range call.Args[1:] {
 				u.scanRead(argument)
 			}
@@ -161,7 +176,7 @@ func (u *ownedMapUsage) scanRead(node *ast.Node) {
 		invoke := node.Sub.(*ast.InvokeNode)
 		if len(invoke.Args) > 0 &&
 			irLocalIs(invoke.Args[0], u.target) &&
-			isOwnedMapReadCoreCall(invoke) {
+			isOwnedMapReadCoreCall(invoke, u.mode) {
 			u.scanRead(invoke.Fn)
 			for _, argument := range invoke.Args[1:] {
 				u.scanRead(argument)
@@ -186,14 +201,19 @@ func isOwnedMapReadHostCall(call *ast.HostCallNode) bool {
 		strings.EqualFold(call.Method.Name(), "Get")
 }
 
-func isOwnedMapReadCoreCall(invoke *ast.InvokeNode) bool {
+func isOwnedMapReadCoreCall(
+	invoke *ast.InvokeNode,
+	mode IROwnedMapMode,
+) bool {
 	_, name, core := irCoreCall(invoke)
 	if !core {
 		return false
 	}
 	switch name {
-	case "get", "contains?", "count":
+	case "get":
 		return true
+	case "contains?", "count":
+		return mode == IROwnedMapTransient
 	default:
 		return false
 	}

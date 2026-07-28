@@ -24,7 +24,7 @@ type int64BoolExpr func(*[4]int64) bool
 type compiledLoopPlan struct {
 	numeric   *compiledInt64Loop
 	evaluator evalFn
-	ownedMaps []bool
+	ownedMaps []compiler.IROwnedMapMode
 }
 
 func (env *environment) getCompiledLoopPlan(n *ast.Node) *compiledLoopPlan {
@@ -36,11 +36,11 @@ func (env *environment) getCompiledLoopPlan(n *ast.Node) *compiledLoopPlan {
 	plan := &compiledLoopPlan{
 		numeric:   compileInt64Loop(letNode),
 		evaluator: compileLoopEval(letNode.Body, letNode.Bindings, ir),
-		ownedMaps: make([]bool, len(letNode.Bindings)),
+		ownedMaps: make([]compiler.IROwnedMapMode, len(letNode.Bindings)),
 	}
 	if plan.evaluator != nil {
 		for i, binding := range letNode.Bindings {
-			plan.ownedMaps[i] = ir.BindingFacts(binding).OwnedMap
+			plan.ownedMaps[i] = ir.BindingFacts(binding).OwnedMapMode
 		}
 	}
 	actual, _ := env.loopPlans.LoadOrStore(n, plan)

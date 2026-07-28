@@ -1840,11 +1840,20 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		if g.currentIR != nil &&
 			g.currentIR.Facts(node).PersistOwnedMap {
 			result := g.allocateTempVar()
-			g.writef(
-				"%s := %s.(*lang.TransientMap).Persistent()\n",
-				result,
-				local,
-			)
+			if g.currentIR.Facts(node).OwnedMapMode ==
+				compiler.IROwnedMapAdaptive {
+				g.writef(
+					"%s := %s.(*runtime.OwnedLoopMap).Persistent()\n",
+					result,
+					local,
+				)
+			} else {
+				g.writef(
+					"%s := %s.(*lang.TransientMap).Persistent()\n",
+					result,
+					local,
+				)
+			}
 			return result
 		}
 		return local
@@ -1909,6 +1918,18 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		}
 		if g.currentIR != nil &&
 			g.currentIR.Facts(node).OwnedMapAssoc {
+			if g.currentIR.Facts(node).OwnedMapMode ==
+				compiler.IROwnedMapAdaptive {
+				for i := range keys {
+					g.writef(
+						"%s.(*runtime.OwnedLoopMap).Assoc(%s, %s)\n",
+						target,
+						keys[i],
+						values[i],
+					)
+				}
+				return target
+			}
 			for i := range keys {
 				if g.currentIR.Facts(
 					assoc.Entries[i].Key,
@@ -2637,12 +2658,20 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		if isLoop && bindingFacts.OwnedMap {
 			initCode := g.generateASTNode(init)
 			varName := g.allocateLocal(name)
-			g.writef(
-				"var %s any = %s.(lang.IEditableCollection)."+
-					"AsTransient()\n",
-				varName,
-				initCode,
-			)
+			if bindingFacts.OwnedMapMode == compiler.IROwnedMapAdaptive {
+				g.writef(
+					"var %s any = runtime.NewOwnedLoopMap(%s)\n",
+					varName,
+					initCode,
+				)
+			} else {
+				g.writef(
+					"var %s any = %s.(lang.IEditableCollection)."+
+						"AsTransient()\n",
+					varName,
+					initCode,
+				)
+			}
 			g.markOwnedMap(name)
 			g.writeAssign("_", varName)
 			bindingVars = append(bindingVars, varName)

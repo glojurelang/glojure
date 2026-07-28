@@ -176,7 +176,14 @@ func TestGenerateOwnedLoopMapUsesTransientRepresentation(t *testing.T) {
 		        (observe counts)
 		        (recur (next remaining)
 		               (assoc counts (first remaining) 1)))
-		      counts)))`)
+		      counts)))
+		(defn update-map [values]
+		  (loop [index 0
+		         result values]
+		    (if (= index 2)
+		      result
+		      (recur (inc index)
+		             (assoc result index index)))))`)
 
 	var output bytes.Buffer
 	if err := NewGenerator(&output).Generate(ns); err != nil {
@@ -200,6 +207,16 @@ func TestGenerateOwnedLoopMapUsesTransientRepresentation(t *testing.T) {
 			"generated %d transient map regions, want only non-escaping histogram",
 			got,
 		)
+	}
+	for _, expected := range []string{
+		"runtime.NewOwnedLoopMap(",
+		".(*runtime.OwnedLoopMap).Assoc(",
+		".(*runtime.OwnedLoopMap).Persistent()",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("adaptive owned map lowering omitted %q:\n%s",
+				expected, generated)
+		}
 	}
 }
 

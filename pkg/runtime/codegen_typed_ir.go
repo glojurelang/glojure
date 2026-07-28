@@ -107,18 +107,32 @@ func (g *Generator) generateIROwnedMapHostCall(
 		return "", false
 	}
 	call := node.Sub.(*ast.HostCallNode)
-	if len(call.Args) < 2 || len(call.Args) > 3 ||
+	if len(call.Args) < 2 || len(call.Args) > 3 {
+		return "", false
+	}
+	mode := g.currentIR.Facts(node).OwnedMapMode
+	if mode != compiler.IROwnedMapAdaptive &&
 		g.currentIR.Facts(call.Args[1]).Type.Kind != compiler.IRString {
 		return "", false
 	}
 	target := g.generateASTNode(call.Args[0])
 	keyCode := g.generateASTNode(call.Args[1])
-	key := g.irStringExpr(call.Args[1], keyCode)
 	fallback := "nil"
 	if len(call.Args) == 3 {
 		fallback = g.generateASTNode(call.Args[2])
 	}
 	result := g.allocateTempVar()
+	if mode == compiler.IROwnedMapAdaptive {
+		g.writef(
+			"%s := %s.(*runtime.OwnedLoopMap).ValAtDefault(%s, %s)\n",
+			result,
+			target,
+			keyCode,
+			fallback,
+		)
+		return result, true
+	}
+	key := g.irStringExpr(call.Args[1], keyCode)
 	g.writef(
 		"%s := %s.(*lang.TransientMap).ValAtStringDefault(%s, %s)\n",
 		result,

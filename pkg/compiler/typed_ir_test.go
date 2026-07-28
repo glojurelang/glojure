@@ -343,7 +343,8 @@ func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
 
 	ir := BuildTypedIR(loop)
 	if facts := ir.BindingFacts(mapBinding); !facts.OwnedMap ||
-		facts.Escape != IRDoesNotEscape {
+		facts.Escape != IRDoesNotEscape ||
+		facts.OwnedMapMode != IROwnedMapTransient {
 		t.Fatalf("map binding facts = %#v, want owned non-escaping map", facts)
 	}
 	if !ir.Facts(update).OwnedMapAssoc {
@@ -357,6 +358,22 @@ func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
 		t.Fatal("terminal map result was not marked for persistence")
 	}
 
+	// A dynamically typed initializer uses the guarded copy-on-write
+	// representation instead of assuming that the value is a map.
+	mapBinding.Sub.(*ast.BindingNode).Init =
+		typedIRLocal(lang.NewSymbol("input"))
+	ir = BuildTypedIR(loop)
+	if facts := ir.BindingFacts(mapBinding); !facts.OwnedMap ||
+		facts.OwnedMapMode != IROwnedMapAdaptive {
+		t.Fatalf("dynamic map binding facts = %#v, want adaptive ownership", facts)
+	}
+	if got := ir.Facts(update).OwnedMapMode; got != IROwnedMapAdaptive {
+		t.Fatalf("dynamic assoc mode = %v, want adaptive", got)
+	}
+	if got := ir.Facts(exit).OwnedMapMode; got != IROwnedMapAdaptive {
+		t.Fatalf("dynamic exit mode = %v, want adaptive", got)
+	}
+
 	// Passing the map to an unknown operation makes its identity observable and
 	// must disable the ownership optimization.
 	unknown := lang.FindOrCreateNamespace(lang.NewSymbol("typed-ir-test")).
@@ -365,6 +382,27 @@ func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
 	ir = BuildTypedIR(loop)
 	if facts := ir.BindingFacts(mapBinding); facts.OwnedMap {
 		t.Fatalf("escaping map was marked owned: %#v", facts)
+	}
+
+	// Failed analyses must not leave operation facts behind when a safe read
+	// precedes the escaping use.
+	body.Sub.(*ast.IfNode).Test = typedIRConst(true)
+	elseLet := body.Sub.(*ast.IfNode).Else.Sub.(*ast.LetNode)
+	elseLet.Body = &ast.Node{
+		Op: ast.OpDo,
+		Sub: &ast.DoNode{
+			Statements: []*ast.Node{
+				typedIRInvoke(unknown, typedIRLocal(counts)),
+			},
+			Ret: recur,
+		},
+	}
+	ir = BuildTypedIR(loop)
+	if facts := ir.BindingFacts(mapBinding); facts.OwnedMap {
+		t.Fatalf("late-escaping map was marked owned: %#v", facts)
+	}
+	if ir.Facts(get).OwnedMapGet {
+		t.Fatal("failed owned-map analysis left a lookup fact behind")
 	}
 }
 

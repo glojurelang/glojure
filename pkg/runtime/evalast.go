@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 
@@ -799,9 +800,14 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 		if err != nil {
 			return nil, err
 		}
-		if plan != nil && plan.ownedMaps[bindingIndex] {
-			initVal = initVal.(lang.IEditableCollection).
-				AsTransient().(*lang.TransientMap)
+		if plan != nil {
+			switch plan.ownedMaps[bindingIndex] {
+			case compiler.IROwnedMapTransient:
+				initVal = initVal.(lang.IEditableCollection).
+					AsTransient().(*lang.TransientMap)
+			case compiler.IROwnedMapAdaptive:
+				initVal = NewOwnedLoopMap(initVal)
+			}
 		}
 		if _, ok := boundNames[name.Name()]; ok || newEnv == env {
 			// avoid overwriting a name in the same scope, or binding in the

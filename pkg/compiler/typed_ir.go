@@ -77,6 +77,20 @@ type IRShape struct {
 	Keywords []lang.Keyword
 }
 
+// IROwnedMapMode describes the internal representation selected for a
+// non-escaping loop-carried map.
+type IROwnedMapMode uint8
+
+const (
+	IROwnedMapNone IROwnedMapMode = iota
+	// IROwnedMapTransient is used when the loop initializer is already known
+	// to be a persistent map.
+	IROwnedMapTransient
+	// IROwnedMapAdaptive keeps a dynamically typed initializer on the
+	// persistent path until its first effective map update.
+	IROwnedMapAdaptive
+)
+
 type IRCall struct {
 	Var   *lang.Var
 	Name  string
@@ -218,13 +232,18 @@ type IRFacts struct {
 	// PersistOwnedMap marks a terminal local whose transient representation
 	// must be frozen before it leaves its ownership region.
 	PersistOwnedMap bool
+
+	// OwnedMapMode identifies the representation expected by an owned-map
+	// operation or terminal result.
+	OwnedMapMode IROwnedMapMode
 }
 
 type IRBindingFacts struct {
-	Escape      IREscape
-	AtomInit    *ast.Node
-	StringStack bool
-	OwnedMap    bool
+	Escape       IREscape
+	AtomInit     *ast.Node
+	StringStack  bool
+	OwnedMap     bool
+	OwnedMapMode IROwnedMapMode
 	// StableType is a representation-relevant type proved to hold at loop
 	// entry and at every recur edge for this binding.
 	StableType IRType
@@ -637,8 +656,10 @@ func (ir *TypedIR) analyzeBindings(node *ast.Node) {
 				result.Escape = IRDoesNotEscape
 				result.StringStack = true
 			}
-			if node.Op == ast.OpLoop &&
-				ir.analyzeOwnedMap(binding, i, let) {
+			if node.Op == ast.OpLoop {
+				result.OwnedMapMode = ir.analyzeOwnedMap(binding, i, let)
+			}
+			if result.OwnedMapMode != IROwnedMapNone {
 				result.Escape = IRDoesNotEscape
 				result.OwnedMap = true
 			}

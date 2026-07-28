@@ -170,7 +170,15 @@ func TestInterpreterOwnedLoopMapReturnsPersistentValue(t *testing.T) {
 		      (let [value (first remaining)]
 		        (recur (next remaining)
 		               (assoc counts value (inc (get counts value 0)))))
-		      counts)))`, WithEnv(env))
+		      counts)))
+		(defn update-map [values]
+		  (loop [index 0
+		         result values]
+		    (if (= index 3)
+		      result
+		      (recur (inc index)
+		             (assoc result index (inc (get result index 0)))))))`,
+		WithEnv(env))
 	histogram := ns.FindInternedVar(lang.NewSymbol("histogram")).Get()
 	result := lang.Apply1(
 		histogram,
@@ -184,6 +192,19 @@ func TestInterpreterOwnedLoopMapReturnsPersistentValue(t *testing.T) {
 		if got := counts.ValAt(key); got != want {
 			t.Fatalf("histogram[%q] = %v, want %d", key, got, want)
 		}
+	}
+
+	initial := lang.NewMap(int64(0), int64(10))
+	updateMap := ns.FindInternedVar(lang.NewSymbol("update-map")).Get()
+	updated := lang.Apply1(updateMap, initial).(lang.IPersistentMap)
+	if got := updated.ValAt(int64(0)); got != int64(11) {
+		t.Fatalf("adaptive map result[0] = %v, want 11", got)
+	}
+	if got := updated.ValAt(int64(2)); got != int64(1) {
+		t.Fatalf("adaptive map result[2] = %v, want 1", got)
+	}
+	if got := initial.ValAt(int64(0)); got != int64(10) {
+		t.Fatalf("adaptive map loop mutated its input: %v", got)
 	}
 }
 
@@ -778,6 +799,60 @@ func TestNativeCoreFnilAllocatesOneWrapper(t *testing.T) {
 	})
 	if allocs > 1 {
 		t.Fatalf("native fnil allocated %v objects, want at most one wrapper", allocs)
+	}
+}
+
+func TestOwnedLoopMapPreservesPersistentInput(t *testing.T) {
+	key := lang.NewKeyword("key")
+	other := lang.NewKeyword("other")
+	initial := lang.NewMap(key, int64(1))
+	loopMap := NewOwnedLoopMap(initial)
+
+	loopMap.Assoc(key, int64(2)).Assoc(other, int64(3))
+	result := loopMap.Persistent()
+
+	if got := lang.Get(initial, key); got != int64(1) {
+		t.Fatalf("owned loop map mutated its input: %v", got)
+	}
+	if got := lang.Get(result, other); got != int64(3) {
+		t.Fatalf("owned loop map result = %v, want 3", got)
+	}
+	if got := lang.Get(result, key); got != int64(2) {
+		t.Fatalf("owned loop map update = %v, want 2", got)
+	}
+}
+
+func TestOwnedLoopMapPreservesUnchangedIdentityAndMetadata(t *testing.T) {
+	key := lang.NewKeyword("key")
+	meta := lang.NewMap(lang.NewKeyword("source"), "test")
+	initial := lang.NewMap(key, int64(1)).(lang.IObj).
+		WithMeta(meta).(lang.IPersistentMap)
+
+	unchanged := NewOwnedLoopMap(initial)
+	unchanged.Assoc(key, int64(1))
+	if got := unchanged.Persistent(); got != initial {
+		t.Fatalf("no-op owned map update changed identity: %T", got)
+	}
+
+	changed := NewOwnedLoopMap(initial)
+	changed.Assoc(key, int64(2)).Assoc(lang.NewKeyword("other"), int64(3))
+	result := changed.Persistent()
+	if got := result.(lang.IMeta).Meta(); got != meta {
+		t.Fatalf("owned loop map metadata = %v, want %v", got, meta)
+	}
+}
+
+func TestOwnedLoopMapKeepsNonMapValuesOnPersistentPath(t *testing.T) {
+	vector := lang.NewVector(int64(1), int64(2))
+	loopMap := NewOwnedLoopMap(vector)
+	loopMap.Assoc(int64(1), int64(3))
+
+	result := loopMap.Persistent()
+	if got := result.(*lang.Vector).Nth(1); got != int64(3) {
+		t.Fatalf("owned loop vector fallback = %v, want 3", got)
+	}
+	if got := vector.Nth(1); got != int64(2) {
+		t.Fatalf("owned loop map mutated fallback input: %v", got)
 	}
 }
 

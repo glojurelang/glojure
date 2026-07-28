@@ -97,12 +97,19 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 	case ast.OpLocal:
 		sym := n.Sub.(*ast.LocalNode).Name
 		if slot, ok := c.localSlots[sym]; ok {
-			persist := c.ir != nil && c.ir.Facts(n).PersistOwnedMap
+			ownedMapFacts := compiler.IRFacts{}
+			if c.ir != nil {
+				ownedMapFacts = c.ir.Facts(n)
+			}
 			switch slot.kind {
 			case loopLocalSlot:
 				return func(env *environment) (interface{}, error) {
 					value := env.loopFrame.args[slot.index]
-					if persist {
+					if ownedMapFacts.PersistOwnedMap {
+						if ownedMapFacts.OwnedMapMode ==
+							compiler.IROwnedMapAdaptive {
+							return value.(*OwnedLoopMap).Persistent(), nil
+						}
 						return value.(*lang.TransientMap).Persistent(), nil
 					}
 					return value, nil
@@ -249,6 +256,13 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 					if err != nil {
 						return nil, err
 					}
+				}
+				if c.ir.Facts(n).OwnedMapMode ==
+					compiler.IROwnedMapAdaptive {
+					return value.(*OwnedLoopMap).ValAtDefault(
+						keyValue,
+						fallbackValue,
+					), nil
 				}
 				transient := value.(*lang.TransientMap)
 				if stringKey, ok := keyValue.(string); ok {
@@ -429,6 +443,11 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 					return nil, err
 				}
 				if owned {
+					if c.ir.Facts(n).OwnedMapMode ==
+						compiler.IROwnedMapAdaptive {
+						result.(*OwnedLoopMap).Assoc(key, value)
+						return result, nil
+					}
 					transient := result.(*lang.TransientMap)
 					if stringKeys[0] {
 						if stringKey, ok := key.(string); ok {
@@ -454,6 +473,14 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 			}
 			for i := range keys {
 				if owned {
+					if c.ir.Facts(n).OwnedMapMode ==
+						compiler.IROwnedMapAdaptive {
+						result.(*OwnedLoopMap).Assoc(
+							keyValues[i*2],
+							keyValues[i*2+1],
+						)
+						continue
+					}
 					transient := result.(*lang.TransientMap)
 					if stringKeys[i] {
 						if stringKey, ok := keyValues[i*2].(string); ok {
