@@ -247,12 +247,38 @@ func (a *primitiveAOTAnalyzer) invokeType(
 	}
 	if a.allowCoreMod && vr.Namespace() != nil &&
 		vr.Namespace().Name().String() == "clojure.core" &&
-		vr.Symbol().String() == "mod" &&
 		!vr.IsDynamic() &&
 		!RT.BooleanCast(lang.Get(vr.Meta(), lang.KWRedef)) &&
-		IsDefaultCoreVar(vr) &&
-		a.allType(invoke.Args, locals, 2, int64AOTPrimitive) {
-		return int64AOTPrimitive
+		IsDefaultCoreVar(vr) {
+		switch vr.Symbol().String() {
+		case "mod":
+			if a.allType(
+				invoke.Args,
+				locals,
+				2,
+				int64AOTPrimitive,
+			) {
+				return int64AOTPrimitive
+			}
+		case "even?", "odd?", "zero?", "pos?", "neg?":
+			if a.allType(
+				invoke.Args,
+				locals,
+				1,
+				int64AOTPrimitive,
+			) {
+				return boolAOTPrimitive
+			}
+		case "not":
+			if a.allType(
+				invoke.Args,
+				locals,
+				1,
+				boolAOTPrimitive,
+			) {
+				return boolAOTPrimitive
+			}
+		}
 	}
 	return invalidAOTPrimitive
 }

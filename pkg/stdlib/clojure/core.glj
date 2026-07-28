@@ -2734,14 +2734,7 @@
   {:added "1.0"
    :static true}
   ([f]
-    (fn [rf]
-      (fn
-        ([] (rf))
-        ([result] (rf result))
-        ([result input]
-           (rf result (f input)))
-        ([result input & inputs]
-           (rf result (apply f input inputs))))))
+    (github.com:glojurelang:glojure:pkg:runtime.NewMapTransducer f))
   ([f coll]
    (lazy-seq
     (when-let [s (seq coll)]
@@ -2811,14 +2804,7 @@
   {:added "1.0"
    :static true}
   ([pred]
-    (fn [rf]
-      (fn
-        ([] (rf))
-        ([result] (rf result))
-        ([result input]
-           (if (pred input)
-             (rf result input)
-             result)))))
+    (github.com:glojurelang:glojure:pkg:runtime.NewFilterTransducer pred))
   ([pred coll]
    (lazy-seq
     (when-let [s (seq coll)]
@@ -2879,20 +2865,7 @@
   {:added "1.0"
    :static true}
   ([n]
-     (fn [rf]
-       (let [nv (volatile! n)]
-         (fn
-           ([] (rf))
-           ([result] (rf result))
-           ([result input]
-              (let [n @nv
-                    nn (vswap! nv dec)
-                    result (if (pos? n)
-                             (rf result input)
-                             result)]
-                (if (not (pos? nn))
-                  (ensure-reduced result)
-                  result)))))))
+     (github.com:glojurelang:glojure:pkg:runtime.NewTakeTransducer n))
   ([n coll]
      (lazy-seq
       (when (pos? n)

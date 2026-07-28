@@ -1122,9 +1122,37 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 			})
 		}
 	}
+	installFixedArityCoreFunction(
+		core,
+		"map",
+		1,
+		lang.FnFunc1(func(fn any) any {
+			return NewMapTransducer(fn)
+		}),
+	)
 	installFixedArityCoreFunction(core, "map", 2, lang.FnFunc2(nativeMapSeq))
 	installFixedArityCoreFunction(core, "mapv", 2, lang.FnFunc2(nativeMapv))
+	installFixedArityCoreFunction(
+		core,
+		"filter",
+		1,
+		lang.FnFunc1(func(predicate any) any {
+			return NewFilterTransducer(predicate)
+		}),
+	)
 	installFixedArityCoreFunction(core, "filter", 2, lang.FnFunc2(nativeFilterSeq))
+	if take := core.FindInternedVar(lang.NewSymbol("take")); take != nil {
+		if _, ok := take.Get().(lang.IFn); ok {
+			installFixedArityCoreFunction(
+				core,
+				"take",
+				1,
+				lang.FnFunc1(func(limit any) any {
+					return NewTakeTransducer(limit)
+				}),
+			)
+		}
+	}
 	installFixedArityCoreFunction(core, "take", 2, lang.FnFunc2(nativeTakeSeq))
 	if mod := core.FindInternedVar(lang.NewSymbol("mod")); mod != nil {
 		mod.BindRoot(lang.FnFunc2(nativeMod))
@@ -1135,7 +1163,7 @@ func recordOptimizableCoreRoots(core *lang.Namespace) {
 	recordDefaultCoreRoots(core,
 		"*", "+", "apply", "assoc", "assoc-in", "atom", "cons", "conj", "count", "dec", "deref",
 		"empty?", "even?", "filter", "first", "fnil", "get", "identity", "inc", "map",
-		"mapv", "mod", "neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
+		"mapv", "mod", "neg?", "next", "not", "nth", "odd?", "peek", "pop", "pos?", "range",
 		"reduce", "reset!", "seq", "str", "swap!", "take", "zero?",
 	)
 }

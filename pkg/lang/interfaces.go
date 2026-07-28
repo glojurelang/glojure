@@ -58,6 +58,18 @@ type (
 		ReduceInt64(acc, value int64) int64
 	}
 
+	// Int64UnaryFn and Int64PredicateFn are optional primitive entry points
+	// for ordinary Clojure functions. Callers use them only after proving the
+	// argument representation; Invoke remains the semantic fallback at every
+	// dynamic boundary.
+	Int64UnaryFn interface {
+		InvokeInt64(value int64) int64
+	}
+
+	Int64PredicateFn interface {
+		InvokeInt64Predicate(value int64) bool
+	}
+
 	// Int64ReductionStepper is an optional unboxed reduction path that can
 	// terminate early without manufacturing a boxed Reduced value.
 	Int64ReductionStepper interface {

@@ -40,6 +40,83 @@ func TestGenerateNamedScalarValue(t *testing.T) {
 	}
 }
 
+func TestGenerateInferredPrimitiveFunctionValues(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.primitive-function-values"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(def pipeline
+		  (filter (fn [value] (not (even? value)))))
+		(defn build []
+		  [(map (fn [value] (* value value)))
+		   (filter (fn [value] (zero? (mod value 3))))
+		   (filter odd?)])`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatal(err)
+	}
+	source := output.String()
+	if !strings.Contains(source, "lang.NewInt64UnaryFn(") {
+		t.Fatalf("generated source omitted primitive unary entry point:\n%s", source)
+	}
+	if got := strings.Count(
+		source,
+		"lang.NewInt64PredicateFn(",
+	); got < 2 {
+		t.Fatalf(
+			"generated source has %d primitive predicate entry points, want at least 2:\n%s",
+			got,
+			source,
+		)
+	}
+
+	output.Reset()
+	if err := newGenerator(&output, false).Generate(ns); err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(output.String(), "lang.NewInt64") {
+		t.Fatalf(
+			"direct-link-disabled source contains primitive callable entry point:\n%s",
+			output.String(),
+		)
+	}
+}
+
+func TestGenerateNativeTransducerValues(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+	mapper := lang.NewKeyword("value")
+
+	mapExpression := generator.generateValue(NewMapTransducer(mapper))
+	if !strings.Contains(mapExpression, "runtime.NewMapTransducer(") {
+		t.Fatalf("generated map transducer = %q", mapExpression)
+	}
+	takeExpression := generator.generateValue(
+		NewTakeTransducer(int64(17)),
+	)
+	if takeExpression != "runtime.NewTakeTransducer(int64(17))" {
+		t.Fatalf("generated take transducer = %q", takeExpression)
+	}
+
+	withMeta := NewFilterTransducer(mapper).(lang.IObj).WithMeta(
+		lang.NewMap(lang.NewKeyword("line"), int64(12)),
+	)
+	filterExpression := generator.generateValue(withMeta)
+	if !strings.Contains(
+		filterExpression,
+		").(lang.IObj).WithMeta(",
+	) {
+		t.Fatalf(
+			"generated metadata-bearing filter transducer = %q",
+			filterExpression,
+		)
+	}
+}
+
 func TestGenerateStandardFileHandles(t *testing.T) {
 	generator := NewGenerator(&bytes.Buffer{})
 

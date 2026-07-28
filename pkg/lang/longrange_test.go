@@ -73,3 +73,17 @@ func TestLongRangeInt64StepsCanStopDescendingReduction(t *testing.T) {
 		t.Fatalf("reducer calls = %d, want 3", reducer.calls)
 	}
 }
+
+func TestLongRangeReduceInitUsesInt64Stepper(t *testing.T) {
+	r := NewLongRange(2, 20, 2).(*LongRange)
+	reducer := &stoppingInt64Reducer{stopAfter: 3}
+
+	got := r.ReduceInit(reducer, int64(0))
+
+	if got != int64(12) {
+		t.Fatalf("ReduceInit = %v, want 12", got)
+	}
+	if reducer.calls != 3 {
+		t.Fatalf("reducer calls = %d, want 3", reducer.calls)
+	}
+}

@@ -218,6 +218,11 @@ func (r *LongRange) Reduce(f IFn) any {
 }
 
 func (r *LongRange) ReduceInit(f IFn, init any) any {
+	if reducer, ok := f.(Int64ReductionStepper); ok {
+		if ret, ok := init.(int64); ok {
+			return r.ReduceInt64Steps(reducer, ret)
+		}
+	}
 	if reducer, ok := f.(Int64Reducer); ok {
 		if ret, ok := init.(int64); ok {
 			for i := r.start; i < r.end; i += r.step {

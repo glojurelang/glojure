@@ -880,6 +880,22 @@ func (g *Generator) generateValue(value any) string {
 		return "runtime.RT"
 	case *evalCompiler:
 		return "runtime.Compiler"
+	case *nativeMapTransducer:
+		return g.generateNativeTransducerValue(
+			"runtime.NewMapTransducer("+g.generateValue(v.fn)+")",
+			v.meta,
+		)
+	case *nativeFilterTransducer:
+		return g.generateNativeTransducerValue(
+			"runtime.NewFilterTransducer("+
+				g.generateValue(v.predicate)+")",
+			v.meta,
+		)
+	case *nativeTakeTransducer:
+		return g.generateNativeTransducerValue(
+			"runtime.NewTakeTransducer("+g.generateValue(v.limit)+")",
+			v.meta,
+		)
 	case *Fn:
 		return g.generateFn(v)
 	case lang.FnFunc:
@@ -993,6 +1009,16 @@ func (g *Generator) generateValue(value any) string {
 		}
 		panic(fmt.Sprintf("unsupported value type %T: %v", v, v))
 	}
+}
+
+func (g *Generator) generateNativeTransducerValue(
+	expression string,
+	meta lang.IPersistentMap,
+) string {
+	if meta == nil {
+		return expression
+	}
+	return expression + ".(lang.IObj).WithMeta(" + g.generateValue(meta) + ")"
 }
 
 // generateNamedScalarValue emits constants whose Go type has a name, such as
@@ -1504,6 +1530,15 @@ func (g *Generator) generateFn(fn *Fn) string {
 		}
 	}
 	arityDispatch := len(fnNode.Methods) > 1 || fnNode.IsVariadic
+	var int64Callable *int64CallableAOTAnalysis
+	if fixedArity == 1 &&
+		(g.specializationTarget == nil ||
+			g.specializationTarget.fn != fn) {
+		int64Callable = g.analyzeInt64Callable(
+			fn,
+			fnNode.Methods[0].Sub.(*ast.FnMethodNode),
+		)
+	}
 	smallFixed := true
 	for _, method := range fnNode.Methods {
 		mn := method.Sub.(*ast.FnMethodNode)
@@ -1524,6 +1559,9 @@ func (g *Generator) generateFn(fn *Fn) string {
 		fnType = fmt.Sprintf("lang.FnFunc%d", fixedArity)
 	} else if arityDispatch {
 		fnType = "lang.ArityFn"
+	}
+	if int64Callable != nil {
+		fnType = "lang.IFn"
 	}
 	// declare it now to make sure it's in the scope of the caller
 	// we may add a nested scope to declare the function in to keep a
@@ -1554,7 +1592,13 @@ func (g *Generator) generateFn(fn *Fn) string {
 		// Supported single arity: emit FnFuncN with direct named params.
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
 		paramNames := fixedParamNames(fixedArity)
-		if !g.generateProtocolSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+		if int64Callable != nil {
+			g.generateInt64CallableFixedFn(
+				fnVar,
+				methodNode,
+				int64Callable,
+			)
+		} else if !g.generateProtocolSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateRecordSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateOwnedVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&

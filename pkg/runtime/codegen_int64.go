@@ -452,8 +452,25 @@ func (e *int64AOTEmitter) emitInvoke(
 	}
 	if e.analysis.allowCoreMod && vr.Namespace() != nil &&
 		vr.Namespace().Name().String() == "clojure.core" &&
-		vr.Symbol().String() == "mod" {
-		return "lang.ModInt64(" + args[0] + ", " + args[1] + ")"
+		!vr.IsDynamic() &&
+		!RT.BooleanCast(lang.Get(vr.Meta(), lang.KWRedef)) &&
+		IsDefaultCoreVar(vr) {
+		switch vr.Symbol().String() {
+		case "mod":
+			return "lang.ModInt64(" + args[0] + ", " + args[1] + ")"
+		case "even?":
+			return "(" + args[0] + "&1 == 0)"
+		case "odd?":
+			return "(" + args[0] + "&1 != 0)"
+		case "zero?":
+			return "(" + args[0] + " == 0)"
+		case "pos?":
+			return "(" + args[0] + " > 0)"
+		case "neg?":
+			return "(" + args[0] + " < 0)"
+		case "not":
+			return "(!" + args[0] + ")"
+		}
 	}
 	helper := e.helper
 	if vr != e.analysis.target.vr {
