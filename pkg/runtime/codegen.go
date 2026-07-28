@@ -3490,8 +3490,20 @@ func (g *Generator) generateNew(node *ast.Node) string {
 		}
 		// generate a reflect.Type for the class
 		classId := g.generateValue(class)
+		args := make([]string, len(newNode.Args))
+		for i, arg := range newNode.Args {
+			args[i] = g.generateASTNode(arg)
+		}
 		resultId := g.allocateTempVar()
-		g.writef("%s := reflect.New(%s).Interface()\n", resultId, classId)
+		g.writef("%s := lang.NewHostInstance(%s%s)\n",
+			resultId,
+			classId,
+			func() string {
+				if len(args) == 0 {
+					return ""
+				}
+				return ", " + strings.Join(args, ", ")
+			}())
 		return resultId
 	case *ast.MaybeClassNode:
 		resultId := g.allocateTempVar()

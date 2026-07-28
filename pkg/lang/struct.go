@@ -90,6 +90,22 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 		}
 	}
 
+	if err, isErr := v.(error); isErr {
+		switch name {
+		case "getMessage", "GetMessage", "getLocalizedMessage", "GetLocalizedMessage":
+			return FnFunc0(func() any { return err.Error() }), true
+		case "toString", "ToString":
+			return FnFunc0(func() any { return err.Error() }), true
+		case "getCause", "GetCause":
+			return FnFunc0(func() any {
+				if cause := unwrapError(err); cause != nil {
+					return cause
+				}
+				return nil
+			}), true
+		}
+	}
+
 	if unicode.IsLower(rune(name[0])) {
 		name = string(unicode.ToUpper(rune(name[0]))) + string([]rune(name)[1:])
 	}
@@ -145,6 +161,17 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 	}
 
 	return nil, false
+}
+
+type errorUnwrapper interface {
+	Unwrap() error
+}
+
+func unwrapError(err error) error {
+	if wrapped, ok := err.(errorUnwrapper); ok {
+		return wrapped.Unwrap()
+	}
+	return nil
 }
 
 func directProtocolMethod(v interface{}, name string) (IFn, bool) {

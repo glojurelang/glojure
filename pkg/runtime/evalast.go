@@ -1108,10 +1108,7 @@ func (env *environment) EvalASTNew(n *ast.Node) (interface{}, error) {
 	case *lang.RecordType:
 		return lang.NewRecord(classVal, args...), nil
 	case reflect.Type:
-		if len(args) > 0 {
-			return nil, errors.New("new with args unsupported")
-		}
-		return reflect.New(classVal).Interface(), nil
+		return lang.NewHostInstance(classVal, args...), nil
 	default:
 		return nil, fmt.Errorf("new value must be a reflect.Type, got %T", classVal)
 	}

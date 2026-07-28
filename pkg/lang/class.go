@@ -1,8 +1,10 @@
 package lang
 
 import (
+	"fmt"
 	"io"
 	"reflect"
+	"sync"
 )
 
 // Class is a JVM-style Class object for host classes registered through
@@ -17,10 +19,37 @@ type Class struct {
 	JavaName string
 }
 
+var hostConstructors sync.Map
+
 // NewClass wraps t with the given fully-qualified Java name. The Java
 // name is what shows up in print-method output and (.getName c).
 func NewClass(t reflect.Type, javaName string) *Class {
 	return &Class{Type: t, JavaName: javaName}
+}
+
+// RegisterHostConstructor installs the implementation used by `(Class. ...)`
+// for a JVM compatibility class. Registrations happen during package init.
+func RegisterHostConstructor(javaName string, constructor IFn) {
+	hostConstructors.Store(javaName, constructor)
+}
+
+// NewHostInstance constructs a registered JVM compatibility class, falling
+// back to Go's zero-value allocation for ordinary reflect.Types.
+func NewHostInstance(class any, args ...any) any {
+	if c, ok := class.(*Class); ok {
+		if constructor, found := hostConstructors.Load(c.JavaName); found {
+			return Apply(constructor, args)
+		}
+		class = c.Type
+	}
+	t, ok := class.(reflect.Type)
+	if !ok {
+		panic(fmt.Sprintf("new value must be a reflect.Type, got %T", class))
+	}
+	if len(args) != 0 {
+		panic(fmt.Sprintf("new %s with args unsupported", t))
+	}
+	return reflect.New(t).Interface()
 }
 
 // Name shadows the embedded reflect.Type.Name() so `(.getName c)` (which
