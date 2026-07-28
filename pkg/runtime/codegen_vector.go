@@ -46,6 +46,7 @@ type vectorAOTAnalyzer struct {
 	targets  map[*lang.Var]*aotSpecializationTarget
 	valid    bool
 	loop     *vectorAOTLoop
+	written  uint32
 }
 
 func analyzeVectorAOTFunction(
@@ -158,8 +159,12 @@ func (a *vectorAOTAnalyzer) expr(
 			a.valid = false
 			break
 		}
+		writtenBefore := a.written
 		thenValue := a.expr(conditional.Then, locals, tail)
+		thenWritten := a.written
+		a.written = writtenBefore
 		elseValue := a.expr(conditional.Else, locals, tail)
+		a.written |= thenWritten
 		result = a.combine(thenValue, elseValue)
 
 	case ast.OpRecur:
@@ -194,6 +199,7 @@ func (a *vectorAOTAnalyzer) expr(
 		if target.transient {
 			a.analysis.assocs[node] = true
 			a.analysis.mutated |= target.origins
+			a.written |= target.origins
 			result = target
 		}
 
@@ -208,6 +214,10 @@ func (a *vectorAOTAnalyzer) expr(
 		if hasTransient {
 			if len(values) == 2 && values[0].transient &&
 				values[1].int64 && isVectorAOTNth(call) {
+				if a.written&values[0].origins != 0 {
+					a.valid = false
+					break
+				}
 				a.analysis.nths[node] = true
 				result.int64 = true
 			} else {
@@ -251,6 +261,7 @@ func (a *vectorAOTAnalyzer) expr(
 		if a.valid {
 			a.analysis.calls[node] = callee
 			a.analysis.mutated |= origins
+			a.written |= origins
 			result = vectorAOTValue{transient: true, origins: origins}
 		}
 	case ast.OpVector:
@@ -524,11 +535,15 @@ func (g *Generator) generateVectorAOTAssoc(
 	}
 	assoc := node.Sub.(*ast.AssocNode)
 	target := g.generateASTNode(assoc.Target)
-	for _, entry := range assoc.Entries {
-		key := g.generateASTNode(entry.Key)
-		value := g.generateASTNode(entry.Val)
+	keys := make([]string, len(assoc.Entries))
+	values := make([]string, len(assoc.Entries))
+	for index, entry := range assoc.Entries {
+		keys[index] = g.generateASTNode(entry.Key)
+		values[index] = g.generateASTNode(entry.Val)
+	}
+	for index := range assoc.Entries {
 		g.writef("%s.AssocN(lang.IntCast(%s), %s)\n",
-			target, key, value)
+			target, keys[index], values[index])
 	}
 	return target, true
 }

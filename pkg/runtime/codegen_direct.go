@@ -59,17 +59,18 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			rootVersionVar = fmt.Sprintf("aotRootVersion%d", index)
 		}
 		target := &aotSpecializationTarget{
-			vr:             vr,
-			fn:             fn,
-			arityDispatch:  arityDispatch,
-			directLinked:   directLinked,
-			directArities:  directArities,
-			directFnVar:    fmt.Sprintf("aotDirectFn%d", index),
-			int64FnVar:     fmt.Sprintf("aotInt64Fn%d", index),
-			float64FnVar:   fmt.Sprintf("aotFloat64Fn%d", index),
-			vectorFnVar:    fmt.Sprintf("aotVectorFn%d", index),
-			recordFnVar:    fmt.Sprintf("aotRecordFn%d", index),
-			rootVersionVar: rootVersionVar,
+			vr:               vr,
+			fn:               fn,
+			arityDispatch:    arityDispatch,
+			directLinked:     directLinked,
+			directArities:    directArities,
+			directFnVar:      fmt.Sprintf("aotDirectFn%d", index),
+			int64FnVar:       fmt.Sprintf("aotInt64Fn%d", index),
+			float64FnVar:     fmt.Sprintf("aotFloat64Fn%d", index),
+			vectorFnVar:      fmt.Sprintf("aotVectorFn%d", index),
+			ownedVectorFnVar: fmt.Sprintf("aotOwnedVectorFn%d", index),
+			recordFnVar:      fmt.Sprintf("aotRecordFn%d", index),
+			rootVersionVar:   rootVersionVar,
 		}
 		target.recordAnalysis = g.aotRecordPlans[vr]
 		directType := "lang.ArityFn"
@@ -163,6 +164,33 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			break
 		}
 	}
+	for {
+		changed := false
+		for _, named := range vars {
+			target := g.aotCallTargets[named.vr]
+			if target == nil || target.arityDispatch ||
+				target.arity > 4 || !target.directLinked ||
+				target.vectorAnalysis != nil ||
+				target.ownedVectorAnalysis != nil {
+				continue
+			}
+			fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
+			method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
+			analysis := analyzeOwnedVectorAOTFunction(
+				target,
+				method,
+				g.aotCallTargets,
+			)
+			if analysis == nil {
+				continue
+			}
+			target.ownedVectorAnalysis = analysis
+			changed = true
+		}
+		if !changed {
+			break
+		}
+	}
 	for _, named := range vars {
 		target := g.aotCallTargets[named.vr]
 		if target == nil || target.arityDispatch ||
@@ -235,6 +263,15 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 				&g.aotDeclarations,
 				"var %s func(%s) *lang.TransientVector\n",
 				target.vectorFnVar,
+				strings.Join(params, ", "),
+			)
+		}
+		if target.ownedVectorAnalysis != nil {
+			params := ownedVectorAOTParamTypes(target.ownedVectorAnalysis)
+			fmt.Fprintf(
+				&g.aotDeclarations,
+				"var %s func(%s) (*runtime.OwnedVector, bool)\n",
+				target.ownedVectorFnVar,
 				strings.Join(params, ", "),
 			)
 		}

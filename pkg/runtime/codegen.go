@@ -85,23 +85,25 @@ type valueInit struct {
 }
 
 type aotSpecializationTarget struct {
-	vr              *lang.Var
-	fn              *Fn
-	arity           int
-	arityDispatch   bool
-	directLinked    bool
-	directArities   [21]bool
-	directFnVar     string
-	directArityVars [21]string
-	int64FnVar      string
-	int64Analysis   *int64AOTAnalysis
-	float64FnVar    string
-	float64Analysis *float64AOTAnalysis
-	vectorFnVar     string
-	vectorAnalysis  *vectorAOTAnalysis
-	recordFnVar     string
-	recordAnalysis  *compiler.IRRecordFunctionPlan
-	rootVersionVar  string
+	vr                  *lang.Var
+	fn                  *Fn
+	arity               int
+	arityDispatch       bool
+	directLinked        bool
+	directArities       [21]bool
+	directFnVar         string
+	directArityVars     [21]string
+	int64FnVar          string
+	int64Analysis       *int64AOTAnalysis
+	float64FnVar        string
+	float64Analysis     *float64AOTAnalysis
+	vectorFnVar         string
+	vectorAnalysis      *vectorAOTAnalysis
+	ownedVectorFnVar    string
+	ownedVectorAnalysis *ownedVectorAOTAnalysis
+	recordFnVar         string
+	recordAnalysis      *compiler.IRRecordFunctionPlan
+	rootVersionVar      string
 }
 
 type aotExternalCallTarget struct {
@@ -187,12 +189,13 @@ type Generator struct {
 	directLink             bool
 
 	// Fields for handling closures
-	liftedValues    map[liftedKey]*liftedValue // Dedupe by composite key
-	liftedCounter   int                        // Counter for closed0, closed1...
-	currentFnEnv    lang.Environment           // Current function's captured env
-	currentIR       *compiler.TypedIR          // typed facts for the current AST
-	ownedMapUpdates map[*ast.Node]bool         // update-in nodes in an owned reduce
-	currentVector   *vectorAOTAnalysis         // transient-vector AOT region
+	liftedValues       map[liftedKey]*liftedValue // Dedupe by composite key
+	liftedCounter      int                        // Counter for closed0, closed1...
+	currentFnEnv       lang.Environment           // Current function's captured env
+	currentIR          *compiler.TypedIR          // typed facts for the current AST
+	ownedMapUpdates    map[*ast.Node]bool         // update-in nodes in an owned reduce
+	currentVector      *vectorAOTAnalysis         // transient-vector AOT region
+	currentOwnedVector *ownedVectorAOTAnalysis    // recursively owned vector region
 
 	// specializationTarget is non-nil only while generating the root function
 	// value for a Var. Nested function literals retain the generic code path.
@@ -1507,6 +1510,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 		if !g.generateProtocolSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateRecordSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+			!g.generateOwnedVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
 			sig := ""
@@ -1934,6 +1938,9 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		}
 		return result
 	case ast.OpAssoc:
+		if result, ok := g.generateOwnedVectorAOTAssoc(node); ok {
+			return result
+		}
 		if result, ok := g.generateVectorAOTAssoc(node); ok {
 			return result
 		}
@@ -2055,7 +2062,10 @@ func (g *Generator) generateDef(node *ast.Node) string {
 	vrVar := g.allocVarVar(vr.Namespace().Name().String(), vr.Symbol().String())
 	if !lang.IsNil(meta) {
 		metaVar := g.generateASTNode(meta)
-		g.writef("%s.SetMeta(%s.(lang.IPersistentMap))\n", vrVar, metaVar)
+		// Normalize the expression to an interface before asserting. Some
+		// collection constructors deliberately expose a concrete Go result,
+		// for which a direct type assertion would not be valid Go syntax.
+		g.writef("%s.SetMeta(any(%s).(lang.IPersistentMap))\n", vrVar, metaVar)
 		// SetDynamic if dynamic kw true in meta
 		g.writef("if runtime.RT.BooleanCast(lang.Get(%s, lang.KWDynamic)) {\n", metaVar)
 		g.writef("\t%s.SetDynamic()\n", vrVar)
@@ -2114,6 +2124,9 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
+	if result, ok := g.generateOwnedVectorAOTInvoke(node); ok {
+		return result
+	}
 	if result, ok := g.generateIROwnedMapUpdateIn(node); ok {
 		return result
 	}
@@ -2146,6 +2159,15 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 	if plan := g.currentIR.Facts(node).Pipeline; plan != nil &&
 		plan.Lowering == compiler.IRPipelineReduceInt64 {
 		return g.generateAOTReducePipeline(invokeNode, plan)
+	}
+	if plan := g.currentIR.Facts(node).Pipeline; plan != nil &&
+		plan.Lowering == compiler.IRPipelineInlineIndexed {
+		if result, ok := g.generateAOTInlineIndexedPipeline(
+			invokeNode,
+			plan,
+		); ok {
+			return result
+		}
 	}
 	return g.generateInvokeDefault(invokeNode)
 }
@@ -2464,7 +2486,9 @@ func (g *Generator) generateIf(node *ast.Node) string {
 
 	// Emit the if statement to g.w
 	resultType := "any"
-	if g.currentVector != nil {
+	if g.currentOwnedVector != nil {
+		resultType = ownedVectorAOTGoType(g.currentOwnedVector.values[node])
+	} else if g.currentVector != nil {
 		resultType = vectorAOTGoType(g.currentVector.values[node])
 	}
 	g.writef("var %s %s\n", resultVar, resultType)
@@ -2666,7 +2690,9 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	// Push a new variable scope for the let bindings
 	resultId := g.allocateTempVar()
 	resultType := "any"
-	if g.currentVector != nil {
+	if g.currentOwnedVector != nil {
+		resultType = ownedVectorAOTGoType(g.currentOwnedVector.values[node])
+	} else if g.currentVector != nil {
 		resultType = vectorAOTGoType(g.currentVector.values[node])
 	}
 	g.writef("var %s %s\n", resultId, resultType)
@@ -2725,6 +2751,18 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			g.writeAssign("_", varName)
 			bindingVars = append(bindingVars, varName)
 			bindingTypes = append(bindingTypes, compiler.IRDynamic)
+			continue
+		}
+		if g.currentOwnedVector != nil &&
+			g.currentOwnedVector.values[init].depth > 0 {
+			initCode := g.generateASTNode(init)
+			varName := g.allocateLocal(name)
+			g.writef(
+				"var %s *runtime.OwnedVector = %s\n",
+				varName,
+				initCode,
+			)
+			g.writeAssign("_", varName)
 			continue
 		}
 		if g.currentVector != nil &&
@@ -3084,7 +3122,7 @@ func (g *Generator) generateWithMeta(node *ast.Node) string {
 	metaVal := g.generateASTNode(meta)
 
 	resultId := g.allocateTempVar()
-	g.writef("%s, err := lang.WithMeta(%s, %s.(lang.IPersistentMap))\n", resultId, exprVal, metaVal)
+	g.writef("%s, err := lang.WithMeta(%s, any(%s).(lang.IPersistentMap))\n", resultId, exprVal, metaVal)
 	g.writef("if err != nil {\n")
 	g.writef("  panic(err)\n")
 	g.writef("}\n")
@@ -3313,6 +3351,9 @@ func (g *Generator) generateGoExportedName(pkg string) string {
 }
 
 func (g *Generator) generateHostCall(node *ast.Node) string {
+	if result, ok := g.generateOwnedVectorAOTNth(node); ok {
+		return result
+	}
 	if result, ok := g.generateVectorAOTNth(node); ok {
 		return result
 	}

@@ -185,6 +185,69 @@ func TestTypedIRDescribesGeneralCollectionPipelinesWithoutForcingLowering(
 	}
 }
 
+func TestTypedIRMarksLiteralIndexedCollectionCallbacksForInlining(
+	t *testing.T,
+) {
+	accumulator := lang.NewSymbol("accumulator")
+	value := lang.NewSymbol("value")
+	reducer := &ast.Node{
+		Op: ast.OpFn,
+		Sub: &ast.FnNode{
+			Methods: []*ast.Node{{
+				Op: ast.OpFnMethod,
+				Sub: &ast.FnMethodNode{
+					Params: []*ast.Node{
+						typedIRBinding(accumulator, nil),
+						typedIRBinding(value, nil),
+					},
+					FixedArity: 2,
+					Body: typedIRNumbersCall(
+						"Add",
+						typedIRLocal(accumulator),
+						typedIRLocal(value),
+					),
+				},
+			}},
+		},
+	}
+	reduce := typedIRInvoke(
+		typedIRCoreVar("reduce"),
+		reducer,
+		typedIRConst(int64(0)),
+		typedIRConst(nil),
+	)
+	plan := BuildTypedIR(reduce).Facts(reduce).Pipeline
+	if plan == nil || plan.Consumer != IRPipelineReduce ||
+		plan.Lowering != IRPipelineInlineIndexed {
+		t.Fatalf("literal reduce plan = %#v", plan)
+	}
+
+	item := lang.NewSymbol("item")
+	callback := &ast.Node{
+		Op: ast.OpFn,
+		Sub: &ast.FnNode{
+			Methods: []*ast.Node{{
+				Op: ast.OpFnMethod,
+				Sub: &ast.FnMethodNode{
+					Params:     []*ast.Node{typedIRBinding(item, nil)},
+					FixedArity: 1,
+					Body:       typedIRLocal(item),
+				},
+			}},
+		},
+	}
+	mapv := typedIRInvoke(
+		typedIRCoreVar("mapv"),
+		callback,
+		typedIRConst(nil),
+	)
+	plan = BuildTypedIR(mapv).Facts(mapv).Pipeline
+	if plan == nil || plan.Consumer != IRPipelineMapv ||
+		plan.Lowering != IRPipelineInlineIndexed {
+		t.Fatalf("literal mapv plan = %#v", plan)
+	}
+}
+
 func TestTypedIRPreservesPipelineStageOrder(t *testing.T) {
 	source := typedIRInvoke(
 		typedIRCoreVar("range"),

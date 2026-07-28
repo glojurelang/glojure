@@ -183,6 +183,10 @@ type IRPipelineLowering uint8
 const (
 	IRPipelineNoLowering IRPipelineLowering = iota
 	IRPipelineReduceInt64
+	// IRPipelineInlineIndexed evaluates a literal callback directly while
+	// traversing an Indexed source. Other source types retain the ordinary
+	// collection-function fallback.
+	IRPipelineInlineIndexed
 )
 
 type IRPipelineStage struct {

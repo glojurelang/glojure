@@ -69,7 +69,7 @@ func AnalyzePipeline(node *ast.Node) *IRPipelinePlan {
 		plan.Stages = stages
 		sourceGuards = guards
 	}
-	if len(plan.Stages) == 0 {
+	if len(plan.Stages) == 0 && plan.Consumer != IRPipelineReduce {
 		return nil
 	}
 
@@ -85,8 +85,51 @@ func AnalyzePipeline(node *ast.Node) *IRPipelinePlan {
 	}
 	if irCanLowerInt64Reduce(plan) {
 		plan.Lowering = IRPipelineReduceInt64
+	} else if irCanInlineIndexedPipeline(plan) {
+		plan.Lowering = IRPipelineInlineIndexed
 	}
 	return plan
+}
+
+func irCanInlineIndexedPipeline(plan *IRPipelinePlan) bool {
+	if plan == nil {
+		return false
+	}
+	switch plan.Consumer {
+	case IRPipelineReduce:
+		return len(plan.Stages) == 0 &&
+			irInlineCallbackArity(plan.Reducer, 2)
+	case IRPipelineMapv:
+		return len(plan.Stages) == 1 &&
+			plan.Stages[0].Kind == IRPipelineMap &&
+			irInlineCallbackArity(plan.Stages[0].Callback, 1)
+	default:
+		return false
+	}
+}
+
+func irInlineCallbackArity(node *ast.Node, arity int) bool {
+	if !irFixedFnArity(node, arity) {
+		return false
+	}
+	fn := node.Sub.(*ast.FnNode)
+	method := fn.Methods[0].Sub.(*ast.FnMethodNode)
+	return !irContainsRecur(method.Body)
+}
+
+func irContainsRecur(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	if node.Op == ast.OpRecur {
+		return true
+	}
+	for _, child := range irChildren(node) {
+		if irContainsRecur(child) {
+			return true
+		}
+	}
+	return false
 }
 
 func irParsePipelineSource(

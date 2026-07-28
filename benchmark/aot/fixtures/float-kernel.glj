@@ -1,6 +1,6 @@
 (ns bench.float-kernel)
 
-(defn polynomial [x]
+(defn ^:redef polynomial [x]
   (let [x2 (* x x)
         x3 (* x2 x)
         x4 (* x3 x)]

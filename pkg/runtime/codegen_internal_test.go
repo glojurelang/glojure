@@ -1021,6 +1021,45 @@ func TestGenerateSharedStaticKeywordMapShapes(t *testing.T) {
 	}
 }
 
+func TestGenerateStaticKeywordMapMetadataUsesInterfaceAssertion(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.static-keyword-map-meta"))
+	var output bytes.Buffer
+	generator := NewGenerator(&output)
+	constant := func(value any) *ast.Node {
+		node := ast.MakeNode(ast.OpConst, value)
+		node.Sub = &ast.ConstNode{Value: value}
+		return node
+	}
+	meta := ast.MakeNode(ast.OpMap, nil)
+	meta.Sub = &ast.MapNode{
+		Keys: []*ast.Node{
+			constant(lang.NewKeyword("a")),
+			constant(lang.NewKeyword("b")),
+			constant(lang.NewKeyword("c")),
+		},
+		Vals: []*ast.Node{
+			constant(int64(1)),
+			constant(int64(2)),
+			constant(int64(3)),
+		},
+	}
+	name := lang.NewSymbol("value")
+	definition := ast.MakeNode(ast.OpDef, nil)
+	definition.Sub = &ast.DefNode{
+		Name: name,
+		Var:  ns.Intern(name),
+		Meta: meta,
+	}
+	generator.currentIR = compiler.BuildTypedIR(definition)
+	generator.generateDef(definition)
+
+	generated := output.String()
+	if !strings.Contains(generated, ".SetMeta(any(") {
+		t.Fatalf("generated metadata did not normalize the concrete map to an interface:\n%s",
+			generated)
+	}
+}
+
 func TestGenerateTypedIRFixedGetIn(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.typed-ir-get-in"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)
@@ -2235,6 +2274,167 @@ func TestAnalyzeReducePipeline(t *testing.T) {
 	if plan := compiler.AnalyzePipeline(reduce); plan != nil &&
 		plan.Lowering == compiler.IRPipelineReduceInt64 {
 		t.Fatal("pipeline with an unproven range bound was fused")
+	}
+}
+
+func TestGenerateInlineIndexedCollectionCallbacks(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.inline-indexed-collections"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn multiply-values [values factor]
+		  (mapv (fn [value] (* value factor)) values))
+		(defn sum-until-three [values]
+		  (reduce
+		    (fn [total value]
+		      (if (= value 3)
+		        (reduced total)
+		        (+ total value)))
+		    0
+		    values))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate indexed collection callbacks: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		".(lang.Indexed)",
+		".Nth(",
+		"lang.IsReduced(",
+		".AsTransient().(*lang.TransientVector)",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("inline collection loop omitted %q:\n%s",
+				expected, generated)
+		}
+	}
+
+	sum := ns.FindInternedVar(lang.NewSymbol("sum-until-three"))
+	if got := sum.Invoke(lang.NewVector(
+		int64(1),
+		int64(2),
+		int64(3),
+		int64(4),
+	)); got != int64(3) {
+		t.Fatalf("vector reduced result = %v, want 3", got)
+	}
+	if got := sum.Invoke(lang.NewList(
+		int64(1),
+		int64(2),
+		int64(3),
+		int64(4),
+	)); got != int64(3) {
+		t.Fatalf("fallback reduced result = %v, want 3", got)
+	}
+}
+
+func TestGenerateOwnedNestedVectorUpdateRegion(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.owned-nested-vector"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn update-cell [values pair delta]
+		  (let [i (nth pair 0)
+		        j (nth pair 1)
+		        row (nth values i)]
+		    (assoc-in values [i j] (+ (nth row j) delta))))
+		(defn update-all [values pairs delta]
+		  (let [updated
+		        (reduce
+		          (fn [state pair] (update-cell state pair delta))
+		          values
+		          pairs)]
+		    (mapv
+		      (fn [row]
+		        (assoc row 0 (+ (nth row 0) delta)))
+		      updated)))`)
+
+	var output bytes.Buffer
+	generator := NewGenerator(&output)
+	if err := generator.Generate(ns); err != nil {
+		t.Fatalf("generate owned nested vector region: %v", err)
+	}
+	for _, name := range []string{"update-cell", "update-all"} {
+		vr := ns.FindInternedVar(lang.NewSymbol(name))
+		target := generator.aotCallTargets[vr]
+		if target == nil || target.ownedVectorAnalysis == nil {
+			var dump string
+			if target != nil {
+				dump = ast.Format(target.fn.ASTNode())
+			}
+			t.Fatalf(
+				"%s did not receive owned-vector analysis (target=%v vector=%v):\n%s",
+				name,
+				target != nil,
+				target != nil && target.vectorAnalysis != nil,
+				dump,
+			)
+		}
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"runtime.NewOwnedVector(",
+		"aotOwnedVectorFn",
+		".NestedSnapshot(",
+		".AssocIn2Copy(",
+		".AssocCopy(",
+		".Assoc(",
+		".(lang.Indexed)",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("owned vector region omitted %q:\n%s",
+				expected, generated)
+		}
+	}
+
+	update := ns.FindInternedVar(lang.NewSymbol("update-all"))
+	original := lang.NewVector(
+		lang.NewVector(int64(1), int64(2)),
+		lang.NewVector(int64(3), int64(4)),
+	)
+	got := update.Invoke(
+		original,
+		lang.NewVector(
+			lang.NewVector(int64(0), int64(1)),
+			lang.NewVector(int64(1), int64(0)),
+		),
+		int64(10),
+	)
+	want := lang.NewVector(
+		lang.NewVector(int64(11), int64(12)),
+		lang.NewVector(int64(23), int64(4)),
+	)
+	if !lang.Equals(got, want) {
+		t.Fatalf("updated value = %v, want %v", got, want)
+	}
+	if !lang.Equals(
+		original,
+		lang.NewVector(
+			lang.NewVector(int64(1), int64(2)),
+			lang.NewVector(int64(3), int64(4)),
+		),
+	) {
+		t.Fatalf("persistent input was mutated: %v", original)
+	}
+
+	var fallback bytes.Buffer
+	if err := newGenerator(&fallback, false).Generate(ns); err != nil {
+		t.Fatalf("generate without direct linking: %v", err)
+	}
+	if strings.Contains(fallback.String(), "runtime.NewOwnedVector(") {
+		t.Fatalf(
+			"disabled direct linking retained owned-vector specialization:\n%s",
+			fallback.String(),
+		)
 	}
 }
 
