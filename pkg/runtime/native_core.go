@@ -1135,7 +1135,7 @@ func recordOptimizableCoreRoots(core *lang.Namespace) {
 	recordDefaultCoreRoots(core,
 		"*", "+", "apply", "assoc", "assoc-in", "atom", "cons", "conj", "count", "dec", "deref",
 		"empty?", "even?", "filter", "first", "fnil", "get", "identity", "inc", "map",
-		"mapv", "neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
+		"mapv", "mod", "neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
 		"reduce", "reset!", "seq", "str", "swap!", "take", "zero?",
 	)
 }

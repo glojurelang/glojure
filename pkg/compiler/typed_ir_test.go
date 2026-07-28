@@ -695,6 +695,40 @@ func TestTypedIRAppliesGuardedCallSignatures(t *testing.T) {
 	if got := ir.ResolvedCallVars(); len(got) != 1 || got[0] != vr {
 		t.Fatalf("resolved call vars = %v, want [%v]", got, vr)
 	}
+	if got := ir.ResolvedCallCount(); got != 1 {
+		t.Fatalf("resolved call count = %d, want 1", got)
+	}
+}
+
+func TestTypedIRSeedsGuardedParameterTypes(t *testing.T) {
+	name := lang.NewSymbol("value")
+	param := typedIRBinding(name, nil)
+	body := typedIRLocal(name)
+	fn := &ast.Node{
+		Op: ast.OpFn,
+		Sub: &ast.FnNode{
+			Methods: []*ast.Node{{
+				Op: ast.OpFnMethod,
+				Sub: &ast.FnMethodNode{
+					Params:     []*ast.Node{param},
+					FixedArity: 1,
+					Body:       body,
+				},
+			}},
+		},
+	}
+
+	if got := BuildTypedIR(fn).Facts(body).Type.Kind; got != IRDynamic {
+		t.Fatalf("unguarded parameter type = %v, want dynamic", got)
+	}
+	ir := BuildTypedIRWithOptions(fn, TypedIROptions{
+		ParameterTypes: map[*lang.Symbol]IRType{
+			name: {Kind: IRInt},
+		},
+	})
+	if got := ir.Facts(body).Type.Kind; got != IRInt {
+		t.Fatalf("guarded parameter type = %v, want int", got)
+	}
 }
 
 func typedIRConst(value any) *ast.Node {

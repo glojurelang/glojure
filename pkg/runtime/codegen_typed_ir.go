@@ -157,7 +157,8 @@ func (g *Generator) generateIRCoreNumericInvoke(
 		facts.Call.Var.Namespace().Name().String() != "clojure.core" ||
 		facts.Call.Name != "mod" ||
 		facts.Call.Var.IsDynamic() ||
-		RT.BooleanCast(lang.Get(facts.Call.Var.Meta(), lang.KWRedef)) {
+		RT.BooleanCast(lang.Get(facts.Call.Var.Meta(), lang.KWRedef)) ||
+		!IsDefaultCoreVar(facts.Call.Var) {
 		return "", false
 	}
 	invoke := node.Sub.(*ast.InvokeNode)

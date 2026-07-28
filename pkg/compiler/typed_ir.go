@@ -105,6 +105,10 @@ type IRCallSignature struct {
 
 type TypedIROptions struct {
 	CallSignatures map[*lang.Var][]IRCallSignature
+	// ParameterTypes seeds representation facts for a guarded function
+	// version. The ordinary unguarded analysis leaves every parameter
+	// dynamic.
+	ParameterTypes map[*lang.Symbol]IRType
 }
 
 // IRGetInPlan represents (get-in value [k ...]) with a literal vector
@@ -290,6 +294,7 @@ type TypedIR struct {
 	facts          map[*ast.Node]IRFacts
 	bindings       map[*ast.Node]IRBindingFacts
 	callSignatures map[*lang.Var][]IRCallSignature
+	parameterTypes map[*lang.Symbol]IRType
 	resolvedCalls  map[*lang.Var]bool
 }
 
@@ -306,6 +311,7 @@ func BuildTypedIRWithOptions(
 		facts:          make(map[*ast.Node]IRFacts),
 		bindings:       make(map[*ast.Node]IRBindingFacts),
 		callSignatures: options.CallSignatures,
+		parameterTypes: options.ParameterTypes,
 		resolvedCalls:  make(map[*lang.Var]bool),
 	}
 	ir.visit(root)
@@ -329,6 +335,19 @@ func (ir *TypedIR) ResolvedCallVars() []*lang.Var {
 		result = append(result, vr)
 	}
 	return result
+}
+
+func (ir *TypedIR) ResolvedCallCount() int {
+	if ir == nil {
+		return 0
+	}
+	count := 0
+	for _, facts := range ir.facts {
+		if facts.Signature != nil {
+			count++
+		}
+	}
+	return count
 }
 
 // GuardedCallsSafe reports whether a function can select guarded call
@@ -449,8 +468,7 @@ func (ir *TypedIR) propagateLocalTypes(
 			methodScope := irCopyTypeScope(scope)
 			for _, param := range method.Params {
 				name := param.Sub.(*ast.BindingNode).Name
-				methodScope[name.String()] =
-					IRType{Kind: IRDynamic, Nullable: true}
+				methodScope[name.String()] = ir.parameterType(name)
 			}
 			changed = ir.propagateLocalTypes(method.Body, methodScope) ||
 				changed
@@ -461,8 +479,7 @@ func (ir *TypedIR) propagateLocalTypes(
 		methodScope := irCopyTypeScope(scope)
 		for _, param := range method.Params {
 			name := param.Sub.(*ast.BindingNode).Name
-			methodScope[name.String()] =
-				IRType{Kind: IRDynamic, Nullable: true}
+			methodScope[name.String()] = ir.parameterType(name)
 		}
 		return ir.propagateLocalTypes(method.Body, methodScope)
 	}
@@ -470,6 +487,15 @@ func (ir *TypedIR) propagateLocalTypes(
 		changed = ir.propagateLocalTypes(child, scope) || changed
 	}
 	return changed
+}
+
+func (ir *TypedIR) parameterType(name *lang.Symbol) IRType {
+	if ir != nil && name != nil {
+		if typ, ok := ir.parameterTypes[name]; ok {
+			return typ
+		}
+	}
+	return IRType{Kind: IRDynamic, Nullable: true}
 }
 
 // refineTypes recomputes facts whose result type depends on child facts. It is

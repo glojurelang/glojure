@@ -123,6 +123,7 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 				target,
 				method,
 				g.aotCallTargets,
+				g.directLink,
 			)
 			if analysis == nil {
 				continue
@@ -200,6 +201,10 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
 		method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
 		target.int64Analysis.proveSafeOperations(method)
+		target.int64Safe = g.directLink && target.directLinked &&
+			!target.int64Analysis.usesSelf &&
+			len(target.int64Analysis.callees) == 0 &&
+			int64AOTInlineCost(method.Body, 24) <= 24
 	}
 	for {
 		changed := false

@@ -25,12 +25,14 @@ type int64AOTAnalysis struct {
 	guardInt32Params   bool
 	guardInt32Loops    map[*ast.LetNode]bool
 	callees            map[*aotSpecializationTarget]struct{}
+	allowCoreMod       bool
 }
 
 func analyzeInt64AOTFunction(
 	target *aotSpecializationTarget,
 	method *ast.FnMethodNode,
 	targets map[*lang.Var]*aotSpecializationTarget,
+	allowCoreMod ...bool,
 ) *int64AOTAnalysis {
 	if target == nil || method.IsVariadic || method.FixedArity > 4 {
 		return nil
@@ -40,6 +42,7 @@ func analyzeInt64AOTFunction(
 		arity:              method.FixedArity,
 		uncheckedHostCalls: make(map[*ast.HostCallNode]bool),
 		callees:            make(map[*aotSpecializationTarget]struct{}),
+		allowCoreMod:       len(allowCoreMod) > 0 && allowCoreMod[0],
 	}
 	analyzer := newInt64AOTAnalyzer(analysis, targets)
 	locals := make(map[*lang.Symbol]aotPrimitiveType, method.FixedArity)
@@ -57,11 +60,12 @@ func newInt64AOTAnalyzer(
 	targets map[*lang.Var]*aotSpecializationTarget,
 ) *primitiveAOTAnalyzer {
 	return &primitiveAOTAnalyzer{
-		target:     analysis.target,
-		arity:      analysis.arity,
-		paramType:  int64AOTPrimitive,
-		resultType: int64AOTPrimitive,
-		targets:    targets,
+		target:       analysis.target,
+		arity:        analysis.arity,
+		paramType:    int64AOTPrimitive,
+		resultType:   int64AOTPrimitive,
+		allowCoreMod: analysis.allowCoreMod,
+		targets:      targets,
 		markUsesSelf: func() {
 			analysis.usesSelf = true
 		},
@@ -445,6 +449,11 @@ func (e *int64AOTEmitter) emitInvoke(
 	vr := invoke.Fn.Sub.(*ast.VarNode).Var
 	if vr.String() == "#'clojure.core/=" {
 		return "(" + args[0] + " == " + args[1] + ")"
+	}
+	if e.analysis.allowCoreMod && vr.Namespace() != nil &&
+		vr.Namespace().Name().String() == "clojure.core" &&
+		vr.Symbol().String() == "mod" {
+		return "lang.ModInt64(" + args[0] + ", " + args[1] + ")"
 	}
 	helper := e.helper
 	if vr != e.analysis.target.vr {

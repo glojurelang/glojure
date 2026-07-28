@@ -1381,6 +1381,75 @@ func TestGenerateUniformIntegerCaseWithPrimitiveResult(t *testing.T) {
 	}
 }
 
+func TestGenerateGuardedInt64ParameterRegion(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.guarded-int64-parameters"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn next-state [state]
+		  (mod (+ (* state 3) 1) 97))
+		(defn wrapped [state]
+		  {:state (next-state state)
+		   :label "ok"})
+		(defn ^:redef redef-next-state [state]
+		  (mod (+ (* state 5) 1) 101))
+		(defn wrapped-redef [state]
+		  {:state (redef-next-state state)})
+		(defn large-leaf [state]
+		  (let [s1 (inc state)
+		        s2 (inc s1)
+		        s3 (inc s2)
+		        s4 (inc s3)
+		        s5 (inc s4)
+		        s6 (inc s5)
+		        s7 (inc s6)
+		        s8 (inc s7)
+		        s9 (inc s8)
+		        s10 (inc s9)
+		        s11 (inc s10)
+		        s12 (inc s11)]
+		    s12))
+		(defn wrapped-large [state]
+		  {:state (large-leaf state)})`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate guarded int64 parameters: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "// inline int64 call") ||
+		strings.Count(generated, "lang.ModInt64(") < 2 {
+		t.Fatalf("guarded int64 region did not inline the typed leaf:\n%s",
+			generated)
+	}
+	if !strings.Contains(generated, "lang.CheckedMultiplyInt64(") {
+		t.Fatalf("inlined primitive leaf lost checked overflow semantics:\n%s",
+			generated)
+	}
+	for _, name := range []string{"redef-next-state", "large-leaf"} {
+		if strings.Contains(
+			generated,
+			"// inline int64 call #'"+
+				"codegen.guarded-int64-parameters/"+name,
+		) {
+			t.Fatalf("ineligible %s call was inlined:\n%s", name, generated)
+		}
+	}
+
+	var fallback bytes.Buffer
+	if err := newGenerator(&fallback, false).Generate(ns); err != nil {
+		t.Fatalf("generate without direct linking: %v", err)
+	}
+	if strings.Contains(fallback.String(), "// inline int64 call") {
+		t.Fatalf("disabled direct linking retained int64 inlining:\n%s",
+			fallback.String())
+	}
+}
+
 func TestGenerateSeqTruthinessWithoutSequenceAllocation(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.seq-truthiness"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)
@@ -2214,6 +2283,7 @@ func TestAnalyzeInt64AOTAcrossVarCall(t *testing.T) {
 		calleeTarget,
 		calleeMethod,
 		targets,
+		true,
 	)
 	if calleeTarget.int64Analysis == nil {
 		t.Fatal("callee did not receive a primitive path")

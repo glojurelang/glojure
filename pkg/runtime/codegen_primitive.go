@@ -28,6 +28,7 @@ type primitiveAOTAnalyzer struct {
 	paramType      aotPrimitiveType
 	resultType     aotPrimitiveType
 	allowFloat     bool
+	allowCoreMod   bool
 	targets        map[*lang.Var]*aotSpecializationTarget
 	markUsesSelf   func()
 	markCallee     func(*aotSpecializationTarget)
@@ -243,6 +244,15 @@ func (a *primitiveAOTAnalyzer) invokeType(
 		if a.acceptsNumeric(left) && left == right {
 			return boolAOTPrimitive
 		}
+	}
+	if a.allowCoreMod && vr.Namespace() != nil &&
+		vr.Namespace().Name().String() == "clojure.core" &&
+		vr.Symbol().String() == "mod" &&
+		!vr.IsDynamic() &&
+		!RT.BooleanCast(lang.Get(vr.Meta(), lang.KWRedef)) &&
+		IsDefaultCoreVar(vr) &&
+		a.allType(invoke.Args, locals, 2, int64AOTPrimitive) {
+		return int64AOTPrimitive
 	}
 	return invalidAOTPrimitive
 }

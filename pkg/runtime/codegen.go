@@ -97,6 +97,7 @@ type aotSpecializationTarget struct {
 	directArityVars     [21]string
 	int64FnVar          string
 	int64Analysis       *int64AOTAnalysis
+	int64Safe           bool
 	float64FnVar        string
 	float64Analysis     *float64AOTAnalysis
 	vectorFnVar         string
@@ -1518,7 +1519,13 @@ func (g *Generator) generateFn(fn *Fn) string {
 			!g.generateVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateOwnedVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
-			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
+			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+			!g.generateInt64ParameterSpecializedFixedFn(
+				fn,
+				fnVar,
+				methodNode,
+				paramNames,
+			) {
 			sig := ""
 			if fixedArity > 0 {
 				sig = strings.Join(paramNames, ", ") + " any"
@@ -1777,6 +1784,14 @@ func (g *Generator) generateFnMethodSplit(
 // Used for FnFuncN (0-4 arity) functions to avoid []any allocation.
 // paramVarNames contains the Go parameter variable names (e.g. ["p0", "p1"]).
 func (g *Generator) generateFnMethodFixed(methodNode *ast.FnMethodNode, paramVarNames []string) {
+	g.generateFnMethodFixedWithTypes(methodNode, paramVarNames, nil)
+}
+
+func (g *Generator) generateFnMethodFixedWithTypes(
+	methodNode *ast.FnMethodNode,
+	paramVarNames []string,
+	paramTypes []compiler.IRValueKind,
+) {
 	// Push a new scope for the method body
 	g.pushVarScope()
 	defer g.popVarScope()
@@ -1787,7 +1802,10 @@ func (g *Generator) generateFnMethodFixed(methodNode *ast.FnMethodNode, paramVar
 	for i, param := range methodNode.Params {
 		paramNode := param.Sub.(*ast.BindingNode)
 		paramVar := g.allocateLocal(paramNode.Name.Name())
-		if g.currentVector != nil &&
+		if i < len(paramTypes) &&
+			paramTypes[i] != compiler.IRDynamic {
+			g.markLocalType(paramNode.Name.Name(), paramTypes[i])
+		} else if g.currentVector != nil &&
 			g.currentVector.paramMask&(uint32(1)<<i) == 0 {
 			g.markLocalType(paramNode.Name.Name(), compiler.IRInt)
 		}
@@ -2140,6 +2158,9 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 		if result, ok := g.generateIROwnedMapReduce(invokeNode, plan); ok {
 			return result
 		}
+	}
+	if result, ok := g.generateAOTSafeInt64Invoke(node); ok {
+		return result
 	}
 	if result, ok := g.generateIRCoreNumericInvoke(node); ok {
 		return result
