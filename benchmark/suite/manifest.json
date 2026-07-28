@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "workloads": [
+    {
+      "name": "binary-trees",
+      "namespace": "benchmark.suite.binary-trees",
+      "file": "workloads/binary-trees.clj",
+      "expected": "[-1 [[4 4096 -8192] [6 1024 -2048] [8 256 -512] [10 64 -128] [12 16 -32]] -1]",
+      "tags": ["allocation", "records", "recursion", "keyword-lookup"]
+    },
+    {
+      "name": "fannkuch-redux",
+      "namespace": "benchmark.suite.fannkuch-redux",
+      "file": "workloads/fannkuch-redux.clj",
+      "expected": "[8629 30]",
+      "tags": ["vectors", "assoc", "nested-loops", "integer-arithmetic"]
+    },
+    {
+      "name": "spectral-norm",
+      "namespace": "benchmark.suite.spectral-norm",
+      "file": "workloads/spectral-norm.clj",
+      "expected": "1623630234289",
+      "tags": ["floating-point", "nested-loops", "function-calls", "vectors"]
+    },
+    {
+      "name": "k-nucleotide",
+      "namespace": "benchmark.suite.k-nucleotide",
+      "file": "workloads/k-nucleotide.clj",
+      "expected": "[15 669059 [3637 3637 3637 3637]]",
+      "tags": ["strings", "persistent-maps", "reduce", "sorting"]
+    },
+    {
+      "name": "persistent-map",
+      "namespace": "benchmark.suite.persistent-map",
+      "file": "workloads/persistent-map.clj",
+      "expected": "[25714 8871811555 288270 false]",
+      "tags": ["persistent-maps", "assoc", "dissoc", "lookup", "reduce"]
+    },
+    {
+      "name": "protocol-dispatch",
+      "namespace": "benchmark.suite.protocol-dispatch",
+      "file": "workloads/protocol-dispatch.clj",
+      "expected": "[-10628 -106280]",
+      "tags": ["protocols", "floating-point", "dispatch"]
+    }
+  ]
+}
