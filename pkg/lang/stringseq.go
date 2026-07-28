@@ -60,7 +60,7 @@ func (s *StringSeq) Cons(o any) Conser {
 }
 
 func (s *StringSeq) First() any {
-	return NewChar(rune(s.str[s.i]))
+	return BoxChar(rune(s.str[s.i]))
 }
 
 func (s *StringSeq) Next() ISeq {
@@ -117,7 +117,7 @@ func (s *StringSeq) Drop(n int) Sequential {
 func (s *StringSeq) ReduceInit(f IFn, init any) any {
 	acc := init
 	for i := s.i; i < len(s.str); i++ {
-		acc = f.Invoke(acc, NewChar(rune(s.str[i])))
+		acc = Apply2(f, acc, BoxChar(rune(s.str[i])))
 		if IsReduced(acc) {
 			return acc.(IDeref).Deref()
 		}

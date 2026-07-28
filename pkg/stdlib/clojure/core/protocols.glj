@@ -148,19 +148,13 @@
        (interface-or-naive-reduce s f val))
      val))
  
-  ;; github.com:glojurelang:glojure:pkg:lang.StringSeq
-  ;; (internal-reduce
-  ;;  [str-seq f val]
-  ;;  (let [s (.s str-seq)
-  ;;        len (.length s)]
-  ;;    (loop [i (.i str-seq)
-  ;;           val val]
-  ;;      (if (< i len)
-  ;;        (let [ret (f val (github.com:glojurelang:glojure:pkg:lang.CharAt s i))]
-  ;;               (if (reduced? ret)
-  ;;                 @ret
-  ;;                 (recur (inc i) ret)))
-  ;;        val))))
+  github.com:glojurelang:glojure:pkg:lang.*StringSeq
+  (internal-reduce
+   [str-seq f val]
+   (.ReduceInit
+    ^github.com:glojurelang:glojure:pkg:lang.IReduceInit str-seq
+    f
+    val))
   
   github.com:glojurelang:glojure:pkg:lang.Object
   (internal-reduce

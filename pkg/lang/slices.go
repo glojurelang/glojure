@@ -66,7 +66,7 @@ func ToSlice(x any) []any {
 	if s, ok := x.(string); ok {
 		res := make([]any, len(s))
 		for i := 0; i < len(s); i++ {
-			res[i] = NewChar(rune(s[i]))
+			res[i] = BoxChar(rune(s[i]))
 		}
 		return res
 	}

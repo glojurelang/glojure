@@ -287,7 +287,7 @@ func LoadNS() {
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_datafy, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols).FindInternedVar(sym_datafy)), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_datafy, lang.NewVector(sym_o), "return a representation of o as data (default identity)"))))
 		var_clojure_DOT_core_DOT_protocols_Datafiable = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_Datafiable.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(188), kw_column, int(14), kw_end_DASH_line, int(188), kw_end_DASH_column, int(23), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
+			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(182), kw_column, int(14), kw_end_DASH_line, int(182), kw_end_DASH_column, int(23), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
 		})
 	}
 	// IKVReduce
@@ -296,7 +296,7 @@ func LoadNS() {
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_kv_DASH_reduce, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols).FindInternedVar(sym_kv_DASH_reduce)), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_kv_DASH_reduce, lang.NewVector(sym_amap, sym_f, sym_init)))))
 		var_clojure_DOT_core_DOT_protocols_IKVReduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_IKVReduce.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(181), kw_column, int(14), kw_end_DASH_line, int(181), kw_end_DASH_column, int(22), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
+			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(175), kw_column, int(14), kw_end_DASH_line, int(175), kw_end_DASH_column, int(22), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
 		})
 	}
 	// InternalReduce
@@ -314,7 +314,7 @@ func LoadNS() {
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_nav, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols).FindInternedVar(sym_nav)), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_nav, lang.NewVector(sym_coll, sym_k, sym_v), "return (possibly transformed) v in the context of coll and k (a key/index or nil),\ndefaults to returning v."))))
 		var_clojure_DOT_core_DOT_protocols_Navigable = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_Navigable.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(200), kw_column, int(14), kw_end_DASH_line, int(200), kw_end_DASH_column, int(22), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
+			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(194), kw_column, int(14), kw_end_DASH_line, int(194), kw_end_DASH_column, int(22), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
 		})
 	}
 	// coll-reduce
@@ -479,7 +479,7 @@ func LoadNS() {
 		tmp1.AddMethod(nil, tmp2)
 		var_clojure_DOT_core_DOT_protocols_datafy = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_datafy.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(191), kw_column, int(4), kw_end_DASH_line, int(191), kw_end_DASH_column, int(9), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
+			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(185), kw_column, int(4), kw_end_DASH_line, int(185), kw_end_DASH_column, int(9), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
 		})
 	}
 	// interface-or-naive-reduce
@@ -535,7 +535,7 @@ func LoadNS() {
 			_ = v6
 			v7 := p2
 			_ = v7
-		recur_loop_2865:
+		recur_loop_1611:
 			var tmp8 any
 			{ // let
 				// let binding "temp__0__auto__"
@@ -576,7 +576,7 @@ func LoadNS() {
 									v5 = tmp24
 									v6 = tmp26
 									v7 = tmp27
-									goto recur_loop_2865
+									goto recur_loop_1611
 								}
 								tmp16 = tmp21
 							} // end let
@@ -596,7 +596,7 @@ func LoadNS() {
 			return tmp8
 		})
 		tmp1.AddMethod(tmp3, tmp4)
-		tmp5 := reflect.TypeOf((*lang.Object)(nil)).Elem()
+		tmp5 := reflect.TypeOf((*lang.StringSeq)(nil))
 		var tmp6 lang.FnFunc3
 		tmp6 = lang.FnFunc3(func(p0, p1, p2 any) any {
 			v7 := p0
@@ -605,85 +605,98 @@ func LoadNS() {
 			_ = v8
 			v9 := p2
 			_ = v9
-			var tmp10 any
-			{ // let
-				// let binding "cls"
-				tmp11 := aotExternalFn6(v7)
-				var v12 any = tmp11
-				_ = v12
-				// let binding "s"
-				var v13 any = v7
-				_ = v13
-				// let binding "f"
-				var v14 any = v8
-				_ = v14
-				// let binding "val"
-				var v15 any = v9
-				_ = v15
-				for {
-					var tmp16 any
-					{ // let
-						// let binding "temp__0__auto__"
-						tmp17 := lang.Seq(v13)
-						var v18 any = tmp17
-						_ = v18
-						var tmp19 any
-						if lang.IsTruthy(v18) {
-							var tmp20 any
-							{ // let
-								// let binding "s"
-								var v21 any = v18
-								_ = v21
-								var tmp22 any
-								tmp23 := aotExternalFn6(v21)
-								tmp24 := aotExternalFn7(tmp23, v12)
-								if lang.IsTruthy(tmp24) {
-									var tmp25 any
-									{ // let
-										// let binding "ret"
-										tmp26 := lang.First(v21)
-										tmp27 := lang.Apply2(v14, v15, tmp26)
-										var v28 any = tmp27
-										_ = v28
-										var tmp29 any
-										tmp30 := lang.IsReduced(v28)
-										if lang.IsTruthy(tmp30) {
-											tmp31 := aotExternalFn4(v28)
-											tmp29 = tmp31
-										} else {
-											var tmp32 any = v12
-											tmp34 := lang.Next(v21)
-											var tmp33 any = tmp34
-											var tmp35 any = v14
-											var tmp36 any = v28
-											v12 = tmp32
-											v13 = tmp33
-											v14 = tmp35
-											v15 = tmp36
-											continue
-										}
-										tmp25 = tmp29
-									} // end let
-									tmp22 = tmp25
-								} else {
-									tmp26 := aotDirectFn0(v21, v14, v15)
-									tmp22 = tmp26
-								}
-								tmp20 = tmp22
-							} // end let
-							tmp19 = tmp20
-						} else {
-							tmp19 = v15
-						}
-						tmp16 = tmp19
-					} // end let
-					tmp10 = tmp16
-					break
-				}
-			} // end let
+			tmp10 := v7.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v8), v9)
 			return tmp10
 		})
 		tmp1.AddMethod(tmp5, tmp6)
+		tmp7 := reflect.TypeOf((*lang.Object)(nil)).Elem()
+		var tmp8 lang.FnFunc3
+		tmp8 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v9 := p0
+			_ = v9
+			v10 := p1
+			_ = v10
+			v11 := p2
+			_ = v11
+			var tmp12 any
+			{ // let
+				// let binding "cls"
+				tmp13 := aotExternalFn6(v9)
+				var v14 any = tmp13
+				_ = v14
+				// let binding "s"
+				var v15 any = v9
+				_ = v15
+				// let binding "f"
+				var v16 any = v10
+				_ = v16
+				// let binding "val"
+				var v17 any = v11
+				_ = v17
+				for {
+					var tmp18 any
+					{ // let
+						// let binding "temp__0__auto__"
+						tmp19 := lang.Seq(v15)
+						var v20 any = tmp19
+						_ = v20
+						var tmp21 any
+						if lang.IsTruthy(v20) {
+							var tmp22 any
+							{ // let
+								// let binding "s"
+								var v23 any = v20
+								_ = v23
+								var tmp24 any
+								tmp25 := aotExternalFn6(v23)
+								tmp26 := aotExternalFn7(tmp25, v14)
+								if lang.IsTruthy(tmp26) {
+									var tmp27 any
+									{ // let
+										// let binding "ret"
+										tmp28 := lang.First(v23)
+										tmp29 := lang.Apply2(v16, v17, tmp28)
+										var v30 any = tmp29
+										_ = v30
+										var tmp31 any
+										tmp32 := lang.IsReduced(v30)
+										if lang.IsTruthy(tmp32) {
+											tmp33 := aotExternalFn4(v30)
+											tmp31 = tmp33
+										} else {
+											var tmp34 any = v14
+											tmp36 := lang.Next(v23)
+											var tmp35 any = tmp36
+											var tmp37 any = v16
+											var tmp38 any = v30
+											v14 = tmp34
+											v15 = tmp35
+											v16 = tmp37
+											v17 = tmp38
+											continue
+										}
+										tmp27 = tmp31
+									} // end let
+									tmp24 = tmp27
+								} else {
+									tmp28 := aotDirectFn0(v23, v16, v17)
+									tmp24 = tmp28
+								}
+								tmp22 = tmp24
+							} // end let
+							tmp21 = tmp22
+						} else {
+							tmp21 = v17
+						}
+						tmp18 = tmp21
+					} // end let
+					tmp12 = tmp18
+					break
+				}
+			} // end let
+			return tmp12
+		})
+		tmp1.AddMethod(tmp7, tmp8)
 		var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(22), kw_column, int(4), kw_end_DASH_line, int(22), kw_end_DASH_column, int(18), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
@@ -908,7 +921,7 @@ func LoadNS() {
 		tmp1 := lang.NewProtocolMultiFn("kv-reduce", lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var_clojure_DOT_core_DOT_protocols_kv_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_kv_DASH_reduce.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(186), kw_column, int(4), kw_end_DASH_line, int(186), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
+			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(180), kw_column, int(4), kw_end_DASH_line, int(180), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
 		})
 	}
 	// naive-seq-reduce
@@ -979,7 +992,7 @@ func LoadNS() {
 		tmp1 := lang.NewProtocolMultiFn("nav", lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var_clojure_DOT_core_DOT_protocols_nav = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_nav.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(203), kw_column, int(4), kw_end_DASH_line, int(203), kw_end_DASH_column, int(6), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
+			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(197), kw_column, int(4), kw_end_DASH_line, int(197), kw_end_DASH_column, int(6), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
 		})
 	}
 	// seq-reduce

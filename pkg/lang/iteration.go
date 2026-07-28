@@ -47,7 +47,7 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 		if n < 0 || n >= len(x) {
 			return nil, false
 		}
-		return NewChar(rune(x[n])), true
+		return BoxChar(rune(x[n])), true
 	}
 
 	if seq := Seq(x); seq != nil {
