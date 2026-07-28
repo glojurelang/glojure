@@ -14,8 +14,8 @@ import (
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-type inputStream interface{ Read([]byte) (int, error) }
-type outputStream interface{ Write([]byte) (int, error) }
+type InputStream interface{ Read([]byte) (int, error) }
+type OutputStream interface{ Write([]byte) (int, error) }
 
 type ByteArrayInputStream struct{ *bytes.Reader }
 type ByteArrayOutputStream struct{ bytes.Buffer }
@@ -142,9 +142,9 @@ func registerClass(name, javaName string, classType reflect.Type, constructor fu
 
 func init() {
 	registerClass("InputStream", "java.io.InputStream",
-		reflect.TypeOf((*inputStream)(nil)).Elem(), nil)
+		reflect.TypeOf((*InputStream)(nil)).Elem(), nil)
 	registerClass("OutputStream", "java.io.OutputStream",
-		reflect.TypeOf((*outputStream)(nil)).Elem(), nil)
+		reflect.TypeOf((*OutputStream)(nil)).Elem(), nil)
 	registerClass("Reader", "java.io.Reader",
 		reflect.TypeOf((*io.Reader)(nil)).Elem(), nil)
 	registerClass("Writer", "java.io.Writer",

@@ -33,6 +33,10 @@ func (f *File) GetPath() string         { return f.Pathname }
 func (f *File) GetName() string         { return filepath.Base(f.Pathname) }
 func (f *File) GetParent() string       { return filepath.Dir(f.Pathname) }
 func (f *File) GetAbsolutePath() string { p, _ := filepath.Abs(f.Pathname); return p }
+func (f *File) Path() string            { return f.GetPath() }
+func (f *File) Name() string            { return f.GetName() }
+func (f *File) Parent() string          { return f.GetParent() }
+func (f *File) AbsolutePath() string    { return f.GetAbsolutePath() }
 func (f *File) GetCanonicalPath() string {
 	p, err := filepath.Abs(f.Pathname)
 	if err != nil {
@@ -40,11 +44,14 @@ func (f *File) GetCanonicalPath() string {
 	}
 	return filepath.Clean(p)
 }
+func (f *File) CanonicalPath() string  { return f.GetCanonicalPath() }
 func (f *File) GetAbsoluteFile() *File { return &File{Pathname: f.GetAbsolutePath()} }
 func (f *File) GetCanonicalFile() *File {
 	return &File{Pathname: f.GetCanonicalPath()}
 }
-func (f *File) Exists() bool { _, err := os.Stat(f.Pathname); return err == nil }
+func (f *File) AbsoluteFile() *File  { return f.GetAbsoluteFile() }
+func (f *File) CanonicalFile() *File { return f.GetCanonicalFile() }
+func (f *File) Exists() bool         { _, err := os.Stat(f.Pathname); return err == nil }
 func (f *File) IsFile() bool {
 	info, err := os.Stat(f.Pathname)
 	return err == nil && info.Mode().IsRegular()
@@ -127,6 +134,8 @@ func (p *Path) ToFile() *File      { return &File{Pathname: p.Pathname} }
 func (p *Path) IsAbsolute() bool   { return filepath.IsAbs(p.Pathname) }
 func (p *Path) GetFileName() *Path { return &Path{Pathname: filepath.Base(p.Pathname)} }
 func (p *Path) GetParent() *Path   { return &Path{Pathname: filepath.Dir(p.Pathname)} }
+func (p *Path) FileName() *Path    { return p.GetFileName() }
+func (p *Path) Parent() *Path      { return p.GetParent() }
 func (p *Path) Normalize() *Path   { return &Path{Pathname: filepath.Clean(p.Pathname)} }
 func (p *Path) ToAbsolutePath() *Path {
 	value, _ := filepath.Abs(p.Pathname)

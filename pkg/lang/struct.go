@@ -92,11 +92,12 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 
 	if err, isErr := v.(error); isErr {
 		switch name {
-		case "getMessage", "GetMessage", "getLocalizedMessage", "GetLocalizedMessage":
+		case "getMessage", "GetMessage", "Message",
+			"getLocalizedMessage", "GetLocalizedMessage", "LocalizedMessage":
 			return FnFunc0(func() any { return err.Error() }), true
 		case "toString", "ToString":
 			return FnFunc0(func() any { return err.Error() }), true
-		case "getCause", "GetCause":
+		case "getCause", "GetCause", "Cause":
 			return FnFunc0(func() any {
 				if cause := unwrapError(err); cause != nil {
 					return cause
