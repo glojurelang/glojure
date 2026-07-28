@@ -1531,13 +1531,15 @@ func (g *Generator) generateFn(fn *Fn) string {
 	}
 	arityDispatch := len(fnNode.Methods) > 1 || fnNode.IsVariadic
 	var int64Callable *int64CallableAOTAnalysis
-	if fixedArity == 1 &&
-		(g.specializationTarget == nil ||
-			g.specializationTarget.fn != fn) {
+	topLevelInt64Callable := false
+	if fixedArity == 1 && g.canGenerateInt64Callable(fn) {
 		int64Callable = g.analyzeInt64Callable(
 			fn,
 			fnNode.Methods[0].Sub.(*ast.FnMethodNode),
 		)
+		topLevelInt64Callable = int64Callable != nil &&
+			g.specializationTarget != nil &&
+			g.specializationTarget.fn == fn
 	}
 	smallFixed := true
 	for _, method := range fnNode.Methods {
@@ -1560,7 +1562,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 	} else if arityDispatch {
 		fnType = "lang.ArityFn"
 	}
-	if int64Callable != nil {
+	if int64Callable != nil && !topLevelInt64Callable {
 		fnType = "lang.IFn"
 	}
 	// declare it now to make sure it's in the scope of the caller
@@ -1592,7 +1594,13 @@ func (g *Generator) generateFn(fn *Fn) string {
 		// Supported single arity: emit FnFuncN with direct named params.
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
 		paramNames := fixedParamNames(fixedArity)
-		if int64Callable != nil {
+		if topLevelInt64Callable {
+			g.generateTopLevelInt64CallableFixedFn(
+				fnVar,
+				methodNode,
+				int64Callable,
+			)
+		} else if int64Callable != nil {
 			g.generateInt64CallableFixedFn(
 				fnVar,
 				methodNode,

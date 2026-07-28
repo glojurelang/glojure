@@ -20,6 +20,7 @@ import (
 type int64AOTAnalysis struct {
 	target             *aotSpecializationTarget
 	arity              int
+	resultType         aotPrimitiveType
 	usesSelf           bool
 	uncheckedHostCalls map[*ast.HostCallNode]bool
 	guardInt32Params   bool
@@ -40,6 +41,7 @@ func analyzeInt64AOTFunction(
 	analysis := &int64AOTAnalysis{
 		target:             target,
 		arity:              method.FixedArity,
+		resultType:         int64AOTPrimitive,
 		uncheckedHostCalls: make(map[*ast.HostCallNode]bool),
 		callees:            make(map[*aotSpecializationTarget]struct{}),
 		allowCoreMod:       len(allowCoreMod) > 0 && allowCoreMod[0],
@@ -63,7 +65,7 @@ func newInt64AOTAnalyzer(
 		target:       analysis.target,
 		arity:        analysis.arity,
 		paramType:    int64AOTPrimitive,
-		resultType:   int64AOTPrimitive,
+		resultType:   analysis.resultType,
 		allowCoreMod: analysis.allowCoreMod,
 		targets:      targets,
 		markUsesSelf: func() {
@@ -263,7 +265,7 @@ func (e *int64AOTEmitter) emitLoop(
 ) string {
 	result := e.g.allocateTempVar()
 	label := "int64_loop_" + e.g.allocateTempVar()
-	e.g.writef("var %s int64\n", result)
+	e.g.writef("var %s %s\n", result, aotGoType(e.analysis.resultType))
 	e.g.writef("{\n")
 	nested := cloneAOTLocals(locals)
 	bindings := make([]aotTypedLocal, len(loop.Bindings))

@@ -49,12 +49,30 @@ func TestGenerateInferredPrimitiveFunctionValues(t *testing.T) {
 	defer lang.PopThreadBindings()
 
 	ReadEval(`
+		(defn accepts-any? [_] true)
+		(defn reaches-zero? [value]
+		  (loop [current value]
+		    (if (zero? current)
+		      true
+		      (if (pos? current)
+		        (recur (dec current))
+		        false))))
 		(def pipeline
 		  (filter (fn [value] (not (even? value)))))
 		(defn build []
 		  [(map (fn [value] (* value value)))
 		   (filter (fn [value] (zero? (mod value 3))))
-		   (filter odd?)])`)
+		   (filter odd?)
+		   (filter
+		     (fn [value]
+		       (loop [current value]
+		         (if (zero? current)
+		           true
+		           (if (pos? current)
+		             (recur (dec current))
+		             false)))))
+		   (filter accepts-any?)
+		   (filter reaches-zero?)])`)
 
 	var output bytes.Buffer
 	if err := NewGenerator(&output).Generate(ns); err != nil {
@@ -67,22 +85,27 @@ func TestGenerateInferredPrimitiveFunctionValues(t *testing.T) {
 	if got := strings.Count(
 		source,
 		"lang.NewInt64PredicateFn(",
-	); got < 2 {
+	); got < 3 {
 		t.Fatalf(
-			"generated source has %d primitive predicate entry points, want at least 2:\n%s",
+			"generated source has %d primitive predicate entry points, want at least 3:\n%s",
 			got,
 			source,
 		)
+	}
+	if !strings.Contains(source, "p0.(int64)") {
+		t.Fatalf("top-level primitive predicate retained only boxed code:\n%s", source)
 	}
 
 	output.Reset()
 	if err := newGenerator(&output, false).Generate(ns); err != nil {
 		t.Fatal(err)
 	}
-	if strings.Contains(output.String(), "lang.NewInt64") {
+	disabledSource := output.String()
+	if strings.Contains(disabledSource, "lang.NewInt64") ||
+		strings.Contains(disabledSource, "p0.(int64)") {
 		t.Fatalf(
-			"direct-link-disabled source contains primitive callable entry point:\n%s",
-			output.String(),
+			"direct-link-disabled source contains primitive callable fast path:\n%s",
+			disabledSource,
 		)
 	}
 }

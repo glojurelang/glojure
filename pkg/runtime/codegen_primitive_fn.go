@@ -16,6 +16,19 @@ type int64CallableAOTAnalysis struct {
 	result    aotPrimitiveType
 }
 
+func (g *Generator) canGenerateInt64Callable(fn *Fn) bool {
+	target := g.specializationTarget
+	if target == nil || target.fn != fn {
+		return true
+	}
+	return target.int64Analysis == nil &&
+		target.int64ParamAnalysis == nil &&
+		target.float64Analysis == nil &&
+		target.vectorAnalysis == nil &&
+		target.ownedVectorAnalysis == nil &&
+		target.recordAnalysis == nil
+}
+
 func (g *Generator) analyzeInt64Callable(
 	fn *Fn,
 	method *ast.FnMethodNode,
@@ -27,36 +40,41 @@ func (g *Generator) analyzeInt64Callable(
 		return nil
 	}
 
-	target := &aotSpecializationTarget{
-		fn:           fn,
-		arity:        1,
-		directLinked: true,
-	}
-	analysis := &int64AOTAnalysis{
-		target:             target,
-		arity:              1,
-		uncheckedHostCalls: make(map[*ast.HostCallNode]bool),
-		callees:            make(map[*aotSpecializationTarget]struct{}),
-		allowCoreMod:       true,
-	}
-	analyzer := newInt64AOTAnalyzer(analysis, g.aotCallTargets)
 	parameter := method.Params[0].Sub.(*ast.BindingNode).Name
-	result := analyzer.exprType(
-		method.Body,
-		map[*lang.Symbol]aotPrimitiveType{
-			parameter: int64AOTPrimitive,
-		},
-	)
-	if result != int64AOTPrimitive && result != boolAOTPrimitive {
-		return nil
+	for _, resultType := range []aotPrimitiveType{
+		int64AOTPrimitive,
+		boolAOTPrimitive,
+	} {
+		target := &aotSpecializationTarget{
+			fn:           fn,
+			arity:        1,
+			directLinked: true,
+		}
+		analysis := &int64AOTAnalysis{
+			target:             target,
+			arity:              1,
+			resultType:         resultType,
+			uncheckedHostCalls: make(map[*ast.HostCallNode]bool),
+			callees:            make(map[*aotSpecializationTarget]struct{}),
+			allowCoreMod:       true,
+		}
+		analyzer := newInt64AOTAnalyzer(analysis, g.aotCallTargets)
+		result := analyzer.exprType(
+			method.Body,
+			map[*lang.Symbol]aotPrimitiveType{
+				parameter: int64AOTPrimitive,
+			},
+		)
+		if result != resultType ||
+			analysis.usesSelf || len(analysis.callees) != 0 {
+			continue
+		}
+		return &int64CallableAOTAnalysis{
+			primitive: analysis,
+			result:    result,
+		}
 	}
-	if analysis.usesSelf || len(analysis.callees) != 0 {
-		return nil
-	}
-	return &int64CallableAOTAnalysis{
-		primitive: analysis,
-		result:    result,
-	}
+	return nil
 }
 
 func (g *Generator) generateInt64CallableFixedFn(
@@ -99,5 +117,38 @@ func (g *Generator) generateInt64CallableFixedFn(
 	}
 	result := emitter.emitExpr(method.Body, locals)
 	g.writef("return %s\n", result)
+	g.writef("})\n")
+}
+
+// generateTopLevelInt64CallableFixedFn keeps the ordinary FnFunc1 shape used
+// by direct call slots while selecting the inferred primitive body for int64
+// arguments. Other numeric types and redefined call sites retain the original
+// generated function body.
+func (g *Generator) generateTopLevelInt64CallableFixedFn(
+	fnVar string,
+	method *ast.FnMethodNode,
+	analysis *int64CallableAOTAnalysis,
+) {
+	g.writef("%s = lang.FnFunc1(func(p0 any) any {\n", fnVar)
+	parameter := g.allocateTempVar()
+	ok := g.allocateTempVar()
+	g.writef("if %s, %s := p0.(int64); %s {\n",
+		parameter, ok, ok)
+	g.writef("_ = %s\n", parameter)
+	locals := map[*lang.Symbol]aotTypedLocal{
+		method.Params[0].Sub.(*ast.BindingNode).Name: {
+			name: parameter,
+			typ:  int64AOTPrimitive,
+		},
+	}
+	emitter := int64AOTEmitter{
+		g:        g,
+		analysis: analysis.primitive,
+		callees:  map[*aotSpecializationTarget]string{},
+	}
+	result := emitter.emitExpr(method.Body, locals)
+	g.writef("return %s\n", result)
+	g.writef("}\n")
+	g.generateFnMethodFixed(method, []string{"p0"})
 	g.writef("})\n")
 }
