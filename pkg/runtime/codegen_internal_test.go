@@ -1747,13 +1747,39 @@ func TestGenerateOwnedMapReduceUsesSharedIRWithDirectLinking(t *testing.T) {
 	generated := output.String()
 	for _, expected := range []string{
 		"runtime.ReduceOwnedMap(",
-		"runtime.UpdateOwnedMap3(",
-		"runtime.UpdateOwnedMap4(",
+		"runtime.UpdateOwnedMapPath2Default3(",
+		"runtime.UpdateOwnedMapPath2Default4(",
 	} {
 		if !strings.Contains(generated, expected) {
 			t.Fatalf("owned map reduce omitted %q:\n%s", expected, generated)
 		}
 	}
+
+	func() {
+		fnil := lang.NSCore.FindInternedVar(lang.NewSymbol("fnil"))
+		originalFnilMeta := fnil.Meta()
+		fnil.SetMeta(
+			originalFnilMeta.Assoc(
+				lang.KWRedef,
+				true,
+			).(lang.IPersistentMap),
+		)
+		defer fnil.SetMeta(originalFnilMeta)
+
+		output.Reset()
+		if err := newGenerator(&output, true).Generate(ns); err != nil {
+			t.Fatalf("generate redefinable fnil owned map reduce: %v", err)
+		}
+		generated = output.String()
+		if !strings.Contains(generated, "runtime.ReduceOwnedMap(") ||
+			!strings.Contains(generated, "runtime.UpdateOwnedMapPath2_3(") ||
+			strings.Contains(generated, "runtime.UpdateOwnedMapPath2Default") {
+			t.Fatalf(
+				"redefinable fnil did not retain the wrapper fallback:\n%s",
+				generated,
+			)
+		}
+	}()
 
 	output.Reset()
 	if err := newGenerator(&output, false).Generate(ns); err != nil {

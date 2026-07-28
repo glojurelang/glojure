@@ -48,9 +48,28 @@ func (ir *TypedIR) analyzeOwnedMapReduce(
 	seen := make(map[*lang.Var]bool)
 	for _, update := range usage.updates {
 		facts := ir.facts[update]
-		facts.OwnedMapUpdateIn = true
+		updatePlan := &IROwnedMapUpdatePlan{}
+		invoke := update.Sub.(*ast.InvokeNode)
+		if path := invoke.Args[1]; path.Op == ast.OpVector {
+			updatePlan.Keys = append(
+				[]*ast.Node(nil),
+				path.Sub.(*ast.VectorNode).Items...,
+			)
+		}
+		if callback := invoke.Args[2]; callback.Op == ast.OpInvoke {
+			callbackInvoke := callback.Sub.(*ast.InvokeNode)
+			if vr, name, core := irCoreCall(callbackInvoke); core &&
+				name == "fnil" && len(callbackInvoke.Args) == 2 {
+				updatePlan.Fnil = &IROwnedMapFnilPlan{
+					Var:     vr,
+					Fn:      callbackInvoke.Args[0],
+					Default: callbackInvoke.Args[1],
+				}
+			}
+		}
+		facts.OwnedMapUpdateIn = updatePlan
 		ir.facts[update] = facts
-		vr, _, _ := irCoreCall(update.Sub.(*ast.InvokeNode))
+		vr, _, _ := irCoreCall(invoke)
 		if !seen[vr] {
 			seen[vr] = true
 			updateVars = append(updateVars, vr)

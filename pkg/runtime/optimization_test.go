@@ -887,6 +887,70 @@ func TestReduceOwnedMapKeepsNestedUpdatesPrivateUntilReturn(t *testing.T) {
 	}
 }
 
+func TestUpdateOwnedMapFixedTwoKeyPathPreservesUpdateSemantics(t *testing.T) {
+	service := lang.NewKeyword("api")
+	requests := lang.NewKeyword("requests")
+	failures := lang.NewKeyword("failures")
+	bytes := lang.NewKeyword("bytes")
+	initial := lang.NewMap(
+		service,
+		lang.NewMap(requests, int64(10)),
+	)
+	increment := lang.FnFunc1(func(value interface{}) interface{} {
+		return lang.Numbers.Inc(value)
+	})
+	add := lang.FnFunc2(func(value, amount interface{}) interface{} {
+		if value == nil {
+			value = int64(0)
+		}
+		return lang.Numbers.Add(value, amount)
+	})
+	reducer := lang.FnFunc2(func(result, _ interface{}) interface{} {
+		result = UpdateOwnedMapPath2_3(
+			result,
+			service,
+			requests,
+			increment,
+		)
+		result = UpdateOwnedMapPath2Default3(
+			result,
+			service,
+			failures,
+			increment,
+			int64(0),
+		)
+		return UpdateOwnedMapPath2Default4(
+			result,
+			service,
+			bytes,
+			add,
+			int64(0),
+			int64(7),
+		)
+	})
+
+	result := ReduceOwnedMap(
+		nativeCoreReduce{},
+		reducer,
+		initial,
+		lang.NewVector(nil, nil, nil),
+	)
+
+	nested := lang.Get(result, service)
+	if got := lang.Get(nested, requests); got != int64(13) {
+		t.Fatalf("fixed-path requests = %v, want 13", got)
+	}
+	if got := lang.Get(nested, failures); got != int64(3) {
+		t.Fatalf("fixed-path failures = %v, want 3", got)
+	}
+	if got := lang.Get(nested, bytes); got != int64(21) {
+		t.Fatalf("fixed-path bytes = %v, want 21", got)
+	}
+	if got := lang.Get(lang.Get(initial, service), requests); got != int64(10) {
+		t.Fatalf("fixed-path reduction mutated initial map: %v", got)
+	}
+}
+
 func TestUpdateOwnedMapPassesPersistentMapAtLeaf(t *testing.T) {
 	outer := lang.NewKeyword("outer")
 	leaf := lang.NewKeyword("leaf")

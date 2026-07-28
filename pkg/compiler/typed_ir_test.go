@@ -610,7 +610,11 @@ func TestTypedIRProvesOwnedMapReduceUpdateChain(t *testing.T) {
 		typedIRCoreVar("update-in"),
 		typedIRLocal(totals),
 		pathA,
-		typedIRVar(typedIRCoreVar("inc")),
+		typedIRInvoke(
+			typedIRCoreVar("fnil"),
+			typedIRVar(typedIRCoreVar("inc")),
+			typedIRConst(int64(0)),
+		),
 	)
 	second := typedIRInvoke(
 		typedIRCoreVar("update-in"),
@@ -650,9 +654,31 @@ func TestTypedIRProvesOwnedMapReduceUpdateChain(t *testing.T) {
 	if plan := ir.Facts(reduce).OwnedMapReduce; plan == nil {
 		t.Fatal("owned map reduction was not represented")
 	}
-	if !ir.Facts(first).OwnedMapUpdateIn ||
-		!ir.Facts(second).OwnedMapUpdateIn {
+	firstUpdate := ir.Facts(first).OwnedMapUpdateIn
+	secondUpdate := ir.Facts(second).OwnedMapUpdateIn
+	if firstUpdate == nil || secondUpdate == nil {
 		t.Fatal("owned update-in chain was not marked")
+	}
+	if len(firstUpdate.Keys) != 1 ||
+		firstUpdate.Keys[0] != pathA.Sub.(*ast.VectorNode).Items[0] ||
+		len(secondUpdate.Keys) != 1 ||
+		secondUpdate.Keys[0] != pathB.Sub.(*ast.VectorNode).Items[0] {
+		t.Fatalf(
+			"owned update paths = %#v, %#v",
+			firstUpdate.Keys,
+			secondUpdate.Keys,
+		)
+	}
+	if firstUpdate.Fnil == nil ||
+		firstUpdate.Fnil.Var.Symbol().String() != "fnil" ||
+		firstUpdate.Fnil.Fn != first.Sub.(*ast.InvokeNode).
+			Args[2].Sub.(*ast.InvokeNode).Args[0] ||
+		firstUpdate.Fnil.Default != first.Sub.(*ast.InvokeNode).
+			Args[2].Sub.(*ast.InvokeNode).Args[1] {
+		t.Fatalf("owned fnil plan = %#v", firstUpdate.Fnil)
+	}
+	if secondUpdate.Fnil != nil {
+		t.Fatalf("plain callback received fnil plan: %#v", secondUpdate.Fnil)
 	}
 
 	observer := lang.FindOrCreateNamespace(lang.NewSymbol("typed-ir-test")).

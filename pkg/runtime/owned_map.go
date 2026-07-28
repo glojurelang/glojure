@@ -114,6 +114,73 @@ func UpdateOwnedMap4(target, keys, updateFn, arg interface{}) interface{} {
 	})
 }
 
+// UpdateOwnedMapPath2_3 is the fixed two-key-path counterpart of update-in.
+// The compiler uses it only when the path vector's exact length is known, so
+// dynamic update-in calls retain the ordinary collection-based path.
+func UpdateOwnedMapPath2_3(
+	target, firstKey, secondKey, updateFn interface{},
+) interface{} {
+	owned := requireOwnedMap(target)
+	child := owned.child(firstKey)
+	child.assoc(
+		secondKey,
+		applyOwnedMapUpdate(
+			updateFn,
+			child.leaf(secondKey),
+			ownedMapUpdateArgs{},
+		),
+	)
+	return owned
+}
+
+// UpdateOwnedMapPath2_4 handles the corresponding update-in arity with one
+// extra callback argument.
+func UpdateOwnedMapPath2_4(
+	target, firstKey, secondKey, updateFn, arg interface{},
+) interface{} {
+	owned := requireOwnedMap(target)
+	child := owned.child(firstKey)
+	child.assoc(
+		secondKey,
+		applyOwnedMapUpdate(
+			updateFn,
+			child.leaf(secondKey),
+			ownedMapUpdateArgs{count: 1, first: arg},
+		),
+	)
+	return owned
+}
+
+// UpdateOwnedMapPath2Default3 applies a one-default fnil update without
+// allocating the short-lived wrapper function.
+func UpdateOwnedMapPath2Default3(
+	target, firstKey, secondKey, updateFn, fallback interface{},
+) interface{} {
+	owned := requireOwnedMap(target)
+	child := owned.child(firstKey)
+	current := child.leaf(secondKey)
+	if lang.IsNil(current) {
+		current = fallback
+	}
+	child.assoc(secondKey, lang.Apply1(updateFn, current))
+	return owned
+}
+
+// UpdateOwnedMapPath2Default4 is the corresponding update with one additional
+// callback argument.
+func UpdateOwnedMapPath2Default4(
+	target, firstKey, secondKey, updateFn, fallback, arg interface{},
+) interface{} {
+	owned := requireOwnedMap(target)
+	child := owned.child(firstKey)
+	current := child.leaf(secondKey)
+	if lang.IsNil(current) {
+		current = fallback
+	}
+	child.assoc(secondKey, lang.Apply2(updateFn, current, arg))
+	return owned
+}
+
 // UpdateOwnedMap handles update-in calls with two or more extra callback
 // arguments. Fixed arities avoid constructing this slice in the common cases.
 func UpdateOwnedMap(
@@ -139,15 +206,20 @@ func updateOwnedMap(
 	target, keys, updateFn interface{},
 	args ownedMapUpdateArgs,
 ) interface{} {
-	owned, ok := target.(*ownedMap)
-	if !ok {
-		panic(lang.NewIllegalArgumentError("owned update requires an owned map"))
-	}
+	owned := requireOwnedMap(target)
 	if vector, ok := keys.(lang.IPersistentVector); ok {
 		updateOwnedMapVector(owned, vector, 0, updateFn, args)
 		return owned
 	}
 	updateOwnedMapSeq(owned, lang.Seq(keys), updateFn, args)
+	return owned
+}
+
+func requireOwnedMap(target interface{}) *ownedMap {
+	owned, ok := target.(*ownedMap)
+	if !ok {
+		panic(lang.NewIllegalArgumentError("owned update requires an owned map"))
+	}
 	return owned
 }
 

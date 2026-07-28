@@ -222,9 +222,9 @@ type Generator struct {
 	liftedCounter      int                        // Counter for closed0, closed1...
 	currentFnEnv       lang.Environment           // Current function's captured env
 	currentIR          *compiler.TypedIR          // typed facts for the current AST
-	ownedMapUpdates    map[*ast.Node]bool         // update-in nodes in an owned reduce
-	currentVector      *vectorAOTAnalysis         // transient-vector AOT region
-	currentOwnedVector *ownedVectorAOTAnalysis    // recursively owned vector region
+	ownedMapUpdates    map[*ast.Node]*compiler.IROwnedMapUpdatePlan
+	currentVector      *vectorAOTAnalysis      // transient-vector AOT region
+	currentOwnedVector *ownedVectorAOTAnalysis // recursively owned vector region
 
 	// specializationTarget is non-nil only while generating the root function
 	// value for a Var. Nested function literals retain the generic code path.

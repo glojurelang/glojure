@@ -177,6 +177,24 @@ type IROwnedMapReducePlan struct {
 	Updates      []*ast.Node
 }
 
+// IROwnedMapUpdatePlan records the literal path expressions of an update-in
+// inside an owned-map reduction. Backends can select a fixed-path helper
+// without first materializing the persistent vector; nil Keys means the path
+// remains dynamic.
+type IROwnedMapUpdatePlan struct {
+	Keys []*ast.Node
+	Fnil *IROwnedMapFnilPlan
+}
+
+// IROwnedMapFnilPlan describes a one-default fnil wrapper whose identity is
+// consumed only by the enclosing update-in. A backend may apply the default
+// at the owned leaf when the recorded Var is safe to direct-link.
+type IROwnedMapFnilPlan struct {
+	Var     *lang.Var
+	Fn      *ast.Node
+	Default *ast.Node
+}
+
 type IRPipelineConsumerKind uint8
 
 const (
@@ -270,10 +288,11 @@ type IRFacts struct {
 
 	OwnedMapReduce *IROwnedMapReducePlan
 
-	// OwnedMapUpdateIn marks an update-in call inside an owned map reduction.
-	// Backends may mutate the private accumulator representation while
-	// preserving the persistent map observed by callbacks and at the boundary.
-	OwnedMapUpdateIn bool
+	// OwnedMapUpdateIn describes an update-in call inside an owned map
+	// reduction. Backends may mutate the private accumulator representation
+	// while preserving the persistent map observed by callbacks and at the
+	// boundary.
+	OwnedMapUpdateIn *IROwnedMapUpdatePlan
 
 	// OwnedMapAssoc marks an assoc whose target is a uniquely owned
 	// loop-carried map. Backends may update a transient representation after

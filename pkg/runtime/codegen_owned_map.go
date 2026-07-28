@@ -28,9 +28,13 @@ func (g *Generator) generateIROwnedMapReduce(
 	}
 
 	previousUpdates := g.ownedMapUpdates
-	g.ownedMapUpdates = make(map[*ast.Node]bool, len(plan.Updates))
+	g.ownedMapUpdates = make(
+		map[*ast.Node]*compiler.IROwnedMapUpdatePlan,
+		len(plan.Updates),
+	)
 	for _, update := range plan.Updates {
-		g.ownedMapUpdates[update] = true
+		g.ownedMapUpdates[update] =
+			g.currentIR.Facts(update).OwnedMapUpdateIn
 	}
 	reducer := g.generateASTNode(plan.Reducer)
 	g.ownedMapUpdates = previousUpdates
@@ -52,13 +56,52 @@ func (g *Generator) generateIROwnedMapReduce(
 func (g *Generator) generateIROwnedMapUpdateIn(
 	node *ast.Node,
 ) (string, bool) {
-	if g.ownedMapUpdates == nil || !g.ownedMapUpdates[node] ||
+	plan := g.ownedMapUpdates[node]
+	if g.ownedMapUpdates == nil || plan == nil ||
 		node == nil || node.Op != ast.OpInvoke {
 		return "", false
 	}
 	invoke := node.Sub.(*ast.InvokeNode)
 	if len(invoke.Args) < 3 {
 		return "", false
+	}
+	if len(plan.Keys) == 2 &&
+		(len(invoke.Args) == 3 || len(invoke.Args) == 4) {
+		arguments := []string{
+			g.generateASTNode(invoke.Args[0]),
+			g.generateASTNode(plan.Keys[0]),
+			g.generateASTNode(plan.Keys[1]),
+		}
+		helper := "runtime.UpdateOwnedMapPath2_3"
+		if plan.Fnil != nil && aotVarCanDirectLink(plan.Fnil.Var) {
+			arguments = append(
+				arguments,
+				g.generateASTNode(plan.Fnil.Fn),
+				g.generateASTNode(plan.Fnil.Default),
+			)
+			helper = "runtime.UpdateOwnedMapPath2Default3"
+		} else {
+			arguments = append(
+				arguments,
+				g.generateASTNode(invoke.Args[2]),
+			)
+		}
+		if len(invoke.Args) == 4 {
+			arguments = append(
+				arguments,
+				g.generateASTNode(invoke.Args[3]),
+			)
+			if plan.Fnil != nil &&
+				aotVarCanDirectLink(plan.Fnil.Var) {
+				helper = "runtime.UpdateOwnedMapPath2Default4"
+			} else {
+				helper = "runtime.UpdateOwnedMapPath2_4"
+			}
+		}
+		result := g.allocateTempVar()
+		g.writef("%s := %s(%s)\n",
+			result, helper, strings.Join(arguments, ", "))
+		return result, true
 	}
 	arguments := make([]string, len(invoke.Args))
 	for index, argument := range invoke.Args {
