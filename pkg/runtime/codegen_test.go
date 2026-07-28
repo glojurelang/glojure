@@ -120,12 +120,18 @@ func TestCodegenPreservesProtocolDispatcher(t *testing.T) {
 	if strings.Contains(generated, "lang.NewVariadicFn") {
 		t.Fatalf("generated fixed-arity protocol retained a variadic wrapper:\n%s", generated)
 	}
+	if !strings.Contains(generated, "var aotProtocolFn0 *lang.MultiFn") ||
+		!strings.Contains(generated, "aotProtocolFn0 = ") ||
+		!strings.Contains(generated, "aotProtocolFn0.Invoke3(") {
+		t.Fatalf("generated protocol calls were not linked to the mutable dispatcher:\n%s",
+			generated)
+	}
 
 	mainVar := ns.FindInternedVar(lang.NewSymbol("-main"))
 	if mainVar == nil {
 		t.Fatal("protocol fixture has no -main")
 	}
-	want := lang.NewVector(int64(42), "sum=42")
+	want := lang.NewVector(int64(42), int64(440), "sum=42")
 	if got := mainVar.Invoke(); !lang.Equals(got, want) {
 		t.Fatalf("protocol fixture returned %v, want %v", got, want)
 	}

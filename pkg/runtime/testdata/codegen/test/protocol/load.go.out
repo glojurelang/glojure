@@ -10,7 +10,14 @@ import (
 	sync "sync"
 )
 
+var aotProtocolFn0 *lang.MultiFn
+var aotProtocolGeneration0 uint64
+var aotProtocolMethod0For0 func(any, int64, int64) int64
+var aotProtocolMethod1For0 func(any, int64, float64) float64
+var aotProtocolMethod2For0 func(any, float64, int64) float64
+var aotProtocolMethod3For0 func(any, float64, float64) float64
 var aotDirectFn0 lang.FnFunc0
+var aotDirectFn1 lang.FnFunc0
 
 func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
 	if vr.IsBound() {
@@ -36,6 +43,32 @@ func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
 		return fixed.Invoke2
 	}
 	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
+}
+
+func aotLinkFn3(vr *lang.Var) lang.FnFunc3 {
+	if vr.IsBound() {
+		return aotLinkBoundFn3(vr)
+	}
+	var once sync.Once
+	var linked lang.FnFunc3
+	return func(p0 any, p1 any, p2 any) any {
+		if !vr.IsBound() {
+			return lang.Apply3(checkDerefVar(vr), p0, p1, p2)
+		}
+		once.Do(func() { linked = aotLinkBoundFn3(vr) })
+		return linked(p0, p1, p2)
+	}
+}
+
+func aotLinkBoundFn3(vr *lang.Var) lang.FnFunc3 {
+	fn := checkDerefVar(vr)
+	if direct, ok := fn.(lang.FnFunc3); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn3); ok {
+		return fixed.Invoke3
+	}
+	return func(p0 any, p1 any, p2 any) any { return lang.Apply3(fn, p0, p1, p2) }
 }
 
 func init() {
@@ -68,8 +101,10 @@ func LoadNS() {
 	sym_clojure_DOT_core := lang.NewSymbolUnchecked("clojure.core")
 	sym_codegen_DOT_test_DOT_protocol := lang.NewSymbolUnchecked("codegen.test.protocol")
 	sym_combine := lang.NewSymbolUnchecked("combine")
+	sym_extend := lang.NewSymbolUnchecked("extend")
 	sym_global_DASH_hierarchy := lang.NewSymbolUnchecked("global-hierarchy")
 	sym_left := lang.NewSymbolUnchecked("left")
+	sym_nil_DASH_combine := lang.NewSymbolUnchecked("nil-combine")
 	sym_right := lang.NewSymbolUnchecked("right")
 	sym_str := lang.NewSymbolUnchecked("str")
 	sym_this := lang.NewSymbolUnchecked("this")
@@ -85,6 +120,8 @@ func LoadNS() {
 	kw_ns := lang.NewKeyword("ns")
 	kw_on_DASH_interface := lang.NewKeyword("on-interface")
 	kw_sigs := lang.NewKeyword("sigs")
+	// var clojure.core/extend
+	var_clojure_DOT_core_extend := lang.InternVarName(sym_clojure_DOT_core, sym_extend)
 	// var clojure.core/str
 	var_clojure_DOT_core_str := lang.InternVarName(sym_clojure_DOT_core, sym_str)
 	// var codegen.test.protocol/Combine
@@ -93,7 +130,10 @@ func LoadNS() {
 	var_codegen_DOT_test_DOT_protocol__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_protocol, sym__DASH_main)
 	// var codegen.test.protocol/combine
 	var_codegen_DOT_test_DOT_protocol_combine := lang.InternVarName(sym_codegen_DOT_test_DOT_protocol, sym_combine)
-	aotExternalFn0 := aotLinkFn2(var_clojure_DOT_core_str)
+	// var codegen.test.protocol/nil-combine
+	var_codegen_DOT_test_DOT_protocol_nil_DASH_combine := lang.InternVarName(sym_codegen_DOT_test_DOT_protocol, sym_nil_DASH_combine)
+	aotExternalFn0 := aotLinkFn3(var_clojure_DOT_core_extend)
+	aotExternalFn1 := aotLinkFn2(var_clojure_DOT_core_str)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -182,6 +222,70 @@ func LoadNS() {
 			return lang.NewMap(kw_file, "codegen/test/protocol.glj", kw_line, int(3), kw_column, int(14), kw_end_DASH_line, int(3), kw_end_DASH_column, int(20), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_protocol))
 		})
 	}
+	// -main
+	{
+		tmp0 := sym__DASH_main
+		var tmp1 lang.FnFunc0
+		tmp1 = lang.FnFunc0(func() any {
+			var tmp2 any
+			{ // let
+				// let binding "before"
+				tmp3 := aotDirectFn1()
+				var v4 any = tmp3
+				_ = v4
+				tmp5 := checkDerefVar(var_codegen_DOT_test_DOT_protocol_Combine)
+				var tmp6 lang.FnFunc3
+				tmp6 = lang.FnFunc3(func(p0, p1, p2 any) any {
+					v7 := p0
+					_ = v7
+					v8 := p1
+					_ = v8
+					v9 := p2
+					_ = v9
+					tmp10 := lang.Numbers.Multiply(v8, v9)
+					return tmp10
+				})
+				tmp7 := lang.NewMap(kw_combine, tmp6)
+				tmp8 := aotExternalFn0(nil, tmp5, tmp7)
+				_ = tmp8
+				var tmp9 any
+				{ // let
+					// let binding "after"
+					tmp10 := aotDirectFn1()
+					var v11 any = tmp10
+					_ = v11
+					// let binding "string-result"
+					tmp12 := aotProtocolFn0.Invoke3("sum=", int64(20), int64(22))
+					var v13 any = tmp12
+					_ = v13
+					tmp14 := checkDerefVar(var_codegen_DOT_test_DOT_protocol_Combine)
+					var tmp15 lang.FnFunc3
+					tmp15 = lang.FnFunc3(func(p0, p1, p2 any) any {
+						v16 := p0
+						_ = v16
+						v17 := p1
+						_ = v17
+						v18 := p2
+						_ = v18
+						tmp19 := lang.Numbers.Add(v17, v18)
+						return tmp19
+					})
+					tmp16 := lang.NewMap(kw_combine, tmp15)
+					tmp17 := aotExternalFn0(nil, tmp14, tmp16)
+					_ = tmp17
+					tmp18 := lang.NewVector(v4, v11, v13)
+					tmp9 = tmp18
+				} // end let
+				tmp2 = tmp9
+			} // end let
+			return tmp2
+		})
+		aotDirectFn0 = tmp1
+		var_codegen_DOT_test_DOT_protocol__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		var_codegen_DOT_test_DOT_protocol__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_expected_DASH_output, lang.NewVector(int64(42), int64(440), "sum=42"), kw_file, "codegen/test/protocol.glj", kw_line, int(16), kw_column, int(7), kw_end_DASH_line, int(16), kw_end_DASH_column, int(49), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_protocol))
+		})
+	}
 	// combine
 	{
 		tmp0 := sym_combine
@@ -198,42 +302,56 @@ func LoadNS() {
 			tmp6 := lang.Numbers.Add(v4, v5)
 			return tmp6
 		})
+		aotProtocolMethod0For0 = func(tmp3 any, tmp4 int64, tmp5 int64) int64 {
+			return lang.CheckedAddInt64(tmp4, tmp5)
+		}
+		aotProtocolMethod1For0 = func(tmp6 any, tmp7 int64, tmp8 float64) float64 {
+			return (float64(tmp7) + tmp8)
+		}
+		aotProtocolMethod2For0 = func(tmp9 any, tmp10 float64, tmp11 int64) float64 {
+			return (tmp10 + float64(tmp11))
+		}
+		aotProtocolMethod3For0 = func(tmp12 any, tmp13 float64, tmp14 float64) float64 {
+			return (tmp13 + tmp14)
+		}
 		tmp1.AddMethod(nil, tmp2)
-		tmp3 := reflect.TypeOf("")
-		var tmp4 lang.FnFunc3
-		tmp4 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v5 := p0
-			_ = v5
-			v6 := p1
-			_ = v6
-			v7 := p2
-			_ = v7
-			tmp8 := lang.Numbers.Add(v6, v7)
-			tmp9 := aotExternalFn0(v5, tmp8)
-			return tmp9
+		tmp15 := reflect.TypeOf("")
+		var tmp16 lang.FnFunc3
+		tmp16 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v17 := p0
+			_ = v17
+			v18 := p1
+			_ = v18
+			v19 := p2
+			_ = v19
+			tmp20 := lang.Numbers.Add(v18, v19)
+			tmp21 := aotExternalFn1(v17, tmp20)
+			return tmp21
 		})
-		tmp1.AddMethod(tmp3, tmp4)
+		tmp1.AddMethod(tmp15, tmp16)
+		aotProtocolFn0 = tmp1
+		aotProtocolGeneration0 = tmp1.ProtocolGeneration()
 		var_codegen_DOT_test_DOT_protocol_combine = ns.InternWithValue(tmp0, tmp1, true)
 		var_codegen_DOT_test_DOT_protocol_combine.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/protocol.glj", kw_line, int(4), kw_column, int(4), kw_end_DASH_line, int(4), kw_end_DASH_column, int(10), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_protocol))
 		})
 	}
-	// -main
+	// nil-combine
 	{
-		tmp0 := sym__DASH_main
+		tmp0 := sym_nil_DASH_combine
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := checkDerefVar(var_codegen_DOT_test_DOT_protocol_combine)
-			tmp3 := lang.Apply3(tmp2, nil, int64(20), int64(22))
-			tmp4 := checkDerefVar(var_codegen_DOT_test_DOT_protocol_combine)
-			tmp5 := lang.Apply3(tmp4, "sum=", int64(20), int64(22))
-			tmp6 := lang.NewVector(tmp3, tmp5)
-			return tmp6
+			if aotProtocolFn0.ProtocolGeneration() == aotProtocolGeneration0 {
+				tmp2 := aotProtocolMethod0For0(nil, int64(20), int64(22))
+				return tmp2
+			}
+			tmp2 := aotProtocolFn0.Invoke3(nil, int64(20), int64(22))
+			return tmp2
 		})
-		aotDirectFn0 = tmp1
-		var_codegen_DOT_test_DOT_protocol__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		var_codegen_DOT_test_DOT_protocol__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_expected_DASH_output, lang.NewVector(int64(42), "sum=42"), kw_file, "codegen/test/protocol.glj", kw_line, int(13), kw_column, int(7), kw_end_DASH_line, int(13), kw_end_DASH_column, int(45), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_protocol))
+		aotDirectFn1 = tmp1
+		var_codegen_DOT_test_DOT_protocol_nil_DASH_combine = ns.InternWithValue(tmp0, tmp1, true)
+		var_codegen_DOT_test_DOT_protocol_nil_DASH_combine.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "codegen/test/protocol.glj", kw_line, int(13), kw_column, int(7), kw_end_DASH_line, int(13), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_protocol))
 		})
 	}
 }

@@ -98,6 +98,15 @@ type IRCall struct {
 	Known bool
 }
 
+type IRCallSignature struct {
+	Params []IRType
+	Result IRType
+}
+
+type TypedIROptions struct {
+	CallSignatures map[*lang.Var][]IRCallSignature
+}
+
 // IRGetInPlan represents (get-in value [k ...]) with a literal vector
 // expression. The key expressions remain ordinary AST nodes so codegen
 // preserves their left-to-right evaluation.
@@ -203,16 +212,17 @@ type IRPipelinePlan struct {
 }
 
 type IRFacts struct {
-	Type     IRType
-	Effects  IREffect
-	Escape   IREscape
-	Shape    IRShape
-	Call     IRCall
-	GetIn    *IRGetInPlan
-	Swap     *IRSwapPlan
-	Append   *IRStackAppendPlan
-	Join     *IRStringJoinPlan
-	Pipeline *IRPipelinePlan
+	Type      IRType
+	Effects   IREffect
+	Escape    IREscape
+	Shape     IRShape
+	Call      IRCall
+	Signature *IRCallSignature
+	GetIn     *IRGetInPlan
+	Swap      *IRSwapPlan
+	Append    *IRStackAppendPlan
+	Join      *IRStringJoinPlan
+	Pipeline  *IRPipelinePlan
 
 	OwnedMapReduce *IROwnedMapReducePlan
 
@@ -253,16 +263,27 @@ type IRBindingFacts struct {
 // optimizer. It retains AST identity for source/evaluator compatibility while
 // giving every backend a common home for representation and lowering facts.
 type TypedIR struct {
-	root     *ast.Node
-	facts    map[*ast.Node]IRFacts
-	bindings map[*ast.Node]IRBindingFacts
+	root           *ast.Node
+	facts          map[*ast.Node]IRFacts
+	bindings       map[*ast.Node]IRBindingFacts
+	callSignatures map[*lang.Var][]IRCallSignature
+	resolvedCalls  map[*lang.Var]bool
 }
 
 func BuildTypedIR(root *ast.Node) *TypedIR {
+	return BuildTypedIRWithOptions(root, TypedIROptions{})
+}
+
+func BuildTypedIRWithOptions(
+	root *ast.Node,
+	options TypedIROptions,
+) *TypedIR {
 	ir := &TypedIR{
-		root:     root,
-		facts:    make(map[*ast.Node]IRFacts),
-		bindings: make(map[*ast.Node]IRBindingFacts),
+		root:           root,
+		facts:          make(map[*ast.Node]IRFacts),
+		bindings:       make(map[*ast.Node]IRBindingFacts),
+		callSignatures: options.CallSignatures,
+		resolvedCalls:  make(map[*lang.Var]bool),
 	}
 	ir.visit(root)
 	for {
@@ -274,6 +295,72 @@ func BuildTypedIR(root *ast.Node) *TypedIR {
 	}
 	ir.analyzeBindings(root)
 	return ir
+}
+
+func (ir *TypedIR) ResolvedCallVars() []*lang.Var {
+	if ir == nil || len(ir.resolvedCalls) == 0 {
+		return nil
+	}
+	result := make([]*lang.Var, 0, len(ir.resolvedCalls))
+	for vr := range ir.resolvedCalls {
+		result = append(result, vr)
+	}
+	return result
+}
+
+// GuardedCallsSafe reports whether a function can select guarded call
+// targets once at entry without hiding an in-function mutation of those
+// targets. It is deliberately conservative; unsupported calls retain the
+// ordinary dynamic path.
+func (ir *TypedIR) GuardedCallsSafe() bool {
+	if ir == nil {
+		return false
+	}
+	for node, facts := range ir.facts {
+		switch node.Op {
+		case ast.OpSetBang, ast.OpGo, ast.OpNew, ast.OpHostInterop:
+			return false
+		case ast.OpHostCall:
+			call := node.Sub.(*ast.HostCallNode)
+			if call.Target == nil || call.Target.Op != ast.OpConst {
+				return false
+			}
+			target := call.Target.Sub.(*ast.ConstNode)
+			if target.Value != lang.Numbers &&
+				(target.HostSymbol == nil ||
+					target.HostSymbol.String() !=
+						"github.com:glojurelang:glojure:pkg:lang.Numbers") {
+				return false
+			}
+		case ast.OpInvoke:
+			if facts.Signature == nil &&
+				!irGuardedCoreCallSafe(facts.Call) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+// irGuardedCoreCallSafe identifies calls which cannot replace a guarded
+// target while the surrounding function is running. Keep this list
+// intentionally narrow: being a known clojure.core Var does not imply that a
+// call is read-only (extend and alter-var-root are counterexamples).
+func irGuardedCoreCallSafe(call IRCall) bool {
+	if !call.Known || call.Var == nil || call.Var.Namespace() == nil ||
+		call.Var.Namespace().Name().String() != "clojure.core" {
+		return false
+	}
+	switch call.Name {
+	case "=", "==", "not=", "<", "<=", ">", ">=",
+		"+", "-", "*", "/", "inc", "dec", "mod", "quot", "rem",
+		"long", "int", "double", "boolean",
+		"count", "get", "nth", "first", "next", "rest", "seq",
+		"empty?", "nil?", "some?", "identical?":
+		return true
+	default:
+		return false
+	}
 }
 
 func (ir *TypedIR) Root() *ast.Node {
@@ -409,8 +496,24 @@ func (ir *TypedIR) refineTypes(node *ast.Node) bool {
 		); ok {
 			typ = inferred
 		}
+	case ast.OpInvoke:
+		if inferred, ok := ir.refineInvokeType(
+			node.Sub.(*ast.InvokeNode),
+			facts.Call,
+		); ok {
+			typ = inferred
+		}
+		if signature := ir.resolveCallSignature(
+			node.Sub.(*ast.InvokeNode),
+		); signature != nil {
+			typ = signature.Result
+			facts.Signature = signature
+			ir.resolvedCalls[facts.Call.Var] = true
+		} else {
+			facts.Signature = nil
+		}
 	}
-	if facts.Type != typ {
+	if facts.Type != typ || ir.facts[node].Signature != facts.Signature {
 		facts.Type = typ
 		ir.facts[node] = facts
 		changed = true
@@ -434,25 +537,47 @@ func (ir *TypedIR) inferHostCallType(
 		}
 	}
 	allInt := len(call.Args) > 0
+	allNumeric := len(call.Args) > 0
+	hasFloat := false
 	for _, argument := range call.Args {
-		if ir.facts[argument].Type.Kind != IRInt {
+		kind := ir.facts[argument].Type.Kind
+		if kind != IRInt {
 			allInt = false
-			break
+		}
+		if kind != IRInt && kind != IRFloat {
+			allNumeric = false
+		}
+		if kind == IRFloat {
+			hasFloat = true
 		}
 	}
-	if !allInt {
+	if !allNumeric {
 		return IRType{}, false
 	}
 	switch strings.ToLower(call.Method.Name()) {
 	case "inc", "unchecked_inc", "dec", "uncheckeddec", "unchecked_dec",
 		"add", "uncheckedadd", "minus", "unchecked_minus", "multiply",
-		"unchecked_multiply", "quotient", "remainder":
+		"unchecked_multiply":
+		if hasFloat {
+			return IRType{Kind: IRFloat}, true
+		}
 		return IRType{Kind: IRInt}, true
+	case "divide":
+		if hasFloat {
+			return IRType{Kind: IRFloat}, true
+		}
+	case "quotient", "remainder":
+		if allInt {
+			return IRType{Kind: IRInt}, true
+		}
 	case "lt", "lte", "gt", "gte", "iszero", "ispos", "isneg":
-		return IRType{Kind: IRBool}, true
+		if allInt || hasFloat && !allInt {
+			return IRType{Kind: IRBool}, true
+		}
 	default:
 		return IRType{}, false
 	}
+	return IRType{}, false
 }
 
 func irCopyTypeScope(scope map[string]IRType) map[string]IRType {
@@ -566,6 +691,11 @@ func (ir *TypedIR) inferInvoke(node *ast.Node, facts *IRFacts) {
 		facts.Effects |= IREffectCallUnknown | IREffectMayThrow
 		return
 	}
+	if signature := ir.resolveCallSignature(invoke); signature != nil {
+		facts.Type = signature.Result
+		facts.Signature = signature
+		ir.resolvedCalls[vr] = true
+	}
 
 	if namespace == "clojure.string" {
 		switch name {
@@ -618,6 +748,64 @@ func (ir *TypedIR) inferInvoke(node *ast.Node, facts *IRFacts) {
 		// lowering supplies a more precise summary.
 		facts.Effects |= IREffectMayThrow
 	}
+}
+
+func (ir *TypedIR) resolveCallSignature(
+	invoke *ast.InvokeNode,
+) *IRCallSignature {
+	if ir == nil || invoke == nil || invoke.Fn == nil ||
+		invoke.Fn.Op != ast.OpVar {
+		return nil
+	}
+	vr := invoke.Fn.Sub.(*ast.VarNode).Var
+	for i := range ir.callSignatures[vr] {
+		signature := &ir.callSignatures[vr][i]
+		if len(signature.Params) != len(invoke.Args) {
+			continue
+		}
+		matched := true
+		for index, argument := range invoke.Args {
+			if ir.facts[argument].Type.Kind != signature.Params[index].Kind {
+				matched = false
+				break
+			}
+		}
+		if matched {
+			return signature
+		}
+	}
+	return nil
+}
+
+func (ir *TypedIR) refineInvokeType(
+	invoke *ast.InvokeNode,
+	call IRCall,
+) (IRType, bool) {
+	if invoke == nil || !call.Known || call.Var == nil ||
+		call.Var.Namespace() == nil ||
+		call.Var.Namespace().Name().String() != "clojure.core" {
+		return IRType{}, false
+	}
+	switch call.Name {
+	case "long":
+		if len(invoke.Args) == 1 {
+			return IRType{Kind: IRInt}, true
+		}
+	case "mod", "quot", "rem":
+		if len(invoke.Args) == 2 &&
+			ir.facts[invoke.Args[0]].Type.Kind == IRInt &&
+			ir.facts[invoke.Args[1]].Type.Kind == IRInt {
+			return IRType{Kind: IRInt}, true
+		}
+	case "inc", "dec":
+		if len(invoke.Args) == 1 {
+			kind := ir.facts[invoke.Args[0]].Type.Kind
+			if kind == IRInt || kind == IRFloat {
+				return IRType{Kind: kind}, true
+			}
+		}
+	}
+	return IRType{}, false
 }
 
 func irFixedFnArity(node *ast.Node, arity int) bool {

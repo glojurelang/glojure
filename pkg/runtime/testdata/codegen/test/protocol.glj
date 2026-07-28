@@ -10,6 +10,17 @@
   go/string
   (combine [target left right] (str target (+ left right))))
 
-(defn ^{:expected-output [42 "sum=42"]} -main []
-  [(combine nil 20 22)
-   (combine "sum=" 20 22)])
+(defn nil-combine []
+  (combine nil 20 22))
+
+(defn ^{:expected-output [42 440 "sum=42"]} -main []
+  (let [before (nil-combine)]
+    (extend-protocol Combine
+      nil
+      (combine [_ left right] (* left right)))
+    (let [after (nil-combine)
+          string-result (combine "sum=" 20 22)]
+      (extend-protocol Combine
+        nil
+        (combine [_ left right] (+ left right)))
+      [before after string-result])))

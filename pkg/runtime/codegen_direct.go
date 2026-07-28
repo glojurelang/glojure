@@ -31,6 +31,7 @@ func sortedAOTTargets(
 // is marked ^:redef, generated callers guard the slot with the root seen by
 // LoadNS and fall back to Var dispatch after a redefinition.
 func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
+	g.prepareAOTProtocolTargets(vars)
 	for _, named := range vars {
 		vr := named.vr
 		if !vr.IsBound() || vr.IsMacro() ||
@@ -254,6 +255,15 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 	if len(g.aotCallTargets) > 0 {
 		g.aotDeclarations.WriteByte('\n')
 	}
+}
+
+func (g *Generator) aotProtocolInvokeTarget(
+	invoke *ast.InvokeNode,
+) *aotProtocolCallTarget {
+	if invoke.Fn.Op != ast.OpVar || len(invoke.Args) > 5 {
+		return nil
+	}
+	return g.aotProtocolCallTargets[invoke.Fn.Sub.(*ast.VarNode).Var]
 }
 
 func directAOTFnArities(fn *ast.FnNode) [21]bool {

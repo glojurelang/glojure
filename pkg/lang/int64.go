@@ -49,3 +49,17 @@ func CheckedNegateInt64(value int64) int64 {
 	}
 	return -value
 }
+
+// ModInt64 implements clojure.core/mod for fixed-width integers. Go's
+// remainder has the dividend's sign; Clojure's modulus has the divisor's
+// sign and therefore needs one adjustment when their signs differ.
+func ModInt64(num, div int64) int64 {
+	if div == 0 {
+		panic(NewArithmeticError("divide by zero"))
+	}
+	remainder := num % div
+	if remainder == 0 || (num > 0) == (div > 0) {
+		return remainder
+	}
+	return remainder + div
+}

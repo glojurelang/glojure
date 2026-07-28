@@ -224,7 +224,8 @@ func (a *primitiveAOTAnalyzer) invokeType(
 		return invalidAOTPrimitive
 	}
 	vr := invoke.Fn.Sub.(*ast.VarNode).Var
-	if vr == a.target.vr && a.allType(invoke.Args, locals, a.arity, a.paramType) {
+	if a.target != nil && vr == a.target.vr &&
+		a.allType(invoke.Args, locals, a.arity, a.paramType) {
 		a.markUsesSelf()
 		return a.resultType
 	}

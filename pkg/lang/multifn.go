@@ -4,7 +4,14 @@ import (
 	"fmt"
 	"reflect"
 	"sync"
+	"sync/atomic"
 )
+
+type protocolMethodCache struct {
+	generation uint64
+	dispatch   any
+	method     IFn
+}
 
 type MultiFn struct {
 	// TODO: take a pass at thread-safety. the java impl relies on
@@ -19,6 +26,8 @@ type MultiFn struct {
 	methodCache        IPersistentMap
 	cachedHierarchy    any
 	protocol           bool
+	protocolGeneration atomic.Uint64
+	protocolMethod     atomic.Pointer[protocolMethodCache]
 
 	mtx sync.RWMutex
 }
@@ -69,6 +78,13 @@ func (m *MultiFn) IsProtocol() bool {
 	return m.protocol
 }
 
+// ProtocolGeneration changes whenever protocol method selection may change.
+// Compiled monomorphic call sites use it to retain dynamic re-extension
+// semantics while calling a cached method directly.
+func (m *MultiFn) ProtocolGeneration() uint64 {
+	return m.protocolGeneration.Load()
+}
+
 // registerWellKnownMethods seeds a freshly created MultiFn with any
 // Go-side default methods that the stdlib alone can't supply. Currently
 // just installs a *Class print-method so host-class values seeded into
@@ -105,6 +121,10 @@ func IsAutoRegisteredMethod(mfName string, dispatchVal any, method any) bool {
 func (m *MultiFn) resetCache() {
 	m.methodCache = emptyMap
 	m.cachedHierarchy = m.hierarchy.Deref()
+	if m.protocol {
+		m.protocolGeneration.Add(1)
+		m.protocolMethod.Store(nil)
+	}
 }
 
 func (m *MultiFn) GetMethodTable() IPersistentMap {
@@ -294,6 +314,15 @@ func (m *MultiFn) ApplyTo(args ISeq) any {
 }
 
 func (m *MultiFn) getMethod(dispatchVal any) IFn {
+	var protocolGeneration uint64
+	if m.protocol {
+		protocolGeneration = m.protocolGeneration.Load()
+		if cached := m.protocolMethod.Load(); cached != nil &&
+			cached.generation == protocolGeneration &&
+			cached.dispatch == dispatchVal {
+			return cached.method
+		}
+	}
 	m.mtx.Lock()
 	if m.cachedHierarchy != m.hierarchy.Deref() {
 		m.resetCache()
@@ -301,9 +330,29 @@ func (m *MultiFn) getMethod(dispatchVal any) IFn {
 	targetFn := m.methodCache.ValAt(dispatchVal)
 	m.mtx.Unlock()
 	if targetFn != nil {
-		return targetFn.(IFn)
+		method := targetFn.(IFn)
+		m.cacheProtocolMethod(protocolGeneration, dispatchVal, method)
+		return method
 	}
-	return m.findAndCacheBestMethod(dispatchVal)
+	method := m.findAndCacheBestMethod(dispatchVal)
+	m.cacheProtocolMethod(protocolGeneration, dispatchVal, method)
+	return method
+}
+
+func (m *MultiFn) cacheProtocolMethod(
+	generation uint64,
+	dispatch any,
+	method IFn,
+) {
+	if !m.protocol || method == nil ||
+		m.protocolGeneration.Load() != generation {
+		return
+	}
+	m.protocolMethod.Store(&protocolMethodCache{
+		generation: generation,
+		dispatch:   dispatch,
+		method:     method,
+	})
 }
 
 func (m *MultiFn) getFn(dispatchVal any) IFn {

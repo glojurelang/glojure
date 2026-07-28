@@ -39,6 +39,26 @@ func TestCheckedInt64Arithmetic(t *testing.T) {
 	assertArithmeticPanic(t, func() { CheckedNegateInt64(math.MinInt64) })
 }
 
+func TestModInt64(t *testing.T) {
+	for _, test := range []struct {
+		num, div int64
+		want     int64
+	}{
+		{5, 3, 2},
+		{-5, 3, 1},
+		{5, -3, -1},
+		{-5, -3, -2},
+		{6, -3, 0},
+		{math.MinInt64, -1, 0},
+	} {
+		if got := ModInt64(test.num, test.div); got != test.want {
+			t.Fatalf("ModInt64(%d, %d) = %d, want %d",
+				test.num, test.div, got, test.want)
+		}
+	}
+	assertArithmeticPanic(t, func() { ModInt64(1, 0) })
+}
+
 func TestEqualsInt64MatchesDynamicNumericEquality(t *testing.T) {
 	for _, test := range []struct {
 		value any

@@ -569,6 +569,137 @@ func TestGenerateBooleanRecordSpecialization(t *testing.T) {
 	}
 }
 
+func TestGenerateDirectProtocolLinkCanBeDisabled(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.direct-protocol"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defprotocol Combine
+		  (combine [target left right]))
+		(extend-protocol Combine
+		  nil
+		  (combine [_ left right] (+ left right)))
+		(defn call-combine [left right]
+		  (combine nil left right))
+		(defn combine-loop []
+		  (loop [i 0
+		         total 0]
+		    (if (= i 100)
+		      total
+		      (recur (inc i) (combine nil total i)))))
+		(defn mutate-and-call []
+		  (extend-protocol Combine
+		    nil
+		    (combine [_ left right] (* left right)))
+		  (combine nil 6 7))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate direct protocol: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "var aotProtocolFn0 *lang.MultiFn") ||
+		!strings.Contains(generated, "aotProtocolFn0.Invoke3(") ||
+		!strings.Contains(generated,
+			"aotProtocolFn0.ProtocolGeneration() == aotProtocolGeneration0") ||
+		!strings.Contains(generated, "aotProtocolMethod") {
+		t.Fatalf("direct protocol target was not generated:\n%s", generated)
+	}
+	if got := strings.Count(
+		generated,
+		"aotProtocolFn0.ProtocolGeneration() == aotProtocolGeneration0",
+	); got != 1 {
+		t.Fatalf(
+			"generated %d guarded protocol regions, want only the pure loop:\n%s",
+			got,
+			generated,
+		)
+	}
+
+	output.Reset()
+	if err := newGenerator(&output, false).Generate(ns); err != nil {
+		t.Fatalf("generate non-direct protocol: %v", err)
+	}
+	if strings.Contains(output.String(), "aotProtocolFn") {
+		t.Fatalf("protocol direct linking ignored disabled direct linking:\n%s",
+			output.String())
+	}
+
+	combine := ns.FindInternedVar(lang.NewSymbol("combine"))
+	originalMeta := combine.Meta()
+	combine.SetMeta(originalMeta.Assoc(lang.KWRedef, true).(lang.IPersistentMap))
+	defer combine.SetMeta(originalMeta)
+
+	output.Reset()
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate redef protocol: %v", err)
+	}
+	if strings.Contains(output.String(), "aotProtocolFn") {
+		t.Fatalf("protocol direct linking ignored ^:redef:\n%s", output.String())
+	}
+}
+
+func TestGenerateStableMixedNumericLoop(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.mixed-numeric-loop"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn float-loop []
+		  (loop [i 0
+		         value 0.25
+		         checksum 0.0]
+		    (if (= i 100)
+		      [value checksum]
+		      (recur (inc i)
+		             (* value 1.0000001)
+		             (+ checksum value)))))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate mixed numeric loop: %v", err)
+	}
+	generated := output.String()
+	if got := strings.Count(generated, " float64 = "); got < 4 {
+		t.Fatalf("mixed numeric loop retained boxed float state:\n%s", generated)
+	}
+	for _, boxed := range []string{
+		"lang.Numbers.Multiply",
+		"lang.Numbers.Add",
+	} {
+		if strings.Contains(generated, boxed) {
+			t.Fatalf("mixed numeric loop retained %s:\n%s", boxed, generated)
+		}
+	}
+}
+
+func TestGenerateTypedCoreModulus(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.typed-modulus"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn modulus-loop []
+		  (loop [i 0
+		         total 0]
+		    (if (= i 100)
+		      [i total]
+		      (recur (inc i) (+ total (mod i 7))))))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate typed modulus: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "lang.ModInt64(") {
+		t.Fatalf("typed modulus retained generic Var dispatch:\n%s", generated)
+	}
+}
+
 func TestGenerateStaticInstanceCheck(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.static-instance"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)

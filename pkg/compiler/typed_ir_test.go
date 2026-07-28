@@ -481,6 +481,37 @@ func TestTypedIRProvesOwnedMapReduceUpdateChain(t *testing.T) {
 	}
 }
 
+func TestTypedIRAppliesGuardedCallSignatures(t *testing.T) {
+	vr := lang.FindOrCreateNamespace(lang.NewSymbol("typed-ir-test")).
+		Intern(lang.NewSymbol("combine"))
+	invoke := typedIRInvoke(
+		vr,
+		typedIRConst(nil),
+		typedIRConst(float64(1.25)),
+		typedIRConst(float64(2.5)),
+	)
+	signature := IRCallSignature{
+		Params: []IRType{
+			{Kind: IRNil},
+			{Kind: IRFloat},
+			{Kind: IRFloat},
+		},
+		Result: IRType{Kind: IRFloat},
+	}
+	ir := BuildTypedIRWithOptions(invoke, TypedIROptions{
+		CallSignatures: map[*lang.Var][]IRCallSignature{
+			vr: {signature},
+		},
+	})
+	facts := ir.Facts(invoke)
+	if facts.Type.Kind != IRFloat || facts.Signature == nil {
+		t.Fatalf("guarded call facts = %#v, want float signature", facts)
+	}
+	if got := ir.ResolvedCallVars(); len(got) != 1 || got[0] != vr {
+		t.Fatalf("resolved call vars = %v, want [%v]", got, vr)
+	}
+}
+
 func typedIRConst(value any) *ast.Node {
 	return &ast.Node{
 		Op:  ast.OpConst,

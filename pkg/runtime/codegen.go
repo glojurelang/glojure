@@ -114,6 +114,13 @@ type aotExternalCallTarget struct {
 	rootVersionVar string
 }
 
+type aotProtocolCallTarget struct {
+	vr            *lang.Var
+	multiFnVar    string
+	generationVar string
+	methods       []*aotProtocolPrimitiveMethod
+}
+
 type aotExternalCallKey struct {
 	vr        *lang.Var
 	arity     int
@@ -173,6 +180,8 @@ type Generator struct {
 
 	aotDeclarations        bytes.Buffer
 	aotCallTargets         map[*lang.Var]*aotSpecializationTarget
+	aotProtocolCallTargets map[*lang.Var]*aotProtocolCallTarget
+	aotProtocolMethods     map[*Fn][]*aotProtocolPrimitiveMethod
 	aotExternalCallTargets map[aotExternalCallKey]*aotExternalCallTarget
 	aotNamespace           *lang.Namespace
 	directLink             bool
@@ -238,6 +247,8 @@ func newGenerator(w io.Writer, directLink bool) *Generator {
 		liftedValues:           make(map[liftedKey]*liftedValue),
 		liftedCounter:          0,
 		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
+		aotProtocolCallTargets: make(map[*lang.Var]*aotProtocolCallTarget),
+		aotProtocolMethods:     make(map[*Fn][]*aotProtocolPrimitiveMethod),
 		aotExternalCallTargets: make(map[aotExternalCallKey]*aotExternalCallTarget),
 		directLink:             directLink,
 	}
@@ -743,6 +754,11 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 		valueExpr := g.generateValue(v)
 		if target := g.specializationTarget; target != nil {
 			g.writef("%s = %s\n", target.directFnVar, valueExpr)
+		}
+		if target := g.aotProtocolCallTargets[vr]; target != nil {
+			g.writef("%s = %s\n", target.multiFnVar, valueExpr)
+			g.writef("%s = %s.ProtocolGeneration()\n",
+				target.generationVar, valueExpr)
 		}
 		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, valueExpr)
 		if target := g.specializationTarget; target != nil && target.rootVersionVar != "" {
@@ -1368,6 +1384,11 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 
 			dispatchValVar := g.generateValue(dispatchVal)
 			methodVar := g.generateValue(method)
+			if fn, ok := method.(*Fn); ok {
+				for _, primitive := range g.aotProtocolMethods[fn] {
+					g.generateAOTProtocolPrimitiveMethod(primitive)
+				}
+			}
 
 			g.writef("%s.AddMethod(%s, %s)\n", mfVar, dispatchValVar, methodVar)
 		}
@@ -1483,7 +1504,8 @@ func (g *Generator) generateFn(fn *Fn) string {
 		// Supported single arity: emit FnFuncN with direct named params.
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
 		paramNames := fixedParamNames(fixedArity)
-		if !g.generateRecordSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+		if !g.generateProtocolSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+			!g.generateRecordSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
@@ -2100,6 +2122,12 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 			return result
 		}
 	}
+	if result, ok := g.generateIRCoreNumericInvoke(node); ok {
+		return result
+	}
+	if result, ok := g.generateAOTProtocolPrimitiveInvoke(node); ok {
+		return result
+	}
 	if result, ok := g.generateVectorAOTInvoke(node); ok {
 		return result
 	}
@@ -2131,8 +2159,9 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	directKeywordCall := false
 	recordTarget := g.aotRecordInvokeTarget(invokeNode)
 	aotTarget := g.aotInvokeTarget(invokeNode)
+	protocolTarget := g.aotProtocolInvokeTarget(invokeNode)
 	var externalTarget *aotExternalCallTarget
-	if recordTarget == nil {
+	if recordTarget == nil && protocolTarget == nil {
 		externalTarget = g.aotExternalInvokeTarget(invokeNode)
 	}
 	if invokeNode.Fn.Op == ast.OpConst {
@@ -2161,7 +2190,7 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		}
 	}
 	if !directCall && !directKeywordCall && recordTarget == nil &&
-		aotTarget == nil && externalTarget == nil {
+		aotTarget == nil && protocolTarget == nil && externalTarget == nil {
 		// Generate the general function expression before its arguments.
 		fnExpr = g.generateASTNode(invokeNode.Fn)
 	}
@@ -2227,6 +2256,15 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		g.writef("%s := %s.Invoke%d(%s)\n",
 			resultVar,
 			fnExpr,
+			len(argExprs),
+			strings.Join(argExprs, ", "),
+		)
+		return resultVar
+	}
+	if protocolTarget != nil {
+		g.writef("%s := %s.Invoke%d(%s)\n",
+			resultVar,
+			protocolTarget.multiFnVar,
 			len(argExprs),
 			strings.Join(argExprs, ", "),
 		)
@@ -2718,8 +2756,8 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			}
 			continue
 		}
-		if isLoop &&
-			bindingFacts.StableType.Kind == compiler.IRInt {
+		if bindingFacts.StableType.Kind == compiler.IRInt &&
+			(isLoop || g.irHasInt64Representation(init)) {
 			initCode := g.generateASTNode(init)
 			varName := g.allocateLocal(name)
 			g.writef(
@@ -2729,8 +2767,27 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			)
 			g.markLocalType(name, compiler.IRInt)
 			g.writeAssign("_", varName)
-			bindingVars = append(bindingVars, varName)
-			bindingTypes = append(bindingTypes, compiler.IRInt)
+			if isLoop {
+				bindingVars = append(bindingVars, varName)
+				bindingTypes = append(bindingTypes, compiler.IRInt)
+			}
+			continue
+		}
+		if bindingFacts.StableType.Kind == compiler.IRFloat &&
+			(isLoop || g.irHasFloat64Representation(init)) {
+			initCode := g.generateASTNode(init)
+			varName := g.allocateLocal(name)
+			g.writef(
+				"var %s float64 = %s\n",
+				varName,
+				g.irFloat64Expr(init, initCode),
+			)
+			g.markLocalType(name, compiler.IRFloat)
+			g.writeAssign("_", varName)
+			if isLoop {
+				bindingVars = append(bindingVars, varName)
+				bindingTypes = append(bindingTypes, compiler.IRFloat)
+			}
 			continue
 		}
 		if bindingFacts.StableType.Kind == compiler.IRString {
@@ -2870,6 +2927,12 @@ func (g *Generator) generateRecur(node *ast.Node) string {
 				"var %s int64 = %s\n",
 				tempVar,
 				g.irInt64Expr(expr, exprCode),
+			)
+		} else if ctx.types[i] == compiler.IRFloat {
+			g.writef(
+				"var %s float64 = %s\n",
+				tempVar,
+				g.irFloat64Expr(expr, exprCode),
 			)
 		} else if ctx.types[i] == compiler.IRString {
 			g.writef(

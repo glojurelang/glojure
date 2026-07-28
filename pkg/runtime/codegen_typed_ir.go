@@ -27,17 +27,27 @@ func (g *Generator) generateIRNumbersHostCall(
 	}
 	facts := g.currentIR.Facts(node)
 	if facts.Type.Kind != compiler.IRInt &&
+		facts.Type.Kind != compiler.IRFloat &&
 		facts.Type.Kind != compiler.IRBool {
 		return "", false
 	}
 
 	args := make([]string, len(call.Args))
+	types := make([]compiler.IRValueKind, len(call.Args))
 	for i, argument := range call.Args {
-		if g.currentIR.Facts(argument).Type.Kind != compiler.IRInt {
+		types[i] = g.currentIR.Facts(argument).Type.Kind
+		if types[i] != compiler.IRInt &&
+			types[i] != compiler.IRFloat {
 			return "", false
 		}
 		code := g.generateASTNode(argument)
-		args[i] = g.irInt64Expr(argument, code)
+		if facts.Type.Kind == compiler.IRFloat ||
+			facts.Type.Kind == compiler.IRBool &&
+				types[i] == compiler.IRFloat {
+			args[i] = g.irFloat64Expr(argument, code)
+		} else {
+			args[i] = g.irInt64Expr(argument, code)
+		}
 	}
 
 	var expression string
@@ -45,15 +55,27 @@ func (g *Generator) generateIRNumbersHostCall(
 	if len(args) == 1 {
 		switch name {
 		case "inc":
-			expression = "lang.CheckedAddInt64(" + args[0] + ", 1)"
+			if facts.Type.Kind == compiler.IRFloat {
+				expression = "(" + args[0] + " + 1)"
+			} else {
+				expression = "lang.CheckedAddInt64(" + args[0] + ", 1)"
+			}
 		case "unchecked_inc":
 			expression = "(" + args[0] + " + 1)"
 		case "dec":
-			expression = "lang.CheckedSubInt64(" + args[0] + ", 1)"
+			if facts.Type.Kind == compiler.IRFloat {
+				expression = "(" + args[0] + " - 1)"
+			} else {
+				expression = "lang.CheckedSubInt64(" + args[0] + ", 1)"
+			}
 		case "uncheckeddec", "unchecked_dec":
 			expression = "(" + args[0] + " - 1)"
 		case "minus":
-			expression = "lang.CheckedNegateInt64(" + args[0] + ")"
+			if facts.Type.Kind == compiler.IRFloat {
+				expression = "(-" + args[0] + ")"
+			} else {
+				expression = "lang.CheckedNegateInt64(" + args[0] + ")"
+			}
 		case "unchecked_minus":
 			expression = "(-" + args[0] + ")"
 		case "iszero":
@@ -65,22 +87,45 @@ func (g *Generator) generateIRNumbersHostCall(
 		}
 	}
 	if len(args) == 2 {
+		if facts.Type.Kind == compiler.IRBool && types[0] != types[1] {
+			// Clojure's mixed numeric comparisons preserve integer precision
+			// that a conversion to float64 could lose.
+			return "", false
+		}
 		switch name {
 		case "add":
-			expression = "lang.CheckedAddInt64(" +
-				args[0] + ", " + args[1] + ")"
+			if facts.Type.Kind == compiler.IRFloat {
+				expression = "(" + args[0] + " + " + args[1] + ")"
+			} else {
+				expression = "lang.CheckedAddInt64(" +
+					args[0] + ", " + args[1] + ")"
+			}
 		case "uncheckedadd":
 			expression = "(" + args[0] + " + " + args[1] + ")"
 		case "minus":
-			expression = "lang.CheckedSubInt64(" +
-				args[0] + ", " + args[1] + ")"
+			if facts.Type.Kind == compiler.IRFloat {
+				expression = "(" + args[0] + " - " + args[1] + ")"
+			} else {
+				expression = "lang.CheckedSubInt64(" +
+					args[0] + ", " + args[1] + ")"
+			}
 		case "unchecked_minus":
 			expression = "(" + args[0] + " - " + args[1] + ")"
 		case "multiply":
-			expression = "lang.CheckedMultiplyInt64(" +
-				args[0] + ", " + args[1] + ")"
+			if facts.Type.Kind == compiler.IRFloat {
+				expression = "(" + args[0] + " * " + args[1] + ")"
+			} else {
+				expression = "lang.CheckedMultiplyInt64(" +
+					args[0] + ", " + args[1] + ")"
+			}
 		case "unchecked_multiply":
 			expression = "(" + args[0] + " * " + args[1] + ")"
+		case "divide":
+			expression = "(" + args[0] + " / " + args[1] + ")"
+		case "quotient":
+			expression = "(" + args[0] + " / " + args[1] + ")"
+		case "remainder":
+			expression = "(" + args[0] + " % " + args[1] + ")"
 		case "lt":
 			expression = "(" + args[0] + " < " + args[1] + ")"
 		case "lte":
@@ -96,6 +141,37 @@ func (g *Generator) generateIRNumbersHostCall(
 	}
 	result := g.allocateTempVar()
 	g.writef("%s := %s\n", result, expression)
+	return result, true
+}
+
+func (g *Generator) generateIRCoreNumericInvoke(
+	node *ast.Node,
+) (string, bool) {
+	if !g.directLink || g.currentIR == nil || node == nil ||
+		node.Op != ast.OpInvoke {
+		return "", false
+	}
+	facts := g.currentIR.Facts(node)
+	if !facts.Call.Known || facts.Call.Var == nil ||
+		facts.Call.Var.Namespace() == nil ||
+		facts.Call.Var.Namespace().Name().String() != "clojure.core" ||
+		facts.Call.Name != "mod" ||
+		facts.Call.Var.IsDynamic() ||
+		RT.BooleanCast(lang.Get(facts.Call.Var.Meta(), lang.KWRedef)) {
+		return "", false
+	}
+	invoke := node.Sub.(*ast.InvokeNode)
+	if len(invoke.Args) != 2 ||
+		g.currentIR.Facts(invoke.Args[0]).Type.Kind != compiler.IRInt ||
+		g.currentIR.Facts(invoke.Args[1]).Type.Kind != compiler.IRInt {
+		return "", false
+	}
+	leftCode := g.generateASTNode(invoke.Args[0])
+	rightCode := g.generateASTNode(invoke.Args[1])
+	left := g.irInt64Expr(invoke.Args[0], leftCode)
+	right := g.irInt64Expr(invoke.Args[1], rightCode)
+	result := g.allocateTempVar()
+	g.writef("%s := lang.ModInt64(%s, %s)\n", result, left, right)
 	return result, true
 }
 
@@ -148,6 +224,16 @@ func (g *Generator) irInt64Expr(node *ast.Node, code string) string {
 		return code
 	}
 	return "lang.AsInt64(" + code + ")"
+}
+
+func (g *Generator) irFloat64Expr(node *ast.Node, code string) string {
+	if g.irHasFloat64Representation(node) {
+		return code
+	}
+	if g.irHasInt64Representation(node) {
+		return "float64(" + code + ")"
+	}
+	return "lang.AsFloat64(" + code + ")"
 }
 
 func (g *Generator) irStringExpr(node *ast.Node, code string) string {
@@ -207,6 +293,53 @@ func (g *Generator) irHasInt64Representation(node *ast.Node) bool {
 		return call.Target.Sub.(*ast.ConstNode).Value == lang.Numbers &&
 			g.currentIR.Facts(node).Type.Kind == compiler.IRInt &&
 			irNumbersHostCallHasPrimitiveRepresentation(call)
+	case ast.OpInvoke:
+		if !g.directLink || g.currentIR == nil {
+			return false
+		}
+		facts := g.currentIR.Facts(node)
+		if facts.Signature != nil {
+			return facts.Signature.Result.Kind == compiler.IRInt
+		}
+		return facts.Type.Kind == compiler.IRInt &&
+			facts.Call.Known &&
+			facts.Call.Name == "mod" &&
+			facts.Call.Var != nil &&
+			facts.Call.Var.Namespace() != nil &&
+			facts.Call.Var.Namespace().Name().String() == "clojure.core" &&
+			!facts.Call.Var.IsDynamic() &&
+			!RT.BooleanCast(lang.Get(facts.Call.Var.Meta(), lang.KWRedef))
+	default:
+		return false
+	}
+}
+
+func (g *Generator) irHasFloat64Representation(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	switch node.Op {
+	case ast.OpConst:
+		_, ok := node.Sub.(*ast.ConstNode).Value.(float64)
+		return ok
+	case ast.OpLocal:
+		name := node.Sub.(*ast.LocalNode).Name
+		return name != nil && g.getLocalType(name.Name()) == compiler.IRFloat
+	case ast.OpHostCall:
+		call := node.Sub.(*ast.HostCallNode)
+		if call.Target == nil || call.Target.Op != ast.OpConst ||
+			call.ResolvedMethod == nil {
+			return false
+		}
+		return call.Target.Sub.(*ast.ConstNode).Value == lang.Numbers &&
+			g.currentIR.Facts(node).Type.Kind == compiler.IRFloat
+	case ast.OpInvoke:
+		if !g.directLink || g.currentIR == nil {
+			return false
+		}
+		signature := g.currentIR.Facts(node).Signature
+		return signature != nil &&
+			signature.Result.Kind == compiler.IRFloat
 	default:
 		return false
 	}
