@@ -117,16 +117,102 @@ type RecordValue interface {
 	RecordWithMeta(meta IPersistentMap) RecordValue
 }
 
+// RecordAttrs holds record state that most values never use. Keeping
+// metadata, extension entries, and hash caches behind one pointer avoids
+// paying for four mostly-empty fields on every interpreted or generated
+// record.
+type RecordAttrs struct {
+	meta   IPersistentMap
+	ext    IPersistentMap
+	hash   uint32
+	hasheq uint32
+}
+
+func NewRecordAttrs(meta, ext IPersistentMap) *RecordAttrs {
+	if meta == nil && ext == nil {
+		return nil
+	}
+	return &RecordAttrs{meta: meta, ext: ext}
+}
+
+func RecordAttrsMeta(attrs *RecordAttrs) IPersistentMap {
+	if attrs == nil {
+		return nil
+	}
+	return attrs.meta
+}
+
+func RecordAttrsExt(attrs *RecordAttrs) IPersistentMap {
+	if attrs == nil {
+		return nil
+	}
+	return attrs.ext
+}
+
+func RecordAttrsWithoutHash(attrs *RecordAttrs) *RecordAttrs {
+	if attrs == nil {
+		return nil
+	}
+	if attrs.meta == nil && attrs.ext == nil {
+		return nil
+	}
+	return &RecordAttrs{meta: attrs.meta, ext: attrs.ext}
+}
+
+func RecordAttrsWithMeta(
+	attrs *RecordAttrs,
+	meta IPersistentMap,
+) *RecordAttrs {
+	if RecordAttrsMeta(attrs) == meta {
+		return attrs
+	}
+	result := &RecordAttrs{meta: meta}
+	if attrs != nil {
+		*result = *attrs
+		result.meta = meta
+	}
+	if result.meta == nil && result.ext == nil &&
+		result.hash == 0 && result.hasheq == 0 {
+		return nil
+	}
+	return result
+}
+
+func RecordAttrsWithExt(
+	attrs *RecordAttrs,
+	ext IPersistentMap,
+) *RecordAttrs {
+	if RecordAttrsExt(attrs) == ext {
+		return attrs
+	}
+	result := &RecordAttrs{ext: ext}
+	if attrs != nil {
+		result.meta = attrs.meta
+	}
+	return result
+}
+
+func RecordAttrsHash(attrs **RecordAttrs, record RecordValue) uint32 {
+	if *attrs == nil {
+		*attrs = &RecordAttrs{}
+	}
+	return RecordHash(&(*attrs).hash, record)
+}
+
+func RecordAttrsHashEq(attrs **RecordAttrs, record RecordValue) uint32 {
+	if *attrs == nil {
+		*attrs = &RecordAttrs{}
+	}
+	return RecordHashEq(&(*attrs).hasheq, record)
+}
+
 // Record is the descriptor-backed implementation used by interpreted code.
 // AOT emits a concrete Go struct with the same RecordValue contract.
 type Record struct {
 	RecordMarker
 	recordType *RecordType
 	fields     []any
-	ext        IPersistentMap
-	meta       IPersistentMap
-	hash       uint32
-	hasheq     uint32
+	attrs      *RecordAttrs
 }
 
 var (
@@ -154,17 +240,17 @@ func NewRecord(recordType *RecordType, values ...any) *Record {
 
 func (r *Record) RecordType() *RecordType        { return r.recordType }
 func (r *Record) RecordField(index int) any      { return r.fields[index] }
-func (r *Record) RecordExtMap() IPersistentMap   { return r.ext }
-func (r *Record) RecordMeta() IPersistentMap     { return r.meta }
-func (r *Record) Meta() IPersistentMap           { return r.meta }
+func (r *Record) RecordExtMap() IPersistentMap   { return RecordAttrsExt(r.attrs) }
+func (r *Record) RecordMeta() IPersistentMap     { return RecordAttrsMeta(r.attrs) }
+func (r *Record) Meta() IPersistentMap           { return RecordAttrsMeta(r.attrs) }
 func (r *Record) Count() int                     { return RecordCount(r) }
 func (r *Record) ValAt(key any) any              { return RecordValAt(r, key) }
 func (r *Record) ContainsKey(key any) bool       { return RecordContainsKey(r, key) }
 func (r *Record) EntryAt(key any) IMapEntry      { return RecordEntryAt(r, key) }
 func (r *Record) Seq() ISeq                      { return RecordSeq(r) }
 func (r *Record) Equiv(other any) bool           { return RecordEquiv(r, other) }
-func (r *Record) Hash() uint32                   { return RecordHash(&r.hash, r) }
-func (r *Record) HashEq() uint32                 { return RecordHashEq(&r.hasheq, r) }
+func (r *Record) Hash() uint32                   { return RecordAttrsHash(&r.attrs, r) }
+func (r *Record) HashEq() uint32                 { return RecordAttrsHashEq(&r.attrs, r) }
 func (r *Record) String() string                 { return RecordString(r) }
 func (r *Record) Empty() IPersistentCollection   { return RecordEmpty(r) }
 func (r *Record) Without(key any) IPersistentMap { return RecordWithout(r, key) }
@@ -196,28 +282,25 @@ func (r *Record) RecordWithField(index int, value any) RecordValue {
 	result := *r
 	result.fields = append([]any(nil), r.fields...)
 	result.fields[index] = value
-	result.hash = 0
-	result.hasheq = 0
+	result.attrs = RecordAttrsWithoutHash(r.attrs)
 	return &result
 }
 
 func (r *Record) RecordWithExtMap(ext IPersistentMap) RecordValue {
-	if r.ext == ext {
+	if r.RecordExtMap() == ext {
 		return r
 	}
 	result := *r
-	result.ext = ext
-	result.hash = 0
-	result.hasheq = 0
+	result.attrs = RecordAttrsWithExt(r.attrs, ext)
 	return &result
 }
 
 func (r *Record) RecordWithMeta(meta IPersistentMap) RecordValue {
-	if r.meta == meta {
+	if r.RecordMeta() == meta {
 		return r
 	}
 	result := *r
-	result.meta = meta
+	result.attrs = RecordAttrsWithMeta(r.attrs, meta)
 	return &result
 }
 
@@ -307,7 +390,7 @@ func NewRecordFromMap(recordType *RecordType, value any) RecordValue {
 		ext = nil
 	}
 	record := NewRecord(recordType, fields...)
-	record.ext = ext
+	record.attrs = NewRecordAttrs(nil, ext)
 	return record
 }
 

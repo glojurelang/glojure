@@ -421,6 +421,7 @@ func TestGenerateConcreteRecordTypeAndDirectOperations(t *testing.T) {
 	generated := output.String()
 	for _, expected := range []string{
 		"type aotRecord0Point struct",
+		"attrs *lang.RecordAttrs",
 		"func aotRecordNew0(",
 		"case *aotRecord0Point:",
 		"return value.f0",
@@ -437,6 +438,17 @@ func TestGenerateConcreteRecordTypeAndDirectOperations(t *testing.T) {
 		t.Fatalf("record generation revived arbitrary map specialization:\n%s",
 			generated)
 	}
+	for _, unwanted := range []string{
+		"\n\tmeta lang.IPersistentMap\n",
+		"\n\text lang.IPersistentMap\n",
+		"\n\thash uint32\n",
+		"\n\thasheq uint32\n",
+	} {
+		if strings.Contains(generated, unwanted) {
+			t.Fatalf("generated record retained eager %q state:\n%s",
+				unwanted, generated)
+		}
+	}
 	if got := strings.Count(generated, "func aotKeywordLookup"); got != 1 {
 		t.Fatalf("generated %d record lookup helpers, want 1:\n%s",
 			got, generated)
@@ -444,6 +456,116 @@ func TestGenerateConcreteRecordTypeAndDirectOperations(t *testing.T) {
 	if got := strings.Count(generated, "func aotKeywordAssoc"); got != 1 {
 		t.Fatalf("generated %d record assoc helpers, want 1:\n%s",
 			got, generated)
+	}
+}
+
+func TestGenerateRecursiveRecordSpecialization(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.record-specialization"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defrecord Node [value left right])
+		(defn make-node [value depth]
+		  (if (zero? depth)
+		    (->Node value nil nil)
+		    (let [next-depth (dec depth)]
+		      (->Node value
+		              (make-node (dec value) next-depth)
+		              (make-node (inc value) next-depth)))))
+		(defn sum-node [node]
+		  (if (nil? (:left node))
+		    (:value node)
+		    (+ (:value node)
+		       (sum-node (:left node))
+		       (sum-node (:right node)))))
+		(defn equal-node-score [left right]
+		  (if (= left right) 1 0))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate specialized record: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"func aotRecordFastNew0(",
+		"f0    int64",
+		"f1    *aotRecord0Node",
+		"f2    *aotRecord0Node",
+		"var aotRecordFn",
+		".aotRecordFast()",
+		"= aotRecordFastNew0(",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("record specialization omitted %q:\n%s",
+				expected, generated)
+		}
+	}
+	if got := strings.Count(generated, "var aotRecordFn"); got != 2 {
+		t.Fatalf(
+			"generated %d record-specialized functions, want 2; "+
+				"record equality must retain generic semantics:\n%s",
+			got,
+			generated,
+		)
+	}
+
+	output.Reset()
+	if err := newGenerator(&output, false).Generate(ns); err != nil {
+		t.Fatalf("generate non-direct record: %v", err)
+	}
+	if strings.Contains(output.String(), "aotRecordFastNew") ||
+		strings.Contains(output.String(), "aotRecordFn") {
+		t.Fatalf("record specialization ignored disabled direct linking:\n%s",
+			output.String())
+	}
+
+	makeNode := ns.FindInternedVar(lang.NewSymbol("make-node"))
+	originalMeta := makeNode.Meta()
+	makeNode.SetMeta(originalMeta.Assoc(lang.KWRedef, true).(lang.IPersistentMap))
+	defer makeNode.SetMeta(originalMeta)
+
+	output.Reset()
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate redef record producer: %v", err)
+	}
+	if strings.Contains(output.String(), "aotRecordFastNew") ||
+		strings.Contains(output.String(), "aotRecordFn") {
+		t.Fatalf("record specialization ignored ^:redef producer:\n%s",
+			output.String())
+	}
+}
+
+func TestGenerateBooleanRecordSpecialization(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.record-bool-specialization"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defrecord Flag [enabled])
+		(defn make-flag [value]
+		  (if (zero? value)
+		    (->Flag true)
+		    (->Flag false)))
+		(defn flag-score [flag]
+		  (if (:enabled flag) 1 0))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate boolean record specialization: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"func aotRecordFastNew0(p0 bool)",
+		"f0    bool",
+		".f0",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("boolean record specialization omitted %q:\n%s",
+				expected, generated)
+		}
 	}
 }
 

@@ -99,6 +99,8 @@ type aotSpecializationTarget struct {
 	float64Analysis *float64AOTAnalysis
 	vectorFnVar     string
 	vectorAnalysis  *vectorAOTAnalysis
+	recordFnVar     string
+	recordAnalysis  *compiler.IRRecordFunctionPlan
 	rootVersionVar  string
 }
 
@@ -136,6 +138,9 @@ type aotRecordType struct {
 	constructor  string
 	mapFactory   string
 	fieldNames   []string
+	shape        *compiler.IRRecordShape
+	stateName    string
+	fastCtor     string
 }
 
 type aotRecordCallTarget struct {
@@ -161,6 +166,8 @@ type Generator struct {
 	keywordLookupHelpers   map[string]*aotKeywordLookupHelper
 	keywordAssocHelpers    map[string]*aotKeywordAssocHelper
 	aotRecordTypes         map[*lang.RecordType]*aotRecordType
+	aotRecordShapes        map[*lang.RecordType]*compiler.IRRecordShape
+	aotRecordPlans         map[*lang.Var]*compiler.IRRecordFunctionPlan
 
 	valueInits []*valueInit // map of value initializations
 
@@ -226,6 +233,8 @@ func newGenerator(w io.Writer, directLink bool) *Generator {
 		keywordLookupHelpers:   make(map[string]*aotKeywordLookupHelper),
 		keywordAssocHelpers:    make(map[string]*aotKeywordAssocHelper),
 		aotRecordTypes:         make(map[*lang.RecordType]*aotRecordType),
+		aotRecordShapes:        make(map[*lang.RecordType]*compiler.IRRecordShape),
+		aotRecordPlans:         make(map[*lang.Var]*compiler.IRRecordFunctionPlan),
 		liftedValues:           make(map[liftedKey]*liftedValue),
 		liftedCounter:          0,
 		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
@@ -377,6 +386,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	sort.Slice(internedVars, func(i, j int) bool {
 		return internedVars[i].name.String() < internedVars[j].name.String()
 	})
+	g.prepareAOTRecordSpecializations(internedVars)
 	g.prepareAOTRecordTypes(internedVars)
 	g.prepareAOTCallTargets(internedVars)
 	for _, nv := range internedVars {
@@ -1473,7 +1483,8 @@ func (g *Generator) generateFn(fn *Fn) string {
 		// Supported single arity: emit FnFuncN with direct named params.
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
 		paramNames := fixedParamNames(fixedArity)
-		if !g.generateVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+		if !g.generateRecordSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+			!g.generateVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
 			sig := ""

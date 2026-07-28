@@ -1,0 +1,50 @@
+(ns codegen.test.record-specialization)
+
+(defrecord Node [value left right])
+
+(defn make-node [value depth]
+  (if (zero? depth)
+    (->Node value nil nil)
+    (let [next-depth (dec depth)]
+      (->Node value
+              (make-node (dec value) next-depth)
+              (make-node (inc value) next-depth)))))
+
+(defn sum-node [node]
+  (if (nil? (:left node))
+    (:value node)
+    (+ (:value node)
+       (sum-node (:left node))
+       (sum-node (:right node)))))
+
+(defrecord Flag [enabled])
+
+(defn make-flag [value]
+  (if (zero? value)
+    (->Flag true)
+    (->Flag false)))
+
+(defn flag-score [flag]
+  (if (:enabled flag) 1 0))
+
+(defn ^{:expected-output [30 :generic "left" [:right] :changed 10 :ok true 7 9 99 10 true true 1 0]}
+  -main []
+  (let [fast (make-node 10 1)
+        generic (->Node :generic "left" [:right])
+        changed (assoc fast :value :changed)
+        tagged (with-meta fast {:tag :ok})
+        mapped (map->Node {:value 7
+                           :left nil
+                           :right nil
+                           :extra 9})
+        extended (assoc fast :extra 99)]
+    [(sum-node fast)
+     (:value generic) (:left generic) (:right generic)
+     (:value changed) (:value fast)
+     (:tag (meta tagged)) (= fast tagged)
+     (:value mapped) (:extra mapped)
+     (:extra extended) (:value extended)
+     (= (hash fast) (hash tagged))
+     (identical? fast (assoc fast :value (:value fast)))
+     (flag-score (make-flag 0))
+     (flag-score (make-flag 1))]))

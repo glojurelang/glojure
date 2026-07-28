@@ -86,9 +86,15 @@ func (g *Generator) generateAOTKeywordHelpers() {
 		for _, record := range g.sortedAOTRecordTypes() {
 			for field, name := range record.fieldNames {
 				if name == helper.keyword {
-					fmt.Fprintf(&g.aotDeclarations,
-						"\tcase *%s: return value.f%d\n",
-						record.typeName, field)
+					if record.shape != nil {
+						fmt.Fprintf(&g.aotDeclarations,
+							"\tcase *%s: return value.RecordField(%d)\n",
+							record.typeName, field)
+					} else {
+						fmt.Fprintf(&g.aotDeclarations,
+							"\tcase *%s: return value.f%d\n",
+							record.typeName, field)
+					}
 					break
 				}
 			}
@@ -144,6 +150,19 @@ func (g *Generator) generateAOTKeywordAssocHelper(
 		if !matched {
 			continue
 		}
+		if record.shape != nil {
+			fmt.Fprintf(&g.aotDeclarations,
+				"\tcase *%s:\n"+
+					"\t\tvar result lang.RecordValue = value\n",
+				record.typeName)
+			for i, field := range indices {
+				fmt.Fprintf(&g.aotDeclarations,
+					"\t\tresult = result.RecordWithField(%d, v%d)\n",
+					field, i)
+			}
+			fmt.Fprintln(&g.aotDeclarations, "\t\treturn result")
+			continue
+		}
 		fmt.Fprintf(&g.aotDeclarations,
 			"\tcase *%s:\n\t\tresult := *value\n", record.typeName)
 		for i, field := range indices {
@@ -151,7 +170,8 @@ func (g *Generator) generateAOTKeywordAssocHelper(
 				"\t\tresult.f%d = v%d\n", field, i)
 		}
 		fmt.Fprintln(&g.aotDeclarations,
-			"\t\tresult.hash = 0\n\t\tresult.hasheq = 0\n\t\treturn &result")
+			"\t\tresult.attrs = lang.RecordAttrsWithoutHash(value.attrs)\n"+
+				"\t\treturn &result")
 	}
 	fmt.Fprintln(&g.aotDeclarations, "\tdefault:")
 	fmt.Fprintln(&g.aotDeclarations, "\t\tvar result any = value")

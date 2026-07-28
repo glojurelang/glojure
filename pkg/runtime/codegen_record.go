@@ -55,6 +55,9 @@ func (g *Generator) allocAOTRecordType(
 		constructor: fmt.Sprintf("aotRecordNew%d", index),
 		mapFactory:  fmt.Sprintf("aotRecordFromMap%d", index),
 		fieldNames:  descriptor.FieldNames(),
+		shape:       g.aotRecordShapes[descriptor],
+		stateName:   fmt.Sprintf("aotRecordState%d", index),
+		fastCtor:    fmt.Sprintf("aotRecordFastNew%d", index),
 	}
 	g.aotRecordTypes[descriptor] = record
 	g.generateAOTRecordType(record)
@@ -85,12 +88,14 @@ func (g *Generator) generateAOTRecordType(record *aotRecordType) {
 		record.descriptor.Name(),
 		strings.Join(fieldNames, ", "),
 	)
+	if record.shape != nil {
+		g.generateAOTSpecializedRecordType(record)
+		g.generateAOTRecordCollectionMethods(record)
+		return
+	}
 	fmt.Fprintf(&g.aotDeclarations, "type %s struct {\n", record.typeName)
 	fmt.Fprintln(&g.aotDeclarations, "\tlang.RecordMarker")
-	fmt.Fprintln(&g.aotDeclarations, "\tmeta lang.IPersistentMap")
-	fmt.Fprintln(&g.aotDeclarations, "\text lang.IPersistentMap")
-	fmt.Fprintln(&g.aotDeclarations, "\thash uint32")
-	fmt.Fprintln(&g.aotDeclarations, "\thasheq uint32")
+	fmt.Fprintln(&g.aotDeclarations, "\tattrs *lang.RecordAttrs")
 	for i := range record.fieldNames {
 		fmt.Fprintf(&g.aotDeclarations, "\tf%d any\n", i)
 	}
@@ -117,8 +122,8 @@ func (g *Generator) generateAOTRecordType(record *aotRecordType) {
 		"func %s(value any) *%s {\n"+
 			"\tsource := lang.NewRecordFromMap(%s, value)\n"+
 			"\treturn &%s{\n"+
-			"\t\tmeta: source.RecordMeta(),\n"+
-			"\t\text: source.RecordExtMap(),\n",
+			"\t\tattrs: lang.NewRecordAttrs("+
+			"source.RecordMeta(), source.RecordExtMap()),\n",
 		record.mapFactory,
 		record.typeName,
 		record.descriptorGo,
@@ -138,9 +143,11 @@ func (g *Generator) generateAOTRecordValueMethods(record *aotRecordType) {
 	typeName := record.typeName
 	fmt.Fprintf(&g.aotDeclarations,
 		"func (r *%s) RecordType() *lang.RecordType { return %s }\n"+
-			"func (r *%s) RecordExtMap() lang.IPersistentMap { return r.ext }\n"+
-			"func (r *%s) RecordMeta() lang.IPersistentMap { return r.meta }\n"+
-			"func (r *%s) Meta() lang.IPersistentMap { return r.meta }\n",
+			"func (r *%s) RecordExtMap() lang.IPersistentMap {\n"+
+			"\treturn lang.RecordAttrsExt(r.attrs)\n}\n"+
+			"func (r *%s) RecordMeta() lang.IPersistentMap {\n"+
+			"\treturn lang.RecordAttrsMeta(r.attrs)\n}\n"+
+			"func (r *%s) Meta() lang.IPersistentMap { return r.RecordMeta() }\n",
 		typeName, record.descriptorGo,
 		typeName,
 		typeName,
@@ -167,16 +174,20 @@ func (g *Generator) generateAOTRecordValueMethods(record *aotRecordType) {
 	}
 	fmt.Fprintln(&g.aotDeclarations,
 		"\tdefault: panic(lang.NewIllegalArgumentError(\"record field index out of bounds\"))\n"+
-			"\t}\n\tresult.hash = 0\n\tresult.hasheq = 0\n\treturn &result\n}")
+			"\t}\n\tresult.attrs = lang.RecordAttrsWithoutHash(r.attrs)\n"+
+			"\treturn &result\n}")
 
 	fmt.Fprintf(&g.aotDeclarations,
 		"func (r *%s) RecordWithExtMap(ext lang.IPersistentMap) lang.RecordValue {\n"+
-			"\tif r.ext == ext { return r }\n"+
-			"\tresult := *r\n\tresult.ext = ext\n"+
-			"\tresult.hash = 0\n\tresult.hasheq = 0\n\treturn &result\n}\n"+
+			"\tif r.RecordExtMap() == ext { return r }\n"+
+			"\tresult := *r\n"+
+			"\tresult.attrs = lang.RecordAttrsWithExt(r.attrs, ext)\n"+
+			"\treturn &result\n}\n"+
 			"func (r *%s) RecordWithMeta(meta lang.IPersistentMap) lang.RecordValue {\n"+
-			"\tif r.meta == meta { return r }\n"+
-			"\tresult := *r\n\tresult.meta = meta\n\treturn &result\n}\n",
+			"\tif r.RecordMeta() == meta { return r }\n"+
+			"\tresult := *r\n"+
+			"\tresult.attrs = lang.RecordAttrsWithMeta(r.attrs, meta)\n"+
+			"\treturn &result\n}\n",
 		typeName,
 		typeName,
 	)
@@ -186,6 +197,10 @@ func (g *Generator) generateAOTRecordCollectionMethods(
 	record *aotRecordType,
 ) {
 	typeName := record.typeName
+	hashPointer := "&r.attrs"
+	if record.shape != nil {
+		hashPointer = "r.aotRecordAttrsPtr()"
+	}
 	fmt.Fprintf(&g.aotDeclarations,
 		"func (r *%s) ValAt(key any) any { return lang.RecordValAt(r, key) }\n"+
 			"func (r *%s) ValAtDefault(key, fallback any) any {\n"+
@@ -220,11 +235,12 @@ func (g *Generator) generateAOTRecordCollectionMethods(
 			"func (r *%s) ApplyTo(args lang.ISeq) any {\n"+
 			"\treturn lang.RecordApplyTo(r, args)\n}\n"+
 			"func (r *%s) Hash() uint32 {\n"+
-			"\treturn lang.RecordHash(&r.hash, r)\n}\n"+
+			"\treturn lang.RecordAttrsHash(%s, r)\n}\n"+
 			"func (r *%s) HashEq() uint32 {\n"+
-			"\treturn lang.RecordHashEq(&r.hasheq, r)\n}\n"+
+			"\treturn lang.RecordAttrsHashEq(%s, r)\n}\n"+
 			"func (r *%s) String() string { return lang.RecordString(r) }\n",
-		typeName, typeName, typeName, typeName, typeName, typeName,
+		typeName, typeName, typeName, typeName, hashPointer,
+		typeName, hashPointer, typeName,
 	)
 }
 

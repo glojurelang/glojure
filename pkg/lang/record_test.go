@@ -76,3 +76,41 @@ func TestRecordMapConstructor(t *testing.T) {
 		t.Fatalf("count = %d, want 3", record.Count())
 	}
 }
+
+func TestRecordLazyAttrsPreserveMetadataAndHashes(t *testing.T) {
+	recordType := InternRecordType("record.test", "Tagged", "value")
+	key := NewKeyword("value")
+	meta := NewMap(NewKeyword("source"), "test")
+	record := NewRecord(recordType, int64(1))
+
+	if record.attrs != nil {
+		t.Fatalf("new record allocated unused attrs: %#v", record.attrs)
+	}
+	originalHash := record.Hash()
+	originalHashEq := record.HashEq()
+	if record.attrs == nil {
+		t.Fatal("hashing did not initialize the lazy cache")
+	}
+	if record.Hash() != originalHash || record.HashEq() != originalHashEq {
+		t.Fatal("record hash cache changed between reads")
+	}
+
+	withMeta := record.WithMeta(meta).(*Record)
+	if withMeta.Meta() != meta {
+		t.Fatalf("record metadata = %v, want %v", withMeta.Meta(), meta)
+	}
+	if withMeta.Hash() != originalHash || withMeta.HashEq() != originalHashEq {
+		t.Fatal("metadata changed record hashes")
+	}
+
+	updated := withMeta.Assoc(key, int64(2)).(*Record)
+	if updated.Meta() != meta {
+		t.Fatal("field update dropped record metadata")
+	}
+	if updated.Hash() == originalHash || updated.HashEq() == originalHashEq {
+		t.Fatal("field update retained stale record hashes")
+	}
+	if record.ValAt(key) != int64(1) {
+		t.Fatal("field update mutated the original record")
+	}
+}

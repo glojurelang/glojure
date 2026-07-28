@@ -67,8 +67,10 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			int64FnVar:     fmt.Sprintf("aotInt64Fn%d", index),
 			float64FnVar:   fmt.Sprintf("aotFloat64Fn%d", index),
 			vectorFnVar:    fmt.Sprintf("aotVectorFn%d", index),
+			recordFnVar:    fmt.Sprintf("aotRecordFn%d", index),
 			rootVersionVar: rootVersionVar,
 		}
+		target.recordAnalysis = g.aotRecordPlans[vr]
 		directType := "lang.ArityFn"
 		if !arityDispatch {
 			method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
@@ -233,6 +235,19 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 				"var %s func(%s) *lang.TransientVector\n",
 				target.vectorFnVar,
 				strings.Join(params, ", "),
+			)
+		}
+		if target.recordAnalysis != nil {
+			params := make([]string, len(target.recordAnalysis.Signature.Params))
+			for index, typ := range target.recordAnalysis.Signature.Params {
+				params[index] = recordAOTTypeExpr(g, typ)
+			}
+			fmt.Fprintf(
+				&g.aotDeclarations,
+				"var %s func(%s) %s\n",
+				target.recordFnVar,
+				strings.Join(params, ", "),
+				recordAOTTypeExpr(g, target.recordAnalysis.Signature.Result),
 			)
 		}
 	}
