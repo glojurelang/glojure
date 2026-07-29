@@ -2213,7 +2213,14 @@ func staticInstanceType(invoke *ast.InvokeNode) (reflect.Type, bool) {
 		vr.Symbol().String() != "instance?" {
 		return nil, false
 	}
-	typ, ok := invoke.Args[0].Sub.(*ast.ConstNode).Value.(reflect.Type)
+	return unwrappedReflectType(invoke.Args[0].Sub.(*ast.ConstNode).Value)
+}
+
+func unwrappedReflectType(value any) (reflect.Type, bool) {
+	if class, ok := value.(*lang.Class); ok {
+		return class.Type, class.Type != nil
+	}
+	typ, ok := value.(reflect.Type)
 	return typ, ok && typ != nil
 }
 
@@ -3242,14 +3249,7 @@ func inferredHostType(target *ast.Node) (reflect.Type, bool) {
 	if !ok {
 		return nil, false
 	}
-	switch value := value.(type) {
-	case reflect.Type:
-		return value, true
-	case *lang.Class:
-		return value.Type, value.Type != nil
-	default:
-		return nil, false
-	}
+	return unwrappedReflectType(value)
 }
 
 func (g *Generator) hostMethodInterfaceExpr(
@@ -3490,8 +3490,20 @@ func (g *Generator) generateNew(node *ast.Node) string {
 		}
 		// generate a reflect.Type for the class
 		classId := g.generateValue(class)
+		args := make([]string, len(newNode.Args))
+		for i, arg := range newNode.Args {
+			args[i] = g.generateASTNode(arg)
+		}
 		resultId := g.allocateTempVar()
-		g.writef("%s := reflect.New(%s).Interface()\n", resultId, classId)
+		g.writef("%s := lang.NewHostInstance(%s%s)\n",
+			resultId,
+			classId,
+			func() string {
+				if len(args) == 0 {
+					return ""
+				}
+				return ", " + strings.Join(args, ", ")
+			}())
 		return resultId
 	case *ast.MaybeClassNode:
 		resultId := g.allocateTempVar()

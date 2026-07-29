@@ -256,6 +256,34 @@ func TestGenerateStaticInstanceCheck(t *testing.T) {
 	}
 }
 
+func TestStaticInstanceTypeUnwrapsHostClass(t *testing.T) {
+	instanceVar := lang.NSCore.FindInternedVar(lang.NewSymbol("instance?"))
+	if instanceVar == nil {
+		t.Fatal("clojure.core/instance? is not interned")
+	}
+
+	underlying := reflect.TypeOf((*bytes.Buffer)(nil))
+	class := lang.NewClass(underlying, "java.lang.StringBuilder")
+	invoke := &ast.InvokeNode{
+		Fn: &ast.Node{
+			Op:  ast.OpVar,
+			Sub: &ast.VarNode{Var: instanceVar},
+		},
+		Args: []*ast.Node{
+			{Op: ast.OpConst, Sub: &ast.ConstNode{Value: class}},
+			{Op: ast.OpConst, Sub: &ast.ConstNode{Value: nil}},
+		},
+	}
+
+	got, ok := staticInstanceType(invoke)
+	if !ok {
+		t.Fatal("host class was not recognized as a static instance target")
+	}
+	if got != underlying {
+		t.Fatalf("host class type = %v, want %v", got, underlying)
+	}
+}
+
 func TestGenerateStaticInstanceCheckForSameNamespaceDirectLink(t *testing.T) {
 	instanceVar := lang.NSCore.FindInternedVar(lang.NewSymbol("instance?"))
 	if instanceVar == nil {
@@ -853,6 +881,28 @@ func TestDirectTaggedHostCallUsesInferredMethodSet(t *testing.T) {
 	}
 	if want := []string{"replacement"}; !reflect.DeepEqual(args, want) {
 		t.Fatalf("args = %v, want %v", args, want)
+	}
+}
+
+func TestInferredHostTypeUnwrapsHostClass(t *testing.T) {
+	const hostClassName = "test.java.io.Writer"
+	underlying := reflect.TypeFor[lang.IDeref]()
+	pkgmap.Set(
+		hostClassName,
+		lang.NewClass(underlying, "java.io.Writer"),
+	)
+	taggedName := lang.NewSymbol("writer").WithMeta(
+		lang.NewMap(lang.KWTag, lang.NewSymbol(hostClassName)),
+	).(*lang.Symbol)
+	target := ast.MakeNode(ast.OpLocal, taggedName)
+	target.Sub = &ast.LocalNode{Name: taggedName}
+
+	got, ok := inferredHostType(target)
+	if !ok {
+		t.Fatal("host class tag was not recognized")
+	}
+	if got != underlying {
+		t.Fatalf("host class type = %v, want %v", got, underlying)
 	}
 }
 
