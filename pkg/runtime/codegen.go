@@ -39,7 +39,7 @@ type varScope struct {
 	localStringStacks map[string]bool   // confined string stacks
 	ownedStringParts  map[string]bool   // private loop-carried str arguments
 	ownedMaps         map[string]bool   // uniquely owned loop-carried maps
-	localTypes        map[string]compiler.IRValueKind
+	localTypes        map[string]compiler.IRType
 }
 
 // recurContext represents the context for a loop/recur form
@@ -99,7 +99,9 @@ type aotSpecializationTarget struct {
 	int64Analysis       *int64AOTAnalysis
 	int64Safe           bool
 	int64ParamFnVar     string
-	int64ParamAnalysis  *int64ParamAOTAnalysis
+	int64ParamAnalysis  *exactIntegerParamAOTAnalysis
+	intParamFnVar       string
+	intParamAnalysis    *exactIntegerParamAOTAnalysis
 	float64FnVar        string
 	float64Analysis     *float64AOTAnalysis
 	vectorFnVar         string
@@ -268,7 +270,7 @@ func newGenerator(w io.Writer, directLink bool) *Generator {
 			localStringStacks: make(map[string]bool),
 			ownedStringParts:  make(map[string]bool),
 			ownedMaps:         make(map[string]bool),
-			localTypes:        make(map[string]compiler.IRValueKind),
+			localTypes:        make(map[string]compiler.IRType),
 		}},
 		recurStack:             []recurContext{},
 		imports:                make(map[string]string),
@@ -1613,7 +1615,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 			!g.generateOwnedVectorSpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
-			!g.generateInt64ParameterSpecializedFixedFn(
+			!g.generateIntegerParameterSpecializedFixedFn(
 				fn,
 				fnVar,
 				methodNode,
@@ -1883,7 +1885,7 @@ func (g *Generator) generateFnMethodFixed(methodNode *ast.FnMethodNode, paramVar
 func (g *Generator) generateFnMethodFixedWithTypes(
 	methodNode *ast.FnMethodNode,
 	paramVarNames []string,
-	paramTypes []compiler.IRValueKind,
+	paramTypes []compiler.IRType,
 ) {
 	// Push a new scope for the method body
 	g.pushVarScope()
@@ -1895,9 +1897,8 @@ func (g *Generator) generateFnMethodFixedWithTypes(
 	for i, param := range methodNode.Params {
 		paramNode := param.Sub.(*ast.BindingNode)
 		paramVar := g.allocateLocal(paramNode.Name.Name())
-		if i < len(paramTypes) &&
-			paramTypes[i] != compiler.IRDynamic {
-			g.markLocalType(paramNode.Name.Name(), paramTypes[i])
+		if i < len(paramTypes) && paramTypes[i].Kind != compiler.IRDynamic {
+			g.markLocalIRType(paramNode.Name.Name(), paramTypes[i])
 		} else if g.currentVector != nil &&
 			g.currentVector.paramMask&(uint32(1)<<i) == 0 {
 			g.markLocalType(paramNode.Name.Name(), compiler.IRInt)
@@ -2261,7 +2262,7 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 	if result, ok := g.generateAOTMultiFnInvoke(node); ok {
 		return result
 	}
-	if result, ok := g.generateAOTInt64ParameterInvoke(node); ok {
+	if result, ok := g.generateAOTIntegerParameterInvoke(node); ok {
 		return result
 	}
 	if result, ok := g.generateAOTSafeInt64Invoke(node); ok {
@@ -2988,6 +2989,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			continue
 		}
 		if bindingFacts.StableType.Kind == compiler.IRInt &&
+			bindingFacts.StableType.GoType == reflect.TypeFor[int64]() &&
 			(isLoop || g.irHasInt64Representation(init)) {
 			initCode := g.generateASTNode(init)
 			varName := g.allocateLocal(name)
@@ -3005,6 +3007,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			continue
 		}
 		if bindingFacts.StableType.Kind == compiler.IRFloat &&
+			bindingFacts.StableType.GoType == reflect.TypeFor[float64]() &&
 			(isLoop || g.irHasFloat64Representation(init)) {
 			initCode := g.generateASTNode(init)
 			varName := g.allocateLocal(name)
@@ -4219,7 +4222,7 @@ func (g *Generator) pushVarScope() {
 		localStringStacks: make(map[string]bool),
 		ownedStringParts:  make(map[string]bool),
 		ownedMaps:         make(map[string]bool),
-		localTypes:        make(map[string]compiler.IRValueKind),
+		localTypes:        make(map[string]compiler.IRType),
 	})
 }
 
@@ -4387,17 +4390,36 @@ func (g *Generator) markLocalType(
 	name string,
 	kind compiler.IRValueKind,
 ) {
-	g.varScopes[len(g.varScopes)-1].localTypes[name] = kind
+	typ := compiler.IRType{Kind: kind}
+	switch kind {
+	case compiler.IRBool:
+		typ.GoType = reflect.TypeFor[bool]()
+	case compiler.IRInt:
+		typ.GoType = reflect.TypeFor[int64]()
+	case compiler.IRFloat:
+		typ.GoType = reflect.TypeFor[float64]()
+	case compiler.IRString:
+		typ.GoType = reflect.TypeFor[string]()
+	}
+	g.markLocalIRType(name, typ)
 }
 
-func (g *Generator) getLocalType(name string) compiler.IRValueKind {
+func (g *Generator) markLocalIRType(name string, typ compiler.IRType) {
+	g.varScopes[len(g.varScopes)-1].localTypes[name] = typ
+}
+
+func (g *Generator) getLocalIRType(name string) compiler.IRType {
 	for i := len(g.varScopes) - 1; i >= 0; i-- {
 		scope := &g.varScopes[i]
 		if _, ok := scope.names[name]; ok {
 			return scope.localTypes[name]
 		}
 	}
-	return compiler.IRDynamic
+	return compiler.IRType{Kind: compiler.IRDynamic, Nullable: true}
+}
+
+func (g *Generator) getLocalType(name string) compiler.IRValueKind {
+	return g.getLocalIRType(name).Kind
 }
 
 // allocateTempVar allocates a fresh temporary variable without name tracking

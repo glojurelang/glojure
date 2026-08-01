@@ -13,22 +13,27 @@ import (
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
-// int64ParamAOTAnalysis describes a guarded version of a function whose
-// selected parameters have concrete int64 representations while its result
-// remains an ordinary Clojure value. It is intentionally driven by resolved
-// typed calls rather than by function or workload identity.
-type int64ParamAOTAnalysis struct {
+// exactIntegerParamAOTAnalysis describes a guarded version of a function
+// whose selected parameters retain one exact Go integer representation while
+// its result remains an ordinary Clojure value. It is driven by resolved typed
+// calls rather than function or workload identity.
+type exactIntegerParamAOTAnalysis struct {
 	paramMask uint32
+	goType    reflect.Type
 	ir        *compiler.TypedIR
 }
 
-func (g *Generator) prepareInt64ParameterSpecializations() {
+func (g *Generator) prepareIntegerParameterSpecializations() {
 	if !g.directLink {
 		return
 	}
 	candidates := make(
-		map[*aotSpecializationTarget]map[uint32]struct{},
+		map[*aotSpecializationTarget]map[reflect.Type]map[uint32]struct{},
 	)
+	representations := []reflect.Type{
+		reflect.TypeFor[int64](),
+		reflect.TypeFor[int](),
+	}
 	for _, caller := range g.aotCallTargets {
 		if caller == nil || caller.fn == nil {
 			continue
@@ -42,20 +47,28 @@ func (g *Generator) prepareInt64ParameterSpecializations() {
 				len(call.ArgumentTypes) != target.arity {
 				continue
 			}
-			var mask uint32
-			for index, typ := range call.ArgumentTypes {
-				if typ.Kind == compiler.IRInt &&
-					typ.GoType == reflect.TypeOf(int64(0)) {
-					mask |= uint32(1) << index
+			for _, representation := range representations {
+				var mask uint32
+				for index, typ := range call.ArgumentTypes {
+					if typ.Kind == compiler.IRInt &&
+						typ.GoType == representation {
+						mask |= uint32(1) << index
+					}
 				}
+				if mask == 0 {
+					continue
+				}
+				if candidates[target] == nil {
+					candidates[target] = make(
+						map[reflect.Type]map[uint32]struct{},
+					)
+				}
+				if candidates[target][representation] == nil {
+					candidates[target][representation] =
+						make(map[uint32]struct{})
+				}
+				candidates[target][representation][mask] = struct{}{}
 			}
-			if mask == 0 {
-				continue
-			}
-			if candidates[target] == nil {
-				candidates[target] = make(map[uint32]struct{})
-			}
-			candidates[target][mask] = struct{}{}
 		}
 	}
 
@@ -65,25 +78,37 @@ func (g *Generator) prepareInt64ParameterSpecializations() {
 			target.arity > 4 {
 			continue
 		}
-		if target.int64Analysis != nil ||
-			target.float64Analysis != nil ||
+		if target.float64Analysis != nil ||
 			target.vectorAnalysis != nil ||
 			target.ownedVectorAnalysis != nil ||
 			target.recordAnalysis != nil {
 			continue
 		}
-		masks := candidates[target]
-		candidateMasks := make([]uint32, 0, len(masks))
-		for mask := range masks {
-			candidateMasks = append(candidateMasks, mask)
-		}
 		fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
 		method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		target.int64ParamAnalysis = g.analyzeInt64ParameterRegion(
-			target.fn,
-			method,
-			candidateMasks,
-		)
+		for _, representation := range representations {
+			if representation == reflect.TypeFor[int64]() &&
+				target.int64Analysis != nil {
+				continue
+			}
+			masks := candidates[target][representation]
+			candidateMasks := make([]uint32, 0, len(masks))
+			for mask := range masks {
+				candidateMasks = append(candidateMasks, mask)
+			}
+			analysis := g.analyzeExactIntegerParameterRegion(
+				target.fn,
+				method,
+				candidateMasks,
+				representation,
+			)
+			switch representation {
+			case reflect.TypeFor[int64]():
+				target.int64ParamAnalysis = analysis
+			case reflect.TypeFor[int]():
+				target.intParamAnalysis = analysis
+			}
+		}
 	}
 }
 
@@ -111,18 +136,22 @@ func (g *Generator) aotSafeInt64CallSignatures() map[*lang.Var][]compiler.IRCall
 	return signatures
 }
 
-func (g *Generator) analyzeInt64ParameterRegion(
+func (g *Generator) analyzeExactIntegerParameterRegion(
 	fn *Fn,
 	method *ast.FnMethodNode,
 	candidateMasks []uint32,
-) *int64ParamAOTAnalysis {
+	representation reflect.Type,
+) *exactIntegerParamAOTAnalysis {
 	if !g.directLink || fn == nil || method == nil ||
 		method.IsVariadic || method.FixedArity < 1 ||
-		method.FixedArity > 4 {
+		method.FixedArity > 4 ||
+		(representation != reflect.TypeFor[int64]() &&
+			representation != reflect.TypeFor[int]()) {
 		return nil
 	}
 	signatures := g.aotSafeInt64CallSignatures()
-	if len(candidateMasks) == 0 && len(signatures) == 0 {
+	if len(candidateMasks) == 0 &&
+		(representation != reflect.TypeFor[int64]() || len(signatures) == 0) {
 		return nil
 	}
 	root := fn.ASTNode()
@@ -134,7 +163,7 @@ func (g *Generator) analyzeInt64ParameterRegion(
 	baseResolved := base.ResolvedCallCount()
 	bestScore := baseScore
 	bestBits := method.FixedArity + 1
-	var best *int64ParamAOTAnalysis
+	var best *exactIntegerParamAOTAnalysis
 	limit := uint32(1) << method.FixedArity
 	for mask := uint32(1); mask < limit; mask++ {
 		if len(candidateMasks) != 0 {
@@ -157,7 +186,7 @@ func (g *Generator) analyzeInt64ParameterRegion(
 			name := parameter.Sub.(*ast.BindingNode).Name
 			parameterTypes[name] = compiler.IRType{
 				Kind:   compiler.IRInt,
-				GoType: reflect.TypeOf(int64(0)),
+				GoType: representation,
 			}
 		}
 		optimized := compiler.BuildTypedIRWithOptions(
@@ -180,26 +209,41 @@ func (g *Generator) analyzeInt64ParameterRegion(
 		}
 		bestScore = score
 		bestBits = bitCount
-		best = &int64ParamAOTAnalysis{
+		best = &exactIntegerParamAOTAnalysis{
 			paramMask: mask,
+			goType:    representation,
 			ir:        optimized,
 		}
 	}
 	return best
 }
 
-func int64ParamAOTTypes(mask uint32, arity int) []string {
+func exactIntegerParamAOTTypes(
+	analysis *exactIntegerParamAOTAnalysis,
+	arity int,
+) []string {
 	result := make([]string, arity)
 	for index := range result {
 		result[index] = "any"
-		if mask&(uint32(1)<<index) != 0 {
-			result[index] = "int64"
+		if analysis.paramMask&(uint32(1)<<index) != 0 {
+			result[index] = exactIntegerGoTypeName(analysis.goType)
 		}
 	}
 	return result
 }
 
-func (g *Generator) generateInt64ParameterSpecializedFixedFn(
+func exactIntegerGoTypeName(typ reflect.Type) string {
+	switch typ {
+	case reflect.TypeFor[int64]():
+		return "int64"
+	case reflect.TypeFor[int]():
+		return "int"
+	default:
+		panic(fmt.Sprintf("unsupported exact integer type %v", typ))
+	}
+}
+
+func (g *Generator) generateIntegerParameterSpecializedFixedFn(
 	fn *Fn,
 	fnVar string,
 	method *ast.FnMethodNode,
@@ -209,32 +253,23 @@ func (g *Generator) generateInt64ParameterSpecializedFixedFn(
 	if target == nil || target.fn != fn {
 		return false
 	}
-	analysis := target.int64ParamAnalysis
-	if analysis == nil {
+	analyses := []*exactIntegerParamAOTAnalysis{
+		target.int64ParamAnalysis,
+		target.intParamAnalysis,
+	}
+	helpers := []string{target.int64ParamFnVar, target.intParamFnVar}
+	if analyses[0] == nil && analyses[1] == nil {
 		return false
 	}
-
-	typedParams := make([]string, method.FixedArity)
-	typedSignature := make([]string, method.FixedArity)
-	paramTypes := make([]compiler.IRValueKind, method.FixedArity)
-	for index := range typedParams {
-		typedParams[index] = g.allocateTempVar()
-		typ := "any"
-		if analysis.paramMask&(uint32(1)<<index) != 0 {
-			typ = "int64"
-			paramTypes[index] = compiler.IRInt
+	for index, analysis := range analyses {
+		if analysis != nil {
+			g.generateExactIntegerParameterHelper(
+				method,
+				analysis,
+				helpers[index],
+			)
 		}
-		typedSignature[index] = typedParams[index] + " " + typ
 	}
-	g.writef("%s = func(%s) any {\n",
-		target.int64ParamFnVar,
-		strings.Join(typedSignature, ", "),
-	)
-	plainIR := g.currentIR
-	g.currentIR = analysis.ir
-	g.generateFnMethodFixedWithTypes(method, typedParams, paramTypes)
-	g.currentIR = plainIR
-	g.writef("}\n")
 
 	signature := ""
 	if method.FixedArity > 0 {
@@ -242,34 +277,81 @@ func (g *Generator) generateInt64ParameterSpecializedFixedFn(
 	}
 	g.writef("%s = lang.FnFunc%d(func(%s) any {\n",
 		fnVar, method.FixedArity, signature)
+	for index, analysis := range analyses {
+		if analysis != nil {
+			g.generateExactIntegerParameterGuard(
+				analysis,
+				helpers[index],
+				paramNames,
+			)
+		}
+	}
+	g.generateFnMethodFixed(method, paramNames)
+	g.writef("})\n")
+	return true
+}
 
+func (g *Generator) generateExactIntegerParameterHelper(
+	method *ast.FnMethodNode,
+	analysis *exactIntegerParamAOTAnalysis,
+	helper string,
+) {
+	typedParams := make([]string, method.FixedArity)
+	typedSignature := make([]string, method.FixedArity)
+	paramTypes := make([]compiler.IRType, method.FixedArity)
+	for index := range typedParams {
+		typedParams[index] = g.allocateTempVar()
+		typ := "any"
+		if analysis.paramMask&(uint32(1)<<index) != 0 {
+			typ = exactIntegerGoTypeName(analysis.goType)
+			paramTypes[index] = compiler.IRType{
+				Kind:   compiler.IRInt,
+				GoType: analysis.goType,
+			}
+		}
+		typedSignature[index] = typedParams[index] + " " + typ
+	}
+	g.writef("%s = func(%s) any {\n",
+		helper,
+		strings.Join(typedSignature, ", "),
+	)
+	plainIR := g.currentIR
+	g.currentIR = analysis.ir
+	g.generateFnMethodFixedWithTypes(method, typedParams, paramTypes)
+	g.currentIR = plainIR
+	g.writef("}\n")
+}
+
+func (g *Generator) generateExactIntegerParameterGuard(
+	analysis *exactIntegerParamAOTAnalysis,
+	helper string,
+	paramNames []string,
+) {
 	typedNames := append([]string(nil), paramNames...)
 	guards := make([]string, 0, bits.OnesCount32(analysis.paramMask))
+	typeName := exactIntegerGoTypeName(analysis.goType)
 	for i, paramName := range paramNames {
 		if analysis.paramMask&(uint32(1)<<i) == 0 {
 			continue
 		}
 		typed := g.allocateTempVar()
 		ok := g.allocateTempVar()
-		g.writef("%s, %s := %s.(int64)\n", typed, ok, paramName)
+		g.writef("%s, %s := %s.(%s)\n", typed, ok, paramName, typeName)
 		typedNames[i] = typed
 		guards = append(guards, ok)
 	}
 	if len(guards) == 0 {
-		panic(fmt.Sprintf("empty int64 parameter guard for %v", target.vr))
+		panic("empty exact integer parameter guard")
 	}
 	g.writef("if %s {\n", strings.Join(guards, " && "))
 	g.writef("return %s(%s)\n",
-		target.int64ParamFnVar,
+		helper,
 		strings.Join(typedNames, ", "),
 	)
 	g.writef("}\n")
-	g.generateFnMethodFixed(method, paramNames)
-	g.writef("})\n")
-	return true
 }
 
-func (g *Generator) generateAOTInt64ParameterInvoke(
+func (g *Generator) generateAOTIntegerParameterInvoke(
 	node *ast.Node,
 ) (string, bool) {
 	if !g.directLink || g.currentIR == nil ||
@@ -278,36 +360,63 @@ func (g *Generator) generateAOTInt64ParameterInvoke(
 	}
 	invoke := node.Sub.(*ast.InvokeNode)
 	target := g.aotInvokeTarget(invoke)
-	if target == nil || !target.directLinked ||
-		target.int64ParamAnalysis == nil ||
-		len(invoke.Args) != target.arity {
+	if target == nil || !target.directLinked || len(invoke.Args) != target.arity {
 		return "", false
 	}
-	mask := target.int64ParamAnalysis.paramMask
-	for index, argument := range invoke.Args {
-		if mask&(uint32(1)<<index) != 0 &&
-			(g.currentIR.Facts(argument).Type.Kind != compiler.IRInt ||
-				g.currentIR.Facts(argument).Type.GoType !=
-					reflect.TypeOf(int64(0))) {
-			return "", false
+	analyses := []*exactIntegerParamAOTAnalysis{
+		target.int64ParamAnalysis,
+		target.intParamAnalysis,
+	}
+	helpers := []string{target.int64ParamFnVar, target.intParamFnVar}
+	for analysisIndex, analysis := range analyses {
+		if analysis == nil ||
+			!g.exactIntegerArgumentsMatch(analysis, invoke.Args) {
+			continue
+		}
+		args := make([]string, len(invoke.Args))
+		for index, argument := range invoke.Args {
+			args[index] = g.generateASTNode(argument)
+		}
+		result := g.allocateTempVar()
+		g.writef("// direct %s parameter call %s\n",
+			exactIntegerGoTypeName(analysis.goType), target.vr)
+		g.writef("%s := %s(%s)\n",
+			result,
+			helpers[analysisIndex],
+			strings.Join(args, ", "),
+		)
+		return result, true
+	}
+	return "", false
+}
+
+func (g *Generator) exactIntegerArgumentsMatch(
+	analysis *exactIntegerParamAOTAnalysis,
+	arguments []*ast.Node,
+) bool {
+	for index, argument := range arguments {
+		if analysis.paramMask&(uint32(1)<<index) == 0 {
+			continue
+		}
+		facts := g.currentIR.Facts(argument)
+		if facts.Type.Kind != compiler.IRInt ||
+			facts.Type.GoType != analysis.goType {
+			return false
+		}
+		switch analysis.goType {
+		case reflect.TypeFor[int64]():
+			if !g.irHasInt64Representation(argument) {
+				return false
+			}
+		case reflect.TypeFor[int]():
+			if !g.irHasIntRepresentation(argument) {
+				return false
+			}
+		default:
+			return false
 		}
 	}
-	args := make([]string, len(invoke.Args))
-	for index, argument := range invoke.Args {
-		code := g.generateASTNode(argument)
-		args[index] = code
-		if mask&(uint32(1)<<index) != 0 {
-			args[index] = g.irInt64Expr(argument, code)
-		}
-	}
-	result := g.allocateTempVar()
-	g.writef("// direct int64 parameter call %s\n", target.vr)
-	g.writef("%s := %s(%s)\n",
-		result,
-		target.int64ParamFnVar,
-		strings.Join(args, ", "),
-	)
-	return result, true
+	return true
 }
 
 func (g *Generator) generateAOTSafeInt64Invoke(

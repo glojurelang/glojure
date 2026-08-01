@@ -23,6 +23,7 @@ func (g *Generator) canGenerateInt64Callable(fn *Fn) bool {
 	}
 	return target.int64Analysis == nil &&
 		target.int64ParamAnalysis == nil &&
+		target.intParamAnalysis == nil &&
 		target.float64Analysis == nil &&
 		target.vectorAnalysis == nil &&
 		target.ownedVectorAnalysis == nil &&

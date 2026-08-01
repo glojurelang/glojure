@@ -1732,9 +1732,9 @@ func TestGenerateTypedInt64ParameterDirectCallWithDynamicResult(t *testing.T) {
 	}
 }
 
-func TestInt64ParameterCallRequiresExactRepresentation(t *testing.T) {
+func TestExactIntegerParameterCallsPreserveRepresentation(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(
-		lang.NewSymbol("codegen.exact-int64-parameter-call"),
+		lang.NewSymbol("codegen.exact-int-parameter-call"),
 	)
 	ns.ReferAllSnapshot(lang.NSCore, nil)
 	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
@@ -1743,18 +1743,65 @@ func TestInt64ParameterCallRequiresExactRepresentation(t *testing.T) {
 	ReadEval(`
 		(defn add-one [value]
 		  (inc value))
+		(defn preserve [value]
+		  (if (zero? value) value value))
 		(defn from-count []
-		  (add-one (count [1 2 3])))`)
+		  [(add-one (count [1 2 3]))
+		   (preserve (count [1 2 3]))])`)
 
 	var output bytes.Buffer
 	if err := NewGenerator(&output).Generate(ns); err != nil {
-		t.Fatalf("generate exact int64 parameter call: %v", err)
+		t.Fatalf("generate exact int parameter call: %v", err)
 	}
-	if generated := output.String(); strings.Contains(
-		generated,
-		"// direct int64 parameter call",
-	) {
+	generated := output.String()
+	for _, expected := range []string{
+		"var aotIntParamFn",
+		"// direct int parameter call",
+		"return lang.BoxInt(",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("exact Go int specialization omitted %q:\n%s",
+				expected, generated)
+		}
+	}
+	if strings.Contains(generated, "// direct int64 parameter call") {
 		t.Fatalf("Go int count result was passed to an int64 entry point:\n%s",
+			generated)
+	}
+
+	var fallback bytes.Buffer
+	if err := newGenerator(&fallback, false).Generate(ns); err != nil {
+		t.Fatalf("generate exact int call without direct linking: %v", err)
+	}
+	if strings.Contains(fallback.String(), "aotIntParamFn") {
+		t.Fatalf("disabled direct linking retained exact int specialization:\n%s",
+			fallback.String())
+	}
+}
+
+func TestStableGoIntLoopIsNotCoercedToInt64(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.stable-go-int-loop"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn loop-count []
+		  (loop [value (count [1])]
+		    (if (zero? value)
+		      value
+		      (recur (count [])))))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate stable Go int loop: %v", err)
+	}
+	generated := output.String()
+	if regexp.MustCompile(`var v[0-9]+ int64 =`).MatchString(generated) {
+		t.Fatalf("stable Go int loop was coerced to int64:\n%s", generated)
+	}
+	if !regexp.MustCompile(`var v[0-9]+ any =`).MatchString(generated) {
+		t.Fatalf("stable Go int loop did not preserve its dynamic representation:\n%s",
 			generated)
 	}
 }

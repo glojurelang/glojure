@@ -147,6 +147,13 @@ func (g *Generator) generateInt64SpecializedFixedFn(
 	g.writef("return %s, true\n", result)
 	g.writef("}\n")
 	g.writef("%s = %s\n", target.int64FnVar, helper)
+	if target.intParamAnalysis != nil {
+		g.generateExactIntegerParameterHelper(
+			method,
+			target.intParamAnalysis,
+			target.intParamFnVar,
+		)
+	}
 
 	arity := method.FixedArity
 	signature := ""
@@ -174,6 +181,13 @@ func (g *Generator) generateInt64SpecializedFixedFn(
 	g.writef("}\n")
 	if arity > 0 {
 		g.writef("}\n")
+	}
+	if target.intParamAnalysis != nil {
+		g.generateExactIntegerParameterGuard(
+			target.intParamAnalysis,
+			target.intParamFnVar,
+			paramNames,
+		)
 	}
 
 	g.generateFnMethodFixed(method, paramNames)

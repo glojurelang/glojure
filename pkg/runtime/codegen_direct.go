@@ -68,6 +68,7 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			directFnVar:      fmt.Sprintf("aotDirectFn%d", index),
 			int64FnVar:       fmt.Sprintf("aotInt64Fn%d", index),
 			int64ParamFnVar:  fmt.Sprintf("aotInt64ParamFn%d", index),
+			intParamFnVar:    fmt.Sprintf("aotIntParamFn%d", index),
 			float64FnVar:     fmt.Sprintf("aotFloat64Fn%d", index),
 			vectorFnVar:      fmt.Sprintf("aotVectorFn%d", index),
 			ownedVectorFnVar: fmt.Sprintf("aotOwnedVectorFn%d", index),
@@ -234,7 +235,7 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			break
 		}
 	}
-	g.prepareInt64ParameterSpecializations()
+	g.prepareIntegerParameterSpecializations()
 	for _, named := range vars {
 		target := g.aotCallTargets[named.vr]
 		if target == nil {
@@ -258,8 +259,22 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 				"var %s func(%s) any\n",
 				target.int64ParamFnVar,
 				strings.Join(
-					int64ParamAOTTypes(
-						target.int64ParamAnalysis.paramMask,
+					exactIntegerParamAOTTypes(
+						target.int64ParamAnalysis,
+						target.arity,
+					),
+					", ",
+				),
+			)
+		}
+		if target.intParamAnalysis != nil {
+			fmt.Fprintf(
+				&g.aotDeclarations,
+				"var %s func(%s) any\n",
+				target.intParamFnVar,
+				strings.Join(
+					exactIntegerParamAOTTypes(
+						target.intParamAnalysis,
 						target.arity,
 					),
 					", ",

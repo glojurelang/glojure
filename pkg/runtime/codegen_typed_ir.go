@@ -255,8 +255,8 @@ func (g *Generator) irHasStringRepresentation(node *ast.Node) bool {
 		return ok
 	case ast.OpLocal:
 		name := node.Sub.(*ast.LocalNode).Name
-		return name != nil &&
-			g.getLocalType(name.Name()) == compiler.IRString
+		return name != nil && g.getLocalIRType(name.Name()).GoType ==
+			reflect.TypeFor[string]()
 	case ast.OpInvoke:
 		if !g.directLink {
 			return false
@@ -285,7 +285,8 @@ func (g *Generator) irHasInt64Representation(node *ast.Node) bool {
 		return ok
 	case ast.OpLocal:
 		name := node.Sub.(*ast.LocalNode).Name
-		return name != nil && g.getLocalType(name.Name()) == compiler.IRInt
+		return name != nil && g.getLocalIRType(name.Name()).GoType ==
+			reflect.TypeFor[int64]()
 	case ast.OpDo:
 		if g.currentIR == nil ||
 			g.currentIR.Facts(node).Type.Kind != compiler.IRInt {
@@ -371,6 +372,10 @@ func (g *Generator) irHasIntRepresentation(node *ast.Node) bool {
 	case ast.OpConst:
 		_, ok := node.Sub.(*ast.ConstNode).Value.(int)
 		return ok
+	case ast.OpLocal:
+		name := node.Sub.(*ast.LocalNode).Name
+		return name != nil && g.getLocalIRType(name.Name()).GoType ==
+			reflect.TypeFor[int]()
 	case ast.OpDo:
 		return g.irHasIntRepresentation(node.Sub.(*ast.DoNode).Ret)
 	case ast.OpLet, ast.OpLoop:
@@ -437,7 +442,8 @@ func (g *Generator) irHasFloat64Representation(node *ast.Node) bool {
 		return ok
 	case ast.OpLocal:
 		name := node.Sub.(*ast.LocalNode).Name
-		return name != nil && g.getLocalType(name.Name()) == compiler.IRFloat
+		return name != nil && g.getLocalIRType(name.Name()).GoType ==
+			reflect.TypeFor[float64]()
 	case ast.OpHostCall:
 		call := node.Sub.(*ast.HostCallNode)
 		if call.Target == nil || call.Target.Op != ast.OpConst ||
