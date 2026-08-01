@@ -5,6 +5,7 @@ package runtime
 import (
 	"fmt"
 	"math/bits"
+	"reflect"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
@@ -43,7 +44,8 @@ func (g *Generator) prepareInt64ParameterSpecializations() {
 			}
 			var mask uint32
 			for index, typ := range call.ArgumentTypes {
-				if typ.Kind == compiler.IRInt {
+				if typ.Kind == compiler.IRInt &&
+					typ.GoType == reflect.TypeOf(int64(0)) {
 					mask |= uint32(1) << index
 				}
 			}
@@ -93,11 +95,17 @@ func (g *Generator) aotSafeInt64CallSignatures() map[*lang.Var][]compiler.IRCall
 		}
 		params := make([]compiler.IRType, target.arity)
 		for i := range params {
-			params[i] = compiler.IRType{Kind: compiler.IRInt}
+			params[i] = compiler.IRType{
+				Kind:   compiler.IRInt,
+				GoType: reflect.TypeOf(int64(0)),
+			}
 		}
 		signatures[vr] = []compiler.IRCallSignature{{
 			Params: params,
-			Result: compiler.IRType{Kind: compiler.IRInt},
+			Result: compiler.IRType{
+				Kind:   compiler.IRInt,
+				GoType: reflect.TypeOf(int64(0)),
+			},
 		}}
 	}
 	return signatures
@@ -148,7 +156,8 @@ func (g *Generator) analyzeInt64ParameterRegion(
 			}
 			name := parameter.Sub.(*ast.BindingNode).Name
 			parameterTypes[name] = compiler.IRType{
-				Kind: compiler.IRInt,
+				Kind:   compiler.IRInt,
+				GoType: reflect.TypeOf(int64(0)),
 			}
 		}
 		optimized := compiler.BuildTypedIRWithOptions(
@@ -277,7 +286,9 @@ func (g *Generator) generateAOTInt64ParameterInvoke(
 	mask := target.int64ParamAnalysis.paramMask
 	for index, argument := range invoke.Args {
 		if mask&(uint32(1)<<index) != 0 &&
-			g.currentIR.Facts(argument).Type.Kind != compiler.IRInt {
+			(g.currentIR.Facts(argument).Type.Kind != compiler.IRInt ||
+				g.currentIR.Facts(argument).Type.GoType !=
+					reflect.TypeOf(int64(0))) {
 			return "", false
 		}
 	}
@@ -308,7 +319,8 @@ func (g *Generator) generateAOTSafeInt64Invoke(
 	}
 	facts := g.currentIR.Facts(node)
 	if facts.Signature == nil || facts.Call.Var == nil ||
-		facts.Signature.Result.Kind != compiler.IRInt {
+		facts.Signature.Result.Kind != compiler.IRInt ||
+		facts.Signature.Result.GoType != reflect.TypeOf(int64(0)) {
 		return "", false
 	}
 	target := g.aotCallTargets[facts.Call.Var]
@@ -328,7 +340,8 @@ func (g *Generator) generateAOTSafeInt64Invoke(
 		len(method.Params),
 	)
 	for i, argument := range invoke.Args {
-		if facts.Signature.Params[i].Kind != compiler.IRInt {
+		if facts.Signature.Params[i].Kind != compiler.IRInt ||
+			facts.Signature.Params[i].GoType != reflect.TypeOf(int64(0)) {
 			return "", false
 		}
 		code := g.generateASTNode(argument)

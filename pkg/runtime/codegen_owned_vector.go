@@ -16,24 +16,27 @@ import (
 // copies the required vector shape, while direct-linked helpers carry that
 // private representation through calls and collection callbacks.
 type ownedVectorAOTAnalysis struct {
-	target      *aotSpecializationTarget
-	paramDepths []int
-	result      ownedVectorAOTValue
-	values      map[*ast.Node]ownedVectorAOTValue
-	nths        map[*ast.Node]int
-	assocs      map[*ast.Node]bool
-	assocIns    map[*ast.Node]ownedVectorAOTAssocIn
-	calls       map[*ast.Node]*aotSpecializationTarget
-	reduces     map[*ast.Node]*ownedVectorAOTReduce
-	mapvs       map[*ast.Node]*ownedVectorAOTMapv
-	mutated     uint32
+	target        *aotSpecializationTarget
+	paramDepths   []int
+	indexedParams uint32
+	result        ownedVectorAOTValue
+	values        map[*ast.Node]ownedVectorAOTValue
+	nths          map[*ast.Node]int
+	assocs        map[*ast.Node]bool
+	assocIns      map[*ast.Node]ownedVectorAOTAssocIn
+	calls         map[*ast.Node]*aotSpecializationTarget
+	reduces       map[*ast.Node]*ownedVectorAOTReduce
+	mapvs         map[*ast.Node]*ownedVectorAOTMapv
+	mutated       uint32
 }
 
 type ownedVectorAOTValue struct {
-	depth     int
-	origins   uint32
-	control   bool
-	forbidden bool
+	depth         int
+	origins       uint32
+	parameters    uint32
+	linearIndexed bool
+	control       bool
+	forbidden     bool
 }
 
 type ownedVectorAOTAssocIn struct {
@@ -110,7 +113,10 @@ func analyzeOwnedVectorAOTFunction(
 		locals := make(map[*lang.Symbol]ownedVectorAOTValue, method.FixedArity)
 		for index, param := range method.Params {
 			depth := paramDepths[index]
-			paramValue := ownedVectorAOTValue{depth: depth}
+			paramValue := ownedVectorAOTValue{
+				depth:      depth,
+				parameters: uint32(1) << index,
+			}
 			if depth > 0 {
 				paramValue.origins = uint32(1) << index
 			}
@@ -217,7 +223,16 @@ func (a *ownedVectorAOTAnalyzer) expr(
 	}
 	var result ownedVectorAOTValue
 	switch node.Op {
-	case ast.OpConst, ast.OpVar:
+	case ast.OpConst:
+		_, result.linearIndexed = AsLinearIndexed(
+			node.Sub.(*ast.ConstNode).Value,
+		)
+
+	case ast.OpVar:
+		vr := node.Sub.(*ast.VarNode).Var
+		if aotVarCanDirectLink(vr) {
+			_, result.linearIndexed = AsLinearIndexed(codegenVarValue(vr))
+		}
 
 	case ast.OpLocal:
 		result = locals[node.Sub.(*ast.LocalNode).Name]
@@ -381,6 +396,10 @@ func (a *ownedVectorAOTAnalyzer) invoke(
 		}
 		if expected > 0 {
 			origins |= value.origins
+		} else if target.ownedVectorAnalysis.indexedParams&
+			(uint32(1)<<index) != 0 && !a.requireIndexed(value) {
+			a.valid = false
+			return ownedVectorAOTValue{}
 		}
 	}
 	a.analysis.calls[node] = target
@@ -454,7 +473,8 @@ func (a *ownedVectorAOTAnalyzer) reduce(
 	}
 	initial := a.expr(invoke.Args[1], locals)
 	source := a.expr(invoke.Args[2], locals)
-	if initial.depth == 0 || source.depth > 0 {
+	if initial.depth == 0 || source.depth > 0 ||
+		!a.requireIndexed(source) {
 		return ownedVectorAOTValue{}, false
 	}
 
@@ -474,6 +494,20 @@ func (a *ownedVectorAOTAnalyzer) reduce(
 func ownedVectorAOTRepeatable(node *ast.Node) bool {
 	return node != nil &&
 		(node.Op == ast.OpConst || node.Op == ast.OpLocal || node.Op == ast.OpVar)
+}
+
+func (a *ownedVectorAOTAnalyzer) requireIndexed(
+	value ownedVectorAOTValue,
+) bool {
+	if value.linearIndexed {
+		return true
+	}
+	parameters := value.parameters
+	if value.depth > 0 || parameters == 0 || parameters&(parameters-1) != 0 {
+		return false
+	}
+	a.analysis.indexedParams |= parameters
+	return true
 }
 
 func (a *ownedVectorAOTAnalyzer) mapv(
@@ -550,7 +584,10 @@ func (a *ownedVectorAOTAnalyzer) combine(
 		}
 		return left
 	}
-	return ownedVectorAOTValue{}
+	return ownedVectorAOTValue{
+		parameters:    left.parameters & right.parameters,
+		linearIndexed: left.linearIndexed && right.linearIndexed,
+	}
 }
 
 func sameOwnedVectorAOTValue(
@@ -592,6 +629,8 @@ func ownedVectorAOTParamTypes(
 	for index, depth := range analysis.paramDepths {
 		if depth > 0 {
 			params[index] = "*runtime.OwnedVector"
+		} else if analysis.indexedParams&(uint32(1)<<index) != 0 {
+			params[index] = "lang.Indexed"
 		} else {
 			params[index] = "any"
 		}
@@ -644,13 +683,19 @@ func (g *Generator) generateOwnedVectorSpecializedFixedFn(
 	fastArgs := append([]string(nil), paramNames...)
 	var guards []string
 	for index, depth := range analysis.paramDepths {
-		if depth == 0 {
+		if depth == 0 &&
+			analysis.indexedParams&(uint32(1)<<index) == 0 {
 			continue
 		}
 		value := g.allocateTempVar()
 		ok := g.allocateTempVar()
-		g.writef("%s, %s := runtime.NewOwnedVector(%s, %d)\n",
-			value, ok, paramNames[index], depth)
+		if depth > 0 {
+			g.writef("%s, %s := runtime.NewOwnedVector(%s, %d)\n",
+				value, ok, paramNames[index], depth)
+		} else {
+			g.writef("%s, %s := runtime.AsLinearIndexed(%s)\n",
+				value, ok, paramNames[index])
+		}
 		fastArgs[index] = value
 		guards = append(guards, ok)
 	}
@@ -697,6 +742,10 @@ func (g *Generator) generateOwnedVectorAOTInvoke(
 		args := make([]string, len(invoke.Args))
 		for index, argument := range invoke.Args {
 			args[index] = g.generateASTNode(argument)
+			if target.ownedVectorAnalysis.indexedParams&
+				(uint32(1)<<index) != 0 {
+				args[index] = "runtime.MustLinearIndexed(" + args[index] + ")"
+			}
 		}
 		result := g.allocateTempVar()
 		ok := g.allocateTempVar()
@@ -828,11 +877,7 @@ func (g *Generator) generateOwnedVectorAOTReduce(
 	initial := g.generateASTNode(invoke.Args[1])
 	source := g.generateASTNode(invoke.Args[2])
 	indexed := g.allocateTempVar()
-	ok := g.allocateTempVar()
-	g.writef("%s, %s := any(%s).(lang.Indexed)\n", indexed, ok, source)
-	g.writef("if !%s {\n", ok)
-	g.generateOwnedVectorFallbackReturn()
-	g.writef("}\n")
+	g.writef("%s := runtime.MustLinearIndexed(%s)\n", indexed, source)
 
 	accumulator := g.allocateTempVar()
 	index := g.allocateTempVar()

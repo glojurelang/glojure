@@ -73,23 +73,25 @@ type IRType struct {
 
 // Accepts reports whether actual satisfies an expected representation fact.
 // A fully dynamic expectation is a wildcard. An expected concrete Go type is
-// exact; when the language kind has one canonical Go representation, that
-// representation can be recovered even if analysis did not attach GoType.
+// exact and must have been established explicitly on the actual value.
 func (expected IRType) Accepts(actual IRType) bool {
 	if expected.Kind == IRDynamic && expected.GoType == nil {
 		return true
 	}
-	if expected.Kind != actual.Kind {
+	if actual.Nullable && !expected.Nullable && expected.Kind != IRNil {
 		return false
 	}
-	if expected.GoType == nil {
-		return true
+	if expected.GoType != nil {
+		// A semantic numeric kind is not a concrete Go representation. For
+		// example, count returns int while arithmetic normally returns int64.
+		// Exact consumers therefore require an explicitly proved GoType rather
+		// than filling in a convenient canonical representation.
+		if expected.Kind != IRDynamic && expected.Kind != actual.Kind {
+			return false
+		}
+		return expected.GoType == actual.GoType
 	}
-	actualType := actual.GoType
-	if actualType == nil {
-		actualType = canonicalIRGoType(actual.Kind)
-	}
-	return expected.GoType == actualType
+	return expected.Kind == actual.Kind
 }
 
 func canonicalIRGoType(kind IRValueKind) reflect.Type {
@@ -1046,20 +1048,29 @@ func InferNumericHostCallType(
 		"add", "uncheckedadd", "minus", "unchecked_minus", "multiply",
 		"unchecked_multiply":
 		if hasFloat {
-			return IRType{Kind: IRFloat}, true
+			return IRType{
+				Kind:   IRFloat,
+				GoType: reflect.TypeOf(float64(0)),
+			}, true
 		}
-		return IRType{Kind: IRInt}, true
+		return IRType{Kind: IRInt, GoType: reflect.TypeOf(int64(0))}, true
 	case "divide":
 		if hasFloat {
-			return IRType{Kind: IRFloat}, true
+			return IRType{
+				Kind:   IRFloat,
+				GoType: reflect.TypeOf(float64(0)),
+			}, true
 		}
 	case "quotient", "remainder":
 		if allInt {
-			return IRType{Kind: IRInt}, true
+			return IRType{
+				Kind:   IRInt,
+				GoType: reflect.TypeOf(int64(0)),
+			}, true
 		}
 	case "lt", "lte", "gt", "gte", "iszero", "ispos", "isneg":
 		if allInt || hasFloat && !allInt {
-			return IRType{Kind: IRBool}, true
+			return IRType{Kind: IRBool, GoType: reflect.TypeOf(false)}, true
 		}
 	default:
 		return IRType{}, false
@@ -1203,7 +1214,10 @@ func (ir *TypedIR) inferInvoke(node *ast.Node, facts *IRFacts) {
 	if namespace == "clojure.string" {
 		switch name {
 		case "join", "replace":
-			facts.Type = IRType{Kind: IRString}
+			facts.Type = IRType{
+				Kind:   IRString,
+				GoType: reflect.TypeOf(""),
+			}
 		}
 		facts.Effects |= IREffectMayThrow
 		return
@@ -1215,17 +1229,17 @@ func (ir *TypedIR) inferInvoke(node *ast.Node, facts *IRFacts) {
 
 	switch name {
 	case "atom":
-		facts.Type = IRType{Kind: IRAtom}
+		facts.Type = IRType{Kind: IRAtom, GoType: reflect.TypeOf((*lang.Atom)(nil))}
 		facts.Effects |= IREffectAllocate
 	case "count":
-		facts.Type = IRType{Kind: IRInt}
+		facts.Type = IRType{Kind: IRInt, GoType: reflect.TypeOf(int(0))}
 	case "str":
-		facts.Type = IRType{Kind: IRString}
+		facts.Type = IRType{Kind: IRString, GoType: reflect.TypeOf("")}
 	case "subs":
-		facts.Type = IRType{Kind: IRString}
+		facts.Type = IRType{Kind: IRString, GoType: reflect.TypeOf("")}
 		facts.Effects |= IREffectMayThrow
 	case "=":
-		facts.Type = IRType{Kind: IRBool}
+		facts.Type = IRType{Kind: IRBool, GoType: reflect.TypeOf(false)}
 	case "deref":
 		facts.Effects |= IREffectReadMutable
 	case "reset!", "swap!":
@@ -1292,19 +1306,19 @@ func (ir *TypedIR) refineInvokeType(
 	switch call.Name {
 	case "long":
 		if len(invoke.Args) == 1 {
-			return IRType{Kind: IRInt}, true
+			return IRType{Kind: IRInt, GoType: reflect.TypeOf(int64(0))}, true
 		}
 	case "mod", "quot", "rem":
 		if len(invoke.Args) == 2 &&
 			ir.facts[invoke.Args[0]].Type.Kind == IRInt &&
 			ir.facts[invoke.Args[1]].Type.Kind == IRInt {
-			return IRType{Kind: IRInt}, true
+			return IRType{Kind: IRInt, GoType: reflect.TypeOf(int64(0))}, true
 		}
 	case "inc", "dec":
 		if len(invoke.Args) == 1 {
 			kind := ir.facts[invoke.Args[0]].Type.Kind
 			if kind == IRInt || kind == IRFloat {
-				return IRType{Kind: kind}, true
+				return IRType{Kind: kind, GoType: canonicalIRGoType(kind)}, true
 			}
 		}
 	}
@@ -1424,6 +1438,9 @@ func (ir *TypedIR) analyzeStringStack(
 ) bool {
 	bindingNode := binding.Sub.(*ast.BindingNode)
 	if !ir.irEmptyVectorAtom(bindingNode.Init) {
+		return false
+	}
+	if irNestedFunctionCapturesLocal(body, bindingNode.Name) {
 		return false
 	}
 
@@ -1643,26 +1660,55 @@ func irLocalIs(node *ast.Node, name *lang.Symbol) bool {
 		node.Sub.(*ast.LocalNode).Name == name
 }
 
+// irNestedFunctionCapturesLocal reports whether a local representation would
+// cross a synchronous ownership region through a closure or goroutine. Even a
+// read-only-looking use is unsafe: the closure may run after a later mutation
+// and observe a value that persistent semantics would have snapshotted.
+func irNestedFunctionCapturesLocal(
+	root *ast.Node,
+	target *lang.Symbol,
+) bool {
+	captured := false
+	var walk func(*ast.Node, bool)
+	walk = func(node *ast.Node, nested bool) {
+		if node == nil || captured {
+			return
+		}
+		if nested && irLocalIs(node, target) {
+			captured = true
+			return
+		}
+		nested = nested || node.Op == ast.OpFn ||
+			node.Op == ast.OpFnMethod || node.Op == ast.OpGo
+		for _, child := range irChildren(node) {
+			walk(child, nested)
+		}
+	}
+	walk(root, false)
+	return captured
+}
+
 func irConstType(value any) IRType {
+	typ := reflect.TypeOf(value)
 	switch value.(type) {
 	case nil:
 		return IRType{Kind: IRNil, Nullable: true}
 	case bool:
-		return IRType{Kind: IRBool}
+		return IRType{Kind: IRBool, GoType: typ}
 	case int, int8, int16, int32, int64,
 		uint, uint8, uint16, uint32, uint64:
-		return IRType{Kind: IRInt}
+		return IRType{Kind: IRInt, GoType: typ}
 	case float32, float64:
-		return IRType{Kind: IRFloat}
+		return IRType{Kind: IRFloat, GoType: typ}
 	case string:
-		return IRType{Kind: IRString}
+		return IRType{Kind: IRString, GoType: typ}
 	case lang.Keyword:
-		return IRType{Kind: IRKeyword}
+		return IRType{Kind: IRKeyword, GoType: typ}
 	default:
 		return IRType{
 			Kind:     IRDynamic,
 			Nullable: true,
-			GoType:   reflect.TypeOf(value),
+			GoType:   typ,
 		}
 	}
 }

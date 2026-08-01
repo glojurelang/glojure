@@ -145,6 +145,7 @@ type aotMultiFnCallTarget struct {
 	arity         int
 	dispatch      *Fn
 	dispatchPlan  *compiler.IRFixedDispatchResultPlan
+	dispatchMasks []uint8
 	methods       []*aotMultiFnMethod
 	defaultMethod *aotMultiFnMethod
 }
@@ -1932,12 +1933,15 @@ func (g *Generator) boxDynamicResult(node *ast.Node, expression string) string {
 	}
 	switch typ {
 	case reflect.TypeFor[int]():
-		return "lang.BoxInt(" + expression + ")"
+		if g.irHasIntRepresentation(node) {
+			return "lang.BoxInt(" + expression + ")"
+		}
 	case reflect.TypeFor[int64]():
-		return "lang.BoxInt64(" + expression + ")"
-	default:
-		return expression
+		if g.irHasInt64Representation(node) {
+			return "lang.BoxInt64(" + expression + ")"
+		}
 	}
+	return expression
 }
 
 ////////////////////////////////////////////////////////////////////////////////

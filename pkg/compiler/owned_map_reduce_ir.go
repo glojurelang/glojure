@@ -30,6 +30,9 @@ func (ir *TypedIR) analyzeOwnedMapReduce(
 		return nil
 	}
 	accumulator := method.Params[0].Sub.(*ast.BindingNode).Name
+	if irNestedFunctionCapturesLocal(method.Body, accumulator) {
+		return nil
+	}
 	usage := ownedMapReduceUsage{
 		accumulator: accumulator,
 		allowed:     make(map[*ast.Node]bool),
@@ -175,6 +178,15 @@ func (u *ownedMapReduceUsage) scanMutationChain(node *ast.Node) bool {
 	_, name, core := irCoreCall(invoke)
 	if !core || name != "update-in" || len(invoke.Args) < 3 ||
 		!u.scanMutationChain(invoke.Args[0]) {
+		return false
+	}
+	// update-in with an empty path invokes the callback on the accumulator
+	// itself. A dynamic path might be empty, which would expose the private
+	// mutable representation to arbitrary user code. Require a literal,
+	// proven-nonempty path before treating the operation as an owned mutation.
+	path := invoke.Args[1]
+	if path == nil || path.Op != ast.OpVector ||
+		len(path.Sub.(*ast.VectorNode).Items) == 0 {
 		return false
 	}
 	if u.containsAccumulator(invoke.Fn) {

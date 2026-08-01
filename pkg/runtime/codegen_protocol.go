@@ -124,16 +124,14 @@ func protocolDispatchIRType(dispatch any) (compiler.IRType, bool) {
 		return compiler.IRType{}, false
 	}
 	result := compiler.IRType{Kind: compiler.IRDynamic, GoType: typ}
-	switch typ.Kind() {
-	case reflect.Bool:
+	switch typ {
+	case reflect.TypeOf(false):
 		result.Kind = compiler.IRBool
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
-		reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16,
-		reflect.Uint32, reflect.Uint64:
+	case reflect.TypeOf(int64(0)):
 		result.Kind = compiler.IRInt
-	case reflect.Float32, reflect.Float64:
+	case reflect.TypeOf(float64(0)):
 		result.Kind = compiler.IRFloat
-	case reflect.String:
+	case reflect.TypeOf(""):
 		result.Kind = compiler.IRString
 	}
 	return result, true
@@ -302,13 +300,13 @@ func inferAOTProtocolPrimitiveSignatures(
 			}
 			return
 		}
-		for _, kind := range []compiler.IRValueKind{
-			compiler.IRDynamic,
-			compiler.IRBool,
-			compiler.IRInt,
-			compiler.IRFloat,
+		for _, typ := range []compiler.IRType{
+			{Kind: compiler.IRDynamic, Nullable: true},
+			{Kind: compiler.IRBool, GoType: reflect.TypeOf(false)},
+			{Kind: compiler.IRInt, GoType: reflect.TypeOf(int64(0))},
+			{Kind: compiler.IRFloat, GoType: reflect.TypeOf(float64(0))},
 		} {
-			params[index] = compiler.IRType{Kind: kind}
+			params[index] = typ
 			visit(index + 1)
 		}
 	}
@@ -352,8 +350,22 @@ func analyzeAOTProtocolPrimitiveMethod(
 	}
 	return compiler.IRCallSignature{
 		Params: append([]compiler.IRType(nil), params...),
-		Result: compiler.IRType{Kind: primitiveCompilerIRType(result)},
+		Result: protocolPrimitiveIRType(result),
 	}, true
+}
+
+func protocolPrimitiveIRType(typ aotPrimitiveType) compiler.IRType {
+	kind := primitiveCompilerIRType(typ)
+	result := compiler.IRType{Kind: kind}
+	switch kind {
+	case compiler.IRBool:
+		result.GoType = reflect.TypeOf(false)
+	case compiler.IRInt:
+		result.GoType = reflect.TypeOf(int64(0))
+	case compiler.IRFloat:
+		result.GoType = reflect.TypeOf(float64(0))
+	}
+	return result
 }
 
 func compilerIRPrimitiveType(kind compiler.IRValueKind) aotPrimitiveType {

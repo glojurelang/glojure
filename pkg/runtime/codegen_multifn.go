@@ -51,6 +51,13 @@ func (g *Generator) prepareAOTMultiFnTargets(vars []namedVar) {
 		if len(methods) == 0 || defaultMethod == nil {
 			continue
 		}
+		dispatchMasks, ok := aotMultiFnDispatchMasks(
+			methods,
+			len(dispatchPlan.Components),
+		)
+		if !ok {
+			continue
+		}
 
 		index := len(g.aotMultiFnCallTargets)
 		target := &aotMultiFnCallTarget{
@@ -64,6 +71,7 @@ func (g *Generator) prepareAOTMultiFnTargets(vars []namedVar) {
 			arity:         arity,
 			dispatch:      dispatch,
 			dispatchPlan:  dispatchPlan,
+			dispatchMasks: dispatchMasks,
 			methods:       methods,
 			defaultMethod: defaultMethod,
 		}
@@ -103,7 +111,7 @@ func (g *Generator) prepareAOTMultiFnTargets(vars []namedVar) {
 		)
 		fmt.Fprintf(
 			&g.aotDeclarations,
-			"var %s func(%s) (any, bool)\n",
+			"var %s func(%s) (any, any, bool)\n",
 			target.fastFnVar,
 			strings.Join(aotRepeatedType("any", arity), ", "),
 		)
@@ -118,6 +126,49 @@ func (g *Generator) prepareAOTMultiFnTargets(vars []namedVar) {
 				arity,
 			)
 		}
+	}
+}
+
+func aotMultiFnDispatchMasks(
+	methods []*aotMultiFnMethod,
+	componentCount int,
+) ([]uint8, bool) {
+	masks := make([]uint8, componentCount)
+	for _, method := range methods {
+		if len(method.components) != componentCount {
+			return nil, false
+		}
+		for index, component := range method.components {
+			mask, ok := aotMultiFnDispatchMask(component)
+			if !ok {
+				return nil, false
+			}
+			masks[index] |= mask
+		}
+	}
+	for _, mask := range masks {
+		if mask == 0 {
+			return nil, false
+		}
+	}
+	return masks, true
+}
+
+func aotMultiFnDispatchMask(value any) (uint8, bool) {
+	switch value.(type) {
+	case nil:
+		return ExactDispatchNil, true
+	case lang.Keyword:
+		return ExactDispatchKeyword, true
+	case bool:
+		return ExactDispatchBool, true
+	case string:
+		return ExactDispatchString, true
+	case int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64:
+		return ExactDispatchInteger, true
+	default:
+		return 0, false
 	}
 }
 
@@ -239,12 +290,9 @@ func (g *Generator) generateAOTMultiFnFastPath(
 	g.popVarScope()
 	g.writef("}\n")
 
-	g.writef("%s = func(%s) (any, bool) {\n",
+	g.writef("%s = func(%s) (any, any, bool) {\n",
 		target.fastFnVar,
 		strings.Join(signature, ", "),
-	)
-	g.writef("if !%s { return nil, false }\n",
-		target.exactVar,
 	)
 	componentNames := make([]string, len(components))
 	for index := range componentNames {
@@ -255,12 +303,30 @@ func (g *Generator) generateAOTMultiFnFastPath(
 		target.dispatchVar,
 		strings.Join(params, ", "),
 	)
+	dispatchValue := componentNames[0]
+	if target.dispatchPlan.Kind == compiler.IRDispatchVector {
+		dispatchValue = "lang.NewVector(" +
+			strings.Join(componentNames, ", ") + ")"
+	}
 	// Dispatch functions are arbitrary user code and may alter the method
-	// table, preferences, or hierarchy themselves.
-	g.writef("if !%s.IsGeneration(%s) { return nil, false }\n",
+	// table, preferences, or hierarchy themselves. Reconstruct a decomposed
+	// vector only on fallback; the fast path must not allocate it.
+	g.writef("if !%s || !%s.IsGeneration(%s) { "+
+		"return nil, %s, false }\n",
+		target.exactVar,
 		target.multiFnVar,
 		target.generationVar,
+		dispatchValue,
 	)
+	for index, component := range componentNames {
+		g.writef(
+			"if !runtime.ExactDispatchValueSafe(%s, %d) { "+
+				"return nil, %s, false }\n",
+			component,
+			target.dispatchMasks[index],
+			dispatchValue,
+		)
+	}
 	for _, method := range target.methods {
 		conditions := make([]string, len(componentNames))
 		for index, component := range method.components {
@@ -269,13 +335,13 @@ func (g *Generator) generateAOTMultiFnFastPath(
 				component,
 			)
 		}
-		g.writef("if %s { return %s(%s), true }\n",
+		g.writef("if %s { return %s(%s), nil, true }\n",
 			strings.Join(conditions, " && "),
 			method.helperVar,
 			strings.Join(params, ", "),
 		)
 	}
-	g.writef("return %s(%s), true\n",
+	g.writef("return %s(%s), nil, true\n",
 		target.defaultMethod.helperVar,
 		strings.Join(params, ", "),
 	)
@@ -331,20 +397,26 @@ func (g *Generator) generateAOTMultiFnInvoke(
 		args[index] = g.generateASTNode(argument)
 	}
 	result := g.allocateTempVar()
+	dispatchValue := g.allocateTempVar()
 	ok := g.allocateTempVar()
 	g.writef("// exact multimethod dispatch %s\n", target.vr)
-	g.writef("%s, %s := %s(%s)\n",
+	g.writef("%s, %s, %s := %s(%s)\n",
 		result,
+		dispatchValue,
 		ok,
 		target.fastFnVar,
 		strings.Join(args, ", "),
 	)
-	g.writef("if !%s { %s = %s.Invoke%d(%s) }\n",
+	fallbackArgs := target.multiFnVar + ".MethodForDispatch(" +
+		dispatchValue + ")"
+	if len(args) != 0 {
+		fallbackArgs += ", " + strings.Join(args, ", ")
+	}
+	g.writef("if !%s { %s = lang.Apply%d(%s) }\n",
 		ok,
 		result,
-		target.multiFnVar,
 		target.arity,
-		strings.Join(args, ", "),
+		fallbackArgs,
 	)
 	return result, true
 }

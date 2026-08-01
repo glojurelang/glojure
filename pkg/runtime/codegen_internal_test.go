@@ -1732,6 +1732,33 @@ func TestGenerateTypedInt64ParameterDirectCallWithDynamicResult(t *testing.T) {
 	}
 }
 
+func TestInt64ParameterCallRequiresExactRepresentation(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.exact-int64-parameter-call"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn add-one [value]
+		  (inc value))
+		(defn from-count []
+		  (add-one (count [1 2 3])))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate exact int64 parameter call: %v", err)
+	}
+	if generated := output.String(); strings.Contains(
+		generated,
+		"// direct int64 parameter call",
+	) {
+		t.Fatalf("Go int count result was passed to an int64 entry point:\n%s",
+			generated)
+	}
+}
+
 func TestGenerateStableCompositeMultiFnDispatch(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(
 		lang.NewSymbol("codegen.stable-composite-multifn"),
@@ -1761,6 +1788,8 @@ func TestGenerateStableCompositeMultiFnDispatch(t *testing.T) {
 		"var aotMultiFnFast",
 		"var aotMultiFnDispatch",
 		".IsGeneration(",
+		"runtime.ExactDispatchValueSafe(",
+		".MethodForDispatch(",
 		"// exact multimethod dispatch",
 	} {
 		if !strings.Contains(generated, expected) {
@@ -2829,7 +2858,7 @@ func TestGenerateInlineIndexedCollectionCallbacks(t *testing.T) {
 	}
 	generated := output.String()
 	for _, expected := range []string{
-		".(lang.Indexed)",
+		"runtime.AsLinearIndexed(",
 		".Nth(",
 		"lang.IsReduced(",
 		".AsTransient().(*lang.TransientVector)",
@@ -2914,7 +2943,7 @@ func TestGenerateOwnedNestedVectorUpdateRegion(t *testing.T) {
 		".AssocIn2Copy(",
 		".AssocCopy(",
 		".Assoc(",
-		".(lang.Indexed)",
+		"runtime.AsLinearIndexed(",
 	} {
 		if !strings.Contains(generated, expected) {
 			t.Fatalf("owned vector region omitted %q:\n%s",

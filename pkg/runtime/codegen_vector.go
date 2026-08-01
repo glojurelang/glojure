@@ -4,6 +4,7 @@ package runtime
 
 import (
 	"math/bits"
+	"reflect"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
@@ -63,8 +64,8 @@ func analyzeVectorAOTFunction(
 	var best *vectorAOTAnalysis
 	candidates := []compiler.IRType{
 		{Kind: compiler.IRDynamic, Nullable: true},
-		{Kind: compiler.IRBool},
-		{Kind: compiler.IRInt},
+		{Kind: compiler.IRBool, GoType: reflect.TypeOf(false)},
+		{Kind: compiler.IRInt, GoType: reflect.TypeOf(int64(0))},
 		{Kind: compiler.IRVector},
 	}
 	combinations := 1
@@ -238,7 +239,7 @@ func (a *vectorAOTAnalyzer) expr(
 			if key.transient || value.transient ||
 				target.transient &&
 					(key.typ.Kind != compiler.IRInt ||
-						value.typ.Kind != compiler.IRInt) {
+						value.typ.GoType != reflect.TypeOf(int64(0))) {
 				a.valid = false
 			}
 		}
@@ -265,19 +266,33 @@ func (a *vectorAOTAnalyzer) expr(
 					break
 				}
 				a.analysis.nths[node] = true
-				result.typ = compiler.IRType{Kind: compiler.IRInt}
+				result.typ = compiler.IRType{
+					Kind:   compiler.IRInt,
+					GoType: reflect.TypeOf(int64(0)),
+				}
 			} else {
 				a.valid = false
 			}
 		} else if isVectorAOTNumbersCall(call) {
 			types := make([]compiler.IRType, len(values))
+			representable := true
 			for index, value := range values {
 				types[index] = value.typ
+				switch value.typ.Kind {
+				case compiler.IRInt:
+					representable = representable &&
+						value.typ.GoType == reflect.TypeOf(int64(0))
+				case compiler.IRFloat:
+					representable = representable &&
+						value.typ.GoType == reflect.TypeOf(float64(0))
+				default:
+					representable = false
+				}
 			}
 			if inferred, ok := compiler.InferNumericHostCallType(
 				call,
 				types,
-			); ok {
+			); ok && representable {
 				a.analysis.numbers[node] = true
 				result.typ = inferred
 			}
@@ -364,9 +379,6 @@ func (a *vectorAOTAnalyzer) combine(
 	if left.typ == right.typ {
 		return vectorAOTValue{typ: left.typ}
 	}
-	if left.typ.Kind == right.typ.Kind {
-		return vectorAOTValue{typ: compiler.IRType{Kind: left.typ.Kind}}
-	}
 	return vectorAOTValue{
 		typ: compiler.IRType{Kind: compiler.IRDynamic, Nullable: true},
 	}
@@ -452,12 +464,12 @@ func vectorAOTGoType(value vectorAOTValue) string {
 }
 
 func vectorAOTIRGoType(typ compiler.IRType) string {
-	switch typ.Kind {
-	case compiler.IRBool:
+	switch {
+	case typ.Kind == compiler.IRBool && typ.GoType == reflect.TypeOf(false):
 		return "bool"
-	case compiler.IRInt:
+	case typ.Kind == compiler.IRInt && typ.GoType == reflect.TypeOf(int64(0)):
 		return "int64"
-	case compiler.IRFloat:
+	case typ.Kind == compiler.IRFloat && typ.GoType == reflect.TypeOf(float64(0)):
 		return "float64"
 	default:
 		return "any"

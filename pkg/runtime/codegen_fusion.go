@@ -49,7 +49,7 @@ func (g *Generator) generateAOTInlineIndexedPipeline(
 	indexed := g.allocateTempVar()
 	ok := g.allocateTempVar()
 	g.writef("var %s any\n", result)
-	g.writef("%s, %s := any(%s).(lang.Indexed)\n",
+	g.writef("%s, %s := runtime.AsLinearIndexed(%s)\n",
 		indexed, ok, source)
 	g.writef("if %s {\n", ok)
 	switch plan.Consumer {

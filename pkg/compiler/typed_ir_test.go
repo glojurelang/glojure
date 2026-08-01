@@ -24,6 +24,36 @@ func TestTypedIRRecordsResolvedCallRepresentation(t *testing.T) {
 	}
 }
 
+func TestIRTypeAcceptsRequiresAnActuallyProvedRepresentation(t *testing.T) {
+	int64Type := IRType{Kind: IRInt, GoType: reflect.TypeFor[int64]()}
+	if int64Type.Accepts(IRType{Kind: IRInt}) {
+		t.Fatal("an unknown integer representation satisfied exact int64")
+	}
+	if int64Type.Accepts(IRType{
+		Kind:   IRInt,
+		GoType: reflect.TypeFor[int](),
+	}) {
+		t.Fatal("Go int satisfied exact int64")
+	}
+	if int64Type.Accepts(IRType{
+		Kind:   IRFloat,
+		GoType: reflect.TypeFor[int64](),
+	}) {
+		t.Fatal("inconsistent semantic and representation facts were accepted")
+	}
+	if !int64Type.Accepts(IRType{
+		Kind:   IRInt,
+		GoType: reflect.TypeFor[int64](),
+	}) {
+		t.Fatal("proved int64 did not satisfy exact int64")
+	}
+
+	count := typedIRInvoke(typedIRCoreVar("count"), typedIRConst("abc"))
+	if got := BuildTypedIR(count).Facts(count).Type.GoType; got != reflect.TypeFor[int]() {
+		t.Fatalf("count representation = %v, want Go int", got)
+	}
+}
+
 func TestTypedIRFindsFixedGetInAndKeywordMapShapes(t *testing.T) {
 	getIn := typedIRCoreVar("get-in")
 	target := typedIRConst(nil)
@@ -506,6 +536,28 @@ func TestTypedIRProvesGeneralLoopCarriedMapOwnership(t *testing.T) {
 	if ir.Facts(get).OwnedMapGet {
 		t.Fatal("failed owned-map analysis left a lookup fact behind")
 	}
+
+	// A closure can outlive an iteration, so even a lookup-only capture would
+	// observe later transient mutations instead of its persistent snapshot.
+	elseLet.Body = recur
+	body.Sub.(*ast.IfNode).Test = &ast.Node{
+		Op: ast.OpFn,
+		Sub: &ast.FnNode{Methods: []*ast.Node{{
+			Op: ast.OpFnMethod,
+			Sub: &ast.FnMethodNode{
+				FixedArity: 0,
+				Body: typedIRInvoke(
+					typedIRCoreVar("get"),
+					typedIRLocal(counts),
+					typedIRConst("key"),
+				),
+			},
+		}}},
+	}
+	ir = BuildTypedIR(loop)
+	if facts := ir.BindingFacts(mapBinding); facts.OwnedMap {
+		t.Fatalf("closure-captured map was marked owned: %#v", facts)
+	}
 }
 
 func TestTypedIRProvesOwnedLoopStringParts(t *testing.T) {
@@ -590,6 +642,21 @@ func TestTypedIRProvesOwnedLoopStringParts(t *testing.T) {
 	if ir.Facts(appendPart).StringPartsAppend != nil ||
 		ir.Facts(finish).StringPartsFinish != nil {
 		t.Fatal("failed string-parts analysis left operation facts behind")
+	}
+
+	body.Sub.(*ast.IfNode).Test = &ast.Node{
+		Op: ast.OpFn,
+		Sub: &ast.FnNode{Methods: []*ast.Node{{
+			Op: ast.OpFnMethod,
+			Sub: &ast.FnMethodNode{
+				FixedArity: 0,
+				Body:       finish,
+			},
+		}}},
+	}
+	ir = BuildTypedIR(loop)
+	if facts := ir.BindingFacts(partsBinding); facts.OwnedStringParts {
+		t.Fatalf("closure-captured parts were marked owned: %#v", facts)
 	}
 }
 
@@ -703,6 +770,30 @@ func TestTypedIRProvesOwnedMapReduceUpdateChain(t *testing.T) {
 	})
 	if plan := ir.Facts(reduce).OwnedMapReduce; plan != nil {
 		t.Fatalf("potentially aliased map initializer was marked owned: %#v", plan)
+	}
+
+	// Empty or dynamic update-in paths can pass the accumulator itself to the
+	// callback, exposing the private mutable representation.
+	reduce.Sub.(*ast.InvokeNode).Args[1] = &ast.Node{
+		Op:  ast.OpMap,
+		Sub: &ast.MapNode{},
+	}
+	method.Body = typedIRInvoke(
+		typedIRCoreVar("update-in"),
+		typedIRLocal(totals),
+		&ast.Node{Op: ast.OpVector, Sub: &ast.VectorNode{}},
+		typedIRVar(typedIRCoreVar("identity")),
+	)
+	ir = BuildTypedIR(reduce)
+	if plan := ir.Facts(reduce).OwnedMapReduce; plan != nil {
+		t.Fatalf("empty update-in path was marked owned: %#v", plan)
+	}
+	method.Body.Sub.(*ast.InvokeNode).Args[1] = typedIRLocal(
+		lang.NewSymbol("dynamic-path"),
+	)
+	ir = BuildTypedIR(reduce)
+	if plan := ir.Facts(reduce).OwnedMapReduce; plan != nil {
+		t.Fatalf("dynamic update-in path was marked owned: %#v", plan)
 	}
 }
 

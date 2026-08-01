@@ -420,6 +420,13 @@ func (m *MultiFn) getFn(dispatchVal any) IFn {
 	return targetFn
 }
 
+// MethodForDispatch performs ordinary multimethod selection for an already
+// evaluated dispatch value. A compiled speculative dispatcher uses this to
+// fall back without executing an effectful dispatch function a second time.
+func (m *MultiFn) MethodForDispatch(dispatchVal any) IFn {
+	return m.getFn(dispatchVal)
+}
+
 func (m *MultiFn) findAndCacheBestMethod(dispatchVal any) IFn {
 	m.mtx.RLock()
 	mt := m.methodTable

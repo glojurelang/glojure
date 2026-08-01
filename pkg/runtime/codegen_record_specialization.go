@@ -4,6 +4,7 @@ package runtime
 
 import (
 	"fmt"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -389,9 +390,15 @@ func recordParamsFromIR(
 	for index, typ := range types {
 		switch typ.Kind {
 		case compiler.IRBool:
+			if typ.GoType != reflect.TypeOf(false) {
+				return nil, "", false
+			}
 			params[index].Kind = compiler.IRRecordSpecializedBool
 			key.WriteByte('b')
 		case compiler.IRInt:
+			if typ.GoType != reflect.TypeOf(int64(0)) {
+				return nil, "", false
+			}
 			params[index].Kind = compiler.IRRecordSpecializedInt64
 			key.WriteByte('i')
 		default:

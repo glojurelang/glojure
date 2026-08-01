@@ -6,9 +6,8 @@ import "github.com/glojurelang/glojure/pkg/lang"
 // proved not to escape a reduction. Nested maps are converted lazily, and the
 // entire reachable owned tree is frozen before it becomes observable.
 type ownedMap struct {
-	transient *lang.TransientMap
-	children  []ownedMapChild
-	meta      lang.IPersistentMap
+	value    *OwnedLoopMap
+	children []ownedMapChild
 }
 
 type ownedMapChild struct {
@@ -28,58 +27,40 @@ func newOwnedMap(value interface{}) *ownedMap {
 	if value == nil {
 		value = lang.NewMap()
 	}
-	editable, ok := value.(lang.IEditableCollection)
-	if !ok {
-		panic(lang.NewIllegalArgumentError("owned map reduction requires an editable map"))
-	}
-	transient, ok := editable.AsTransient().(*lang.TransientMap)
-	if !ok {
-		panic(lang.NewIllegalArgumentError("owned map reduction requires a transient map"))
-	}
-	var meta lang.IPersistentMap
-	if valueWithMeta, ok := value.(lang.IMeta); ok {
-		meta = valueWithMeta.Meta()
-	}
-	return &ownedMap{transient: transient, meta: meta}
+	return &ownedMap{value: NewOwnedLoopMap(value)}
 }
 
 func (m *ownedMap) child(key interface{}) *ownedMap {
-	value := m.transient.ValAt(key)
+	value := m.value.ValAt(key)
 	if child, ok := value.(*ownedMap); ok {
 		return child
 	}
 	child := newOwnedMap(value)
-	m.transient.Assoc(key, child)
+	m.value.Assoc(key, child)
 	m.children = append(m.children, ownedMapChild{key: key, value: child})
 	return child
 }
 
 func (m *ownedMap) leaf(key interface{}) interface{} {
-	value := m.transient.ValAt(key)
+	value := m.value.ValAt(key)
 	if child, ok := value.(*ownedMap); ok {
 		value = child.persistent()
-		m.transient.Assoc(key, value)
+		m.value.Assoc(key, value)
 	}
 	return value
 }
 
 func (m *ownedMap) assoc(key, value interface{}) {
-	m.transient.Assoc(key, value)
+	m.value.Assoc(key, value)
 }
 
 func (m *ownedMap) persistent() interface{} {
 	for _, child := range m.children {
-		if m.transient.ValAt(child.key) == child.value {
-			m.transient.Assoc(child.key, child.value.persistent())
+		if lang.Identical(m.value.ValAt(child.key), child.value) {
+			m.value.Assoc(child.key, child.value.persistent())
 		}
 	}
-	result := m.transient.Persistent()
-	if m.meta != nil {
-		if obj, ok := result.(lang.IObj); ok {
-			return obj.WithMeta(m.meta)
-		}
-	}
-	return result
+	return m.value.Persistent()
 }
 
 // ReduceOwnedMap runs a reduction whose accumulator has been proved to be a

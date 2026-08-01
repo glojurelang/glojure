@@ -18,6 +18,9 @@ func (ir *TypedIR) analyzeOwnedStringParts(
 	if !irEmptyVectorLiteral(bindingNode.Init) || loop.LoopID == nil {
 		return false
 	}
+	if irNestedFunctionCapturesLocal(loop.Body, bindingNode.Name) {
+		return false
+	}
 
 	usage := ownedStringPartsUsage{
 		target:       bindingNode.Name,
@@ -51,7 +54,10 @@ func (ir *TypedIR) analyzeOwnedStringParts(
 		facts.StringPartsFinish = &IROwnedStringPartsFinishPlan{
 			Parts: bindingNode.Name,
 		}
-		facts.Type = IRType{Kind: IRString}
+		facts.Type = IRType{
+			Kind:   IRString,
+			GoType: canonicalIRGoType(IRString),
+		}
 		ir.facts[finishNode] = facts
 	}
 	return true

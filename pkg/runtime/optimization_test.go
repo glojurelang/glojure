@@ -18,6 +18,36 @@ type testBlockingDeref struct {
 	value interface{}
 }
 
+type testIndexedImplementation struct{}
+
+func (testIndexedImplementation) Count() int              { return 1 }
+func (testIndexedImplementation) Nth(int) any             { return int64(1) }
+func (testIndexedImplementation) NthDefault(int, any) any { return int64(1) }
+
+func TestProofBoundaryRejectsArbitraryIndexedImplementations(t *testing.T) {
+	if _, ok := AsLinearIndexed(testIndexedImplementation{}); ok {
+		t.Fatal("user-defined Indexed implementation entered built-in traversal")
+	}
+	if indexed, ok := AsLinearIndexed(lang.NewVector(int64(1))); !ok || indexed.Nth(0) != int64(1) {
+		t.Fatalf("built-in vector was not proved linear: %v, %v", indexed, ok)
+	}
+}
+
+func TestExactDispatchValueSafetyUsesClosedRepresentations(t *testing.T) {
+	if !ExactDispatchValueSafe(
+		lang.NewKeyword("event"),
+		ExactDispatchKeyword,
+	) {
+		t.Fatal("keyword did not satisfy keyword dispatch proof")
+	}
+	if ExactDispatchValueSafe(
+		testIndexedImplementation{},
+		ExactDispatchKeyword|ExactDispatchInteger,
+	) {
+		t.Fatal("user value entered exact dispatch comparison")
+	}
+}
+
 func (d testBlockingDeref) Deref() interface{} {
 	return d.value
 }

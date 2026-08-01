@@ -3,6 +3,7 @@
 package runtime
 
 import (
+	"reflect"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
@@ -319,12 +320,21 @@ func (g *Generator) irHasInt64Representation(node *ast.Node) bool {
 			g.currentIR.Facts(node).Type.Kind == compiler.IRInt &&
 			irNumbersHostCallHasPrimitiveRepresentation(call)
 	case ast.OpInvoke:
+		invoke := node.Sub.(*ast.InvokeNode)
+		if invoke.Fn != nil && invoke.Fn.Op == ast.OpConst {
+			callable := invoke.Fn.Sub.(*ast.ConstNode).Value
+			typ := reflect.TypeOf(callable)
+			return typ != nil && typ.Kind() == reflect.Func &&
+				typ.NumOut() == 1 &&
+				typ.Out(0) == reflect.TypeFor[int64]()
+		}
 		if !g.directLink || g.currentIR == nil {
 			return false
 		}
 		facts := g.currentIR.Facts(node)
 		if facts.Signature != nil {
-			return facts.Signature.Result.Kind == compiler.IRInt
+			return facts.Signature.Result.Kind == compiler.IRInt &&
+				facts.Signature.Result.GoType == reflect.TypeFor[int64]()
 		}
 		return facts.Type.Kind == compiler.IRInt &&
 			facts.Call.Known &&
@@ -350,6 +360,63 @@ func (g *Generator) irHasInt64Representation(node *ast.Node) bool {
 	default:
 		return false
 	}
+}
+
+func (g *Generator) irHasIntRepresentation(node *ast.Node) bool {
+	if node == nil || g.currentIR == nil ||
+		g.currentIR.Facts(node).Type.GoType != reflect.TypeFor[int]() {
+		return false
+	}
+	switch node.Op {
+	case ast.OpConst:
+		_, ok := node.Sub.(*ast.ConstNode).Value.(int)
+		return ok
+	case ast.OpDo:
+		return g.irHasIntRepresentation(node.Sub.(*ast.DoNode).Ret)
+	case ast.OpLet, ast.OpLoop:
+		return g.irHasIntRepresentation(node.Sub.(*ast.LetNode).Body)
+	case ast.OpIf:
+		ifNode := node.Sub.(*ast.IfNode)
+		return g.irIntBranchHasRepresentation(ifNode.Then) &&
+			g.irIntBranchHasRepresentation(ifNode.Else)
+	case ast.OpHostCall:
+		call := node.Sub.(*ast.HostCallNode)
+		return call.ResolvedMethod != nil
+	case ast.OpInvoke:
+		facts := g.currentIR.Facts(node)
+		invoke := node.Sub.(*ast.InvokeNode)
+		if invoke.Fn != nil && invoke.Fn.Op == ast.OpConst {
+			callable := invoke.Fn.Sub.(*ast.ConstNode).Value
+			typ := reflect.TypeOf(callable)
+			return typ != nil && typ.Kind() == reflect.Func &&
+				typ.NumOut() == 1 && typ.Out(0) == reflect.TypeFor[int]()
+		}
+		return g.directLink && facts.Call.Known &&
+			facts.Call.Var != nil && facts.Call.Var.Namespace() != nil &&
+			facts.Call.Var.Namespace().Name().String() == "clojure.core" &&
+			facts.Call.Name == "count" &&
+			!facts.Call.Var.IsDynamic() &&
+			!RT.BooleanCast(lang.Get(facts.Call.Var.Meta(), lang.KWRedef))
+	case ast.OpCase:
+		caseNode := node.Sub.(*ast.CaseNode)
+		for _, entry := range caseNode.Entries {
+			if !g.irIntBranchHasRepresentation(entry.ResultExpr) {
+				return false
+			}
+		}
+		return caseNode.Default == nil ||
+			g.irIntBranchHasRepresentation(caseNode.Default)
+	default:
+		return false
+	}
+}
+
+func (g *Generator) irIntBranchHasRepresentation(node *ast.Node) bool {
+	if node == nil || g.currentIR == nil {
+		return false
+	}
+	return g.currentIR.Facts(node).NeverReturns ||
+		g.irHasIntRepresentation(node)
 }
 
 func (g *Generator) irInt64BranchHasRepresentation(node *ast.Node) bool {
@@ -385,7 +452,8 @@ func (g *Generator) irHasFloat64Representation(node *ast.Node) bool {
 		}
 		signature := g.currentIR.Facts(node).Signature
 		return signature != nil &&
-			signature.Result.Kind == compiler.IRFloat
+			signature.Result.Kind == compiler.IRFloat &&
+			signature.Result.GoType == reflect.TypeFor[float64]()
 	default:
 		return false
 	}

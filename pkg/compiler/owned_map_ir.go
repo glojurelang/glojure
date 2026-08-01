@@ -27,6 +27,9 @@ func (ir *TypedIR) analyzeOwnedMap(
 	default:
 		return IROwnedMapNone
 	}
+	if irNestedFunctionCapturesLocal(loop.Body, bindingNode.Name) {
+		return IROwnedMapNone
+	}
 	usage := ownedMapUsage{
 		ir:           ir,
 		target:       bindingNode.Name,
