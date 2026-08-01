@@ -16,48 +16,103 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.filter.outputs.docs_only }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Detect documentation-only pull requests
+        id: filter
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          docs_only=false
+          if [[ "${{ github.event_name }}" == pull_request ]]; then
+            docs_only=true
+            found=false
+            while IFS= read -r -d '' file; do
+              found=true
+              case "$file" in
+                *.md) ;;
+                *) docs_only=false; break ;;
+              esac
+            done < <(git diff --name-only -z "$BASE_SHA...$HEAD_SHA")
+            if [[ "$found" == false ]]; then
+              docs_only=false
+            fi
+          fi
+          echo "docs_only=$docs_only" >> "$GITHUB_OUTPUT"
+
   checks:
     name: Checks
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Skip expensive checks for documentation-only changes
+        if: needs.changes.outputs.docs_only == 'true'
+        run: echo "Only Markdown files changed; no checks are needed."
       - uses: actions/checkout@v6
+        if: needs.changes.outputs.docs_only != 'true'
       - uses: cachix/install-nix-action@v31
+        if: needs.changes.outputs.docs_only != 'true'
         with:
           nix_path: nixpkgs=channel:nixos-unstable
       - name: Check formatting
+        if: needs.changes.outputs.docs_only != 'true'
         run: nix-shell --run 'make format-check'
       - name: Check module files
+        if: needs.changes.outputs.docs_only != 'true'
         run: nix-shell --run 'go mod tidy' && git diff --exit-code -- go.mod go.sum
 
   go:
     name: Go and compact runtime
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - name: Skip expensive tests for documentation-only changes
+        if: needs.changes.outputs.docs_only == 'true'
+        run: echo "Only Markdown files changed; no tests are needed."
       - uses: actions/checkout@v6
+        if: needs.changes.outputs.docs_only != 'true'
       - uses: cachix/install-nix-action@v31
+        if: needs.changes.outputs.docs_only != 'true'
         with:
           nix_path: nixpkgs=channel:nixos-unstable
       - name: Run Go tests
+        if: needs.changes.outputs.docs_only != 'true'
         run: |
           # shellcheck disable=SC2016 # Expansion belongs to the nested Nix shell.
           nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; make test-go test-aot-runtime'
 
   race:
     name: Race detector
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      - name: Skip expensive tests for documentation-only changes
+        if: needs.changes.outputs.docs_only == 'true'
+        run: echo "Only Markdown files changed; no tests are needed."
       - uses: actions/checkout@v6
+        if: needs.changes.outputs.docs_only != 'true'
       - uses: cachix/install-nix-action@v31
+        if: needs.changes.outputs.docs_only != 'true'
         with:
           nix_path: nixpkgs=channel:nixos-unstable
       - name: Run Go tests with race detection
+        if: needs.changes.outputs.docs_only != 'true'
         run: nix-shell --run 'go test -race ./...'
 
   compatibility:
     name: Compatibility (${{ matrix.mode }})
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
@@ -69,41 +124,62 @@ jobs:
           - mode: aot
             command: make test-suite-aot
     steps:
+      - name: Skip expensive tests for documentation-only changes
+        if: needs.changes.outputs.docs_only == 'true'
+        run: echo "Only Markdown files changed; no tests are needed."
       - uses: actions/checkout@v6
+        if: needs.changes.outputs.docs_only != 'true'
       - uses: cachix/install-nix-action@v31
+        if: needs.changes.outputs.docs_only != 'true'
         with:
           nix_path: nixpkgs=channel:nixos-unstable
       - name: Run ${{ matrix.mode }} compatibility tests
+        if: needs.changes.outputs.docs_only != 'true'
         run: |
           # shellcheck disable=SC2016 # Expansion belongs to the nested Nix shell.
           nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; ${{ matrix.command }}'
 
   generated:
     name: Generated files
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      - name: Skip expensive checks for documentation-only changes
+        if: needs.changes.outputs.docs_only == 'true'
+        run: echo "Only Markdown files changed; no generated files need checking."
       - uses: actions/checkout@v6
+        if: needs.changes.outputs.docs_only != 'true'
       - uses: cachix/install-nix-action@v31
+        if: needs.changes.outputs.docs_only != 'true'
         with:
           nix_path: nixpkgs=channel:nixos-unstable
       - name: Regenerate committed files
+        if: needs.changes.outputs.docs_only != 'true'
         run: |
           # shellcheck disable=SC2016 # Expansion belongs to the nested Nix shell.
           nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; make stdlib-targets generate aot glj-imports'
       - name: Check for drift
+        if: needs.changes.outputs.docs_only != 'true'
         run: git diff --exit-code
 
   build-smoke:
     name: Native and WASM builds
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - name: Skip expensive builds for documentation-only changes
+        if: needs.changes.outputs.docs_only == 'true'
+        run: echo "Only Markdown files changed; no builds are needed."
       - uses: actions/checkout@v6
+        if: needs.changes.outputs.docs_only != 'true'
       - uses: cachix/install-nix-action@v31
+        if: needs.changes.outputs.docs_only != 'true'
         with:
           nix_path: nixpkgs=channel:nixos-unstable
       - name: Build native and browser binaries
+        if: needs.changes.outputs.docs_only != 'true'
         run: |
           # shellcheck disable=SC2016 # Expansion belongs to the nested Nix shell.
           nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; make build bin/js_wasm/glj.wasm'
@@ -111,11 +187,12 @@ jobs:
   required:
     name: Required
     if: always()
-    needs: [checks, go, race, compatibility, generated, build-smoke]
+    needs: [changes, checks, go, race, compatibility, generated, build-smoke]
     runs-on: ubuntu-latest
     steps:
       - name: Verify required jobs
         env:
+          CHANGES: ${{ needs.changes.result }}
           CHECKS: ${{ needs.checks.result }}
           GO: ${{ needs.go.result }}
           RACE: ${{ needs.race.result }}
@@ -123,6 +200,6 @@ jobs:
           GENERATED: ${{ needs.generated.result }}
           BUILD_SMOKE: ${{ needs.build-smoke.result }}
         run: |
-          for result in "$CHECKS" "$GO" "$RACE" "$COMPATIBILITY" "$GENERATED" "$BUILD_SMOKE"; do
+          for result in "$CHANGES" "$CHECKS" "$GO" "$RACE" "$COMPATIBILITY" "$GENERATED" "$BUILD_SMOKE"; do
             test "$result" = success
           done
