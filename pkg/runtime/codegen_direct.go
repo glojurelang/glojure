@@ -142,7 +142,7 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		for _, named := range vars {
 			target := g.aotCallTargets[named.vr]
 			if target == nil || target.arityDispatch ||
-				target.arity > 4 || !target.directLinked {
+				!target.directLinked {
 				continue
 			}
 			fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
@@ -172,7 +172,7 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		for _, named := range vars {
 			target := g.aotCallTargets[named.vr]
 			if target == nil || target.arityDispatch ||
-				target.arity > 4 || !target.directLinked ||
+				!target.directLinked ||
 				target.vectorAnalysis != nil ||
 				target.ownedVectorAnalysis != nil {
 				continue

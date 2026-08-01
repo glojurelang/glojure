@@ -249,7 +249,7 @@ func (g *Generator) prepareAOTRecordSpecializations(vars []namedVar) {
 			fn := value.ASTNode().Sub.(*ast.FnNode)
 			if !fn.IsVariadic && len(fn.Methods) == 1 {
 				method := fn.Methods[0].Sub.(*ast.FnMethodNode)
-				if !method.IsVariadic && method.FixedArity <= 4 {
+				if !method.IsVariadic && method.FixedArity <= 20 {
 					methods[vr] = method
 				}
 			}
@@ -265,15 +265,21 @@ func (g *Generator) prepareAOTRecordSpecializations(vars []namedVar) {
 	sort.Slice(functionVars, func(i, j int) bool {
 		return functionVars[i].String() < functionVars[j].String()
 	})
+	producerParams := recordProducerCallSiteParams(functionVars, methods)
 
 	signatures := make(map[*lang.Var]compiler.IRRecordFunctionSignature)
 	for _, record := range records {
 		for _, vr := range functionVars {
-			shape, plan := compiler.InferRecursiveRecordProducer(
+			params := producerParams[vr]
+			if params == nil {
+				continue
+			}
+			shape, plan := compiler.InferRecursiveRecordProducerWithParams(
 				methods[vr],
 				vr,
 				record,
 				constructors,
+				params,
 			)
 			if shape == nil || plan == nil {
 				continue
@@ -332,6 +338,69 @@ func (g *Generator) prepareAOTRecordSpecializations(vars []namedVar) {
 	}
 }
 
+func recordProducerCallSiteParams(
+	functionVars []*lang.Var,
+	methods map[*lang.Var]*ast.FnMethodNode,
+) map[*lang.Var][]compiler.IRRecordSpecializedType {
+	type observed struct {
+		params []compiler.IRRecordSpecializedType
+	}
+	byTarget := make(map[*lang.Var]map[string]observed)
+	for _, caller := range functionVars {
+		value, ok := codegenVarValue(caller).(*Fn)
+		if !ok {
+			continue
+		}
+		for _, site := range compiler.BuildTypedIR(
+			value.ASTNode(),
+		).DirectCallSites() {
+			if methods[site.Var] == nil {
+				continue
+			}
+			params, key, ok := recordParamsFromIR(site.ArgumentTypes)
+			if !ok {
+				continue
+			}
+			if byTarget[site.Var] == nil {
+				byTarget[site.Var] = make(map[string]observed)
+			}
+			byTarget[site.Var][key] = observed{params: params}
+		}
+	}
+	result := make(map[*lang.Var][]compiler.IRRecordSpecializedType)
+	for target, candidates := range byTarget {
+		// A single helper cannot represent conflicting parameter signatures.
+		// Retain ordinary dispatch until multi-versioning is available.
+		if len(candidates) != 1 {
+			continue
+		}
+		for _, candidate := range candidates {
+			result[target] = candidate.params
+		}
+	}
+	return result
+}
+
+func recordParamsFromIR(
+	types []compiler.IRType,
+) ([]compiler.IRRecordSpecializedType, string, bool) {
+	params := make([]compiler.IRRecordSpecializedType, len(types))
+	var key strings.Builder
+	for index, typ := range types {
+		switch typ.Kind {
+		case compiler.IRBool:
+			params[index].Kind = compiler.IRRecordSpecializedBool
+			key.WriteByte('b')
+		case compiler.IRInt:
+			params[index].Kind = compiler.IRRecordSpecializedInt64
+			key.WriteByte('i')
+		default:
+			return nil, "", false
+		}
+	}
+	return params, key.String(), true
+}
+
 func sameAOTRecordShape(
 	left, right *compiler.IRRecordShape,
 ) bool {
@@ -352,7 +421,7 @@ func recordAOTParamCandidates(
 	records []*lang.RecordType,
 	shapes map[*lang.RecordType]*compiler.IRRecordShape,
 ) [][]compiler.IRRecordSpecializedType {
-	if arity < 1 || arity > 4 {
+	if arity < 1 || arity > 20 {
 		return nil
 	}
 	intType := compiler.IRRecordSpecializedType{
@@ -365,6 +434,14 @@ func recordAOTParamCandidates(
 				Kind:   compiler.IRRecordSpecializedRecord,
 				Record: record,
 			})
+		}
+	}
+	const candidateBudget = 1 << 12
+	candidateCount := 1
+	for range arity {
+		candidateCount *= 1 + len(typedRecords)
+		if candidateCount > candidateBudget {
+			return nil
 		}
 	}
 	var result [][]compiler.IRRecordSpecializedType

@@ -100,6 +100,15 @@ func ReduceOwnedMap(
 	return result
 }
 
+// AssocOwnedMap applies one assoc entry to a map whose identity is confined to
+// an ownership region. Repeated calls cover assoc's variadic entry list while
+// preserving source evaluation order in generated code.
+func AssocOwnedMap(target, key, value interface{}) interface{} {
+	owned := requireOwnedMap(target)
+	owned.assoc(key, value)
+	return owned
+}
+
 // UpdateOwnedMap3 is the fixed-arity owned-map counterpart of update-in.
 func UpdateOwnedMap3(target, keys, updateFn interface{}) interface{} {
 	return updateOwnedMap(target, keys, updateFn, ownedMapUpdateArgs{})

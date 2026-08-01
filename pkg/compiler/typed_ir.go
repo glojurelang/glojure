@@ -71,6 +71,44 @@ type IRType struct {
 	GoType reflect.Type
 }
 
+// Accepts reports whether actual satisfies an expected representation fact.
+// A fully dynamic expectation is a wildcard. An expected concrete Go type is
+// exact; when the language kind has one canonical Go representation, that
+// representation can be recovered even if analysis did not attach GoType.
+func (expected IRType) Accepts(actual IRType) bool {
+	if expected.Kind == IRDynamic && expected.GoType == nil {
+		return true
+	}
+	if expected.Kind != actual.Kind {
+		return false
+	}
+	if expected.GoType == nil {
+		return true
+	}
+	actualType := actual.GoType
+	if actualType == nil {
+		actualType = canonicalIRGoType(actual.Kind)
+	}
+	return expected.GoType == actualType
+}
+
+func canonicalIRGoType(kind IRValueKind) reflect.Type {
+	switch kind {
+	case IRBool:
+		return reflect.TypeOf(false)
+	case IRInt:
+		return reflect.TypeOf(int64(0))
+	case IRFloat:
+		return reflect.TypeOf(float64(0))
+	case IRString:
+		return reflect.TypeOf("")
+	case IRKeyword:
+		return reflect.TypeOf(lang.Keyword{})
+	default:
+		return nil
+	}
+}
+
 type IRShape struct {
 	Kind     IRShapeKind
 	Count    int
@@ -112,13 +150,21 @@ type IRDirectCallSite struct {
 	ArgumentTypes []IRType
 }
 
-// IRFixedVectorResultPlan describes a fixed-arity function whose body returns
-// a vector assembled directly from expressions over its parameters. A backend
-// may consume the components without materializing the vector when the vector
-// itself cannot be observed.
-type IRFixedVectorResultPlan struct {
+type IRFixedDispatchResultKind uint8
+
+const (
+	IRDispatchScalar IRFixedDispatchResultKind = iota
+	IRDispatchVector
+)
+
+// IRFixedDispatchResultPlan describes a fixed-arity function whose body
+// returns either a scalar expression or a vector assembled directly from
+// expressions over its parameters. A backend may consume vector components
+// without materializing the vector when its identity cannot be observed.
+type IRFixedDispatchResultPlan struct {
 	Method     *ast.FnMethodNode
 	Components []*ast.Node
+	Kind       IRFixedDispatchResultKind
 }
 
 type TypedIROptions struct {
@@ -165,23 +211,30 @@ type IROwnedStringPartsFinishPlan struct {
 	Parts *lang.Symbol
 }
 
-// IROwnedMapReducePlan represents a reduce whose inline callback carries one
-// map accumulator through a chain of update-in calls without exposing any
-// intermediate map identity.
+// IROwnedMapReducePlan represents a reduce whose inline callback linearly
+// carries one map accumulator through ownership-compatible mutations without
+// exposing any intermediate map identity.
 type IROwnedMapReducePlan struct {
-	ReduceVar    *lang.Var
-	UpdateInVars []*lang.Var
-	Reducer      *ast.Node
-	Initial      *ast.Node
-	Source       *ast.Node
-	Updates      []*ast.Node
+	ReduceVar *lang.Var
+	CallVars  []*lang.Var
+	Reducer   *ast.Node
+	Initial   *ast.Node
+	Source    *ast.Node
+	Mutations []*ast.Node
 }
 
-// IROwnedMapUpdatePlan records the literal path expressions of an update-in
-// inside an owned-map reduction. Backends can select a fixed-path helper
-// without first materializing the persistent vector; nil Keys means the path
-// remains dynamic.
-type IROwnedMapUpdatePlan struct {
+type IROwnedMapMutationKind uint8
+
+const (
+	IROwnedMapUpdateIn IROwnedMapMutationKind = iota
+	IROwnedMapAssoc
+)
+
+// IROwnedMapMutationPlan records an ownership-compatible map operation inside
+// a reduction. Paths and assoc entries remain ordinary expressions; a backend
+// can choose a representation-specific helper without changing eligibility.
+type IROwnedMapMutationPlan struct {
+	Kind IROwnedMapMutationKind
 	Keys []*ast.Node
 	Fnil *IROwnedMapFnilPlan
 }
@@ -212,29 +265,10 @@ const (
 	IRPipelineTake
 )
 
-// IRPipelinePrimitive names callbacks whose exact Clojure semantics are
-// understood by a lowering. Unknown callbacks remain represented in the
-// pipeline but cannot be lowered without invoking the original function.
-type IRPipelinePrimitive uint8
-
-const (
-	IRPipelinePrimitiveUnknown IRPipelinePrimitive = iota
-	IRPipelineMapIdentity
-	IRPipelineMapInc
-	IRPipelineMapDec
-	IRPipelineMapSquare
-	IRPipelineFilterOdd
-	IRPipelineFilterEven
-	IRPipelineFilterPos
-	IRPipelineFilterNeg
-	IRPipelineFilterZero
-)
-
 type IRPipelineLowering uint8
 
 const (
 	IRPipelineNoLowering IRPipelineLowering = iota
-	IRPipelineReduceInt64
 	// IRPipelineInlineIndexed evaluates a literal callback directly while
 	// traversing an Indexed source. Other source types retain the ordinary
 	// collection-function fallback.
@@ -247,7 +281,6 @@ type IRPipelineStage struct {
 	Limit       *ast.Node
 	OperatorVar *lang.Var
 	CallbackVar *lang.Var
-	Primitive   IRPipelinePrimitive
 }
 
 // IRPipelinePlan describes a collection pipeline independently of either the
@@ -264,7 +297,6 @@ type IRPipelinePlan struct {
 	Stages      []IRPipelineStage
 	GuardVars   []*lang.Var
 	Lowering    IRPipelineLowering
-	TakeLimit   int64
 }
 
 type IRFacts struct {
@@ -288,11 +320,10 @@ type IRFacts struct {
 
 	OwnedMapReduce *IROwnedMapReducePlan
 
-	// OwnedMapUpdateIn describes an update-in call inside an owned map
-	// reduction. Backends may mutate the private accumulator representation
-	// while preserving the persistent map observed by callbacks and at the
-	// boundary.
-	OwnedMapUpdateIn *IROwnedMapUpdatePlan
+	// OwnedMapMutation describes an operation inside an owned map reduction.
+	// Backends may mutate the private accumulator representation while
+	// preserving the persistent map observed by callbacks and at the boundary.
+	OwnedMapMutation *IROwnedMapMutationPlan
 
 	// OwnedMapAssoc marks an assoc whose target is a uniquely owned
 	// loop-carried map. Backends may update a transient representation after
@@ -462,10 +493,10 @@ func (ir *TypedIR) DirectCallSites() []IRDirectCallSite {
 	return result
 }
 
-// AnalyzeFixedVectorResult recognizes a deliberately small, composable region:
-// one fixed-arity method returning a literal vector whose component
+// AnalyzeFixedDispatchResult recognizes a composable region: one fixed-arity
+// method returning a scalar expression or literal vector whose component
 // expressions have no free locals or nested binding forms.
-func AnalyzeFixedVectorResult(root *ast.Node) *IRFixedVectorResultPlan {
+func AnalyzeFixedDispatchResult(root *ast.Node) *IRFixedDispatchResultPlan {
 	if root == nil || root.Op != ast.OpFn {
 		return nil
 	}
@@ -475,7 +506,7 @@ func AnalyzeFixedVectorResult(root *ast.Node) *IRFixedVectorResultPlan {
 	}
 	method := fn.Methods[0].Sub.(*ast.FnMethodNode)
 	if method.IsVariadic || method.FixedArity < 0 ||
-		method.FixedArity > 4 {
+		method.FixedArity > 20 {
 		return nil
 	}
 	body := method.Body
@@ -486,12 +517,17 @@ func AnalyzeFixedVectorResult(root *ast.Node) *IRFixedVectorResultPlan {
 		}
 		body = do.Ret
 	}
-	if body == nil || body.Op != ast.OpVector {
+	if body == nil {
 		return nil
 	}
-	components := body.Sub.(*ast.VectorNode).Items
-	if len(components) == 0 || len(components) > 4 {
-		return nil
+	kind := IRDispatchScalar
+	components := []*ast.Node{body}
+	if body.Op == ast.OpVector {
+		kind = IRDispatchVector
+		components = body.Sub.(*ast.VectorNode).Items
+		if len(components) == 0 {
+			return nil
+		}
 	}
 	params := make(map[*lang.Symbol]struct{}, len(method.Params))
 	for _, parameter := range method.Params {
@@ -515,10 +551,21 @@ func AnalyzeFixedVectorResult(root *ast.Node) *IRFixedVectorResultPlan {
 			return nil
 		}
 	}
-	return &IRFixedVectorResultPlan{
+	return &IRFixedDispatchResultPlan{
 		Method:     method,
 		Components: append([]*ast.Node(nil), components...),
+		Kind:       kind,
 	}
+}
+
+// AnalyzeFixedVectorResult is retained for callers specifically requiring a
+// vector result.
+func AnalyzeFixedVectorResult(root *ast.Node) *IRFixedDispatchResultPlan {
+	plan := AnalyzeFixedDispatchResult(root)
+	if plan == nil || plan.Kind != IRDispatchVector {
+		return nil
+	}
+	return plan
 }
 
 // GuardedCallsSafe reports whether every resolved call can use targets
@@ -949,8 +996,23 @@ func (ir *TypedIR) refineTypes(node *ast.Node) bool {
 func (ir *TypedIR) inferHostCallType(
 	call *ast.HostCallNode,
 ) (IRType, bool) {
+	argumentTypes := make([]IRType, len(call.Args))
+	for index, argument := range call.Args {
+		argumentTypes[index] = ir.facts[argument].Type
+	}
+	return InferNumericHostCallType(call, argumentTypes)
+}
+
+// InferNumericHostCallType is the shared representation rule for calls to
+// lang.Numbers. Specialized region analyses use the same rule as TypedIR
+// instead of maintaining their own operation allowlists.
+func InferNumericHostCallType(
+	call *ast.HostCallNode,
+	argumentTypes []IRType,
+) (IRType, bool) {
 	if call == nil || call.Method == nil ||
-		call.Target == nil || call.Target.Op != ast.OpConst {
+		call.Target == nil || call.Target.Op != ast.OpConst ||
+		len(call.Args) != len(argumentTypes) {
 		return IRType{}, false
 	}
 	target := call.Target.Sub.(*ast.ConstNode)
@@ -964,8 +1026,8 @@ func (ir *TypedIR) inferHostCallType(
 	allInt := len(call.Args) > 0
 	allNumeric := len(call.Args) > 0
 	hasFloat := false
-	for _, argument := range call.Args {
-		kind := ir.facts[argument].Type.Kind
+	for _, argument := range argumentTypes {
+		kind := argument.Kind
 		if kind != IRInt {
 			allInt = false
 		}
@@ -1206,7 +1268,7 @@ func (ir *TypedIR) resolveCallSignature(
 		}
 		matched := true
 		for index, argument := range invoke.Args {
-			if ir.facts[argument].Type.Kind != signature.Params[index].Kind {
+			if !signature.Params[index].Accepts(ir.facts[argument].Type) {
 				matched = false
 				break
 			}
@@ -1597,8 +1659,18 @@ func irConstType(value any) IRType {
 	case lang.Keyword:
 		return IRType{Kind: IRKeyword}
 	default:
-		return IRType{Kind: IRDynamic, Nullable: true}
+		return IRType{
+			Kind:     IRDynamic,
+			Nullable: true,
+			GoType:   reflect.TypeOf(value),
+		}
 	}
+}
+
+// ConstantType exposes the shared representation assigned to an AST
+// constant for region analyses that also track ownership.
+func ConstantType(value any) IRType {
+	return irConstType(value)
 }
 
 func irJoinTypes(types ...IRType) IRType {
@@ -1754,6 +1826,13 @@ func irChildren(node *ast.Node) []*ast.Node {
 	}
 	walk(reflect.ValueOf(node.Sub))
 	return result
+}
+
+// IRChildren returns the immediate AST inputs used by shared IR analyses.
+// Region analyses should use this rather than maintaining incomplete local
+// AST walkers.
+func IRChildren(node *ast.Node) []*ast.Node {
+	return irChildren(node)
 }
 
 func irScalarAtomInit(

@@ -49,26 +49,24 @@ type IRRecordFunctionPlan struct {
 	Calls        map[*ast.Node]*lang.Var
 }
 
-// InferRecursiveRecordProducer finds functions which build one record shape
-// from int64 parameters and recursive calls to themselves. Multiple
-// constructor branches must agree field-by-field; nil and the same record
-// type combine into a nullable record pointer.
-func InferRecursiveRecordProducer(
+// InferRecursiveRecordProducerWithParams infers the concrete fields of a
+// recursive record constructor from a proven function signature. The caller
+// supplies signature facts derived from call sites; recursion itself is then
+// solved under the same signature.
+func InferRecursiveRecordProducerWithParams(
 	method *ast.FnMethodNode,
 	self *lang.Var,
 	record *lang.RecordType,
 	constructors map[*lang.Var]*lang.RecordType,
+	params []IRRecordSpecializedType,
 ) (*IRRecordShape, *IRRecordFunctionPlan) {
 	if method == nil || method.IsVariadic || method.FixedArity < 1 ||
-		method.FixedArity > 4 || self == nil || record == nil {
+		method.FixedArity != len(params) || self == nil || record == nil {
 		return nil, nil
 	}
-	intType := IRRecordSpecializedType{Kind: IRRecordSpecializedInt64}
-	params := make([]IRRecordSpecializedType, method.FixedArity)
 	locals := make(map[*lang.Symbol]IRRecordSpecializedType, len(params))
 	for index, param := range method.Params {
-		params[index] = intType
-		locals[param.Sub.(*ast.BindingNode).Name] = intType
+		locals[param.Sub.(*ast.BindingNode).Name] = params[index]
 	}
 	signatures := map[*lang.Var]IRRecordFunctionSignature{
 		self: {

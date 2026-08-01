@@ -108,6 +108,51 @@ func TestOwnedVectorPersistentReusesUnchangedNestedVectors(t *testing.T) {
 	}
 }
 
+func TestOwnedVectorAssocPathCopiesArbitraryDepth(t *testing.T) {
+	original := lang.NewVector(
+		lang.NewVector(lang.NewVector(int64(1), int64(2))),
+	)
+	owned, ok := NewOwnedVector(original, 3)
+	if !ok {
+		t.Fatal("three-level vector was rejected")
+	}
+	updated := owned.AssocPathCopy([]int{0, 0, 1}, int64(9)).Persistent()
+	want := lang.NewVector(
+		lang.NewVector(lang.NewVector(int64(1), int64(9))),
+	)
+	if !lang.Equals(updated, want) {
+		t.Fatalf("updated value = %v, want %v", updated, want)
+	}
+	if !lang.Equals(
+		original,
+		lang.NewVector(lang.NewVector(lang.NewVector(int64(1), int64(2)))),
+	) {
+		t.Fatalf("original value was mutated: %v", original)
+	}
+}
+
+func TestOwnedVectorNestedSnapshotCanCopyDeeperPath(t *testing.T) {
+	original := lang.NewVector(
+		lang.NewVector(lang.NewVector(int64(1), int64(2))),
+	)
+	owned, ok := NewOwnedVector(original, 3)
+	if !ok {
+		t.Fatal("three-level vector was rejected")
+	}
+	snapshot := owned.NestedSnapshot(0)
+	updated := snapshot.AssocPath([]int{0, 1}, int64(9)).Persistent()
+	want := lang.NewVector(lang.NewVector(int64(1), int64(9)))
+	if !lang.Equals(updated, want) {
+		t.Fatalf("snapshot update = %v, want %v", updated, want)
+	}
+	if !lang.Equals(
+		original,
+		lang.NewVector(lang.NewVector(lang.NewVector(int64(1), int64(2)))),
+	) {
+		t.Fatalf("snapshot update mutated original: %v", original)
+	}
+}
+
 func assertOwnedVectorPanic(t *testing.T, call func()) {
 	t.Helper()
 	defer func() {

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -16,23 +17,24 @@ import (
 // once, while direct-linked helper calls pass the owned transient through the
 // whole update region.
 type vectorAOTAnalysis struct {
-	target    *aotSpecializationTarget
-	paramMask uint32
-	result    vectorAOTValue
-	values    map[*ast.Node]vectorAOTValue
-	assocs    map[*ast.Node]bool
-	nths      map[*ast.Node]bool
-	numbers   map[*ast.Node]bool
-	calls     map[*ast.Node]*aotSpecializationTarget
-	freeze    map[*ast.Node]bool
-	mutated   uint32
+	target     *aotSpecializationTarget
+	paramMask  uint32
+	paramTypes []compiler.IRType
+	result     vectorAOTValue
+	values     map[*ast.Node]vectorAOTValue
+	assocs     map[*ast.Node]bool
+	nths       map[*ast.Node]bool
+	numbers    map[*ast.Node]bool
+	calls      map[*ast.Node]*aotSpecializationTarget
+	freeze     map[*ast.Node]bool
+	mutated    uint32
 }
 
 type vectorAOTValue struct {
 	transient bool
 	origins   uint32
 	control   bool
-	int64     bool
+	typ       compiler.IRType
 }
 
 type vectorAOTLoop struct {
@@ -55,21 +57,47 @@ func analyzeVectorAOTFunction(
 	targets map[*lang.Var]*aotSpecializationTarget,
 ) *vectorAOTAnalysis {
 	if target == nil || method == nil || method.IsVariadic ||
-		method.FixedArity < 1 || method.FixedArity > 4 {
+		method.FixedArity < 1 || method.FixedArity > 31 {
 		return nil
 	}
 	var best *vectorAOTAnalysis
-	limit := uint32(1) << method.FixedArity
-	for mask := uint32(1); mask < limit; mask++ {
+	candidates := []compiler.IRType{
+		{Kind: compiler.IRDynamic, Nullable: true},
+		{Kind: compiler.IRBool},
+		{Kind: compiler.IRInt},
+		{Kind: compiler.IRVector},
+	}
+	combinations := 1
+	for range method.FixedArity {
+		combinations *= len(candidates)
+		if combinations > 1<<16 {
+			return nil
+		}
+	}
+	for encoded := 0; encoded < combinations; encoded++ {
+		value := encoded
+		paramTypes := make([]compiler.IRType, method.FixedArity)
+		var mask uint32
+		for index := range paramTypes {
+			paramTypes[index] = candidates[value%len(candidates)]
+			value /= len(candidates)
+			if paramTypes[index].Kind == compiler.IRVector {
+				mask |= uint32(1) << index
+			}
+		}
+		if mask == 0 {
+			continue
+		}
 		analysis := &vectorAOTAnalysis{
-			target:    target,
-			paramMask: mask,
-			values:    make(map[*ast.Node]vectorAOTValue),
-			assocs:    make(map[*ast.Node]bool),
-			nths:      make(map[*ast.Node]bool),
-			numbers:   make(map[*ast.Node]bool),
-			calls:     make(map[*ast.Node]*aotSpecializationTarget),
-			freeze:    make(map[*ast.Node]bool),
+			target:     target,
+			paramMask:  mask,
+			paramTypes: paramTypes,
+			values:     make(map[*ast.Node]vectorAOTValue),
+			assocs:     make(map[*ast.Node]bool),
+			nths:       make(map[*ast.Node]bool),
+			numbers:    make(map[*ast.Node]bool),
+			calls:      make(map[*ast.Node]*aotSpecializationTarget),
+			freeze:     make(map[*ast.Node]bool),
 		}
 		analyzer := &vectorAOTAnalyzer{
 			analysis: analysis,
@@ -85,7 +113,7 @@ func analyzeVectorAOTFunction(
 				}
 			} else {
 				locals[param.Sub.(*ast.BindingNode).Name] =
-					vectorAOTValue{int64: true}
+					vectorAOTValue{typ: paramTypes[index]}
 			}
 		}
 		analysis.result = analyzer.expr(method.Body, locals, true)
@@ -94,11 +122,27 @@ func analyzeVectorAOTFunction(
 			continue
 		}
 		if best == nil ||
-			bits.OnesCount32(mask) > bits.OnesCount32(best.paramMask) {
+			bits.OnesCount32(mask) > bits.OnesCount32(best.paramMask) ||
+			bits.OnesCount32(mask) == bits.OnesCount32(best.paramMask) &&
+				(len(analysis.numbers) > len(best.numbers) ||
+					len(analysis.numbers) == len(best.numbers) &&
+						vectorAOTConcreteParamCount(analysis) <
+							vectorAOTConcreteParamCount(best)) {
 			best = analysis
 		}
 	}
 	return best
+}
+
+func vectorAOTConcreteParamCount(analysis *vectorAOTAnalysis) int {
+	count := 0
+	for index, typ := range analysis.paramTypes {
+		if analysis.paramMask&(uint32(1)<<index) == 0 &&
+			typ.Kind != compiler.IRDynamic {
+			count++
+		}
+	}
+	return count
 }
 
 func (a *vectorAOTAnalyzer) expr(
@@ -112,7 +156,7 @@ func (a *vectorAOTAnalyzer) expr(
 	var result vectorAOTValue
 	switch node.Op {
 	case ast.OpConst:
-		_, result.int64 = node.Sub.(*ast.ConstNode).Value.(int64)
+		result.typ = compiler.ConstantType(node.Sub.(*ast.ConstNode).Value)
 
 	case ast.OpLocal:
 		result = locals[node.Sub.(*ast.LocalNode).Name]
@@ -179,7 +223,7 @@ func (a *vectorAOTAnalyzer) expr(
 			expected := loop.expected[index]
 			if value.transient != expected.transient ||
 				value.transient && value.origins != expected.origins ||
-				value.int64 != expected.int64 {
+				!value.transient && !expected.typ.Accepts(value.typ) {
 				a.valid = false
 			}
 		}
@@ -192,7 +236,9 @@ func (a *vectorAOTAnalyzer) expr(
 			key := a.expr(entry.Key, locals, false)
 			value := a.expr(entry.Val, locals, false)
 			if key.transient || value.transient ||
-				target.transient && (!key.int64 || !value.int64) {
+				target.transient &&
+					(key.typ.Kind != compiler.IRInt ||
+						value.typ.Kind != compiler.IRInt) {
 				a.valid = false
 			}
 		}
@@ -213,20 +259,28 @@ func (a *vectorAOTAnalyzer) expr(
 		}
 		if hasTransient {
 			if len(values) == 2 && values[0].transient &&
-				values[1].int64 && isVectorAOTNth(call) {
+				values[1].typ.Kind == compiler.IRInt && isVectorAOTNth(call) {
 				if a.written&values[0].origins != 0 {
 					a.valid = false
 					break
 				}
 				a.analysis.nths[node] = true
-				result.int64 = true
+				result.typ = compiler.IRType{Kind: compiler.IRInt}
 			} else {
 				a.valid = false
 			}
-		} else if isVectorAOTNumbersCall(call) &&
-			allVectorAOTInt64(values) {
-			a.analysis.numbers[node] = true
-			result.int64 = vectorAOTNumberReturnsInt64(call.Method.Name())
+		} else if isVectorAOTNumbersCall(call) {
+			types := make([]compiler.IRType, len(values))
+			for index, value := range values {
+				types[index] = value.typ
+			}
+			if inferred, ok := compiler.InferNumericHostCallType(
+				call,
+				types,
+			); ok {
+				a.analysis.numbers[node] = true
+				result.typ = inferred
+			}
 		}
 
 	case ast.OpInvoke:
@@ -248,13 +302,15 @@ func (a *vectorAOTAnalyzer) expr(
 		calleeAnalysis := callee.vectorAnalysis
 		var origins uint32
 		for index, value := range values {
-			expected := calleeAnalysis.paramMask&(uint32(1)<<index) != 0
-			if value.transient != expected ||
-				!expected && !value.int64 {
+			expectedVector :=
+				calleeAnalysis.paramMask&(uint32(1)<<index) != 0
+			if value.transient != expectedVector ||
+				!expectedVector &&
+					!calleeAnalysis.paramTypes[index].Accepts(value.typ) {
 				a.valid = false
 				break
 			}
-			if expected {
+			if expectedVector {
 				origins |= value.origins
 			}
 		}
@@ -305,10 +361,15 @@ func (a *vectorAOTAnalyzer) combine(
 			origins:   left.origins | right.origins,
 		}
 	}
-	if left.int64 && right.int64 {
-		return vectorAOTValue{int64: true}
+	if left.typ == right.typ {
+		return vectorAOTValue{typ: left.typ}
 	}
-	return vectorAOTValue{}
+	if left.typ.Kind == right.typ.Kind {
+		return vectorAOTValue{typ: compiler.IRType{Kind: left.typ.Kind}}
+	}
+	return vectorAOTValue{
+		typ: compiler.IRType{Kind: compiler.IRDynamic, Nullable: true},
+	}
 }
 
 func (a *vectorAOTAnalyzer) findLoop(id *lang.Symbol) *vectorAOTLoop {
@@ -371,36 +432,13 @@ func isVectorAOTNumbersCall(call *ast.HostCallNode) bool {
 			"github.com:glojurelang:glojure:pkg:lang.Numbers"
 }
 
-func allVectorAOTInt64(values []vectorAOTValue) bool {
-	if len(values) == 0 {
-		return false
-	}
-	for _, value := range values {
-		if !value.int64 {
-			return false
-		}
-	}
-	return true
-}
-
-func vectorAOTNumberReturnsInt64(name string) bool {
-	switch strings.ToLower(name) {
-	case "inc", "unchecked_inc", "dec", "uncheckeddec", "unchecked_dec",
-		"add", "uncheckedadd", "minus", "unchecked_minus", "multiply",
-		"unchecked_multiply", "max", "min":
-		return true
-	default:
-		return false
-	}
-}
-
 func vectorAOTParamTypes(analysis *vectorAOTAnalysis) []string {
 	params := make([]string, analysis.target.arity)
 	for index := range params {
 		if analysis.paramMask&(uint32(1)<<index) != 0 {
 			params[index] = "*lang.TransientVector"
 		} else {
-			params[index] = "int64"
+			params[index] = vectorAOTIRGoType(analysis.paramTypes[index])
 		}
 	}
 	return params
@@ -410,10 +448,20 @@ func vectorAOTGoType(value vectorAOTValue) string {
 	if value.transient {
 		return "*lang.TransientVector"
 	}
-	if value.int64 {
+	return vectorAOTIRGoType(value.typ)
+}
+
+func vectorAOTIRGoType(typ compiler.IRType) string {
+	switch typ.Kind {
+	case compiler.IRBool:
+		return "bool"
+	case compiler.IRInt:
 		return "int64"
+	case compiler.IRFloat:
+		return "float64"
+	default:
+		return "any"
 	}
-	return "any"
 }
 
 func (g *Generator) generateVectorSpecializedFixedFn(
@@ -456,9 +504,9 @@ func (g *Generator) generateVectorSpecializedFixedFn(
 	fastArgs := append([]string(nil), paramNames...)
 	var guards []string
 	for index, param := range paramNames {
-		value := g.allocateTempVar()
-		ok := g.allocateTempVar()
 		if analysis.paramMask&(uint32(1)<<index) != 0 {
+			value := g.allocateTempVar()
+			ok := g.allocateTempVar()
 			g.writef("%s, %s := %s.(*lang.Vector)\n", value, ok, param)
 			g.writef(
 				"%s = %s && lang.CanTransientlyUpdateInt64Vector(%s)\n",
@@ -467,11 +515,16 @@ func (g *Generator) generateVectorSpecializedFixedFn(
 				value,
 			)
 			fastArgs[index] = value + ".AsTransientForUpdate()"
-		} else {
-			g.writef("%s, %s := %s.(int64)\n", value, ok, param)
+			guards = append(guards, ok)
+		} else if goType := vectorAOTIRGoType(
+			analysis.paramTypes[index],
+		); goType != "any" {
+			value := g.allocateTempVar()
+			ok := g.allocateTempVar()
+			g.writef("%s, %s := %s.(%s)\n", value, ok, param, goType)
 			fastArgs[index] = value
+			guards = append(guards, ok)
 		}
-		guards = append(guards, ok)
 	}
 	g.writef("if %s {\n", strings.Join(guards, " && "))
 	result := g.allocateTempVar()

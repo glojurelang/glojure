@@ -160,9 +160,11 @@ func TestTypedIRDescribesGeneralCollectionPipelinesWithoutForcingLowering(
 	}
 	if len(plan.Stages) != 2 ||
 		plan.Stages[0].Kind != IRPipelineFilter ||
-		plan.Stages[0].Primitive != IRPipelineFilterOdd ||
+		plan.Stages[0].CallbackVar == nil ||
+		plan.Stages[0].CallbackVar.Symbol().String() != "odd?" ||
 		plan.Stages[1].Kind != IRPipelineMap ||
-		plan.Stages[1].Primitive != IRPipelineMapInc {
+		plan.Stages[1].CallbackVar == nil ||
+		plan.Stages[1].CallbackVar.Symbol().String() != "inc" {
 		t.Fatalf("mapv stages = %#v", plan.Stages)
 	}
 
@@ -179,7 +181,7 @@ func TestTypedIRDescribesGeneralCollectionPipelinesWithoutForcingLowering(
 	plan = BuildTypedIR(into).Facts(into).Pipeline
 	if plan == nil || plan.Consumer != IRPipelineInto ||
 		len(plan.Stages) != 1 ||
-		plan.Stages[0].Primitive != IRPipelinePrimitiveUnknown ||
+		plan.Stages[0].CallbackVar != nil ||
 		plan.Lowering != IRPipelineNoLowering {
 		t.Fatalf("generic into/map plan = %#v", plan)
 	}
@@ -654,8 +656,8 @@ func TestTypedIRProvesOwnedMapReduceUpdateChain(t *testing.T) {
 	if plan := ir.Facts(reduce).OwnedMapReduce; plan == nil {
 		t.Fatal("owned map reduction was not represented")
 	}
-	firstUpdate := ir.Facts(first).OwnedMapUpdateIn
-	secondUpdate := ir.Facts(second).OwnedMapUpdateIn
+	firstUpdate := ir.Facts(first).OwnedMapMutation
+	secondUpdate := ir.Facts(second).OwnedMapMutation
 	if firstUpdate == nil || secondUpdate == nil {
 		t.Fatal("owned update-in chain was not marked")
 	}
@@ -689,6 +691,18 @@ func TestTypedIRProvesOwnedMapReduceUpdateChain(t *testing.T) {
 	ir = BuildTypedIR(reduce)
 	if plan := ir.Facts(reduce).OwnedMapReduce; plan != nil {
 		t.Fatalf("escaping reducer accumulator was marked owned: %#v", plan)
+	}
+
+	method.Body = second
+	seed := lang.NewSymbol("seed")
+	reduce.Sub.(*ast.InvokeNode).Args[1] = typedIRLocal(seed)
+	ir = BuildTypedIRWithOptions(reduce, TypedIROptions{
+		ParameterTypes: map[*lang.Symbol]IRType{
+			seed: {Kind: IRMap},
+		},
+	})
+	if plan := ir.Facts(reduce).OwnedMapReduce; plan != nil {
+		t.Fatalf("potentially aliased map initializer was marked owned: %#v", plan)
 	}
 }
 

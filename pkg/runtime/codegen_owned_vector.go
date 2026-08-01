@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -36,9 +37,8 @@ type ownedVectorAOTValue struct {
 }
 
 type ownedVectorAOTAssocIn struct {
-	outer *ast.Node
-	inner *ast.Node
-	copy  bool
+	path []*ast.Node
+	copy bool
 }
 
 type ownedVectorAOTReduce struct {
@@ -61,16 +61,23 @@ func analyzeOwnedVectorAOTFunction(
 	targets map[*lang.Var]*aotSpecializationTarget,
 ) *ownedVectorAOTAnalysis {
 	if target == nil || method == nil || method.IsVariadic ||
-		method.FixedArity < 1 || method.FixedArity > 4 {
+		method.FixedArity < 1 || method.FixedArity > 31 {
 		return nil
 	}
 
-	// Depth zero is dynamic; depths one and two are the currently supported
-	// flat and nested representations. Enumerating the small signature space
-	// lets use sites, rather than parameter names or annotations, infer shape.
+	// Depth zero is dynamic. Candidate vector depths are derived from the
+	// deepest vector operation or already-proved callee signature in the body,
+	// rather than from a workload-specific nesting limit.
+	maxDepth := ownedVectorAOTMaxDepth(method.Body, targets)
+	if maxDepth == 0 {
+		return nil
+	}
 	combinations := 1
 	for range method.FixedArity {
-		combinations *= 3
+		combinations *= maxDepth + 1
+		if combinations > 1<<16 {
+			return nil
+		}
 	}
 	var best *ownedVectorAOTAnalysis
 	for encoded := 1; encoded < combinations; encoded++ {
@@ -78,8 +85,8 @@ func analyzeOwnedVectorAOTFunction(
 		value := encoded
 		var paramMask uint32
 		for index := range paramDepths {
-			paramDepths[index] = value % 3
-			value /= 3
+			paramDepths[index] = value % (maxDepth + 1)
+			value /= maxDepth + 1
 			if paramDepths[index] > 0 {
 				paramMask |= uint32(1) << index
 			}
@@ -127,6 +134,45 @@ func analyzeOwnedVectorAOTFunction(
 		}
 	}
 	return best
+}
+
+func ownedVectorAOTMaxDepth(
+	node *ast.Node,
+	targets map[*lang.Var]*aotSpecializationTarget,
+) int {
+	if node == nil {
+		return 0
+	}
+	depth := 0
+	if node.Op == ast.OpInvoke {
+		invoke := node.Sub.(*ast.InvokeNode)
+		if isCoreInvoke(invoke, "assoc-in") && len(invoke.Args) >= 2 &&
+			invoke.Args[1] != nil && invoke.Args[1].Op == ast.OpVector {
+			depth = len(invoke.Args[1].Sub.(*ast.VectorNode).Items)
+		}
+		if isCoreInvoke(invoke, "mapv") && depth < 2 {
+			depth = 2
+		}
+		if invoke.Fn != nil && invoke.Fn.Op == ast.OpVar {
+			if target := targets[invoke.Fn.Sub.(*ast.VarNode).Var]; target != nil && target.ownedVectorAnalysis != nil {
+				for _, candidate := range target.ownedVectorAnalysis.paramDepths {
+					if candidate > depth {
+						depth = candidate
+					}
+				}
+			}
+		}
+	}
+	if node.Op == ast.OpHostCall &&
+		isVectorAOTNth(node.Sub.(*ast.HostCallNode)) {
+		depth = 1
+	}
+	for _, child := range compiler.IRChildren(node) {
+		if childDepth := ownedVectorAOTMaxDepth(child, targets); childDepth > depth {
+			depth = childDepth
+		}
+	}
+	return depth
 }
 
 func ownedVectorAOTResultMatchesParams(
@@ -357,12 +403,12 @@ func (a *ownedVectorAOTAnalyzer) assocIn(
 	}
 	target := a.expr(invoke.Args[0], locals)
 	path := invoke.Args[1]
-	if target.depth != 2 || path == nil || path.Op != ast.OpVector {
+	if target.depth == 0 || path == nil || path.Op != ast.OpVector {
 		a.valid = false
 		return ownedVectorAOTValue{}
 	}
 	items := path.Sub.(*ast.VectorNode).Items
-	if len(items) != 2 {
+	if len(items) == 0 || len(items) != target.depth {
 		a.valid = false
 		return ownedVectorAOTValue{}
 	}
@@ -375,9 +421,8 @@ func (a *ownedVectorAOTAnalyzer) assocIn(
 		a.valid = false
 	}
 	a.analysis.assocIns[node] = ownedVectorAOTAssocIn{
-		outer: items[0],
-		inner: items[1],
-		copy:  !ownedVectorAOTIsAssocIn(a.analysis, invoke.Args[0]),
+		path: append([]*ast.Node(nil), items...),
+		copy: !ownedVectorAOTIsAssocIn(a.analysis, invoke.Args[0]),
 	}
 	a.analysis.mutated |= target.origins
 	return target
@@ -666,7 +711,7 @@ func (g *Generator) generateOwnedVectorAOTInvoke(
 		g.writef("}\n")
 		return result, true
 	}
-	if plan := g.currentOwnedVector.assocIns[node]; plan.outer != nil {
+	if plan := g.currentOwnedVector.assocIns[node]; len(plan.path) != 0 {
 		return g.generateOwnedVectorAOTAssocIn(node, plan)
 	}
 	if plan := g.currentOwnedVector.reduces[node]; plan != nil {
@@ -736,21 +781,41 @@ func (g *Generator) generateOwnedVectorAOTAssocIn(
 ) (string, bool) {
 	invoke := node.Sub.(*ast.InvokeNode)
 	target := g.generateASTNode(invoke.Args[0])
-	outer := g.generateASTNode(plan.outer)
-	inner := g.generateASTNode(plan.inner)
+	path := make([]string, len(plan.path))
+	for index, item := range plan.path {
+		path[index] = g.generateASTNode(item)
+	}
 	value := g.generateASTNode(invoke.Args[2])
-	if plan.copy {
+	if len(path) == 2 && plan.copy {
 		updated := g.allocateTempVar()
 		g.writef(
 			"%s := %s.AssocIn2Copy(lang.IntCast(%s), %s, %s)\n",
-			updated, target, outer, inner, value,
+			updated, target, path[0], path[1], value,
 		)
 		target = updated
-	} else {
+	} else if len(path) == 2 {
 		g.writef(
 			"%s.AssocIn2(lang.IntCast(%s), %s, %s)\n",
-			target, outer, inner, value,
+			target, path[0], path[1], value,
 		)
+	} else {
+		indices := make([]string, len(path))
+		for index, item := range path {
+			indices[index] = "lang.IntCast(" + item + ")"
+		}
+		method := "AssocPath"
+		if plan.copy {
+			method = "AssocPathCopy"
+		}
+		updated := g.allocateTempVar()
+		g.writef("%s := %s.%s([]int{%s}, %s)\n",
+			updated,
+			target,
+			method,
+			strings.Join(indices, ", "),
+			value,
+		)
+		target = updated
 	}
 	return target, true
 }

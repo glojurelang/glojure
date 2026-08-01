@@ -17,7 +17,7 @@ func (g *Generator) generateIROwnedMapReduce(
 	if !g.directLink || !aotVarCanDirectLink(plan.ReduceVar) {
 		return "", false
 	}
-	for _, vr := range plan.UpdateInVars {
+	for _, vr := range plan.CallVars {
 		if !aotVarCanDirectLink(vr) {
 			return "", false
 		}
@@ -27,17 +27,17 @@ func (g *Generator) generateIROwnedMapReduce(
 		return "", false
 	}
 
-	previousUpdates := g.ownedMapUpdates
-	g.ownedMapUpdates = make(
-		map[*ast.Node]*compiler.IROwnedMapUpdatePlan,
-		len(plan.Updates),
+	previousMutations := g.ownedMapMutations
+	g.ownedMapMutations = make(
+		map[*ast.Node]*compiler.IROwnedMapMutationPlan,
+		len(plan.Mutations),
 	)
-	for _, update := range plan.Updates {
-		g.ownedMapUpdates[update] =
-			g.currentIR.Facts(update).OwnedMapUpdateIn
+	for _, mutation := range plan.Mutations {
+		g.ownedMapMutations[mutation] =
+			g.currentIR.Facts(mutation).OwnedMapMutation
 	}
 	reducer := g.generateASTNode(plan.Reducer)
-	g.ownedMapUpdates = previousUpdates
+	g.ownedMapMutations = previousMutations
 
 	initial := g.generateASTNode(plan.Initial)
 	source := g.generateASTNode(plan.Source)
@@ -53,12 +53,18 @@ func (g *Generator) generateIROwnedMapReduce(
 	return result, true
 }
 
-func (g *Generator) generateIROwnedMapUpdateIn(
+func (g *Generator) generateIROwnedMapMutation(
 	node *ast.Node,
 ) (string, bool) {
-	plan := g.ownedMapUpdates[node]
-	if g.ownedMapUpdates == nil || plan == nil ||
-		node == nil || node.Op != ast.OpInvoke {
+	plan := g.ownedMapMutations[node]
+	if g.ownedMapMutations == nil || plan == nil || node == nil {
+		return "", false
+	}
+	if plan.Kind == compiler.IROwnedMapAssoc {
+		return g.generateIROwnedMapAssoc(node)
+	}
+	if plan.Kind != compiler.IROwnedMapUpdateIn ||
+		node.Op != ast.OpInvoke {
 		return "", false
 	}
 	invoke := node.Sub.(*ast.InvokeNode)
@@ -117,6 +123,30 @@ func (g *Generator) generateIROwnedMapUpdateIn(
 	result := g.allocateTempVar()
 	g.writef("%s := %s(%s)\n",
 		result, helper, strings.Join(arguments, ", "))
+	return result, true
+}
+
+func (g *Generator) generateIROwnedMapAssoc(
+	node *ast.Node,
+) (string, bool) {
+	if node.Op != ast.OpAssoc {
+		return "", false
+	}
+	assoc := node.Sub.(*ast.AssocNode)
+	if len(assoc.Entries) == 0 {
+		return "", false
+	}
+	result := g.generateASTNode(assoc.Target)
+	for _, entry := range assoc.Entries {
+		key := g.generateASTNode(entry.Key)
+		value := g.generateASTNode(entry.Val)
+		next := g.allocateTempVar()
+		g.writef(
+			"%s := runtime.AssocOwnedMap(%s, %s, %s)\n",
+			next, result, key, value,
+		)
+		result = next
+	}
 	return result, true
 }
 

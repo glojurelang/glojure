@@ -287,9 +287,6 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 
 	case ast.OpInvoke:
 		invoke := n.Sub.(*ast.InvokeNode)
-		if pipeline := c.compileReducePipeline(n, invoke); pipeline != nil {
-			return pipeline
-		}
 		fn := c.compile(invoke.Fn)
 		args := c.compileArgs(invoke.Args)
 		if fn == nil || args == nil {

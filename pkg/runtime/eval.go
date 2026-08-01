@@ -96,9 +96,6 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 		return n, nil
 	}
 	currentNS := env.CurrentNamespace()
-	if result, ok, err := env.evalDirectInt64ReducePipeline(n, currentNS); ok {
-		return result, err
-	}
 	if result, ok, err := env.evalDirectInvoke(n, currentNS); ok {
 		return result, err
 	}

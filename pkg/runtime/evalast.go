@@ -936,13 +936,6 @@ func (env *environment) EvalASTRecur(n *ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) {
-	invokeNode := n.Sub.(*ast.InvokeNode)
-	if pipeline := (threadedEvalCompiler{}).compileReducePipeline(
-		n,
-		invokeNode,
-	); pipeline != nil {
-		return pipeline(env)
-	}
 	return env.evalASTInvokeDefault(n)
 }
 

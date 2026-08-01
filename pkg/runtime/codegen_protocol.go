@@ -4,6 +4,7 @@ package runtime
 
 import (
 	"fmt"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -60,7 +61,8 @@ func (g *Generator) prepareAOTProtocolPrimitiveMethods(
 	}
 	for seq := methodTable.Seq(); seq != nil; seq = seq.Next() {
 		entry := seq.First().(lang.IMapEntry)
-		if entry.Key() != nil {
+		receiver, ok := protocolDispatchIRType(entry.Key())
+		if !ok {
 			continue
 		}
 		fn, ok := entry.Val().(*Fn)
@@ -72,11 +74,14 @@ func (g *Generator) prepareAOTProtocolPrimitiveMethods(
 			continue
 		}
 		method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		if method.IsVariadic || method.FixedArity < 2 ||
-			method.FixedArity > 4 {
+		if method.IsVariadic || method.FixedArity < 1 ||
+			method.FixedArity > 20 {
 			continue
 		}
-		for _, signature := range inferAOTProtocolPrimitiveSignatures(method) {
+		for _, signature := range inferAOTProtocolPrimitiveSignatures(
+			method,
+			receiver,
+		) {
 			primitive := &aotProtocolPrimitiveMethod{
 				fn:        fn,
 				signature: signature,
@@ -105,6 +110,33 @@ func (g *Generator) prepareAOTProtocolPrimitiveMethods(
 			)
 		}
 	}
+}
+
+// protocolDispatchIRType converts only exact protocol dispatch keys. Interface
+// and default methods require method-selection facts rather than an exact-type
+// lookup, so they conservatively retain ordinary protocol dispatch.
+func protocolDispatchIRType(dispatch any) (compiler.IRType, bool) {
+	if dispatch == nil {
+		return compiler.IRType{Kind: compiler.IRNil, Nullable: true}, true
+	}
+	typ, ok := dispatch.(reflect.Type)
+	if !ok || typ.Kind() == reflect.Interface {
+		return compiler.IRType{}, false
+	}
+	result := compiler.IRType{Kind: compiler.IRDynamic, GoType: typ}
+	switch typ.Kind() {
+	case reflect.Bool:
+		result.Kind = compiler.IRBool
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
+		reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16,
+		reflect.Uint32, reflect.Uint64:
+		result.Kind = compiler.IRInt
+	case reflect.Float32, reflect.Float64:
+		result.Kind = compiler.IRFloat
+	case reflect.String:
+		result.Kind = compiler.IRString
+	}
+	return result, true
 }
 
 func (g *Generator) aotProtocolCallSignatures() map[*lang.Var][]compiler.IRCallSignature {
@@ -139,12 +171,11 @@ func (g *Generator) aotProtocolPrimitiveMethodFor(
 func sameIRCallSignature(
 	left, right compiler.IRCallSignature,
 ) bool {
-	if len(left.Params) != len(right.Params) ||
-		left.Result.Kind != right.Result.Kind {
+	if len(left.Params) != len(right.Params) || left.Result != right.Result {
 		return false
 	}
 	for index := range left.Params {
-		if left.Params[index].Kind != right.Params[index].Kind {
+		if left.Params[index] != right.Params[index] {
 			return false
 		}
 	}
@@ -243,14 +274,23 @@ func (g *Generator) generateAOTProtocolPrimitiveInvoke(
 
 func inferAOTProtocolPrimitiveSignatures(
 	method *ast.FnMethodNode,
+	receiver compiler.IRType,
 ) []compiler.IRCallSignature {
 	if method == nil || len(method.Params) != method.FixedArity ||
-		method.FixedArity < 2 {
+		method.FixedArity < 1 {
 		return nil
+	}
+	const candidateBudget = 1 << 12
+	candidates := 1
+	for index := 1; index < method.FixedArity; index++ {
+		candidates *= 4
+		if candidates > candidateBudget {
+			return nil
+		}
 	}
 	var result []compiler.IRCallSignature
 	params := make([]compiler.IRType, method.FixedArity)
-	params[0] = compiler.IRType{Kind: compiler.IRNil}
+	params[0] = receiver
 	var visit func(int)
 	visit = func(index int) {
 		if index == len(params) {
@@ -263,6 +303,8 @@ func inferAOTProtocolPrimitiveSignatures(
 			return
 		}
 		for _, kind := range []compiler.IRValueKind{
+			compiler.IRDynamic,
+			compiler.IRBool,
 			compiler.IRInt,
 			compiler.IRFloat,
 		} {
@@ -274,8 +316,16 @@ func inferAOTProtocolPrimitiveSignatures(
 	sort.Slice(result, func(i, j int) bool {
 		for index := range result[i].Params {
 			if result[i].Params[index].Kind != result[j].Params[index].Kind {
-				return result[i].Params[index].Kind <
-					result[j].Params[index].Kind
+				// Concrete representations precede the dynamic wildcard.
+				left := result[i].Params[index].Kind
+				right := result[j].Params[index].Kind
+				if left == compiler.IRDynamic {
+					return false
+				}
+				if right == compiler.IRDynamic {
+					return true
+				}
+				return left < right
 			}
 		}
 		return result[i].Result.Kind < result[j].Result.Kind

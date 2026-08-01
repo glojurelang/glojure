@@ -144,7 +144,7 @@ type aotMultiFnCallTarget struct {
 	fastFnVar     string
 	arity         int
 	dispatch      *Fn
-	dispatchPlan  *compiler.IRFixedVectorResultPlan
+	dispatchPlan  *compiler.IRFixedDispatchResultPlan
 	methods       []*aotMultiFnMethod
 	defaultMethod *aotMultiFnMethod
 }
@@ -222,7 +222,7 @@ type Generator struct {
 	liftedCounter      int                        // Counter for closed0, closed1...
 	currentFnEnv       lang.Environment           // Current function's captured env
 	currentIR          *compiler.TypedIR          // typed facts for the current AST
-	ownedMapUpdates    map[*ast.Node]*compiler.IROwnedMapUpdatePlan
+	ownedMapMutations  map[*ast.Node]*compiler.IROwnedMapMutationPlan
 	currentVector      *vectorAOTAnalysis      // transient-vector AOT region
 	currentOwnedVector *ownedVectorAOTAnalysis // recursively owned vector region
 
@@ -2054,6 +2054,9 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		}
 		return result
 	case ast.OpAssoc:
+		if result, ok := g.generateIROwnedMapMutation(node); ok {
+			return result
+		}
 		if result, ok := g.generateOwnedVectorAOTAssoc(node); ok {
 			return result
 		}
@@ -2243,7 +2246,7 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 	if result, ok := g.generateOwnedVectorAOTInvoke(node); ok {
 		return result
 	}
-	if result, ok := g.generateIROwnedMapUpdateIn(node); ok {
+	if result, ok := g.generateIROwnedMapMutation(node); ok {
 		return result
 	}
 	if plan := g.currentIR.Facts(node).OwnedMapReduce; plan != nil {
@@ -2283,10 +2286,6 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 	}
 	if result, ok := g.generateIRSwap(node); ok {
 		return result
-	}
-	if plan := g.currentIR.Facts(node).Pipeline; plan != nil &&
-		plan.Lowering == compiler.IRPipelineReduceInt64 {
-		return g.generateAOTReducePipeline(invokeNode, plan)
 	}
 	if plan := g.currentIR.Facts(node).Pipeline; plan != nil &&
 		plan.Lowering == compiler.IRPipelineInlineIndexed {
@@ -2965,16 +2964,22 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 			}
 			continue
 		}
-		if g.currentVector != nil &&
-			g.currentVector.values[init].int64 {
+		if g.currentVector != nil && vectorAOTIRGoType(
+			g.currentVector.values[init].typ,
+		) != "any" {
 			initCode := g.generateASTNode(init)
 			varName := g.allocateLocal(name)
-			g.writef("var %s int64 = %s\n", varName, initCode)
-			g.markLocalType(name, compiler.IRInt)
+			typ := g.currentVector.values[init].typ.Kind
+			g.writef("var %s %s = %s\n",
+				varName,
+				vectorAOTIRGoType(g.currentVector.values[init].typ),
+				initCode,
+			)
+			g.markLocalType(name, typ)
 			g.writeAssign("_", varName)
 			if isLoop {
 				bindingVars = append(bindingVars, varName)
-				bindingTypes = append(bindingTypes, compiler.IRInt)
+				bindingTypes = append(bindingTypes, typ)
 			}
 			continue
 		}

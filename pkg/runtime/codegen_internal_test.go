@@ -327,24 +327,16 @@ func TestGenerateDirectLinkedInt64VectorUpdateRegion(t *testing.T) {
 	defer lang.PopThreadBindings()
 
 	ReadEval(`
-		(defn exchange [values left right]
-		  (let [left-value (nth values left)
-		        right-value (nth values right)]
-		    (assoc (assoc values left right-value) right left-value)))
-		(defn reverse-owned [values length]
-		  (loop [result values left 0 right (dec length)]
-		    (if (>= left right)
+		(defn adjust-pair [values left right]
+		  (let [left-value (inc (nth values left))
+		        right-value (dec (nth values right))]
+		    (assoc values left left-value right right-value)))
+		(defn rebalance [values first-index last-index]
+		  (loop [result values index first-index]
+		    (if (>= index last-index)
 		      result
-		      (recur (exchange result left right)
-		             (inc left)
-		             (dec right)))))
-		(defn flip-score [values]
-		  (loop [owned values score 0]
-		    (let [first-value (nth owned 0)]
-		      (if (zero? first-value)
-		        score
-		        (recur (reverse-owned owned (inc first-value))
-		               (inc score))))))`)
+		      (recur (adjust-pair result index last-index)
+		             (inc index)))))`)
 
 	var output bytes.Buffer
 	generator := newGenerator(&output, true)
@@ -377,6 +369,43 @@ func TestGenerateDirectLinkedInt64VectorUpdateRegion(t *testing.T) {
 			"vector specialization ignored disabled direct linking:\n%s",
 			output.String(),
 		)
+	}
+}
+
+func TestVectorUpdateRegionInfersParametersIndependently(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.vector-parameter-representations"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn conditional-update [values index increment? context]
+		  (if increment?
+		    (assoc values index (inc (nth values index)))
+		    (assoc values index (dec (nth values index)))))`)
+
+	var output bytes.Buffer
+	generator := NewGenerator(&output)
+	if err := generator.Generate(ns); err != nil {
+		t.Fatalf("generate vector parameter representations: %v", err)
+	}
+	target := generator.aotCallTargets[ns.FindInternedVar(lang.NewSymbol("conditional-update"))]
+	if target == nil || target.vectorAnalysis == nil {
+		t.Fatal("conditional vector update was not analyzed")
+	}
+	analysis := target.vectorAnalysis
+	if analysis.paramMask != 1 ||
+		analysis.paramTypes[1].Kind != compiler.IRInt ||
+		analysis.paramTypes[2].Kind != compiler.IRDynamic ||
+		analysis.paramTypes[3].Kind != compiler.IRDynamic {
+		t.Fatalf("parameter representations = %#v", analysis.paramTypes)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, ".(int64)") ||
+		strings.Contains(generated, ".(bool)") {
+		t.Fatalf("wrapper did not guard only proven representations:\n%s", generated)
 	}
 }
 
@@ -566,22 +595,26 @@ func TestGenerateRecursiveRecordSpecialization(t *testing.T) {
 	defer lang.PopThreadBindings()
 
 	ReadEval(`
-		(defrecord Node [value left right])
-		(defn make-node [value depth]
-		  (if (zero? depth)
-		    (->Node value nil nil)
-		    (let [next-depth (dec depth)]
-		      (->Node value
-		              (make-node (dec value) next-depth)
-		              (make-node (inc value) next-depth)))))
-		(defn sum-node [node]
-		  (if (nil? (:left node))
-		    (:value node)
-		    (+ (:value node)
-		       (sum-node (:left node))
-		       (sum-node (:right node)))))
-		(defn equal-node-score [left right]
-		  (if (= left right) 1 0))`)
+		(defrecord Route [cost preferred alternate])
+		(defn plan-route [base-cost stages]
+		  (if (zero? stages)
+		    (->Route base-cost nil nil)
+		    (let [remaining (dec stages)]
+		      (->Route (+ base-cost stages)
+		               (plan-route base-cost remaining)
+		               (plan-route base-cost remaining)))))
+		(defn total-route-cost [route]
+		  (if (nil? (:preferred route))
+		    (:cost route)
+		    (+ (:cost route)
+		       (total-route-cost (:preferred route))
+		       (total-route-cost (:alternate route)))))
+		(defn equal-route-score [left right]
+		  (if (= left right) 1 0))
+		(defn route-adjusted-cost [route a b c d]
+		  (+ (:cost route) (+ (+ a b) (+ c d))))
+		(defn sample-route []
+		  (plan-route 5 3))`)
 
 	var output bytes.Buffer
 	if err := NewGenerator(&output).Generate(ns); err != nil {
@@ -591,8 +624,8 @@ func TestGenerateRecursiveRecordSpecialization(t *testing.T) {
 	for _, expected := range []string{
 		"func aotRecordFastNew0(",
 		"f0    int64",
-		"f1    *aotRecord0Node",
-		"f2    *aotRecord0Node",
+		"f1    *aotRecord0Route",
+		"f2    *aotRecord0Route",
 		"var aotRecordFn",
 		".aotRecordFast()",
 		"= aotRecordFastNew0(",
@@ -602,9 +635,9 @@ func TestGenerateRecursiveRecordSpecialization(t *testing.T) {
 				expected, generated)
 		}
 	}
-	if got := strings.Count(generated, "var aotRecordFn"); got != 2 {
+	if got := strings.Count(generated, "var aotRecordFn"); got != 3 {
 		t.Fatalf(
-			"generated %d record-specialized functions, want 2; "+
+			"generated %d record-specialized functions, want 3; "+
 				"record equality must retain generic semantics:\n%s",
 			got,
 			generated,
@@ -621,10 +654,10 @@ func TestGenerateRecursiveRecordSpecialization(t *testing.T) {
 			output.String())
 	}
 
-	makeNode := ns.FindInternedVar(lang.NewSymbol("make-node"))
-	originalMeta := makeNode.Meta()
-	makeNode.SetMeta(originalMeta.Assoc(lang.KWRedef, true).(lang.IPersistentMap))
-	defer makeNode.SetMeta(originalMeta)
+	planRoute := ns.FindInternedVar(lang.NewSymbol("plan-route"))
+	originalMeta := planRoute.Meta()
+	planRoute.SetMeta(originalMeta.Assoc(lang.KWRedef, true).(lang.IPersistentMap))
+	defer planRoute.SetMeta(originalMeta)
 
 	output.Reset()
 	if err := NewGenerator(&output).Generate(ns); err != nil {
@@ -650,7 +683,9 @@ func TestGenerateBooleanRecordSpecialization(t *testing.T) {
 		    (->Flag true)
 		    (->Flag false)))
 		(defn flag-score [flag]
-		  (if (:enabled flag) 1 0))`)
+		  (if (:enabled flag) 1 0))
+		(defn sample-flag []
+		  (make-flag 0))`)
 
 	var output bytes.Buffer
 	if err := NewGenerator(&output).Generate(ns); err != nil {
@@ -669,6 +704,46 @@ func TestGenerateBooleanRecordSpecialization(t *testing.T) {
 	}
 }
 
+func TestRecursiveRecordSignatureComesFromCallSites(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.record-callsite-signature"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defrecord Link [marked next])
+		(defn make-link [marked depth]
+		  (if (zero? depth)
+		    (->Link marked nil)
+		    (->Link marked (make-link marked (dec depth)))))
+		(defn count-marked [link]
+		  (if (nil? (:next link))
+		    (if (:marked link) 1 0)
+		    (+ (if (:marked link) 1 0)
+		       (count-marked (:next link)))))
+		(defn sample-link []
+		  (make-link true 4))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate call-site record signature: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"func aotRecordFastNew0(p0 bool, p1 *aotRecord0Link)",
+		"func(bool, int64) *aotRecord0Link",
+		"f0    bool",
+		"f1    *aotRecord0Link",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("record call-site inference omitted %q:\n%s",
+				expected, generated)
+		}
+	}
+}
+
 func TestGenerateDirectProtocolLinkCanBeDisabled(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.direct-protocol"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)
@@ -680,7 +755,11 @@ func TestGenerateDirectProtocolLinkCanBeDisabled(t *testing.T) {
 		  (combine [target left right]))
 		(extend-protocol Combine
 		  nil
-		  (combine [_ left right] (+ left right)))
+		  (combine [_ left right] (+ left right))
+		  go/string
+		  (combine [_ left right] (+ left right))
+		  go/int64
+		  (combine [target left right] (+ target (+ left right))))
 		(defn call-combine [left right]
 		  (combine nil left right))
 		(defn combine-loop []
@@ -689,6 +768,18 @@ func TestGenerateDirectProtocolLinkCanBeDisabled(t *testing.T) {
 		    (if (= i 100)
 		      total
 		      (recur (inc i) (combine nil total i)))))
+		(defn combine-string-loop []
+		  (loop [i 0
+		         total 0]
+		    (if (= i 100)
+		      total
+		      (recur (inc i) (combine "" total i)))))
+		(defn combine-int-loop []
+		  (loop [i 0
+		         total 0]
+		    (if (= i 100)
+		      total
+		      (recur (inc i) (combine 1 total i)))))
 		(defn combine-float-loop []
 		  (let [result
 		        (loop [i 0
@@ -726,9 +817,9 @@ func TestGenerateDirectProtocolLinkCanBeDisabled(t *testing.T) {
 	if got := strings.Count(
 		generated,
 		"aotProtocolFn0.ProtocolGeneration() == aotProtocolGeneration0",
-	); got != 2 {
+	); got != 4 {
 		t.Fatalf(
-			"generated %d guarded protocol regions, want both pure loops:\n%s",
+			"generated %d guarded protocol regions, want all pure loops:\n%s",
 			got,
 			generated,
 		)
@@ -757,6 +848,36 @@ func TestGenerateDirectProtocolLinkCanBeDisabled(t *testing.T) {
 	}
 	if strings.Contains(output.String(), "aotProtocolFn") {
 		t.Fatalf("protocol direct linking ignored ^:redef:\n%s", output.String())
+	}
+}
+
+func TestGenerateExactProtocolMethodAboveFourArguments(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.direct-protocol-five-args"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defprotocol CombineFive
+		  (combine-five [target a b c d]))
+		(extend-protocol CombineFive
+		  nil
+		  (combine-five [_ a b c d]
+		    (+ (+ a b) (+ c d))))
+		(defn call-combine-five []
+		  (combine-five nil 1 2 3 4))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate five-argument protocol: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "func(any, int64, int64, int64, int64) int64") ||
+		!strings.Contains(generated, "aotProtocolMethod") {
+		t.Fatalf("five-argument exact protocol method was not generated:\n%s",
+			generated)
 	}
 }
 
@@ -1621,13 +1742,15 @@ func TestGenerateStableCompositeMultiFnDispatch(t *testing.T) {
 
 	ReadEval(`
 		(defmulti choose
-		  (fn [event] [(:kind event) (:priority event)]))
-		(defmethod choose [:read :low] [event]
-		  (:value event))
-		(defmethod choose :default [_]
+		  (fn [request context]
+		    [(:method request) (:zone context) (:urgent? request)]))
+		(defmethod choose [:post :west true] [request _]
+		  (:status request))
+		(defmethod choose :default [_ _]
 		  0)
 		(defn run-one []
-		  (choose {:kind :read :priority :low :value 42}))`)
+		  (choose {:method :post :urgent? true :status 202}
+		          {:zone :west}))`)
 
 	var output bytes.Buffer
 	if err := NewGenerator(&output).Generate(ns); err != nil {
@@ -1638,7 +1761,7 @@ func TestGenerateStableCompositeMultiFnDispatch(t *testing.T) {
 		"var aotMultiFnFast",
 		"var aotMultiFnDispatch",
 		".IsGeneration(",
-		"// scalar multimethod dispatch",
+		"// exact multimethod dispatch",
 	} {
 		if !strings.Contains(generated, expected) {
 			t.Fatalf("scalar multimethod dispatch omitted %q:\n%s",
@@ -1653,6 +1776,40 @@ func TestGenerateStableCompositeMultiFnDispatch(t *testing.T) {
 	if strings.Contains(fallback.String(), "aotMultiFnFast") {
 		t.Fatalf("disabled direct linking retained multimethod fast path:\n%s",
 			fallback.String())
+	}
+}
+
+func TestGenerateStableScalarMultiFnDispatch(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.stable-scalar-multifn"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defmulti describe (fn [event] (:kind event)))
+		(defmethod describe :read [event]
+		  (:value event))
+		(defmethod describe :default [_]
+		  0)
+		(defn run-one []
+		  (describe {:kind :read :value 42}))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate scalar multimethod: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"var aotMultiFnFast",
+		"var aotMultiFnDispatch",
+		"// exact multimethod dispatch",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("scalar multimethod dispatch omitted %q:\n%s",
+				expected, generated)
+		}
 	}
 }
 
@@ -1773,14 +1930,17 @@ func TestGenerateOwnedMapReduceUsesSharedIRWithDirectLinking(t *testing.T) {
 	defer lang.PopThreadBindings()
 
 	ReadEval(`
-		(defn summarize [values]
+		(defn warehouse-inventory [shipments]
 		  (reduce
-		    (fn [totals value]
-		      (-> totals
-		          (update-in [(:service value) :count] (fnil inc 0))
-		          (update-in [(:service value) :sum] (fnil + 0) (:n value))))
+		    (fn [inventory shipment]
+		      (-> inventory
+		          (update-in [(:warehouse shipment) (:sku shipment)]
+		                     (fnil + 0)
+		                     (:quantity shipment))
+		          (update-in [(:warehouse shipment) :line-count]
+		                     (fnil inc 0))))
 		    {}
-		    values))`)
+		    shipments))`)
 
 	var output bytes.Buffer
 	if err := newGenerator(&output, true).Generate(ns); err != nil {
@@ -1846,6 +2006,35 @@ func TestGenerateOwnedMapReduceUsesSharedIRWithDirectLinking(t *testing.T) {
 		"runtime.ReduceOwnedMap(",
 	) {
 		t.Fatalf("owned map reduction bypassed ^:redef update-in:\n%s", generated)
+	}
+}
+
+func TestGenerateOwnedMapReduceSupportsGeneralLinearAssoc(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.owned-map-assoc"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn index-squares [values]
+		  (reduce
+		    (fn [index value]
+		      (assoc index value (* value value)))
+		    {:seed 1}
+		    values))`)
+
+	var output bytes.Buffer
+	if err := newGenerator(&output, true).Generate(ns); err != nil {
+		t.Fatalf("generate general owned map reduce: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"runtime.ReduceOwnedMap(",
+		"runtime.AssocOwnedMap(",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("general owned map reduce omitted %q:\n%s", expected, generated)
+		}
 	}
 }
 
@@ -2614,53 +2803,6 @@ func TestAnalyzeFloat64AOTMixedLoopAndCrossCall(t *testing.T) {
 	}
 }
 
-func TestAnalyzeReducePipeline(t *testing.T) {
-	core := lang.NSCore
-	coreVar := func(name string) *lang.Var {
-		return core.Intern(lang.NewSymbol(name))
-	}
-	rangeCall := aotTestInvoke(coreVar("range"), aotTestInt(100))
-	filterCall := aotTestInvoke(
-		coreVar("filter"),
-		aotTestVar(coreVar("odd?")),
-		rangeCall,
-	)
-	mapCall := aotTestInvoke(
-		coreVar("map"),
-		aotTestVar(coreVar("inc")),
-		filterCall,
-	)
-	reduce := aotTestInvoke(
-		coreVar("reduce"),
-		aotTestVar(coreVar("+")),
-		aotTestInt(0),
-		mapCall,
-	)
-
-	plan := compiler.AnalyzePipeline(reduce)
-	if plan == nil || plan.Lowering != compiler.IRPipelineReduceInt64 {
-		t.Fatal("safe integer range pipeline was not fused")
-	}
-	want := []ReducePipelineTransformKind{
-		ReducePipelineFilterOdd,
-		ReducePipelineMapInc,
-	}
-	if len(plan.Stages) != len(want) {
-		t.Fatalf("transform count = %d, want %d", len(plan.Stages), len(want))
-	}
-	for i, stage := range plan.Stages {
-		if stage.Primitive != want[i] {
-			t.Fatalf("transform %d = %v, want %v", i, stage.Primitive, want[i])
-		}
-	}
-
-	rangeCall.Sub.(*ast.InvokeNode).Args[0] = aotTestLocal(lang.NewSymbol("n"))
-	if plan := compiler.AnalyzePipeline(reduce); plan != nil &&
-		plan.Lowering == compiler.IRPipelineReduceInt64 {
-		t.Fatal("pipeline with an unproven range bound was fused")
-	}
-}
-
 func TestGenerateInlineIndexedCollectionCallbacks(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(
 		lang.NewSymbol("codegen.inline-indexed-collections"),
@@ -2819,6 +2961,39 @@ func TestGenerateOwnedNestedVectorUpdateRegion(t *testing.T) {
 			"disabled direct linking retained owned-vector specialization:\n%s",
 			fallback.String(),
 		)
+	}
+}
+
+func TestOwnedVectorDepthAndPathComeFromOperations(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.owned-vector-derived-depth"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn update-deep [values i j k value]
+		  (assoc-in values [i j k] value))
+		(defn update-dynamic-path [values path value]
+		  (assoc-in values path value))`)
+
+	var output bytes.Buffer
+	generator := NewGenerator(&output)
+	if err := generator.Generate(ns); err != nil {
+		t.Fatalf("generate derived vector depth: %v", err)
+	}
+	deep := generator.aotCallTargets[ns.FindInternedVar(lang.NewSymbol("update-deep"))]
+	if deep == nil || deep.ownedVectorAnalysis == nil ||
+		deep.ownedVectorAnalysis.paramDepths[0] != 3 {
+		t.Fatalf("deep vector analysis = %#v", deep)
+	}
+	dynamic := generator.aotCallTargets[ns.FindInternedVar(lang.NewSymbol("update-dynamic-path"))]
+	if dynamic != nil && dynamic.ownedVectorAnalysis != nil {
+		t.Fatal("dynamic path received an unproved owned-vector depth")
+	}
+	if !strings.Contains(output.String(), ".AssocPathCopy(") {
+		t.Fatalf("arbitrary path lowering was not generated:\n%s", output.String())
 	}
 }
 

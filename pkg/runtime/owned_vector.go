@@ -73,9 +73,10 @@ func (v *OwnedVector) Nested(index int) *OwnedVector {
 func (v *OwnedVector) NestedSnapshot(index int) *OwnedVector {
 	nested := v.Nested(index)
 	return &OwnedVector{
-		values: append([]any(nil), nested.values...),
-		meta:   nested.meta,
-		dirty:  true,
+		values:        append([]any(nil), nested.values...),
+		meta:          nested.meta,
+		dirty:         true,
+		ownedChildren: make(map[int]bool),
 	}
 }
 
@@ -162,6 +163,69 @@ func (v *OwnedVector) AssocIn2(
 	nested.Assoc(lang.IntCast(innerKey), value)
 	v.dirty = true
 	return v
+}
+
+// AssocPathCopy path-copies every vector on an arbitrary proven vector path.
+// It is the general form of AssocIn2Copy; the two-level helper remains as a
+// low-overhead lowering for that common representation depth.
+func (v *OwnedVector) AssocPathCopy(
+	path []int,
+	value any,
+) *OwnedVector {
+	result := v.versionCopy()
+	return result.AssocPath(path, value)
+}
+
+// AssocPath updates an arbitrary non-empty path in the current private
+// logical version, copying a child when it is still shared with another
+// logical version.
+func (v *OwnedVector) AssocPath(path []int, value any) *OwnedVector {
+	if len(path) == 0 {
+		panic(lang.NewIllegalArgumentError("owned vector assoc path is empty"))
+	}
+	index := path[0]
+	if len(path) == 1 {
+		return v.Assoc(index, value)
+	}
+	if index < 0 || index > len(v.values) {
+		panic(lang.NewIndexOutOfBoundsError())
+	}
+	if index == len(v.values) {
+		v.values = append(v.values, persistentAssocPath(nil, path[1:], value))
+		v.dirty = true
+		return v
+	}
+	nested, ok := v.values[index].(*OwnedVector)
+	if !ok {
+		v.values[index] = persistentAssocPath(
+			v.values[index],
+			path[1:],
+			value,
+		)
+		v.dirty = true
+		return v
+	}
+	if !v.ownedChildren[index] {
+		nested = nested.versionCopy()
+		v.values[index] = nested
+		v.ownedChildren[index] = true
+	}
+	nested.AssocPath(path[1:], value)
+	v.dirty = true
+	return v
+}
+
+func persistentAssocPath(target any, path []int, value any) any {
+	if len(path) == 0 {
+		return value
+	}
+	key := int64(path[0])
+	nested := lang.Get(target, key)
+	return lang.Assoc(
+		target,
+		key,
+		persistentAssocPath(nested, path[1:], value),
+	)
 }
 
 func (v *OwnedVector) Persistent() *lang.Vector {

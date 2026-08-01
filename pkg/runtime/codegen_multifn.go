@@ -12,11 +12,11 @@ import (
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
-// Ordinary multimethod fast paths are deliberately limited to stable,
-// fixed-arity dispatchers returning a short literal vector. The generated
-// path evaluates those vector components directly and selects exact methods
-// without allocating the intermediate vector. Any method, preference, or
-// hierarchy change falls back to ordinary MultiFn dispatch.
+// Stable fixed-arity dispatchers can select exact methods directly. Literal
+// vector results are decomposed into components so the otherwise unobservable
+// vector need not be allocated; scalar dispatch is the one-component case.
+// Any method, preference, or hierarchy change falls back to ordinary MultiFn
+// dispatch.
 func (g *Generator) prepareAOTMultiFnTargets(vars []namedVar) {
 	if !g.directLink {
 		return
@@ -38,7 +38,7 @@ func (g *Generator) prepareAOTMultiFnTargets(vars []namedVar) {
 		if !ok {
 			continue
 		}
-		dispatchPlan := compiler.AnalyzeFixedVectorResult(dispatch.ASTNode())
+		dispatchPlan := compiler.AnalyzeFixedDispatchResult(dispatch.ASTNode())
 		if dispatchPlan == nil {
 			continue
 		}
@@ -46,7 +46,7 @@ func (g *Generator) prepareAOTMultiFnTargets(vars []namedVar) {
 		methods, defaultMethod := prepareAOTMultiFnMethods(
 			multiFn,
 			arity,
-			len(dispatchPlan.Components),
+			dispatchPlan,
 		)
 		if len(methods) == 0 || defaultMethod == nil {
 			continue
@@ -143,7 +143,7 @@ func aotMultiFnHierarchyEmpty(multiFn *lang.MultiFn) bool {
 func prepareAOTMultiFnMethods(
 	multiFn *lang.MultiFn,
 	arity int,
-	componentCount int,
+	plan *compiler.IRFixedDispatchResultPlan,
 ) ([]*aotMultiFnMethod, *aotMultiFnMethod) {
 	var methods []*aotMultiFnMethod
 	var defaultMethod *aotMultiFnMethod
@@ -166,13 +166,17 @@ func prepareAOTMultiFnMethods(
 			defaultMethod = method
 			continue
 		}
-		vector, ok := entry.Key().(lang.IPersistentVector)
-		if !ok || vector.Count() != componentCount {
-			return nil, nil
-		}
-		method.components = make([]any, componentCount)
-		for index := range method.components {
-			method.components[index] = vector.Nth(index)
+		if plan.Kind == compiler.IRDispatchScalar {
+			method.components = []any{entry.Key()}
+		} else {
+			vector, ok := entry.Key().(lang.IPersistentVector)
+			if !ok || vector.Count() != len(plan.Components) {
+				return nil, nil
+			}
+			method.components = make([]any, len(plan.Components))
+			for index := range method.components {
+				method.components[index] = vector.Nth(index)
+			}
 		}
 		methods = append(methods, method)
 	}
@@ -239,10 +243,8 @@ func (g *Generator) generateAOTMultiFnFastPath(
 		target.fastFnVar,
 		strings.Join(signature, ", "),
 	)
-	g.writef("if !%s || !%s.IsGeneration(%s) { return nil, false }\n",
+	g.writef("if !%s { return nil, false }\n",
 		target.exactVar,
-		target.multiFnVar,
-		target.generationVar,
 	)
 	componentNames := make([]string, len(components))
 	for index := range componentNames {
@@ -252,6 +254,12 @@ func (g *Generator) generateAOTMultiFnFastPath(
 		strings.Join(componentNames, ", "),
 		target.dispatchVar,
 		strings.Join(params, ", "),
+	)
+	// Dispatch functions are arbitrary user code and may alter the method
+	// table, preferences, or hierarchy themselves.
+	g.writef("if !%s.IsGeneration(%s) { return nil, false }\n",
+		target.multiFnVar,
+		target.generationVar,
 	)
 	for _, method := range target.methods {
 		conditions := make([]string, len(componentNames))
@@ -324,7 +332,7 @@ func (g *Generator) generateAOTMultiFnInvoke(
 	}
 	result := g.allocateTempVar()
 	ok := g.allocateTempVar()
-	g.writef("// scalar multimethod dispatch %s\n", target.vr)
+	g.writef("// exact multimethod dispatch %s\n", target.vr)
 	g.writef("%s, %s := %s(%s)\n",
 		result,
 		ok,

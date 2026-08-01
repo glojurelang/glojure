@@ -1016,6 +1016,31 @@ func TestReduceOwnedMapKeepsNestedUpdatesPrivateUntilReturn(t *testing.T) {
 	}
 }
 
+func TestReduceOwnedMapSupportsLinearAssocMutations(t *testing.T) {
+	seed := lang.NewKeyword("seed")
+	initial := lang.NewMap(seed, int64(1))
+	reducer := lang.FnFunc2(func(result, item interface{}) interface{} {
+		return AssocOwnedMap(result, item, lang.Numbers.Multiply(item, item))
+	})
+
+	result := ReduceOwnedMap(
+		nativeCoreReduce{},
+		reducer,
+		initial,
+		lang.NewVector(int64(2), int64(3)),
+	)
+
+	if got := lang.Get(result, int64(2)); got != int64(4) {
+		t.Fatalf("owned assoc result = %v, want 4", got)
+	}
+	if got := lang.Get(result, int64(3)); got != int64(9) {
+		t.Fatalf("owned assoc result = %v, want 9", got)
+	}
+	if initial.Count() != 1 || lang.Get(initial, int64(2)) != nil {
+		t.Fatalf("owned assoc mutated initial map: %v", initial)
+	}
+}
+
 func TestUpdateOwnedMapFixedTwoKeyPathPreservesUpdateSemantics(t *testing.T) {
 	service := lang.NewKeyword("api")
 	requests := lang.NewKeyword("requests")

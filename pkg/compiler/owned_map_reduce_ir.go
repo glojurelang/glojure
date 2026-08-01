@@ -5,11 +5,11 @@ import (
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
-// analyzeOwnedMapReduce proves that an inline two-argument reducer threads an
-// empty map literal through update-in calls without exposing an intermediate
-// accumulator. Keeping the initial form narrow gives the runtime lowering a
-// representation it can always convert to a transient without a speculative
-// fallback.
+// analyzeOwnedMapReduce proves that an inline two-argument reducer linearly
+// threads a map through ownership-compatible mutations without exposing an
+// intermediate accumulator. Eligibility follows from representation and
+// escape facts; the particular keys, paths, callbacks, and number of
+// mutations do not affect the proof.
 func (ir *TypedIR) analyzeOwnedMapReduce(
 	node *ast.Node,
 ) *IROwnedMapReducePlan {
@@ -19,7 +19,7 @@ func (ir *TypedIR) analyzeOwnedMapReduce(
 	invoke := node.Sub.(*ast.InvokeNode)
 	reduceVar, name, core := irCoreCall(invoke)
 	if !core || name != "reduce" || len(invoke.Args) != 3 ||
-		!irEmptyMapLiteral(invoke.Args[1]) ||
+		invoke.Args[1].Op != ast.OpMap ||
 		!irFixedFnArity(invoke.Args[0], 2) {
 		return nil
 	}
@@ -36,7 +36,7 @@ func (ir *TypedIR) analyzeOwnedMapReduce(
 		safe:        true,
 	}
 	usage.scanTail(method.Body)
-	if !usage.safe || len(usage.updates) == 0 {
+	if !usage.safe || len(usage.mutations) == 0 {
 		return nil
 	}
 	usage.rejectOtherReferences(method.Body)
@@ -44,51 +44,61 @@ func (ir *TypedIR) analyzeOwnedMapReduce(
 		return nil
 	}
 
-	updateVars := make([]*lang.Var, 0, len(usage.updates))
+	callVars := make([]*lang.Var, 0, len(usage.mutations))
 	seen := make(map[*lang.Var]bool)
-	for _, update := range usage.updates {
-		facts := ir.facts[update]
-		updatePlan := &IROwnedMapUpdatePlan{}
-		invoke := update.Sub.(*ast.InvokeNode)
-		if path := invoke.Args[1]; path.Op == ast.OpVector {
-			updatePlan.Keys = append(
-				[]*ast.Node(nil),
-				path.Sub.(*ast.VectorNode).Items...,
-			)
+	for _, mutation := range usage.mutations {
+		facts := ir.facts[mutation]
+		plan := ownedMapMutationPlan(mutation)
+		facts.OwnedMapMutation = plan
+		ir.facts[mutation] = facts
+		if mutation.Op != ast.OpInvoke {
+			continue
 		}
-		if callback := invoke.Args[2]; callback.Op == ast.OpInvoke {
-			callbackInvoke := callback.Sub.(*ast.InvokeNode)
-			if vr, name, core := irCoreCall(callbackInvoke); core &&
-				name == "fnil" && len(callbackInvoke.Args) == 2 {
-				updatePlan.Fnil = &IROwnedMapFnilPlan{
-					Var:     vr,
-					Fn:      callbackInvoke.Args[0],
-					Default: callbackInvoke.Args[1],
-				}
-			}
-		}
-		facts.OwnedMapUpdateIn = updatePlan
-		ir.facts[update] = facts
-		vr, _, _ := irCoreCall(invoke)
-		if !seen[vr] {
+		vr, _, _ := irCoreCall(mutation.Sub.(*ast.InvokeNode))
+		if vr != nil && !seen[vr] {
 			seen[vr] = true
-			updateVars = append(updateVars, vr)
+			callVars = append(callVars, vr)
 		}
 	}
 	return &IROwnedMapReducePlan{
-		ReduceVar:    reduceVar,
-		UpdateInVars: updateVars,
-		Reducer:      invoke.Args[0],
-		Initial:      invoke.Args[1],
-		Source:       invoke.Args[2],
-		Updates:      append([]*ast.Node(nil), usage.updates...),
+		ReduceVar: reduceVar,
+		CallVars:  callVars,
+		Reducer:   invoke.Args[0],
+		Initial:   invoke.Args[1],
+		Source:    invoke.Args[2],
+		Mutations: append([]*ast.Node(nil), usage.mutations...),
 	}
+}
+
+func ownedMapMutationPlan(node *ast.Node) *IROwnedMapMutationPlan {
+	if node.Op == ast.OpAssoc {
+		return &IROwnedMapMutationPlan{Kind: IROwnedMapAssoc}
+	}
+	plan := &IROwnedMapMutationPlan{Kind: IROwnedMapUpdateIn}
+	invoke := node.Sub.(*ast.InvokeNode)
+	if path := invoke.Args[1]; path.Op == ast.OpVector {
+		plan.Keys = append(
+			[]*ast.Node(nil), path.Sub.(*ast.VectorNode).Items...,
+		)
+	}
+	if callback := invoke.Args[2]; callback.Op == ast.OpInvoke {
+		callbackInvoke := callback.Sub.(*ast.InvokeNode)
+		if vr, name, core := irCoreCall(callbackInvoke); core &&
+			name == "fnil" && len(callbackInvoke.Args) == 2 {
+			plan.Fnil = &IROwnedMapFnilPlan{
+				Var:     vr,
+				Fn:      callbackInvoke.Args[0],
+				Default: callbackInvoke.Args[1],
+			}
+		}
+	}
+	return plan
 }
 
 type ownedMapReduceUsage struct {
 	accumulator *lang.Symbol
 	allowed     map[*ast.Node]bool
-	updates     []*ast.Node
+	mutations   []*ast.Node
 	safe        bool
 }
 
@@ -128,25 +138,43 @@ func (u *ownedMapReduceUsage) scanTail(node *ast.Node) {
 		u.scanTail(conditional.Then)
 		u.scanTail(conditional.Else)
 	default:
-		if !u.scanUpdateChain(node) {
+		if !u.scanMutationChain(node) {
 			u.safe = false
 		}
 	}
 }
 
-func (u *ownedMapReduceUsage) scanUpdateChain(node *ast.Node) bool {
+func (u *ownedMapReduceUsage) scanMutationChain(node *ast.Node) bool {
 	node = irUnwrapDo(node)
 	if irLocalIs(node, u.accumulator) {
 		u.allowed[node] = true
 		return true
 	}
-	if node == nil || node.Op != ast.OpInvoke {
+	if node == nil {
+		return false
+	}
+	if node.Op == ast.OpAssoc {
+		assoc := node.Sub.(*ast.AssocNode)
+		if len(assoc.Entries) == 0 ||
+			!u.scanMutationChain(assoc.Target) {
+			return false
+		}
+		for _, entry := range assoc.Entries {
+			if u.containsAccumulator(entry.Key) ||
+				u.containsAccumulator(entry.Val) {
+				return false
+			}
+		}
+		u.mutations = append(u.mutations, node)
+		return true
+	}
+	if node.Op != ast.OpInvoke {
 		return false
 	}
 	invoke := node.Sub.(*ast.InvokeNode)
 	_, name, core := irCoreCall(invoke)
 	if !core || name != "update-in" || len(invoke.Args) < 3 ||
-		!u.scanUpdateChain(invoke.Args[0]) {
+		!u.scanMutationChain(invoke.Args[0]) {
 		return false
 	}
 	if u.containsAccumulator(invoke.Fn) {
@@ -157,7 +185,7 @@ func (u *ownedMapReduceUsage) scanUpdateChain(node *ast.Node) bool {
 			return false
 		}
 	}
-	u.updates = append(u.updates, node)
+	u.mutations = append(u.mutations, node)
 	return true
 }
 
@@ -187,12 +215,4 @@ func (u *ownedMapReduceUsage) containsAccumulator(node *ast.Node) bool {
 		}
 	}
 	return false
-}
-
-func irEmptyMapLiteral(node *ast.Node) bool {
-	if node == nil || node.Op != ast.OpMap {
-		return false
-	}
-	m := node.Sub.(*ast.MapNode)
-	return len(m.Keys) == 0 && len(m.Vals) == 0
 }
