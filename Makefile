@@ -202,7 +202,7 @@ bin/%/glj: generate \
 	@mkdir -p $(dir $@)
 	scripts/build-glj.sh $@ $*
 
-bin/%/glj.wasm: \
+bin/%/glj.wasm: $(GO) \
 	  $(wildcard ./cmd/glj/*.go) \
 	  $(wildcard ./pkg/**/*.go) \
 	  $(wildcard ./internal/**/*.go) \
