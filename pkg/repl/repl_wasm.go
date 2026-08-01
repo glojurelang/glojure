@@ -49,5 +49,3 @@ func Start(opts ...Option) {
 		fmt.Print(defaultPrompt(&o))
 	}
 }
-
-

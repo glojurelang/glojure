@@ -61,10 +61,10 @@ func DoubleToLongBits(x any) int64    { return jdouble.DoubleToLongBits(toFloat6
 func DoubleToRawLongBits(x any) int64 { return jdouble.DoubleToRawLongBits(toFloat64(x)) }
 func LongBitsToDouble(x any) float64  { return jdouble.LongBitsToDouble(toInt64(x)) }
 
-func Compare(x, y any) int32   { return jdouble.Compare(toFloat64(x), toFloat64(y)) }
-func Max(a, b any) float64     { return jdouble.Max(toFloat64(a), toFloat64(b)) }
-func Min(a, b any) float64     { return jdouble.Min(toFloat64(a), toFloat64(b)) }
-func Sum(a, b any) float64     { return jdouble.Sum(toFloat64(a), toFloat64(b)) }
+func Compare(x, y any) int32 { return jdouble.Compare(toFloat64(x), toFloat64(y)) }
+func Max(a, b any) float64   { return jdouble.Max(toFloat64(a), toFloat64(b)) }
+func Min(a, b any) float64   { return jdouble.Min(toFloat64(a), toFloat64(b)) }
+func Sum(a, b any) float64   { return jdouble.Sum(toFloat64(a), toFloat64(b)) }
 
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)

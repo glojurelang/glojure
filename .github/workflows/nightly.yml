@@ -1,0 +1,71 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: '17 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly
+  cancel-in-progress: true
+
+jobs:
+  fuzz:
+    name: Fuzz (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - package: ./pkg/reader
+            target: FuzzCLJConformance
+          - package: ./pkg/reader
+            target: FuzzRead
+          - package: ./internal/persistent/vector
+            target: FuzzTransient
+          - package: ./pkg/lang
+            target: FuzzPersistentHashMap
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Run fuzzer
+        run: >-
+          nix-shell --run
+          'go test ${{ matrix.package }} -run=^$ -fuzz=^${{ matrix.target }}$ -fuzztime=5m'
+
+  stress:
+    name: Shuffled and repeated Go tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Run shuffled tests repeatedly
+        run: nix-shell --run 'go test -shuffle=on -count=5 ./...'
+
+  cross-build:
+    name: Major-platform builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Build major targets
+        run: |
+          # shellcheck disable=SC2016 # Expansion belongs to the nested Nix shell.
+          nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; make \
+            bin/darwin_arm64/glj bin/darwin_amd64/glj \
+            bin/linux_arm64/glj bin/linux_amd64/glj bin/linux_arm/glj \
+            bin/linux_riscv64/glj bin/linux_ppc64le/glj bin/linux_s390x/glj bin/linux_386/glj \
+            bin/windows_arm64/glj bin/windows_arm/glj bin/windows_amd64/glj bin/windows_386/glj \
+            bin/js_wasm/glj.wasm bin/wasip1_wasm/glj.wasm'

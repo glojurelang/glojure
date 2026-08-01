@@ -1,6 +1,12 @@
 R := https://github.com/makeplus/makes
 M := .cache/makes
-$(shell [ -d '$M' ] || git clone -q $R '$M')
+MAKES-REV := f57024d72b07055d0e75234a219a3ccecc63ade2
+$(shell \
+  if [ "$$(git -C '$M' rev-parse HEAD 2>/dev/null)" != '$(MAKES-REV)' ]; then \
+    [ -d '$M/.git' ] || git clone -q $R '$M'; \
+    git -C '$M' fetch -q origin $(MAKES-REV); \
+    git -C '$M' checkout -q $(MAKES-REV); \
+  fi)
 
 include $M/init.mk
 
@@ -74,7 +80,7 @@ TEST-GLJ-DIR := test/glojure
 TEST-GLJ-FILES := $(shell find $(TEST-GLJ-DIR) -name '*.glj' | sort)
 TEST-GLJ-TARGETS := $(addsuffix .test,$(TEST-GLJ-FILES))
 TEST-SUITE-REPO := https://github.com/glojurelang/clojure-test-suite.git
-TEST-SUITE-BRANCH := glojure
+TEST-SUITE-REV := 6ec123c2fed2ff227aed5926d28d2abc1d35a9c1
 TEST-SUITE-DIR := test/clojure-test-suite
 TEST-SUITE-FILE := test-glojure.glj
 TEST-SUITE-EXPECT-FAILURES ?= 0
@@ -209,8 +215,12 @@ vet: $(GO)
 	go vet ./...
 
 # vet is disabled until we fix errors in generated code
-test: test-aot-runtime test-glj  # vet
-	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
+.PHONY: test test-go test-aot-runtime test-glj test-suite
+test: test-go test-aot-runtime test-glj  # vet
+	$(MAKE) test-suite v=1
+
+test-go: $(GO)
+	go test ./...
 
 TEST-COMPARE-LOAD := $(shell \
 	processors=$$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2); \
@@ -224,14 +234,14 @@ test-compare: $(YS)
 	  '$(if $(load),$(load),$(TEST-COMPARE-LOAD))'
 
 test-aot-runtime: $(GO)
-	go test -tags glj_aot_runtime ./pkg/glj ./pkg/gljmain ./pkg/runtime
+	go test -tags glj_aot_runtime ./pkg/glj ./pkg/runtime ./pkg/stdlib
 
 .PHONY: test-aot test-suite-aot
 test-aot: test-aot-runtime test-glj
 	$(MAKE) test-suite-aot
 
 test-suite-aot: $(GO) $(STDLIB-TARGETS) generate aot $(TEST-SUITE-DIR)
-	cd $(TEST-SUITE-DIR) && git checkout $(TEST-SUITE-BRANCH)
+	cd $(TEST-SUITE-DIR) && git checkout --detach $(TEST-SUITE-REV)
 	TEST_SUITE_EXPECT_FAILURES=$(TEST-SUITE-EXPECT-FAILURES) \
 	TEST_SUITE_EXPECT_ERRORS=$(TEST-SUITE-EXPECT-ERRORS) \
 	TEST_SUITE_EXPECT_LOAD_ERRORS=$(TEST-SUITE-EXPECT-LOAD-ERRORS) \
@@ -240,10 +250,11 @@ test-suite-aot: $(GO) $(STDLIB-TARGETS) generate aot $(TEST-SUITE-DIR)
 test-glj: $(TEST-GLJ-TARGETS)
 
 $(TEST-SUITE-DIR):
-	git clone --branch $(TEST-SUITE-BRANCH) $(TEST-SUITE-REPO) $@
+	git clone --no-checkout $(TEST-SUITE-REPO) $@
+	cd $@ && git checkout --detach $(TEST-SUITE-REV)
 
 test-suite: $(GLJ-CMD) $(TEST-SUITE-DIR)
-	cd $(TEST-SUITE-DIR) && git checkout $(TEST-SUITE-BRANCH)
+	cd $(TEST-SUITE-DIR) && git checkout --detach $(TEST-SUITE-REV)
 	cd $(TEST-SUITE-DIR) && \
 	  $(abspath $<) $(TEST-SUITE-FILE) \
 	    $(if $(TEST-SUITE-EXPECT-FAILURES),--expect-failures $(TEST-SUITE-EXPECT-FAILURES)) \
@@ -259,6 +270,15 @@ format: $(GO)
 	  echo "Files were formatted. Please commit the changes."; \
 	  exit 1; \
 	fi
+
+.PHONY: format-check
+format-check:
+	@files="$$(gofmt -l $$(git ls-files '*.go'))"; \
+	  if [ -n "$$files" ]; then \
+	    echo "The following files need gofmt:"; \
+	    echo "$$files"; \
+	    exit 1; \
+	  fi
 
 update-clojure-sources:
 	scripts/rewrite-core/update-clojure-sources.sh \

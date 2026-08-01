@@ -13,12 +13,12 @@ import (
 
 // Server is a minimal nREPL server for editor integration.
 type Server struct {
-	listener    net.Listener
-	sessions    map[string]*Session
-	mu          sync.RWMutex
-	done        chan struct{}
-	portFile    string
-	wg          sync.WaitGroup
+	listener net.Listener
+	sessions map[string]*Session
+	mu       sync.RWMutex
+	done     chan struct{}
+	portFile string
+	wg       sync.WaitGroup
 }
 
 // Session tracks per-session state for an nREPL client.

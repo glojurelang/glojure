@@ -30,14 +30,14 @@ var (
 // constructor sugar).
 func ValueOf(x any) lang.Char { return lang.Char(toRune(x)) }
 
-func IsDigit(x any) bool          { return jchar.IsDigit(toRune(x)) }
-func IsLetter(x any) bool         { return jchar.IsLetter(toRune(x)) }
-func IsLetterOrDigit(x any) bool  { return jchar.IsLetterOrDigit(toRune(x)) }
-func IsAlphabetic(x any) bool     { return jchar.IsAlphabetic(toRune(x)) }
-func IsWhitespace(x any) bool     { return jchar.IsWhitespace(toRune(x)) }
-func IsSpaceChar(x any) bool      { return jchar.IsSpaceChar(toRune(x)) }
-func IsUpperCase(x any) bool      { return jchar.IsUpperCase(toRune(x)) }
-func IsLowerCase(x any) bool      { return jchar.IsLowerCase(toRune(x)) }
+func IsDigit(x any) bool         { return jchar.IsDigit(toRune(x)) }
+func IsLetter(x any) bool        { return jchar.IsLetter(toRune(x)) }
+func IsLetterOrDigit(x any) bool { return jchar.IsLetterOrDigit(toRune(x)) }
+func IsAlphabetic(x any) bool    { return jchar.IsAlphabetic(toRune(x)) }
+func IsWhitespace(x any) bool    { return jchar.IsWhitespace(toRune(x)) }
+func IsSpaceChar(x any) bool     { return jchar.IsSpaceChar(toRune(x)) }
+func IsUpperCase(x any) bool     { return jchar.IsUpperCase(toRune(x)) }
+func IsLowerCase(x any) bool     { return jchar.IsLowerCase(toRune(x)) }
 
 func ToUpperCase(x any) lang.Char { return lang.Char(jchar.ToUpperCase(toRune(x))) }
 func ToLowerCase(x any) lang.Char { return lang.Char(jchar.ToLowerCase(toRune(x))) }

@@ -1,22 +1,128 @@
 name: CI
+
 on:
   push:
-    paths-ignore:
-    - '**.md'
+    branches: [main]
   pull_request:
-    branches:
-    - main
-    paths-ignore:
-    - '**.md'
+    branches: [main]
+  merge_group:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Check formatting
+        run: nix-shell --run 'make format-check'
+      - name: Check module files
+        run: nix-shell --run 'go mod tidy' && git diff --exit-code -- go.mod go.sum
+
+  go:
+    name: Go and compact runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Run Go tests
+        run: |
+          # shellcheck disable=SC2016 # Expansion belongs to the nested Nix shell.
+          nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; make test-go test-aot-runtime'
+
+  race:
+    name: Race detector
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Run Go tests with race detection
+        run: nix-shell --run 'go test -race ./...'
+
+  compatibility:
+    name: Compatibility (${{ matrix.mode }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mode: interpreted
+            command: make test-glj test-suite v=1
+          - mode: aot
+            command: make test-suite-aot
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Run ${{ matrix.mode }} compatibility tests
+        run: |
+          # shellcheck disable=SC2016 # Expansion belongs to the nested Nix shell.
+          nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; ${{ matrix.command }}'
+
+  generated:
+    name: Generated files
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Regenerate committed files
+        run: |
+          # shellcheck disable=SC2016 # Expansion belongs to the nested Nix shell.
+          nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; make stdlib-targets generate aot glj-imports'
+      - name: Check for drift
+        run: git diff --exit-code
+
+  build-smoke:
+    name: Native and WASM builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Build native and browser binaries
+        run: |
+          # shellcheck disable=SC2016 # Expansion belongs to the nested Nix shell.
+          nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; make build bin/js_wasm/glj.wasm'
+
+  required:
+    name: Required
+    if: always()
+    needs: [checks, go, race, compatibility, generated, build-smoke]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
-    - uses: cachix/install-nix-action@v19
-      with:
-        nix_path: nixpkgs=channel:nixos-unstable
-    - run: nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH; (make test || make test) || make test'
+      - name: Verify required jobs
+        env:
+          CHECKS: ${{ needs.checks.result }}
+          GO: ${{ needs.go.result }}
+          RACE: ${{ needs.race.result }}
+          COMPATIBILITY: ${{ needs.compatibility.result }}
+          GENERATED: ${{ needs.generated.result }}
+          BUILD_SMOKE: ${{ needs.build-smoke.result }}
+        run: |
+          for result in "$CHECKS" "$GO" "$RACE" "$COMPATIBILITY" "$GENERATED" "$BUILD_SMOKE"; do
+            test "$result" = success
+          done
