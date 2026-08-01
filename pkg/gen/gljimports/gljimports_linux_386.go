@@ -9,9 +9,14 @@ import (
 	errors "errors"
 	flag "flag"
 	fmt "fmt"
+	github_com_glojurelang_glojure_pkg_httpserver "github.com/glojurelang/glojure/pkg/httpserver"
 	github_com_glojurelang_glojure_pkg_lang "github.com/glojurelang/glojure/pkg/lang"
+	github_com_glojurelang_glojure_pkg_nrepl "github.com/glojurelang/glojure/pkg/nrepl"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
+	github_com_glojurelang_glojure_pkg_podclient "github.com/glojurelang/glojure/pkg/podclient"
+	github_com_glojurelang_glojure_pkg_repl "github.com/glojurelang/glojure/pkg/repl"
 	github_com_glojurelang_glojure_pkg_runtime "github.com/glojurelang/glojure/pkg/runtime"
+	github_com_glojurelang_glojure_pkg_srepl "github.com/glojurelang/glojure/pkg/srepl"
 	io "io"
 	io_fs "io/fs"
 	io_ioutil "io/ioutil"
@@ -220,6 +225,12 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("fmt.Sscanln", fmt.Sscanln)
 	_register("fmt.State", reflect.TypeOf((*fmt.State)(nil)).Elem())
 	_register("fmt.Stringer", reflect.TypeOf((*fmt.Stringer)(nil)).Elem())
+
+	// package github.com/glojurelang/glojure/pkg/httpserver
+	////////////////////////////////////////
+	_register("github.com/glojurelang/glojure/pkg/httpserver.Server", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_httpserver.Server)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/httpserver.*Server", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_httpserver.Server)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/httpserver.Start", github_com_glojurelang_glojure_pkg_httpserver.Start)
 
 	// package github.com/glojurelang/glojure/pkg/lang
 	////////////////////////////////////////
@@ -994,6 +1005,41 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.WithMeta", github_com_glojurelang_glojure_pkg_lang.WithMeta)
 	_register("github.com/glojurelang/glojure/pkg/lang.WriteWriter", github_com_glojurelang_glojure_pkg_lang.WriteWriter)
 
+	// package github.com/glojurelang/glojure/pkg/nrepl
+	////////////////////////////////////////
+	_register("github.com/glojurelang/glojure/pkg/nrepl.BencodeDecode", github_com_glojurelang_glojure_pkg_nrepl.BencodeDecode)
+	_register("github.com/glojurelang/glojure/pkg/nrepl.BencodeEncode", github_com_glojurelang_glojure_pkg_nrepl.BencodeEncode)
+	_register("github.com/glojurelang/glojure/pkg/nrepl.Client", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_nrepl.Client)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/nrepl.*Client", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_nrepl.Client)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/nrepl.CompletionEntry", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_nrepl.CompletionEntry)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/nrepl.*CompletionEntry", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_nrepl.CompletionEntry)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/nrepl.Connect", github_com_glojurelang_glojure_pkg_nrepl.Connect)
+	_register("github.com/glojurelang/glojure/pkg/nrepl.Server", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_nrepl.Server)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/nrepl.*Server", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_nrepl.Server)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/nrepl.Session", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_nrepl.Session)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/nrepl.*Session", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_nrepl.Session)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/nrepl.Start", github_com_glojurelang_glojure_pkg_nrepl.Start)
+
+	// package github.com/glojurelang/glojure/pkg/podclient
+	////////////////////////////////////////
+	_register("github.com/glojurelang/glojure/pkg/podclient.Client", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_podclient.Client)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/podclient.*Client", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_podclient.Client)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/podclient.Start", github_com_glojurelang_glojure_pkg_podclient.Start)
+	_register("github.com/glojurelang/glojure/pkg/podclient.StartCommand", github_com_glojurelang_glojure_pkg_podclient.StartCommand)
+
+	// package github.com/glojurelang/glojure/pkg/repl
+	////////////////////////////////////////
+	_register("github.com/glojurelang/glojure/pkg/repl.ColorSyntax", github_com_glojurelang_glojure_pkg_repl.ColorSyntax)
+	_register("github.com/glojurelang/glojure/pkg/repl.EvalFunc", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_repl.EvalFunc)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/repl.IsTerminal", github_com_glojurelang_glojure_pkg_repl.IsTerminal)
+	_register("github.com/glojurelang/glojure/pkg/repl.Option", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_repl.Option)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/repl.Start", github_com_glojurelang_glojure_pkg_repl.Start)
+	_register("github.com/glojurelang/glojure/pkg/repl.WithEnvironment", github_com_glojurelang_glojure_pkg_repl.WithEnvironment)
+	_register("github.com/glojurelang/glojure/pkg/repl.WithHistoryFile", github_com_glojurelang_glojure_pkg_repl.WithHistoryFile)
+	_register("github.com/glojurelang/glojure/pkg/repl.WithNREPLClient", github_com_glojurelang_glojure_pkg_repl.WithNREPLClient)
+	_register("github.com/glojurelang/glojure/pkg/repl.WithStdin", github_com_glojurelang_glojure_pkg_repl.WithStdin)
+	_register("github.com/glojurelang/glojure/pkg/repl.WithStdout", github_com_glojurelang_glojure_pkg_repl.WithStdout)
+
 	// package github.com/glojurelang/glojure/pkg/runtime
 	////////////////////////////////////////
 	_register("github.com/glojurelang/glojure/pkg/runtime.AddLoadPath", github_com_glojurelang_glojure_pkg_runtime.AddLoadPath)
@@ -1051,6 +1097,12 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/runtime.WithLoadPath", github_com_glojurelang_glojure_pkg_runtime.WithLoadPath)
 	_register("github.com/glojurelang/glojure/pkg/runtime.WithStderr", github_com_glojurelang_glojure_pkg_runtime.WithStderr)
 	_register("github.com/glojurelang/glojure/pkg/runtime.WithStdout", github_com_glojurelang_glojure_pkg_runtime.WithStdout)
+
+	// package github.com/glojurelang/glojure/pkg/srepl
+	////////////////////////////////////////
+	_register("github.com/glojurelang/glojure/pkg/srepl.Server", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_srepl.Server)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/srepl.*Server", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_srepl.Server)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/srepl.Start", github_com_glojurelang_glojure_pkg_srepl.Start)
 
 	// package io
 	////////////////////////////////////////
