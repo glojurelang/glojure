@@ -39,7 +39,12 @@ var defaultPackages = []string{
 	"unicode",
 
 	"github.com/glojurelang/glojure/pkg/lang",
+	"github.com/glojurelang/glojure/pkg/nrepl",
+	"github.com/glojurelang/glojure/pkg/httpserver",
+	"github.com/glojurelang/glojure/pkg/podclient",
+	"github.com/glojurelang/glojure/pkg/repl",
 	"github.com/glojurelang/glojure/pkg/runtime",
+	"github.com/glojurelang/glojure/pkg/srepl",
 }
 
 var packagesFlag = flag.String(
