@@ -3,6 +3,6 @@
 
 [#?@(:glj [splice with #?@(:glj [a nested splice])])]
 
-[#?(:clj [no match at end of collection])]
+[#?(:cljs [no match at end of collection])]
 
-#?(:clj [no match at end of input])
+#?(:cljs [no match at end of input])

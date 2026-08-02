@@ -1359,6 +1359,7 @@ func (r *Reader) readConditional(eofOK bool, stopRune rune) (any, error) {
 	}
 
 	var form any = readerCondSentinel
+	var cljFallback any = readerCondSentinel
 
 	seq := lang.Seq(lst)
 	for seq != nil {
@@ -1375,8 +1376,16 @@ func (r *Reader) readConditional(eofOK bool, stopRune rune) (any, error) {
 			form = seq.First()
 			break
 		}
+		// Use JVM Clojure code only when there is no native or default match.
+		if keyword, ok := feature.(lang.Keyword); ok &&
+			keyword.Name() == "clj" && cljFallback == readerCondSentinel {
+			cljFallback = seq.First()
+		}
 
 		seq = seq.Next()
+	}
+	if form == readerCondSentinel && cljFallback != readerCondSentinel {
+		form = cljFallback
 	}
 
 	if form == readerCondSentinel {
