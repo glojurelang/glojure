@@ -50,6 +50,7 @@ func init() {
 	register("Sorted", "clojure.lang", reflect.TypeOf((*lang.Sorted)(nil)).Elem())
 	register("Ratio", "clojure.lang", reflect.TypeOf((*lang.Ratio)(nil)))
 	register("Symbol", "clojure.lang", reflect.TypeOf((*lang.Symbol)(nil)))
+	register("ExceptionInfo", "clojure.lang", reflect.TypeOf((*lang.ExceptionInfo)(nil)))
 	register("Atom", "clojure.lang", reflect.TypeOf((*lang.Atom)(nil)))
 	register("Volatile", "clojure.lang", reflect.TypeOf((*lang.Volatile)(nil)))
 }

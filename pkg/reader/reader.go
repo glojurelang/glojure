@@ -1300,9 +1300,18 @@ func (r *Reader) readKeyword() (interface{}, error) {
 		return nil, r.error("invalid keyword: :%s", sym)
 	}
 	if sym[0] == ':' {
-		// TODO: handle auto-resolving keywords with namespaces
-		ns := r.getCurrentNS().Name().Name()
-		sym = ns + "/" + sym[1:]
+		autoName := sym[1:]
+		parts := strings.SplitN(autoName, "/", 2)
+		if len(parts) == 2 {
+			alias := lang.NewSymbol(parts[0])
+			resolved := r.getCurrentNS().LookupAlias(alias)
+			if resolved == nil {
+				return nil, r.error("Invalid token: ::%s", autoName)
+			}
+			sym = resolved.Name().Name() + "/" + parts[1]
+		} else {
+			sym = r.getCurrentNS().Name().Name() + "/" + autoName
+		}
 	}
 	return lang.NewKeyword(sym), nil
 }

@@ -17,3 +17,14 @@ func TestFileListFiles(t *testing.T) {
 		t.Fatalf("ListFiles = %#v, want %q", files, path)
 	}
 }
+
+func TestCreateTempFile(t *testing.T) {
+	file := CreateTempFile("glojure-file-", ".tmp")
+	defer os.Remove(file.Pathname)
+	if !file.Exists() {
+		t.Fatal("temporary file does not exist")
+	}
+	if got := filepath.Ext(file.Pathname); got != ".tmp" {
+		t.Fatalf("extension = %q, want .tmp", got)
+	}
+}

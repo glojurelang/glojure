@@ -29,13 +29,31 @@ func NewFile(args ...any) any {
 	}
 }
 
+func CreateTempFile(prefix, suffix any) *File {
+	pattern := pathname(prefix) + "*"
+	if suffix != nil {
+		pattern += pathname(suffix)
+	}
+	file, err := os.CreateTemp("", pattern)
+	if err != nil {
+		panic(err)
+	}
+	path := file.Name()
+	if err := file.Close(); err != nil {
+		panic(err)
+	}
+	return &File{Pathname: path}
+}
+
 func (f *File) GetPath() string         { return f.Pathname }
 func (f *File) GetName() string         { return filepath.Base(f.Pathname) }
 func (f *File) GetParent() string       { return filepath.Dir(f.Pathname) }
+func (f *File) GetParentFile() *File    { return &File{Pathname: filepath.Dir(f.Pathname)} }
 func (f *File) GetAbsolutePath() string { p, _ := filepath.Abs(f.Pathname); return p }
 func (f *File) Path() string            { return f.GetPath() }
 func (f *File) Name() string            { return f.GetName() }
 func (f *File) Parent() string          { return f.GetParent() }
+func (f *File) ParentFile() *File       { return f.GetParentFile() }
 func (f *File) AbsolutePath() string    { return f.GetAbsolutePath() }
 func (f *File) GetCanonicalPath() string {
 	p, err := filepath.Abs(f.Pathname)
@@ -233,6 +251,13 @@ func init() {
 	pkgmap.SetHostClass("File", lang.NewClass(reflect.TypeOf((*File)(nil)), "java.io.File"))
 	lang.RegisterHostConstructor("java.io.File",
 		lang.FnFunc(func(args ...any) any { return NewFile(args...) }))
+	registerStatic("File", "java.io", "createTempFile", "CreateTempFile",
+		lang.FnFunc(func(args ...any) any {
+			if len(args) != 2 {
+				panic(fmt.Sprintf("File/createTempFile: wrong number of args (%d)", len(args)))
+			}
+			return CreateTempFile(args[0], args[1])
+		}))
 
 	pkgmap.SetHostClassPackage("Path", "java.nio.file")
 	pkgmap.SetHostClass("Path", lang.NewClass(reflect.TypeOf((*Path)(nil)), "java.nio.file.Path"))

@@ -12,6 +12,16 @@ type closeTrackingReader struct {
 	closed bool
 }
 
+type closeTrackingWriter struct {
+	bytes.Buffer
+	closed bool
+}
+
+func (w *closeTrackingWriter) Close() error {
+	w.closed = true
+	return nil
+}
+
 func (r *closeTrackingReader) Close() error {
 	r.closed = true
 	return nil
@@ -51,6 +61,21 @@ func TestPushbackReaderClosesWrappedReader(t *testing.T) {
 	reader.Close()
 	if !wrapped.closed {
 		t.Fatal("Close did not close wrapped reader")
+	}
+}
+
+func TestPrintWriterWritesAndCloses(t *testing.T) {
+	wrapped := &closeTrackingWriter{}
+	writer := NewPrintWriter(wrapped).(*PrintWriter)
+	if _, err := writer.Write([]byte("hello")); err != nil {
+		t.Fatal(err)
+	}
+	writer.Close()
+	if got, want := wrapped.String(), "hello"; got != want {
+		t.Fatalf("content = %q, want %q", got, want)
+	}
+	if !wrapped.closed {
+		t.Fatal("Close did not close wrapped writer")
 	}
 }
 

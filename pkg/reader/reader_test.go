@@ -92,6 +92,21 @@ func TestRead(t *testing.T) {
 	}
 }
 
+func TestAutoResolvedKeywordAlias(t *testing.T) {
+	target := lang.FindOrCreateNamespace(lang.NewSymbol("resolved.keyword"))
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("keyword.reader.test"))
+	ns.AddAlias(lang.NewSymbol("rk"), target)
+	r := New(strings.NewReader("::rk/value"),
+		WithGetCurrentNS(func() *lang.Namespace { return ns }))
+	value, err := r.ReadOne()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := value, lang.NewKeyword("resolved.keyword/value"); got != want {
+		t.Fatalf("keyword = %v, want %v", got, want)
+	}
+}
+
 func TestReadErrors(t *testing.T) {
 	type testCase struct {
 		name      string

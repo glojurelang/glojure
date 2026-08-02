@@ -24,6 +24,10 @@ type PushbackReader struct {
 	*bufio.Reader
 	closer io.Closer
 }
+type PrintWriter struct {
+	io.Writer
+	closer io.Closer
+}
 type StringWriter struct{ strings.Builder }
 type FileInputStream struct {
 	*os.File
@@ -45,6 +49,20 @@ func (s *StringReader) Close()                    {}
 func (s *PushbackReader) Close() {
 	if s.closer != nil {
 		if err := s.closer.Close(); err != nil {
+			panic(err)
+		}
+	}
+}
+func (w *PrintWriter) Close() {
+	if w.closer != nil {
+		if err := w.closer.Close(); err != nil {
+			panic(err)
+		}
+	}
+}
+func (w *PrintWriter) Flush() {
+	if flusher, ok := w.Writer.(interface{ Flush() error }); ok {
+		if err := flusher.Flush(); err != nil {
 			panic(err)
 		}
 	}
@@ -109,6 +127,19 @@ func NewPushbackReader(args ...any) any {
 	pushback := &PushbackReader{Reader: bufio.NewReader(reader)}
 	pushback.closer, _ = args[0].(io.Closer)
 	return pushback
+}
+
+func NewPrintWriter(args ...any) any {
+	if len(args) != 1 {
+		panic(fmt.Sprintf("PrintWriter/new: wrong number of args (%d)", len(args)))
+	}
+	writer, ok := args[0].(io.Writer)
+	if !ok {
+		panic(fmt.Sprintf("PrintWriter/new: %T is not a writer", args[0]))
+	}
+	result := &PrintWriter{Writer: writer}
+	result.closer, _ = args[0].(io.Closer)
+	return result
 }
 
 func NewFileInputStream(args ...any) any {
@@ -202,6 +233,8 @@ func init() {
 		reflect.TypeOf((*StringReader)(nil)), NewStringReader)
 	registerClass("PushbackReader", "java.io.PushbackReader",
 		reflect.TypeOf((*PushbackReader)(nil)), NewPushbackReader)
+	registerClass("PrintWriter", "java.io.PrintWriter",
+		reflect.TypeOf((*PrintWriter)(nil)), NewPrintWriter)
 	registerClass("StringWriter", "java.io.StringWriter",
 		reflect.TypeOf((*StringWriter)(nil)), NewStringWriter)
 	registerClass("FileInputStream", "java.io.FileInputStream",

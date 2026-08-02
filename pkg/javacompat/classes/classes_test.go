@@ -13,7 +13,7 @@ func TestCommonClassesAreRegistered(t *testing.T) {
 		"ILookup", "IMapEntry", "IMeta", "IObj", "IPending", "IPersistentCollection",
 		"IPersistentMap", "IPersistentSet", "IPersistentVector", "IRecord", "IReduceInit",
 		"IRef", "ISeq", "Indexed", "Named", "Reversible", "Seqable", "Sequential", "Sorted",
-		"Ratio", "Symbol", "Atom", "Volatile",
+		"Ratio", "Symbol", "ExceptionInfo", "Atom", "Volatile",
 	} {
 		if _, ok := pkgmap.HostClass(name); !ok {
 			t.Fatalf("host class %s is not registered", name)
