@@ -42,17 +42,38 @@ func NewMultiFn(name string, dispatchFn IFn, defaultDispatchVal any, hierarchy I
 	return mf
 }
 
-// registerWellKnownMethods seeds a freshly created MultiFn with any
-// Go-side default methods that the stdlib alone can't supply. Currently
-// just installs a *Class print-method so host-class values seeded into
-// `(ns-imports *ns*)` print as their FQ Java name instead of falling
-// through to the catch-all Object handler.
+// registerWellKnownMethods seeds a freshly created MultiFn with Go-side
+// methods that the stdlib alone can't supply. It handles host-class printing
+// and bridges the Clojure IKVReduce protocol to Glojure's native interface.
 func registerWellKnownMethods(mf *MultiFn) {
 	switch mf.name {
 	case "print-method", "print-dup":
 		mf.AddMethod(reflect.TypeOf((*Class)(nil)), classPrintMethod)
+	case "kv-reduce":
+		mf.AddMethod(nil, kvReduceNilMethod)
+		mf.AddMethod(reflect.TypeOf((*Object)(nil)).Elem(), kvReduceObjectMethod)
+		mf.AddMethod(reflect.TypeOf((*IKVReduce)(nil)).Elem(), kvReduceInterfaceMethod)
 	}
 }
+
+var (
+	kvReduceNilMethod = FnFunc3(func(_, _, init any) any {
+		return init
+	})
+	kvReduceObjectMethod = FnFunc3(func(amap, f, init any) any {
+		for entries := Seq(amap); entries != nil; entries = entries.Next() {
+			entry := entries.First().(IMapEntry)
+			init = Apply3(f, init, entry.Key(), entry.Val())
+			if IsReduced(init) {
+				return init.(IDeref).Deref()
+			}
+		}
+		return init
+	})
+	kvReduceInterfaceMethod = FnFunc3(func(amap, f, init any) any {
+		return amap.(IKVReduce).KVReduce(MustHostCast[IFn](f), init)
+	})
+)
 
 // IsAutoRegisteredMethod reports whether (dispatchVal, method) is an
 // entry seeded by registerWellKnownMethods for a MultiFn named mfName.
@@ -71,6 +92,19 @@ func IsAutoRegisteredMethod(mfName string, dispatchVal any, method any) bool {
 			return false
 		}
 		return reflect.ValueOf(m).Pointer() == reflect.ValueOf(classPrintMethod).Pointer()
+	case "kv-reduce":
+		m, ok := method.(FnFunc3)
+		if !ok {
+			return false
+		}
+		switch dispatchVal {
+		case nil:
+			return reflect.ValueOf(m).Pointer() == reflect.ValueOf(kvReduceNilMethod).Pointer()
+		case reflect.TypeOf((*Object)(nil)).Elem():
+			return reflect.ValueOf(m).Pointer() == reflect.ValueOf(kvReduceObjectMethod).Pointer()
+		case reflect.TypeOf((*IKVReduce)(nil)).Elem():
+			return reflect.ValueOf(m).Pointer() == reflect.ValueOf(kvReduceInterfaceMethod).Pointer()
+		}
 	}
 	return false
 }

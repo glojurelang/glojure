@@ -1,0 +1,24 @@
+(ns glojure.test-glojure.reduce-kv
+  (:use clojure.test))
+
+(deftest built-in-kv-reduction
+  (let [sum-values (fn [total _ value] (+ total value))]
+    (is (= 0 (reduce-kv sum-values 0 nil)))
+    (is (= 30 (reduce-kv sum-values 0 [10 20])))
+    (is (= 3 (reduce-kv sum-values 0 {:one 1 :two 2})))
+    (is (= 45
+           (reduce-kv
+             sum-values
+             0
+             (hash-map
+               :a 1 :b 2 :c 3 :d 4 :e 5
+               :f 6 :g 7 :h 8 :i 9))))))
+
+(deftest reduced-value-stops-reduction
+  (is (= :stopped
+         (reduce-kv
+           (fn [_ _ _] (reduced :stopped))
+           nil
+           {:one 1 :two 2}))))
+
+(run-tests)
