@@ -80,6 +80,24 @@ func GetProperty(args ...any) any {
 	panic(fmt.Sprintf("System/getProperty: wrong number of args (%d)", len(args)))
 }
 
+// GetProperties returns the hosted JVM property table as a persistent map.
+// gojava deliberately keeps its mutable property storage encapsulated, so
+// enumerate the standard JVM-compatible keys seeded by that package. Values
+// cleared by callers are omitted.
+func GetProperties() any {
+	keys := []string{
+		"user.home", "user.dir", "user.name", "user.country",
+		"os.name", "file.separator", "line.separator", "path.separator",
+	}
+	kvs := make([]any, 0, len(keys)*2)
+	for _, key := range keys {
+		if value, ok := jsys.GetProperty(key); ok {
+			kvs = append(kvs, key, value)
+		}
+	}
+	return lang.NewPersistentHashMap(kvs...)
+}
+
 // SetProperty returns the previous value (or nil if none).
 func SetProperty(name, value any) any {
 	old, ok := jsys.SetProperty(toString(name), toString(value))
@@ -127,6 +145,12 @@ func init() {
 
 	register("getenv", "Getenv", lang.FnFunc(func(args ...any) any { return Getenv(args...) }))
 	register("getProperty", "GetProperty", lang.FnFunc(func(args ...any) any { return GetProperty(args...) }))
+	register("getProperties", "GetProperties", lang.FnFunc(func(args ...any) any {
+		if len(args) != 0 {
+			panic(fmt.Sprintf("System/getProperties: wrong number of args (%d)", len(args)))
+		}
+		return GetProperties()
+	}))
 	register("setProperty", "SetProperty", lang.FnFunc(func(args ...any) any {
 		return SetProperty(args[0], args[1])
 	}))

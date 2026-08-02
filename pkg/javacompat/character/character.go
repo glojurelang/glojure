@@ -7,6 +7,7 @@ package character
 import (
 	"fmt"
 	"reflect"
+	"unicode"
 
 	jchar "github.com/gloathub/gojava/character"
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -30,17 +31,18 @@ var (
 // constructor sugar).
 func ValueOf(x any) lang.Char { return lang.Char(toRune(x)) }
 
-func IsDigit(x any) bool          { return jchar.IsDigit(toRune(x)) }
-func IsLetter(x any) bool         { return jchar.IsLetter(toRune(x)) }
-func IsLetterOrDigit(x any) bool  { return jchar.IsLetterOrDigit(toRune(x)) }
-func IsAlphabetic(x any) bool     { return jchar.IsAlphabetic(toRune(x)) }
-func IsWhitespace(x any) bool     { return jchar.IsWhitespace(toRune(x)) }
-func IsSpaceChar(x any) bool      { return jchar.IsSpaceChar(toRune(x)) }
-func IsUpperCase(x any) bool      { return jchar.IsUpperCase(toRune(x)) }
-func IsLowerCase(x any) bool      { return jchar.IsLowerCase(toRune(x)) }
+func IsDigit(x any) bool         { return jchar.IsDigit(toRune(x)) }
+func IsLetter(x any) bool        { return jchar.IsLetter(toRune(x)) }
+func IsLetterOrDigit(x any) bool { return jchar.IsLetterOrDigit(toRune(x)) }
+func IsAlphabetic(x any) bool    { return jchar.IsAlphabetic(toRune(x)) }
+func IsWhitespace(x any) bool    { return jchar.IsWhitespace(toRune(x)) }
+func IsSpaceChar(x any) bool     { return jchar.IsSpaceChar(toRune(x)) }
+func IsUpperCase(x any) bool     { return jchar.IsUpperCase(toRune(x)) }
+func IsLowerCase(x any) bool     { return jchar.IsLowerCase(toRune(x)) }
 
 func ToUpperCase(x any) lang.Char { return lang.Char(jchar.ToUpperCase(toRune(x))) }
 func ToLowerCase(x any) lang.Char { return lang.Char(jchar.ToLowerCase(toRune(x))) }
+func ToTitleCase(x any) lang.Char { return lang.Char(unicode.ToTitle(toRune(x))) }
 func ToString(x any) string       { return jchar.ToString(toRune(x)) }
 
 func Digit(args ...any) any {
@@ -87,6 +89,7 @@ func init() {
 
 	register("toUpperCase", "ToUpperCase", lang.FnFunc(func(args ...any) any { return ToUpperCase(args[0]) }))
 	register("toLowerCase", "ToLowerCase", lang.FnFunc(func(args ...any) any { return ToLowerCase(args[0]) }))
+	register("toTitleCase", "ToTitleCase", lang.FnFunc(func(args ...any) any { return ToTitleCase(args[0]) }))
 	register("toString", "ToString", lang.FnFunc(func(args ...any) any { return ToString(args[0]) }))
 
 	register("digit", "Digit", lang.FnFunc(func(args ...any) any { return Digit(args...) }))

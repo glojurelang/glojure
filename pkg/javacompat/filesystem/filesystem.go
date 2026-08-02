@@ -104,6 +104,17 @@ func (f *File) List() []string {
 	}
 	return out
 }
+func (f *File) ListFiles() []*File {
+	entries, err := os.ReadDir(f.Pathname)
+	if err != nil {
+		return nil
+	}
+	out := make([]*File, len(entries))
+	for i, entry := range entries {
+		out[i] = &File{Pathname: filepath.Join(f.Pathname, entry.Name())}
+	}
+	return out
+}
 func (f *File) ToPath() *Path    { return &Path{Pathname: f.Pathname} }
 func (f *File) ToString() string { return f.Pathname }
 func (f *File) String() string   { return f.Pathname }

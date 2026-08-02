@@ -84,6 +84,8 @@ type (
 	}
 )
 
+var _ IKVReduce = (*Map)(nil)
+
 var (
 	_ APersistentMap = (*Map)(nil)
 	_ IMeta          = (*Map)(nil)
@@ -538,6 +540,17 @@ func (m *Map) Seq() ISeq {
 		return newKeywordMapSeq(m)
 	}
 	return NewMapSeq(m.keyVals)
+}
+
+func (m *Map) KVReduce(f IFn, init any) any {
+	for entries := m.Seq(); entries != nil; entries = entries.Next() {
+		entry := entries.First().(IMapEntry)
+		init = f.Invoke(init, entry.Key(), entry.Val())
+		if IsReduced(init) {
+			return init.(IDeref).Deref()
+		}
+	}
+	return init
 }
 
 func (m *Map) interleavedKeyVals(extraEntries int) []any {

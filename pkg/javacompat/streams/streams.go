@@ -20,6 +20,10 @@ type OutputStream interface{ Write([]byte) (int, error) }
 type ByteArrayInputStream struct{ *bytes.Reader }
 type ByteArrayOutputStream struct{ bytes.Buffer }
 type StringReader struct{ *bufio.Reader }
+type PushbackReader struct {
+	*bufio.Reader
+	closer io.Closer
+}
 type StringWriter struct{ strings.Builder }
 type FileInputStream struct {
 	*os.File
@@ -38,6 +42,13 @@ func (s *ByteArrayOutputStream) ToString() string { return s.String() }
 func (s *ByteArrayOutputStream) Size() int        { return s.Len() }
 func (s *ByteArrayOutputStream) Close()           {}
 func (s *StringReader) Close()                    {}
+func (s *PushbackReader) Close() {
+	if s.closer != nil {
+		if err := s.closer.Close(); err != nil {
+			panic(err)
+		}
+	}
+}
 func (s *StringReader) ReadLine() any {
 	return readLine(s.Reader)
 }
@@ -85,6 +96,19 @@ func NewStringWriter(args ...any) any {
 		panic(fmt.Sprintf("StringWriter/new: wrong number of args (%d)", len(args)))
 	}
 	return &StringWriter{}
+}
+
+func NewPushbackReader(args ...any) any {
+	if len(args) != 1 {
+		panic(fmt.Sprintf("PushbackReader/new: wrong number of args (%d)", len(args)))
+	}
+	reader, ok := args[0].(io.Reader)
+	if !ok {
+		panic(fmt.Sprintf("PushbackReader/new: %T is not a reader", args[0]))
+	}
+	pushback := &PushbackReader{Reader: bufio.NewReader(reader)}
+	pushback.closer, _ = args[0].(io.Closer)
+	return pushback
 }
 
 func NewFileInputStream(args ...any) any {
@@ -176,6 +200,8 @@ func init() {
 		reflect.TypeOf((*ByteArrayOutputStream)(nil)), NewByteArrayOutputStream)
 	registerClass("StringReader", "java.io.StringReader",
 		reflect.TypeOf((*StringReader)(nil)), NewStringReader)
+	registerClass("PushbackReader", "java.io.PushbackReader",
+		reflect.TypeOf((*PushbackReader)(nil)), NewPushbackReader)
 	registerClass("StringWriter", "java.io.StringWriter",
 		reflect.TypeOf((*StringWriter)(nil)), NewStringWriter)
 	registerClass("FileInputStream", "java.io.FileInputStream",

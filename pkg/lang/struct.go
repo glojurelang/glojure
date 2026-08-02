@@ -66,6 +66,8 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 	switch value := v.(type) {
 	case *Var:
 		switch name {
+		case "getRawRoot", "GetRawRoot":
+			return FnFunc0(func() any { return value.getRoot() }), true
 		case "ns", "Ns":
 			return FnFunc0(func() any { return value.Namespace() }), true
 		case "sym", "Sym":
@@ -109,6 +111,13 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 		if fn, ok := lookupStringMethod(lookup); ok {
 			return FnFunc(func(args ...any) any { return fn(s, args...) }), true
 		}
+	}
+
+	// Go's fmt.Stringer is the hosted equivalent of Java's Object.toString.
+	// Most runtime values expose String rather than a separately named
+	// ToString method, so bridge the Java spelling explicitly.
+	if stringer, ok := v.(fmt.Stringer); ok && (name == "toString" || name == "ToString") {
+		return FnFunc0(func() any { return stringer.String() }), true
 	}
 
 	if err, isErr := v.(error); isErr {

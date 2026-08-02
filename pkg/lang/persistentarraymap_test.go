@@ -50,6 +50,16 @@ func TestPersistentArrayMapConstructionPreservesOrder(t *testing.T) {
 	}
 }
 
+func TestPersistentArrayMapKVReduce(t *testing.T) {
+	m := NewMap("a", 1, "b", 2).(*Map)
+	result := m.KVReduce(FnFunc(func(args ...any) any {
+		return args[0].(int) + args[2].(int)
+	}), 0)
+	if result != 3 {
+		t.Fatalf("KVReduce = %v, want 3", result)
+	}
+}
+
 func TestPersistentArrayMapConstructionHandlesTrailingMapEntry(t *testing.T) {
 	m := NewPersistentArrayMapAsIfByAssoc([]any{
 		"a", 1,

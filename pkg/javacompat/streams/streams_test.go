@@ -1,10 +1,21 @@
 package streams
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"testing"
 )
+
+type closeTrackingReader struct {
+	*bytes.Reader
+	closed bool
+}
+
+func (r *closeTrackingReader) Close() error {
+	r.closed = true
+	return nil
+}
 
 func TestStringReaderReadLine(t *testing.T) {
 	reader := NewStringReader("first\r\nsecond").(*StringReader)
@@ -16,6 +27,30 @@ func TestStringReaderReadLine(t *testing.T) {
 	}
 	if got := reader.ReadLine(); got != nil {
 		t.Fatalf("EOF ReadLine = %v, want nil", got)
+	}
+}
+
+func TestPushbackReaderRunes(t *testing.T) {
+	reader := NewPushbackReader(NewStringReader("ab")).(*PushbackReader)
+	r, _, err := reader.ReadRune()
+	if err != nil || r != 'a' {
+		t.Fatalf("ReadRune = %q, %v", r, err)
+	}
+	if err := reader.UnreadRune(); err != nil {
+		t.Fatal(err)
+	}
+	r, _, err = reader.ReadRune()
+	if err != nil || r != 'a' {
+		t.Fatalf("ReadRune after unread = %q, %v", r, err)
+	}
+}
+
+func TestPushbackReaderClosesWrappedReader(t *testing.T) {
+	wrapped := &closeTrackingReader{Reader: bytes.NewReader([]byte("a"))}
+	reader := NewPushbackReader(wrapped).(*PushbackReader)
+	reader.Close()
+	if !wrapped.closed {
+		t.Fatal("Close did not close wrapped reader")
 	}
 }
 

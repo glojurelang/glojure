@@ -113,9 +113,25 @@ func TestFieldOrMethodVarJavaAccessors(t *testing.T) {
 	if !ok || Apply(symMethod, nil) != vr.Symbol() {
 		t.Fatal("Var.sym did not return its symbol")
 	}
+	vr.BindRoot("root")
+	rootMethod, ok := FieldOrMethod(vr, "getRawRoot")
+	if !ok || Apply(rootMethod, nil) != "root" {
+		t.Fatal("Var.getRawRoot did not return its unbound root")
+	}
 	nameMethod, ok := FieldOrMethod(ns, "name")
 	if !ok || Apply(nameMethod, nil) != ns.Name() {
 		t.Fatal("Namespace.name did not return its symbol")
+	}
+}
+
+func TestFieldOrMethodToString(t *testing.T) {
+	sym := NewSymbol("example/value")
+	method, ok := FieldOrMethod(sym, "toString")
+	if !ok {
+		t.Fatal("toString not resolved")
+	}
+	if got, want := Apply(method, nil), "example/value"; got != want {
+		t.Fatalf("toString = %v, want %v", got, want)
 	}
 }
 
