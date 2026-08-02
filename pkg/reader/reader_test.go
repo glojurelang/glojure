@@ -193,3 +193,16 @@ func testPrintString(x interface{}) string {
 
 	return lang.PrintString(x)
 }
+
+func TestEnableFeature(t *testing.T) {
+	EnableFeature("embedding-test")
+	r := New(strings.NewReader(
+		"#?(:embedding-test selected :default fallback)"))
+	value, err := r.ReadOne()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := testPrintString(value); got != "selected" {
+		t.Fatalf("enabled reader feature selected %s", got)
+	}
+}

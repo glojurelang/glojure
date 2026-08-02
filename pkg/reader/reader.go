@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"unicode"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -67,7 +68,26 @@ var (
 
 	readerCondSentinel = &struct{}{}
 	stopRuneSentinel   = &struct{}{}
+
+	featureMu     sync.RWMutex
+	extraFeatures = map[string]struct{}{}
 )
+
+// EnableFeature makes an additional reader-conditional feature available to
+// subsequently created readers. Glojure always recognizes :glj; embedding
+// runtimes can opt into compatible host features such as :clj or :bb.
+func EnableFeature(name string) {
+	featureMu.Lock()
+	extraFeatures[name] = struct{}{}
+	featureMu.Unlock()
+}
+
+func featureEnabled(name string) bool {
+	featureMu.RLock()
+	_, ok := extraFeatures[name]
+	featureMu.RUnlock()
+	return ok
+}
 
 type (
 	trackingRuneScanner struct {
@@ -1403,7 +1423,7 @@ func (r *Reader) hasFeature(feat any) (bool, error) {
 	case "glj":
 		return true, nil
 	default:
-		return false, nil
+		return featureEnabled(name), nil
 	}
 }
 
