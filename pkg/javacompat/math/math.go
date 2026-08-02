@@ -252,6 +252,8 @@ func toFloat64(x any) float64 {
 		return float64(v)
 	case uint8:
 		return float64(v)
+	case *lang.Ratio:
+		return lang.AsFloat64(v)
 	}
 	panic(fmt.Sprintf("cannot coerce %T to float64", x))
 }

@@ -20,8 +20,12 @@ var (
 	PrintWriter = reflect.TypeOf(&bytes.Buffer{})
 )
 
-func HasType(t reflect.Type, v interface{}) bool {
+func HasType(target any, v interface{}) bool {
 	if v == nil {
+		return false
+	}
+	t, ok := ReflectType(target)
+	if !ok {
 		return false
 	}
 	vType := reflect.TypeOf(v)
@@ -30,6 +34,22 @@ func HasType(t reflect.Type, v interface{}) bool {
 		return true
 	default:
 		return false
+	}
+}
+
+// ReflectType unwraps both native Go reflect.Type values and JVM-style Class
+// wrappers to the host type used by the runtime.
+func ReflectType(value any) (reflect.Type, bool) {
+	switch v := value.(type) {
+	case *Class:
+		if v == nil {
+			return nil, false
+		}
+		return v.Type, true
+	case reflect.Type:
+		return v, true
+	default:
+		return nil, false
 	}
 }
 

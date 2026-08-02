@@ -19,9 +19,12 @@ type OutputStream interface{ Write([]byte) (int, error) }
 
 type ByteArrayInputStream struct{ *bytes.Reader }
 type ByteArrayOutputStream struct{ bytes.Buffer }
-type StringReader struct{ *strings.Reader }
+type StringReader struct{ *bufio.Reader }
 type StringWriter struct{ strings.Builder }
-type FileInputStream struct{ *os.File }
+type FileInputStream struct {
+	*os.File
+	reader *bufio.Reader
+}
 type FileOutputStream struct{ *os.File }
 type BufferedInputStream struct{ *bufio.Reader }
 type BufferedOutputStream struct{ *bufio.Writer }
@@ -35,8 +38,26 @@ func (s *ByteArrayOutputStream) ToString() string { return s.String() }
 func (s *ByteArrayOutputStream) Size() int        { return s.Len() }
 func (s *ByteArrayOutputStream) Close()           {}
 func (s *StringReader) Close()                    {}
-func (s *StringWriter) ToString() string          { return s.String() }
-func (s *StringWriter) Close()                    {}
+func (s *StringReader) ReadLine() any {
+	return readLine(s.Reader)
+}
+func (s *FileInputStream) Read(buffer []byte) (int, error) { return s.reader.Read(buffer) }
+func (s *FileInputStream) ReadLine() any                   { return readLine(s.reader) }
+
+func readLine(reader *bufio.Reader) any {
+	line, err := reader.ReadString('\n')
+	if err != nil && err != io.EOF {
+		panic(err)
+	}
+	if len(line) == 0 && err == io.EOF {
+		return nil
+	}
+	line = strings.TrimSuffix(line, "\n")
+	line = strings.TrimSuffix(line, "\r")
+	return line
+}
+func (s *StringWriter) ToString() string { return s.String() }
+func (s *StringWriter) Close()           {}
 
 func NewByteArrayInputStream(args ...any) any {
 	if len(args) != 1 {
@@ -56,7 +77,7 @@ func NewStringReader(args ...any) any {
 	if len(args) != 1 {
 		panic(fmt.Sprintf("StringReader/new: wrong number of args (%d)", len(args)))
 	}
-	return &StringReader{Reader: strings.NewReader(lang.ToString(args[0]))}
+	return &StringReader{Reader: bufio.NewReader(strings.NewReader(lang.ToString(args[0])))}
 }
 
 func NewStringWriter(args ...any) any {
@@ -74,7 +95,7 @@ func NewFileInputStream(args ...any) any {
 	if err != nil {
 		panic(err)
 	}
-	return &FileInputStream{File: file}
+	return &FileInputStream{File: file, reader: bufio.NewReader(file)}
 }
 
 func NewFileOutputStream(args ...any) any {

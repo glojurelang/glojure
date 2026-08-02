@@ -89,6 +89,12 @@ func TestCatchMatches(t *testing.T) {
 			want:   true,
 		},
 		{
+			name:   "custom error matches a Class wrapper",
+			r:      customErr,
+			expect: NewClass(reflect.TypeOf((*CustomError)(nil)), "example.CustomError"),
+			want:   true,
+		},
+		{
 			name:   "wrapped error matches its own pointer type",
 			r:      wrappedErr,
 			expect: reflect.TypeOf((*WrappedError)(nil)),

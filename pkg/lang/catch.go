@@ -16,7 +16,10 @@ func CatchMatches(r, expect any) bool {
 		return false
 	}
 
-	expectType := expect.(reflect.Type)
+	expectType, ok := ReflectType(expect)
+	if !ok {
+		return false
+	}
 
 	// if expect is an error type, check if r is an instance of it
 	if rErr, ok := r.(error); ok {

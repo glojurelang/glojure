@@ -63,6 +63,27 @@ func lookupStringMethod(name string) (StringMethod, bool) {
 // Method results are cached and wrapped as FnFunc so that subsequent
 // Apply calls use the IFn fast path instead of reflection.
 func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
+	switch value := v.(type) {
+	case *Var:
+		switch name {
+		case "ns", "Ns":
+			return FnFunc0(func() any { return value.Namespace() }), true
+		case "sym", "Sym":
+			return FnFunc0(func() any { return value.Symbol() }), true
+		}
+	case *Namespace:
+		if name == "name" || name == "Name" {
+			return FnFunc0(func() any { return value.Name() }), true
+		}
+	}
+	// java.lang.Class.getName maps to reflect.Type.Name in the hosted runtime.
+	// Handle it before ordinary reflection because reflect.Type's concrete
+	// implementation exposes Name, not GetName.
+	if name == "getName" || name == "GetName" {
+		if typ, ok := ReflectType(v); ok {
+			return FnFunc0(func() any { return typ.String() }), true
+		}
+	}
 	if resolver, ok := v.(FieldOrMethodResolver); ok {
 		if result, found := resolver.ResolveFieldOrMethod(name); found {
 			return result, true

@@ -6,6 +6,8 @@ package glj
 import (
 	_ "github.com/glojurelang/glojure/pkg/javacompat/boolean"
 	_ "github.com/glojurelang/glojure/pkg/javacompat/character"
+	_ "github.com/glojurelang/glojure/pkg/javacompat/classes"
+	_ "github.com/glojurelang/glojure/pkg/javacompat/date"
 	_ "github.com/glojurelang/glojure/pkg/javacompat/double"
 	_ "github.com/glojurelang/glojure/pkg/javacompat/filesystem"
 	_ "github.com/glojurelang/glojure/pkg/javacompat/instant"

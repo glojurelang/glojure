@@ -18,6 +18,12 @@ import (
 
 const pkg = "github.com/glojurelang/glojure/pkg/javacompat/uuid"
 
+// IsUUID reports whether x is a java.util.UUID compatibility value.
+func IsUUID(x any) bool {
+	_, ok := x.(*juuid.UUID)
+	return ok
+}
+
 // RandomUUID mirrors UUID.randomUUID.
 func RandomUUID() *juuid.UUID { return juuid.RandomUUID() }
 

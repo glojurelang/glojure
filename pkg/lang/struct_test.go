@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -88,6 +89,33 @@ func TestFieldOrMethodNotFound(t *testing.T) {
 	_, ok := FieldOrMethod(r, "nonexistent")
 	if ok {
 		t.Error("FieldOrMethod returned true for nonexistent field/method")
+	}
+}
+
+func TestFieldOrMethodClassGetName(t *testing.T) {
+	method, ok := FieldOrMethod(reflect.TypeOf(""), "getName")
+	if !ok {
+		t.Fatal("reflect.Type.getName was not resolved")
+	}
+	if got, want := Apply(method, nil), "string"; got != want {
+		t.Fatalf("getName = %v, want %v", got, want)
+	}
+}
+
+func TestFieldOrMethodVarJavaAccessors(t *testing.T) {
+	ns := FindOrCreateNamespace(NewSymbol("interop.test"))
+	vr := ns.Intern(NewSymbol("value"))
+	nsMethod, ok := FieldOrMethod(vr, "ns")
+	if !ok || Apply(nsMethod, nil) != ns {
+		t.Fatal("Var.ns did not return its namespace")
+	}
+	symMethod, ok := FieldOrMethod(vr, "sym")
+	if !ok || Apply(symMethod, nil) != vr.Symbol() {
+		t.Fatal("Var.sym did not return its symbol")
+	}
+	nameMethod, ok := FieldOrMethod(ns, "name")
+	if !ok || Apply(nameMethod, nil) != ns.Name() {
+		t.Fatal("Namespace.name did not return its symbol")
 	}
 }
 
