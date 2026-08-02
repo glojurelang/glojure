@@ -808,17 +808,22 @@ func (g *Generator) generateOwnedVectorAOTAssoc(
 	}
 	assoc := node.Sub.(*ast.AssocNode)
 	target := g.generateASTNode(assoc.Target)
-	for index, entry := range assoc.Entries {
-		key := g.generateASTNode(entry.Key)
-		value := g.generateASTNode(entry.Val)
+	keys := make([]string, len(assoc.Entries))
+	values := make([]string, len(assoc.Entries))
+	for index := range assoc.Entries {
+		entry := assoc.Entries[index]
+		keys[index] = g.generateASTNode(entry.Key)
+		values[index] = g.generateASTNode(entry.Val)
+	}
+	for index := range assoc.Entries {
 		if copyTarget && index == 0 {
 			updated := g.allocateTempVar()
 			g.writef("%s := %s.AssocCopy(lang.IntCast(%s), %s)\n",
-				updated, target, key, value)
+				updated, target, keys[index], values[index])
 			target = updated
 		} else {
 			g.writef("%s.Assoc(lang.IntCast(%s), %s)\n",
-				target, key, value)
+				target, keys[index], values[index])
 		}
 	}
 	return target, true

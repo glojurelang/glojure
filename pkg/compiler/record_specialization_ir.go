@@ -20,12 +20,14 @@ const (
 )
 
 type IRRecordSpecializedType struct {
-	Kind   IRRecordSpecializedKind
-	Record *lang.RecordType
+	Kind     IRRecordSpecializedKind
+	Record   *lang.RecordType
+	Nullable bool
 }
 
 func (t IRRecordSpecializedType) Equal(other IRRecordSpecializedType) bool {
-	return t.Kind == other.Kind && t.Record == other.Record
+	return t.Kind == other.Kind && t.Record == other.Record &&
+		t.Nullable == other.Nullable
 }
 
 type IRRecordShape struct {
@@ -108,8 +110,9 @@ func InferRecursiveRecordProducerWithParams(
 		}
 		if merged.Kind == IRRecordSpecializedNil {
 			merged = IRRecordSpecializedType{
-				Kind:   IRRecordSpecializedRecord,
-				Record: record,
+				Kind:     IRRecordSpecializedRecord,
+				Record:   record,
+				Nullable: true,
 			}
 		}
 		fields[index] = merged
@@ -250,7 +253,7 @@ func (a *irRecordFunctionAnalyzer) expr(
 	case ast.OpKeywordLookup:
 		lookup := node.Sub.(*ast.KeywordLookupNode)
 		target := a.expr(lookup.Target, locals)
-		if target.Kind != IRRecordSpecializedRecord {
+		if target.Kind != IRRecordSpecializedRecord || target.Nullable {
 			a.valid = false
 			break
 		}
@@ -421,17 +424,20 @@ func mergeIRRecordFieldTypes(
 	if left.Kind == IRRecordSpecializedInvalid {
 		return right, right.Kind != IRRecordSpecializedInvalid
 	}
-	if left.Equal(right) {
+	if left.Kind == right.Kind && left.Record == right.Record {
+		left.Nullable = left.Nullable || right.Nullable
 		return left, true
 	}
 	if left.Kind == IRRecordSpecializedNil &&
 		right.Kind == IRRecordSpecializedRecord &&
 		right.Record == record {
+		right.Nullable = true
 		return right, true
 	}
 	if right.Kind == IRRecordSpecializedNil &&
 		left.Kind == IRRecordSpecializedRecord &&
 		left.Record == record {
+		left.Nullable = true
 		return left, true
 	}
 	return IRRecordSpecializedType{}, false
@@ -440,15 +446,18 @@ func mergeIRRecordFieldTypes(
 func mergeIRRecordResultTypes(
 	left, right IRRecordSpecializedType,
 ) (IRRecordSpecializedType, bool) {
-	if left.Equal(right) {
+	if left.Kind == right.Kind && left.Record == right.Record {
+		left.Nullable = left.Nullable || right.Nullable
 		return left, left.Kind != IRRecordSpecializedInvalid
 	}
 	if left.Kind == IRRecordSpecializedNil &&
 		right.Kind == IRRecordSpecializedRecord {
+		right.Nullable = true
 		return right, true
 	}
 	if right.Kind == IRRecordSpecializedNil &&
 		left.Kind == IRRecordSpecializedRecord {
+		left.Nullable = true
 		return left, true
 	}
 	return IRRecordSpecializedType{}, false

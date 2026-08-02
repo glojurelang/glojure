@@ -322,7 +322,6 @@ var aotDirectFn4 lang.FnFunc1
 var aotRecordFn1 func(*aotRecord0Flag) int64
 var aotRecordFn2 func(int64) *aotRecord0Flag
 var aotRecordFn3 func(int64, int64) *aotRecord1Node
-var aotRecordFn4 func(*aotRecord1Node) int64
 
 var aotKeywordMapShape0 = lang.NewKeywordMapShape("value", "left", "right", "extra")
 
@@ -748,14 +747,14 @@ func LoadNS() {
 			}
 			v7 := p0
 			_ = v7
-			var tmp8 any
+			var tmp8 int64
 			tmp9 := aotKeywordLookup3(v7, nil)
 			if lang.IsTruthy(tmp9) {
 				tmp8 = int64(1)
 			} else {
 				tmp8 = int64(0)
 			}
-			return tmp8
+			return lang.BoxInt64(tmp8)
 		})
 		aotDirectFn1 = tmp1
 		var_codegen_DOT_test_DOT_record_DASH_specialization_flag_DASH_score = ns.InternWithValue(tmp0, tmp1, true)
@@ -881,42 +880,26 @@ func LoadNS() {
 	{
 		tmp0 := sym_sum_DASH_node
 		var tmp1 lang.FnFunc1
-		var tmp2 func(tmp3 *aotRecord1Node) int64
-		tmp2 = func(tmp3 *aotRecord1Node) int64 {
-			var tmp4 int64
-			if tmp3.f1 == nil {
-				tmp4 = tmp3.f0
-			} else {
-				tmp4 = lang.CheckedAddInt64(lang.CheckedAddInt64(tmp3.f0, tmp2(tmp3.f1)), tmp2(tmp3.f2))
-			}
-			return tmp4
-		}
-		aotRecordFn4 = tmp2
 		tmp1 = lang.FnFunc1(func(p0 any) any {
-			tmp5, tmp6 := p0.(*aotRecord1Node)
-			tmp6 = tmp6 && tmp5.aotRecordFast()
-			if tmp6 {
-				return tmp2(tmp5)
-			}
-			v7 := p0
-			_ = v7
-			var tmp8 any
-			tmp9 := aotKeywordLookup1(v7, nil)
-			tmp10 := lang.Identical(tmp9, nil)
-			if lang.IsTruthy(tmp10) {
-				tmp11 := aotKeywordLookup0(v7, nil)
-				tmp8 = tmp11
+			v2 := p0
+			_ = v2
+			var tmp3 any
+			tmp4 := aotKeywordLookup1(v2, nil)
+			tmp5 := lang.Identical(tmp4, nil)
+			if lang.IsTruthy(tmp5) {
+				tmp6 := aotKeywordLookup0(v2, nil)
+				tmp3 = tmp6
 			} else {
-				tmp12 := aotKeywordLookup0(v7, nil)
-				tmp13 := aotKeywordLookup1(v7, nil)
-				tmp14 := aotDirectFn4(tmp13)
-				tmp15 := lang.Numbers.Add(tmp12, tmp14)
-				tmp16 := aotKeywordLookup2(v7, nil)
-				tmp17 := aotDirectFn4(tmp16)
-				tmp18 := lang.Numbers.Add(tmp15, tmp17)
-				tmp8 = tmp18
+				tmp7 := aotKeywordLookup0(v2, nil)
+				tmp8 := aotKeywordLookup1(v2, nil)
+				tmp9 := aotDirectFn4(tmp8)
+				tmp10 := lang.Numbers.Add(tmp7, tmp9)
+				tmp11 := aotKeywordLookup2(v2, nil)
+				tmp12 := aotDirectFn4(tmp11)
+				tmp13 := lang.Numbers.Add(tmp10, tmp12)
+				tmp3 = tmp13
 			}
-			return tmp8
+			return tmp3
 		})
 		aotDirectFn4 = tmp1
 		var_codegen_DOT_test_DOT_record_DASH_specialization_sum_DASH_node = ns.InternWithValue(tmp0, tmp1, true)

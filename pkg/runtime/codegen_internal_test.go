@@ -635,10 +635,10 @@ func TestGenerateRecursiveRecordSpecialization(t *testing.T) {
 				expected, generated)
 		}
 	}
-	if got := strings.Count(generated, "var aotRecordFn"); got != 3 {
+	if got := strings.Count(generated, "var aotRecordFn"); got != 2 {
 		t.Fatalf(
-			"generated %d record-specialized functions, want 3; "+
-				"record equality must retain generic semantics:\n%s",
+			"generated %d record-specialized functions, want 2; "+
+				"nullable recursive fields must retain generic semantics:\n%s",
 			got,
 			generated,
 		)
@@ -667,6 +667,40 @@ func TestGenerateRecursiveRecordSpecialization(t *testing.T) {
 		strings.Contains(output.String(), "aotRecordFn") {
 		t.Fatalf("record specialization ignored ^:redef producer:\n%s",
 			output.String())
+	}
+}
+
+func TestNullableRecordProducerUsesGenericFallback(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.nullable-record-producer"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defrecord MaybeLink [value next])
+		(defn maybe-link [value]
+		  (if (zero? value)
+		    nil
+		    (->MaybeLink value (maybe-link (dec value)))))
+		(defn sample-maybe-link []
+		  (maybe-link 0))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate nullable record producer: %v", err)
+	}
+	if strings.Contains(output.String(), "var aotRecordFn") {
+		t.Fatalf(
+			"nullable record producer received an unsound pointer-returning specialization:\n%s",
+			output.String(),
+		)
+	}
+	if got := ns.FindInternedVar(
+		lang.NewSymbol("sample-maybe-link"),
+	).Invoke(); got != nil {
+		t.Fatalf("nullable record producer returned %#v, want nil", got)
 	}
 }
 
@@ -2958,14 +2992,18 @@ func TestGenerateOwnedNestedVectorUpdateRegion(t *testing.T) {
 		    (mapv
 		      (fn [row]
 		        (assoc row 0 (+ (nth row 0) delta)))
-		      updated)))`)
+		      updated)))
+		(defn ordered-assoc [values divisor]
+		  (let [row (nth values 0)
+		        updated (assoc row -777777 99 1 (quot 888888 divisor))]
+		    (assoc-in values [0 0] (nth updated 0))))`)
 
 	var output bytes.Buffer
 	generator := NewGenerator(&output)
 	if err := generator.Generate(ns); err != nil {
 		t.Fatalf("generate owned nested vector region: %v", err)
 	}
-	for _, name := range []string{"update-cell", "update-all"} {
+	for _, name := range []string{"update-cell", "update-all", "ordered-assoc"} {
 		vr := ns.FindInternedVar(lang.NewSymbol(name))
 		target := generator.aotCallTargets[vr]
 		if target == nil || target.ownedVectorAnalysis == nil {
@@ -2996,6 +3034,23 @@ func TestGenerateOwnedNestedVectorUpdateRegion(t *testing.T) {
 			t.Fatalf("owned vector region omitted %q:\n%s",
 				expected, generated)
 		}
+	}
+	valueIndex := strings.Index(
+		generated,
+		"lang.Numbers.Quotient(int64(888888)",
+	)
+	assocIndex := strings.Index(
+		generated,
+		".AssocCopy(lang.IntCast(int64(-777777))",
+	)
+	if valueIndex < 0 || assocIndex < 0 || valueIndex > assocIndex {
+		t.Fatalf(
+			"owned vector assoc did not evaluate all operands before mutation "+
+				"(value=%d assoc=%d):\n%s",
+			valueIndex,
+			assocIndex,
+			generated,
+		)
 	}
 
 	update := ns.FindInternedVar(lang.NewSymbol("update-all"))

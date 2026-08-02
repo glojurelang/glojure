@@ -572,7 +572,16 @@ func (g *Generator) generateRecordSpecializedFixedFn(
 	if len(guards) > 0 {
 		g.writef("if %s {\n", strings.Join(guards, " && "))
 	}
-	g.writef("return %s(%s)\n", helper, strings.Join(args, ", "))
+	call := helper + "(" + strings.Join(args, ", ") + ")"
+	if analysis.Signature.Result.Kind == compiler.IRRecordSpecializedRecord &&
+		analysis.Signature.Result.Nullable {
+		result := g.allocateTempVar()
+		g.writef("%s := %s\n", result, call)
+		g.writef("if %s == nil { return nil }\n", result)
+		g.writef("return %s\n", result)
+	} else {
+		g.writef("return %s\n", call)
+	}
 	if len(guards) > 0 {
 		g.writef("}\n")
 	}
