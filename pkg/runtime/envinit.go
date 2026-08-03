@@ -226,5 +226,7 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 		return ReadEval(string(buf), WithFilename(fname))
 	}), true)
 
+	installGrenadineHost()
+
 	return env
 }

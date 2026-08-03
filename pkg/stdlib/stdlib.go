@@ -11,5 +11,5 @@ import (
 // generated loader Go files, which are already compiled into AOT-enabled
 // executables and are not runtime load-path resources.
 //
-//go:embed */*.glj */*/*.glj */*/*/*.glj
+//go:embed */*.glj */*/*.glj */*/*/*.glj */*.clj */*/*.clj */*.cljc
 var StdLib embed.FS

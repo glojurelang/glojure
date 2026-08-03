@@ -1,0 +1,22 @@
+(ns glojure.test-glojure.deps
+  (:require [clojure.test :refer [deftest is run-tests]]
+            [clojurestar.deps :as portable-deps]
+            [glojure.deps :as deps]))
+
+(deftest embedded-grenadine-facade
+  (let [coordinate {:mvn/version "1.0.0"}
+        result
+        (deps/add-deps
+         {:deps {'example/library coordinate}}
+         {:install-fn
+          (fn [libs opts]
+            (is (= {'example/library coordinate} libs))
+            (is (map? (:host opts)))
+            {:classpath [] :source-roots [] :warnings []})})]
+    (is (= [] (:source-roots result)))
+    (is (= coordinate (get (deps/current-basis) 'example/library)))))
+
+(deftest portable-facade
+  (is (nil? (portable-deps/add-deps {}))))
+
+(run-tests)
