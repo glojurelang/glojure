@@ -21,7 +21,21 @@ func (r *Ref) Deref() interface{} {
 	return r.val
 }
 
+// Set replaces the value held by this hosted Ref. Transactional callers still
+// use Commute; JVM compatibility adapters use Set when they implement mutable
+// host objects whose state is exposed through IDeref.
+func (r *Ref) Set(value interface{}) interface{} {
+	r.val = value
+	return value
+}
+
 func (r *Ref) Commute(fn IFn, args ISeq) interface{} {
+	return LockingTransaction.doCommute(r, fn, args)
+}
+
+// Alter applies fn to the in-transaction value. The hosted transaction model
+// is currently serialized, so it shares the same implementation as Commute.
+func (r *Ref) Alter(fn IFn, args ISeq) interface{} {
 	return LockingTransaction.doCommute(r, fn, args)
 }
 

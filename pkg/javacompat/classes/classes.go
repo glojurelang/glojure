@@ -11,6 +11,9 @@ import (
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
+type URL struct{}
+type URLClassLoader struct{}
+
 func register(name, javaPackage string, typ reflect.Type) {
 	pkgmap.SetHostClassPackage(name, javaPackage)
 	pkgmap.SetHostClass(name, lang.NewClass(typ, javaPackage+"."+name))
@@ -26,7 +29,7 @@ func newBigInteger(args ...any) any {
 			if err != nil {
 				panic(err)
 			}
-			return value
+			return value.ToBigInteger()
 		}
 	}
 	magnitudeArg := args[len(args)-1]
@@ -60,12 +63,12 @@ func newBigInteger(args ...any) any {
 		if signum < 0 {
 			number.Neg(number)
 		}
-		return lang.NewBigIntFromGoBigInt(number)
+		return number
 	}
 	if len(bytes) > 0 && bytes[0]&0x80 != 0 {
 		number.Sub(number, new(big.Int).Lsh(big.NewInt(1), uint(8*len(bytes))))
 	}
-	return lang.NewBigIntFromGoBigInt(number)
+	return number
 }
 
 func init() {
@@ -89,6 +92,8 @@ func init() {
 		reflect.TypeOf((*lang.BigDecimal)(nil))))
 	register("Class", "java.lang", reflect.TypeOf((*reflect.Type)(nil)).Elem())
 	register("ClassNotFoundException", "java.lang", reflect.TypeOf((*error)(nil)).Elem())
+	register("URL", "java.net", reflect.TypeOf((*URL)(nil)))
+	register("URLClassLoader", "java.net", reflect.TypeOf((*URLClassLoader)(nil)))
 	register("NumberFormatException", "java.lang", reflect.TypeOf((*error)(nil)).Elem())
 	register("Set", "java.util", reflect.TypeOf((*lang.IPersistentSet)(nil)).Elem())
 	register("Collection", "java.util", reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem())
@@ -97,6 +102,22 @@ func init() {
 	register("Keyword", "clojure.lang", reflect.TypeOf(lang.Keyword{}))
 	register("Namespace", "clojure.lang", reflect.TypeOf((*lang.Namespace)(nil)))
 	register("Var", "clojure.lang", reflect.TypeOf((*lang.Var)(nil)))
+	pushThreadBindings := lang.FnFunc1(func(bindings any) any {
+		mapping, ok := bindings.(lang.IPersistentMap)
+		if !ok {
+			panic(fmt.Sprintf("Var/pushThreadBindings: expected map, got %T", bindings))
+		}
+		lang.PushThreadBindings(mapping)
+		return nil
+	})
+	popThreadBindings := lang.FnFunc0(func() any {
+		lang.PopThreadBindings()
+		return nil
+	})
+	for _, prefix := range []string{"Var.", "clojure.lang.Var."} {
+		pkgmap.Set(prefix+"pushThreadBindings", pushThreadBindings)
+		pkgmap.Set(prefix+"popThreadBindings", popThreadBindings)
+	}
 	pkgmap.SetHostClassPackage("BigInteger", "java.math")
 	pkgmap.SetHostClass("BigInteger", lang.NewClassWithTypes(
 		"java.math.BigInteger",
@@ -135,7 +156,11 @@ func init() {
 	register("IRef", "clojure.lang", reflect.TypeOf((*lang.IRef)(nil)).Elem())
 	register("ISeq", "clojure.lang", reflect.TypeOf((*lang.ISeq)(nil)).Elem())
 	register("Indexed", "clojure.lang", reflect.TypeOf((*lang.Indexed)(nil)).Elem())
-	register("Named", "clojure.lang", reflect.TypeOf((*lang.Named)(nil)).Elem())
+	pkgmap.SetHostClassPackage("Named", "clojure.lang")
+	pkgmap.SetHostClass("Named", lang.NewClassWithTypes(
+		"clojure.lang.Named",
+		reflect.TypeOf(lang.Keyword{}),
+		reflect.TypeOf((*lang.Symbol)(nil))))
 	register("Reversible", "clojure.lang", reflect.TypeOf((*lang.Reversible)(nil)).Elem())
 	register("Seqable", "clojure.lang", reflect.TypeOf((*lang.Seqable)(nil)).Elem())
 	register("Sequential", "clojure.lang", reflect.TypeOf((*lang.Sequential)(nil)).Elem())

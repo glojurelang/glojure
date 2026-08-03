@@ -33,6 +33,8 @@ type RoundingMode string
 const (
 	RoundingModeDown     RoundingMode = "DOWN"
 	RoundingModeHalfEven RoundingMode = "HALF_EVEN"
+	RoundingModeFloor    RoundingMode = "FLOOR"
+	RoundingModeCeiling  RoundingMode = "CEILING"
 )
 
 // NewBigDecimal creates a new BigDecimal from a string.
@@ -88,7 +90,14 @@ func (n *BigDecimal) SetScale(scale any, mode any) *BigDecimal {
 	quotient, remainder := new(big.Int), new(big.Int)
 	quotient.QuoRem(scaledNumerator, rat.Denom(), remainder)
 
-	if fmt.Sprint(mode) == string(RoundingModeHalfEven) && remainder.Sign() != 0 {
+	modeName := fmt.Sprint(mode)
+	if remainder.Sign() != 0 && modeName == string(RoundingModeFloor) && scaledNumerator.Sign() < 0 {
+		quotient.Sub(quotient, big.NewInt(1))
+	}
+	if remainder.Sign() != 0 && modeName == string(RoundingModeCeiling) && scaledNumerator.Sign() > 0 {
+		quotient.Add(quotient, big.NewInt(1))
+	}
+	if modeName == string(RoundingModeHalfEven) && remainder.Sign() != 0 {
 		twiceRemainder := new(big.Int).Lsh(new(big.Int).Abs(remainder), 1)
 		denominator := new(big.Int).Abs(rat.Denom())
 		comparison := twiceRemainder.Cmp(denominator)
@@ -300,5 +309,9 @@ func init() {
 	for _, prefix := range []string{"RoundingMode", "java.math.RoundingMode"} {
 		pkgmap.Set(prefix+".DOWN", RoundingModeDown)
 		pkgmap.Set(prefix+".HALF_EVEN", RoundingModeHalfEven)
+	}
+	for _, prefix := range []string{"BigDecimal", "java.math.BigDecimal"} {
+		pkgmap.Set(prefix+".ROUND_FLOOR", RoundingModeFloor)
+		pkgmap.Set(prefix+".ROUND_CEILING", RoundingModeCeiling)
 	}
 }

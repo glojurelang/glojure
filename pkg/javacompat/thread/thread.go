@@ -16,11 +16,15 @@ import (
 
 const pkg = "github.com/glojurelang/glojure/pkg/javacompat/thread"
 
-// Thread is the placeholder type registered as java.lang.Thread's
-// reflect.Type. We don't expose Thread instances yet (only static
-// sleep), so the value just makes (ns-imports *ns*) include the
-// auto-imported class.
+// Thread is a lightweight hosted representation of the current goroutine.
+// Go does not expose a stable goroutine identity or JVM-shaped frames, but a
+// concrete value with an empty stack preserves portable feature-detection and
+// non-REPL control flow.
 type Thread struct{}
+
+func CurrentThread() any { return &Thread{} }
+
+func (thread *Thread) GetStackTrace() []any { return []any{} }
 
 // Sleep mirrors java.lang.Thread.sleep. Accepts (millis) or (millis, nanos);
 // both arguments are coerced from any int-like value glojure may pass.
@@ -45,6 +49,7 @@ func register(jvmName, goName string, v any) {
 
 func init() {
 	register("sleep", "Sleep", lang.FnFunc(func(args ...any) any { return Sleep(args...) }))
+	register("currentThread", "CurrentThread", lang.FnFunc0(CurrentThread))
 }
 
 func toInt64(x any) int64 {

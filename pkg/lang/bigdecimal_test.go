@@ -43,6 +43,17 @@ func TestBigDecimalUnscaledConstructorPreservesDecimalText(t *testing.T) {
 	}
 }
 
+func TestBigDecimalFloorAndCeilingScale(t *testing.T) {
+	negative, _ := NewBigDecimal("-4.3")
+	if got, want := negative.SetScale(0, RoundingModeFloor).ToPlainString(), "-5"; got != want {
+		t.Fatalf("floor = %q, want %q", got, want)
+	}
+	positive, _ := NewBigDecimal("4.3")
+	if got, want := positive.SetScale(0, RoundingModeCeiling).ToPlainString(), "5"; got != want {
+		t.Fatalf("ceiling = %q, want %q", got, want)
+	}
+}
+
 func newBigIntegerForTest(value string) *BigInt {
 	result, err := NewBigInt(value)
 	if err != nil {

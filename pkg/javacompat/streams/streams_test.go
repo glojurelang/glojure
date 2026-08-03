@@ -189,6 +189,17 @@ func TestPrintWriterWritesAndCloses(t *testing.T) {
 	}
 }
 
+func TestPrintWriterAppend(t *testing.T) {
+	var output bytes.Buffer
+	writer := NewPrintWriter(&output).(*PrintWriter)
+	if got := writer.Append("hello").Append(lang.NewChar('!')); got != writer {
+		t.Fatal("Append did not return its receiver")
+	}
+	if got, want := output.String(), "hello!"; got != want {
+		t.Fatalf("content = %q, want %q", got, want)
+	}
+}
+
 func TestFileInputStreamReadLine(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "lines.txt")
 	if err := os.WriteFile(path, []byte("first\nsecond"), 0o600); err != nil {
@@ -224,5 +235,64 @@ func TestFileInputStreamJavaRead(t *testing.T) {
 	}
 	if got := lang.Apply1(read, buffer); got != int64(-1) {
 		t.Fatalf("EOF read = %v, want -1", got)
+	}
+}
+
+func TestStringWriterAppend(t *testing.T) {
+	writer := &StringWriter{}
+	if got := writer.Append("Go").Append(lang.NewChar('!')); got != writer {
+		t.Fatal("Append did not return its receiver")
+	}
+	if got, want := writer.String(), "Go!"; got != want {
+		t.Fatalf("content = %q, want %q", got, want)
+	}
+}
+
+func TestStringWriterCombinesUTF16Surrogates(t *testing.T) {
+	writer := &StringWriter{}
+	writer.Append(lang.Char(0xD83D)).Append(lang.Char(0xDE03))
+	if got, want := writer.String(), "😃"; got != want {
+		t.Fatalf("content = %q, want %q", got, want)
+	}
+}
+
+func TestColumnWriterTracksPosition(t *testing.T) {
+	base := &StringWriter{}
+	fields := lang.NewRef(lang.NewMap(
+		lang.NewKeyword("max"), int64(72),
+		lang.NewKeyword("cur"), int64(0),
+		lang.NewKeyword("line"), int64(0),
+		lang.NewKeyword("base"), base))
+	writer := NewColumnWriter(base, int64(72), fields).(*ColumnWriter)
+	write, _ := writer.ResolveFieldOrMethod("write")
+	lang.Apply1(write, "abc\ndef")
+	if got, want := base.String(), "abc\ndef"; got != want {
+		t.Fatalf("content = %q, want %q", got, want)
+	}
+	state := fields.Deref()
+	if got := lang.Get(state, lang.NewKeyword("line")); got != int64(1) {
+		t.Fatalf("line = %v, want 1", got)
+	}
+	if got := lang.Get(state, lang.NewKeyword("cur")); got != int64(3) {
+		t.Fatalf("column = %v, want 3", got)
+	}
+}
+
+func TestDynamicWriterProxy(t *testing.T) {
+	base := &StringWriter{}
+	proxy := NewDynamicWriterProxy(lang.NewMap(
+		lang.NewKeyword("write"), lang.FnFunc1(func(value any) any {
+			base.WriteString(lang.ToString(value))
+			return nil
+		}),
+		lang.NewKeyword("deref"), lang.FnFunc0(func() any { return "state" }))).(*DynamicWriterProxy)
+	if _, err := io.WriteString(proxy, "hello"); err != nil {
+		t.Fatal(err)
+	}
+	if got := base.String(); got != "hello" {
+		t.Fatalf("content = %q", got)
+	}
+	if got := proxy.Deref(); got != "state" {
+		t.Fatalf("deref = %v", got)
 	}
 }

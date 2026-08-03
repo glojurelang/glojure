@@ -252,7 +252,14 @@ func init() {
 		}
 		return lang.NewVector(out...)
 	})
-	registerMethod("getBytes", func(s string, _ ...any) any { return jstr.GetBytes(s) })
+	registerMethod("getBytes", func(s string, _ ...any) any {
+		bytes := jstr.GetBytes(s)
+		result := make([]int8, len(bytes))
+		for index, value := range bytes {
+			result[index] = int8(value)
+		}
+		return result
+	})
 	registerMethod("chars", func(s string, _ ...any) any {
 		units := jstr.Chars(s)
 		out := make([]any, len(units))

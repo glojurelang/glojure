@@ -114,6 +114,16 @@ func (c *Class) Name() string { return c.JavaName }
 // fmt.Stringer caller renders the FQ Java name.
 func (c *Class) String() string { return c.JavaName }
 
+// Types returns every hosted Go type represented by this JVM compatibility
+// class. Protocol extension uses this for marker classes such as Named, whose
+// JVM surface covers both Keyword and Symbol values.
+func (c *Class) Types() []reflect.Type {
+	if c == nil {
+		return nil
+	}
+	return append([]reflect.Type(nil), c.acceptedTypes...)
+}
+
 // classPrintMethod is the print-method body for *Class values: write the
 // JavaName verbatim. Installed into the print-method MultiFn at
 // construction time (see registerWellKnownMethods in multifn.go).

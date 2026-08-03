@@ -3,8 +3,10 @@ package date
 import (
 	"bytes"
 	"testing"
+	"time"
 
 	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
 func TestDateReadableRepresentation(t *testing.T) {
@@ -42,5 +44,21 @@ func TestDateEquality(t *testing.T) {
 	}
 	if left.HashCode() != right.HashCode() {
 		t.Fatal("equal dates did not have equal hash codes")
+	}
+}
+
+func TestSQLDateCompatibility(t *testing.T) {
+	constructed := New(int64(55), int64(6), int64(12)).(*Date)
+	valueOf, ok := pkgmap.Get("java.sql.Date.valueOf")
+	if !ok {
+		t.Fatal("java.sql.Date.valueOf is not registered")
+	}
+	parsed := lang.Apply(valueOf.(lang.IFn), []any{"1955-07-12"}).(*Date)
+	if !constructed.Equals(parsed) {
+		t.Fatalf("constructed %v != parsed %v", constructed, parsed)
+	}
+	instant := time.UnixMilli(parsed.GetTime()).In(time.Local)
+	if got, want := instant.Format("2006-01-02"), "1955-07-12"; got != want {
+		t.Fatalf("date = %s, want %s", got, want)
 	}
 }

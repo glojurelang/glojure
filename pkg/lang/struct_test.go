@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"math"
 	"reflect"
 	"testing"
 )
@@ -302,5 +303,20 @@ func TestTransientProtocolMethodsResolveDirectlyAndCache(t *testing.T) {
 		_, _ = FieldOrMethod(transient, "Conj")
 	}); got != 0 {
 		t.Fatalf("cached Conj resolution allocated %v objects per call, want 0", got)
+	}
+}
+
+func TestJavaClassAndFloatingPointMethods(t *testing.T) {
+	isArray, ok := FieldOrMethod(reflect.TypeOf([]int8{}), "isArray")
+	if !ok || Apply0(isArray) != true {
+		t.Fatal("byte[] Class.isArray was not true")
+	}
+	isInfinite, ok := FieldOrMethod(math.Inf(1), "isInfinite")
+	if !ok || Apply0(isInfinite) != true {
+		t.Fatal("Double.isInfinite was not true")
+	}
+	isNaN, ok := FieldOrMethod(float64(0), "isNaN")
+	if !ok || Apply0(isNaN) != false {
+		t.Fatal("Double.isNaN was not false")
 	}
 }

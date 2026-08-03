@@ -22,6 +22,13 @@ func New(args ...any) any {
 		return &Date{millis: time.Now().UnixMilli()}
 	case 1:
 		return &Date{millis: toInt64(args[0])}
+	case 3:
+		// java.sql.Date retains java.util.Date's deprecated
+		// (year-since-1900, zero-based-month, day) constructor.
+		value := time.Date(
+			toInt(args[0])+1900, time.Month(toInt(args[1])+1), toInt(args[2]),
+			0, 0, 0, 0, time.Local)
+		return &Date{millis: value.UnixMilli()}
 	default:
 		panic(fmt.Sprintf("Date/new: wrong number of args (%d)", len(args)))
 	}
@@ -83,9 +90,25 @@ func init() {
 		lang.NewClass(reflect.TypeOf((*Date)(nil)), "java.sql.Timestamp"))
 	lang.RegisterHostConstructor("java.util.Date",
 		lang.FnFunc(func(args ...any) any { return New(args...) }))
+	lang.RegisterHostConstructor("java.sql.Date",
+		lang.FnFunc(func(args ...any) any { return New(args...) }))
+	valueOf := lang.FnFunc1(func(value any) any {
+		text, ok := value.(string)
+		if !ok {
+			panic(fmt.Sprintf("java.sql.Date/valueOf: expected string, got %T", value))
+		}
+		parsed, err := time.ParseInLocation("2006-01-02", text, time.Local)
+		if err != nil {
+			panic(err)
+		}
+		return &Date{millis: parsed.UnixMilli()}
+	})
+	pkgmap.Set("java.sql.Date.valueOf", valueOf)
 	pkgmap.Set("github.com/glojurelang/glojure/pkg/javacompat/date.ParseInstantDate",
 		lang.FnFunc1(ParseInstantDate))
 }
+
+func toInt(value any) int { return int(toInt64(value)) }
 
 func toInt64(value any) int64 {
 	switch v := value.(type) {

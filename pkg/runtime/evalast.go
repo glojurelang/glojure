@@ -375,8 +375,13 @@ func (c *evalCompiler) MaybeResolveIn(ns *lang.Namespace, sym *lang.Symbol) inte
 		}
 		return n.FindInternedVar(lang.NewSymbol(sym.Name()))
 	case strings.Index(sym.Name(), ".") > 0 && !strings.HasSuffix(sym.Name(), ".") || sym.Name()[0] == '[':
-		// TODO: what case does this correspond to? should we be looking for imports here?
-		// previously: panic(fmt.Errorf("can't resolve class %s in ns %s", sym, ns))
+		name := sym.Name()
+		if separator := strings.LastIndex(name, "."); separator >= 0 {
+			name = name[separator+1:]
+		}
+		if class, found := pkgmap.HostClass(name); found {
+			return class
+		}
 		return nil
 	case sym.Equals(SymNS):
 		return lang.VarNS
@@ -474,8 +479,10 @@ func (env *environment) EvalASTHostCall(n *ast.Node) (interface{}, error) {
 			return nil, fmt.Errorf("no such field or method on %v (%T): %s", tgtVal, tgtVal, method)
 		}
 	}
-	// if the field is not a function, return an error
-	if reflect.TypeOf(methodVal).Kind() != reflect.Func {
+	// Hosted compatibility values may resolve methods directly as Clojure IFns
+	// rather than Go function values.
+	_, callable := methodVal.(lang.IFn)
+	if !callable && (methodVal == nil || reflect.TypeOf(methodVal).Kind() != reflect.Func) {
 		return nil, errors.New("not a method: " + lang.ToString(tgtVal) + "." + method.Name())
 	}
 

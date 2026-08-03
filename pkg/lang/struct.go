@@ -3,6 +3,7 @@ package lang
 import (
 	"fmt"
 	"io"
+	"math"
 	"reflect"
 	"regexp"
 	"sync"
@@ -81,6 +82,14 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 		}
 	}
 	switch value := v.(type) {
+	case *Class:
+		if value != nil {
+			for _, methodName := range []string{name, lowerInitial(name)} {
+				if method, found := pkgmap.Get(value.JavaName + "." + methodName); found {
+					return method, true
+				}
+			}
+		}
 	case *Var:
 		switch name {
 		case "getRawRoot", "GetRawRoot":
@@ -135,6 +144,29 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 				}
 				return component
 			}), true
+		}
+	}
+	if name == "isArray" || name == "IsArray" {
+		if typ, ok := ReflectType(v); ok {
+			return FnFunc0(func() any {
+				return typ.Kind() == reflect.Array || typ.Kind() == reflect.Slice
+			}), true
+		}
+	}
+	if name == "isInfinite" || name == "IsInfinite" {
+		switch number := v.(type) {
+		case float64:
+			return FnFunc0(func() any { return math.IsInf(number, 0) }), true
+		case float32:
+			return FnFunc0(func() any { return math.IsInf(float64(number), 0) }), true
+		}
+	}
+	if name == "isNaN" || name == "IsNaN" {
+		switch number := v.(type) {
+		case float64:
+			return FnFunc0(func() any { return math.IsNaN(number) }), true
+		case float32:
+			return FnFunc0(func() any { return math.IsNaN(float64(number)) }), true
 		}
 	}
 	if resolver, ok := v.(FieldOrMethodResolver); ok {
@@ -197,6 +229,8 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 			// StackTraceElement values. Return the faithful empty Java-array
 			// shape until a richer frame mapper is available.
 			return FnFunc0(func() any { return []any{} }), true
+		case "setStackTrace", "SetStackTrace":
+			return FnFunc1(func(any) any { return nil }), true
 		}
 	}
 
@@ -255,6 +289,15 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 	}
 
 	return nil, false
+}
+
+func lowerInitial(value string) string {
+	if value == "" {
+		return value
+	}
+	runes := []rune(value)
+	runes[0] = unicode.ToLower(runes[0])
+	return string(runes)
 }
 
 type errorUnwrapper interface {

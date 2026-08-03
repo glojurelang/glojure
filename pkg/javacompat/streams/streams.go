@@ -10,6 +10,7 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"unicode/utf16"
 	"unicode/utf8"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -79,7 +80,23 @@ type PrintWriter struct {
 	io.Writer
 	closer io.Closer
 }
-type StringWriter struct{ strings.Builder }
+
+func (writer *PrintWriter) Append(value any) *PrintWriter {
+	fmt.Fprint(writer.Writer, lang.ToString(value))
+	return writer
+}
+
+type StringWriter struct {
+	strings.Builder
+	pendingHigh rune
+}
+type ColumnWriter struct {
+	base   io.Writer
+	fields *lang.Ref
+}
+type DynamicWriterProxy struct {
+	methods any
+}
 type FileInputStream struct {
 	*os.File
 	reader *bufio.Reader
@@ -335,6 +352,130 @@ func readLine(reader *bufio.Reader) any {
 }
 func (s *StringWriter) ToString() string { return s.String() }
 func (s *StringWriter) Close()           {}
+func (s *StringWriter) Append(value any) *StringWriter {
+	if character, ok := value.(lang.Char); ok {
+		rn := rune(character)
+		if 0xD800 <= rn && rn <= 0xDBFF {
+			s.pendingHigh = rn
+			return s
+		}
+		if s.pendingHigh != 0 && 0xDC00 <= rn && rn <= 0xDFFF {
+			s.WriteRune(utf16.DecodeRune(s.pendingHigh, rn))
+			s.pendingHigh = 0
+			return s
+		}
+	}
+	if s.pendingHigh != 0 {
+		s.WriteRune(utf8.RuneError)
+		s.pendingHigh = 0
+	}
+	s.WriteString(lang.ToString(value))
+	return s
+}
+
+func NewColumnWriter(writer any, maxColumns any, fields any) any {
+	base, ok := writer.(io.Writer)
+	if !ok {
+		panic(fmt.Sprintf("ColumnWriter: %T is not a writer", writer))
+	}
+	state, ok := fields.(*lang.Ref)
+	if !ok {
+		state = lang.NewRef(lang.NewMap(
+			lang.NewKeyword("max"), maxColumns,
+			lang.NewKeyword("cur"), int64(0),
+			lang.NewKeyword("line"), int64(0),
+			lang.NewKeyword("base"), writer))
+	}
+	return &ColumnWriter{base: base, fields: state}
+}
+
+func NewDynamicWriterProxy(methods any) any {
+	return &DynamicWriterProxy{methods: methods}
+}
+func (proxy *DynamicWriterProxy) method(name string) (lang.IFn, bool) {
+	method := lang.Get(proxy.methods, lang.NewKeyword(strings.ToLower(name)))
+	fn, ok := method.(lang.IFn)
+	return fn, ok
+}
+func (proxy *DynamicWriterProxy) Deref() any {
+	method, ok := proxy.method("deref")
+	if !ok {
+		return nil
+	}
+	return lang.Apply0(method)
+}
+func (proxy *DynamicWriterProxy) Write(data []byte) (int, error) {
+	method, ok := proxy.method("write")
+	if !ok {
+		return 0, fmt.Errorf("dynamic Writer proxy has no write method")
+	}
+	lang.Apply1(method, string(data))
+	return len(data), nil
+}
+func (proxy *DynamicWriterProxy) ResolveFieldOrMethod(name string) (any, bool) {
+	return proxy.method(name)
+}
+
+func (writer *ColumnWriter) Deref() any { return writer.fields }
+func (writer *ColumnWriter) Flush() {
+	if flusher, ok := writer.base.(interface{ Flush() }); ok {
+		flusher.Flush()
+	}
+}
+func (writer *ColumnWriter) Write(data []byte) (int, error) {
+	writer.updatePosition(string(data))
+	return writer.base.Write(data)
+}
+func (writer *ColumnWriter) updatePosition(text string) {
+	state := writer.fields.Deref()
+	line := lang.MustAsInt(lang.Get(state, lang.NewKeyword("line")))
+	column := lang.MustAsInt(lang.Get(state, lang.NewKeyword("cur")))
+	if lastNewline := strings.LastIndexByte(text, '\n'); lastNewline >= 0 {
+		line += strings.Count(text, "\n")
+		column = len(text) - lastNewline - 1
+	} else {
+		column += len([]rune(text))
+	}
+	state = lang.Assoc(state, lang.NewKeyword("line"), int64(line))
+	state = lang.Assoc(state, lang.NewKeyword("cur"), int64(column))
+	writer.fields.Set(state)
+}
+func (writer *ColumnWriter) ResolveFieldOrMethod(name string) (any, bool) {
+	switch strings.ToLower(name) {
+	case "flush":
+		return lang.FnFunc0(func() any { writer.Flush(); return nil }), true
+	case "write":
+		return lang.FnFunc(func(args ...any) any {
+			if len(args) != 1 && len(args) != 3 {
+				panic(fmt.Sprintf("ColumnWriter.write: wrong number of args (%d)", len(args)))
+			}
+			var text string
+			if len(args) == 1 {
+				switch value := args[0].(type) {
+				case string:
+					text = value
+				case lang.Char:
+					text = string(value)
+				default:
+					text = string(rune(lang.MustAsInt(value)))
+				}
+			} else {
+				chars := lang.Seq(args[0])
+				all := []rune{}
+				for ; chars != nil; chars = chars.Next() {
+					all = append(all, rune(lang.MustAsInt(chars.First())))
+				}
+				offset, length := lang.MustAsInt(args[1]), lang.MustAsInt(args[2])
+				text = string(all[offset : offset+length])
+			}
+			if _, err := io.WriteString(writer, text); err != nil {
+				panic(err)
+			}
+			return nil
+		}), true
+	}
+	return nil, false
+}
 
 func NewByteArrayInputStream(args ...any) any {
 	if len(args) != 1 {
@@ -478,6 +619,8 @@ func registerClass(name, javaName string, classType reflect.Type, constructor fu
 }
 
 func init() {
+	pkgmap.Set("github.com/glojurelang/glojure/pkg/javacompat/streams.NewColumnWriter", lang.FnFunc3(NewColumnWriter))
+	pkgmap.Set("github.com/glojurelang/glojure/pkg/javacompat/streams.NewDynamicWriterProxy", lang.FnFunc1(NewDynamicWriterProxy))
 	registerClass("InputStream", "java.io.InputStream",
 		reflect.TypeOf((*InputStream)(nil)).Elem(), nil)
 	registerClass("OutputStream", "java.io.OutputStream",
