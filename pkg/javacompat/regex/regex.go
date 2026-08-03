@@ -12,6 +12,7 @@ package regex
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	jregex "github.com/gloathub/gojava/regex"
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -35,17 +36,22 @@ func Compile(args ...any) *jregex.Pattern {
 		panic("Pattern/compile: missing regex string")
 	}
 	if len(args) == 1 {
-		p, err := jregex.Compile(toString(args[0]))
+		p, err := jregex.Compile(TranslateJavaPattern(toString(args[0])))
 		if err != nil {
 			panic(err.Error())
 		}
 		return p
 	}
-	p, err := jregex.CompileFlags(toString(args[0]), toInt32(args[1]))
+	p, err := jregex.CompileFlags(TranslateJavaPattern(toString(args[0])), toInt32(args[1]))
 	if err != nil {
 		panic(err.Error())
 	}
 	return p
+}
+
+func TranslateJavaPattern(pattern string) string {
+	pattern = strings.ReplaceAll(pattern, `\p{XDigit}`, `[0-9A-Fa-f]`)
+	return strings.ReplaceAll(pattern, `\e`, `\x1b`)
 }
 
 // Matches mirrors Pattern.matches(regex, input): convenience for a
@@ -69,6 +75,19 @@ func Quote(args ...any) string {
 	return jregex.Quote(toString(args[0]))
 }
 
+func IsPattern(value any) bool {
+	_, ok := value.(*jregex.Pattern)
+	return ok
+}
+
+func ReplaceAll(pattern any, input, replacement string) string {
+	compiled, ok := pattern.(*jregex.Pattern)
+	if !ok {
+		panic(fmt.Sprintf("ReplaceAll: expected Pattern, got %T", pattern))
+	}
+	return compiled.Matcher(input).ReplaceAll(replacement)
+}
+
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Pattern."+jvmName, v)
@@ -86,6 +105,10 @@ func init() {
 	register("compile", "Compile", lang.FnFunc(func(args ...any) any { return Compile(args...) }))
 	register("matches", "Matches", lang.FnFunc(func(args ...any) any { return Matches(args...) }))
 	register("quote", "Quote", lang.FnFunc(func(args ...any) any { return Quote(args...) }))
+	pkgmap.Set(pkg+".IsPattern", lang.FnFunc1(func(value any) any { return IsPattern(value) }))
+	pkgmap.Set(pkg+".ReplaceAll", lang.FnFunc3(func(pattern, input, replacement any) any {
+		return ReplaceAll(pattern, toString(input), toString(replacement))
+	}))
 }
 
 func toString(x any) string {

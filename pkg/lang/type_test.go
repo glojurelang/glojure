@@ -55,3 +55,11 @@ func TestHasTypeAcceptsClassAliases(t *testing.T) {
 		t.Fatal("Class wrapper matched an unregistered host type")
 	}
 }
+
+func TestClassEqualsUnderlyingReflectType(t *testing.T) {
+	typeOfSymbol := reflect.TypeOf((*Symbol)(nil))
+	class := NewClass(typeOfSymbol, "clojure.lang.Symbol")
+	if !Equals(class, typeOfSymbol) || !Equals(typeOfSymbol, class) {
+		t.Fatal("Class wrapper and its underlying reflect.Type were not equal")
+	}
+}

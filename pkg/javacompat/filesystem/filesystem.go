@@ -124,15 +124,41 @@ func (f *File) List() []string {
 	return out
 }
 func (f *File) ListFiles() []*File {
+	return f.listFilesFiltered(nil)
+}
+
+func (f *File) listFilesFiltered(filter any) []*File {
 	entries, err := os.ReadDir(f.Pathname)
 	if err != nil {
 		return nil
 	}
-	out := make([]*File, len(entries))
-	for i, entry := range entries {
-		out[i] = &File{Pathname: filepath.Join(f.Pathname, entry.Name())}
+	out := make([]*File, 0, len(entries))
+	for _, entry := range entries {
+		if filter != nil {
+			predicate := lang.MustHostCast[lang.IFn](filter)
+			if !lang.BooleanCast(predicate.Invoke(f, entry.Name())) {
+				continue
+			}
+		}
+		out = append(out, &File{Pathname: filepath.Join(f.Pathname, entry.Name())})
 	}
 	return out
+}
+
+func (f *File) ResolveFieldOrMethod(name string) (any, bool) {
+	if name != "ListFiles" && name != "listFiles" {
+		return nil, false
+	}
+	return lang.FnFunc(func(args ...any) any {
+		switch len(args) {
+		case 0:
+			return f.ListFiles()
+		case 1:
+			return f.listFilesFiltered(args[0])
+		default:
+			panic(fmt.Sprintf("File.listFiles: wrong number of args (%d)", len(args)))
+		}
+	}), true
 }
 func (f *File) ToPath() *Path    { return &Path{Pathname: f.Pathname} }
 func (f *File) ToString() string { return f.Pathname }

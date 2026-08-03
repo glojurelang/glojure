@@ -26,7 +26,7 @@ func (*Encoder) EncodeToString(value any) string {
 	return stdbase64.StdEncoding.EncodeToString(byteSlice(value))
 }
 
-func (*Decoder) Decode(value any) []byte {
+func (*Decoder) Decode(value any) []int8 {
 	var text string
 	switch value := value.(type) {
 	case string:
@@ -38,7 +38,11 @@ func (*Decoder) Decode(value any) []byte {
 	if err != nil {
 		panic(err)
 	}
-	return decoded
+	result := make([]int8, len(decoded))
+	for index, item := range decoded {
+		result[index] = int8(item)
+	}
+	return result
 }
 
 // Link gives embedders an explicit reference that retains this package and

@@ -5,6 +5,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -233,5 +234,40 @@ func TestEnableFeature(t *testing.T) {
 	}
 	if got := testPrintString(value); got != "selected" {
 		t.Fatalf("enabled reader feature selected %s", got)
+	}
+}
+
+func TestJavaXDigitRegex(t *testing.T) {
+	r := New(strings.NewReader(`#"^\p{XDigit}+$"`))
+	value, err := r.ReadOne()
+	if err != nil {
+		t.Fatal(err)
+	}
+	pattern := value.(*regexp.Regexp)
+	if !pattern.MatchString("01aF") || pattern.MatchString("xyz") {
+		t.Fatalf("translated XDigit pattern behaved unexpectedly: %s", pattern)
+	}
+}
+
+func TestJavaEscapeRegex(t *testing.T) {
+	r := New(strings.NewReader(`#"\e\[.*?m"`))
+	value, err := r.ReadOne()
+	if err != nil {
+		t.Fatal(err)
+	}
+	pattern := value.(*regexp.Regexp)
+	if !pattern.MatchString("\x1b[31m") {
+		t.Fatalf("translated escape pattern did not match: %s", pattern)
+	}
+}
+
+func TestSpaceCharacterLiteral(t *testing.T) {
+	r := New(strings.NewReader("\\ "))
+	value, err := r.ReadOne()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if value != lang.NewChar(' ') {
+		t.Fatalf("space literal = %#v", value)
 	}
 }

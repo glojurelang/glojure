@@ -531,7 +531,18 @@ func (nm *NumberMethods) CharArrayInit(size int, init any) []Char {
 }
 
 func (nm *NumberMethods) Bytes(x any) []int8 {
-	return x.([]int8)
+	switch value := x.(type) {
+	case []int8:
+		return value
+	case []byte:
+		result := make([]int8, len(value))
+		for index, item := range value {
+			result[index] = int8(item)
+		}
+		return result
+	default:
+		panic(fmt.Sprintf("cannot coerce %T to byte[]", x))
+	}
 }
 
 func (nm *NumberMethods) ByteArray(sizeOrSeq any) []int8 {

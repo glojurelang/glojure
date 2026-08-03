@@ -86,6 +86,22 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 			return FnFunc0(func() any { return typ.String() }), true
 		}
 	}
+	if name == "getComponentType" || name == "GetComponentType" {
+		if typ, ok := ReflectType(v); ok {
+			return FnFunc0(func() any {
+				if typ.Kind() != reflect.Array && typ.Kind() != reflect.Slice {
+					return nil
+				}
+				component := typ.Elem()
+				// Go's byte is uint8, while the JVM byte primitive is signed.
+				// Present either storage representation as java.lang.Byte.TYPE.
+				if component.Kind() == reflect.Uint8 {
+					return reflect.TypeOf(int8(0))
+				}
+				return component
+			}), true
+		}
+	}
 	if resolver, ok := v.(FieldOrMethodResolver); ok {
 		if result, found := resolver.ResolveFieldOrMethod(name); found {
 			return result, true
@@ -134,6 +150,11 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 				}
 				return nil
 			}), true
+		case "getStackTrace", "GetStackTrace", "StackTrace":
+			// Hosted Go errors do not expose JVM program counters as
+			// StackTraceElement values. Return the faithful empty Java-array
+			// shape until a richer frame mapper is available.
+			return FnFunc0(func() any { return []any{} }), true
 		}
 	}
 

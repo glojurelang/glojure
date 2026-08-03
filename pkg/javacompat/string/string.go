@@ -56,6 +56,30 @@ func Join(args ...any) string {
 
 func ValueOf(x any) string { return jstr.ValueOf(x) }
 
+func New(args ...any) any {
+	if len(args) < 1 || len(args) > 2 {
+		panic(fmt.Sprintf("String/new: wrong number of args (%d)", len(args)))
+	}
+	switch value := args[0].(type) {
+	case string:
+		return value
+	case []byte:
+		return string(value)
+	case []int8:
+		bytes := make([]byte, len(value))
+		for index, item := range value {
+			bytes[index] = byte(item)
+		}
+		return string(bytes)
+	case lang.IPersistentVector:
+		chars, ok := toInt32Slice(value)
+		if ok {
+			return string(chars)
+		}
+	}
+	panic(fmt.Sprintf("String/new: cannot coerce %T", args[0]))
+}
+
 func CopyValueOf(args ...any) string {
 	data, ok := toInt32Slice(args[0])
 	if !ok {
@@ -82,6 +106,8 @@ func registerMethod(name string, fn lang.StringMethod) {
 }
 
 func init() {
+	lang.RegisterHostConstructor("java.lang.String",
+		lang.FnFunc(func(args ...any) any { return New(args...) }))
 	// Static methods. Registered under bare "String." prefix; the runtime
 	// also accepts "java.lang.String/" via prefix stripping in evalast.go.
 	register("format", "Format", lang.FnFunc(func(args ...any) any { return Format(args...) }))

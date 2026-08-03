@@ -17,6 +17,8 @@ func register(name, javaPackage string, typ reflect.Type) {
 func init() {
 	register("Object", "java.lang", reflect.TypeOf((*any)(nil)).Elem())
 	register("Byte", "java.lang", reflect.TypeOf(int8(0)))
+	pkgmap.Set("Byte.TYPE", reflect.TypeOf(int8(0)))
+	pkgmap.Set("java.lang.Byte.TYPE", reflect.TypeOf(int8(0)))
 	register("Short", "java.lang", reflect.TypeOf(int16(0)))
 	register("Float", "java.lang", reflect.TypeOf(float32(0)))
 	register("Comparable", "java.lang", reflect.TypeOf((*lang.Comparer)(nil)).Elem())

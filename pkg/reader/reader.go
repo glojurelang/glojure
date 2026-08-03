@@ -726,11 +726,18 @@ func (r *Reader) readRegex() (interface{}, error) {
 		}
 	}
 
-	re, err := regexp.Compile(str)
+	re, err := regexp.Compile(translateJavaRegex(str))
 	if err != nil {
 		return nil, r.error("invalid regex: %w", err)
 	}
 	return re, nil
+}
+
+func translateJavaRegex(pattern string) string {
+	// RE2 supports Unicode properties but not Java's POSIX-style XDigit
+	// property alias or the \e escape. Preserve their Java meanings.
+	pattern = strings.ReplaceAll(pattern, `\p{XDigit}`, `[0-9A-Fa-f]`)
+	return strings.ReplaceAll(pattern, `\e`, `\x1b`)
 }
 
 func (r *Reader) readChar() (interface{}, error) {
@@ -745,7 +752,15 @@ func (r *Reader) readChar() (interface{}, error) {
 		}
 
 		// TODO: helper for non-char/non-symbol runes
-		if unicode.IsSpace(rn) || (len(char) > 0 && isSyntaxRune(rn)) {
+		if unicode.IsSpace(rn) {
+			if len(char) == 0 {
+				char = string(rn)
+			} else {
+				r.rs.UnreadRune()
+			}
+			break
+		}
+		if len(char) > 0 && isSyntaxRune(rn) {
 			r.rs.UnreadRune()
 			break
 		}

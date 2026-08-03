@@ -7,7 +7,19 @@ func TestBase64RoundTrip(t *testing.T) {
 	if encoded != "aGk=" {
 		t.Fatalf("encoded = %q, want aGk=", encoded)
 	}
-	if decoded := string(GetDecoder().Decode(encoded)); decoded != "hi" {
-		t.Fatalf("decoded = %q, want hi", decoded)
+	if decoded := GetDecoder().Decode(encoded); !EqualsBytes(decoded, []int8{'h', 'i'}) {
+		t.Fatalf("decoded = %v, want hi", decoded)
 	}
+}
+
+func EqualsBytes(left, right []int8) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for index := range left {
+		if left[index] != right[index] {
+			return false
+		}
+	}
+	return true
 }

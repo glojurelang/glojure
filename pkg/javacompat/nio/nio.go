@@ -13,7 +13,11 @@ import (
 
 type Charset struct{ name string }
 type CharsetDecoder struct{ charset *Charset }
-type ByteBuffer struct{ bytes []byte }
+type ByteBuffer struct {
+	bytes    []byte
+	position int
+	limit    int
+}
 type CodingErrorAction string
 type CharacterCodingException struct{ message string }
 
@@ -56,7 +60,52 @@ func (d *CharsetDecoder) Decode(buffer any) string {
 }
 
 func (*CharacterCodingException) Error() string { return "Input length = 1" }
-func Wrap(value any) *ByteBuffer                { return &ByteBuffer{bytes: byteSlice(value)} }
+func Wrap(value any) *ByteBuffer {
+	data := byteSlice(value)
+	return &ByteBuffer{bytes: data, limit: len(data)}
+}
+
+func (b *ByteBuffer) Remaining() int32 { return int32(b.limit - b.position) }
+
+func (b *ByteBuffer) Position(args ...any) any {
+	if len(args) == 0 {
+		return int32(b.position)
+	}
+	position := lang.MustAsInt(args[0])
+	if position < 0 || position > b.limit {
+		panic(fmt.Errorf("ByteBuffer.position: %d outside 0..%d", position, b.limit))
+	}
+	b.position = position
+	return b
+}
+
+func (b *ByteBuffer) Limit(args ...any) any {
+	if len(args) == 0 {
+		return int32(b.limit)
+	}
+	limit := lang.MustAsInt(args[0])
+	if limit < 0 || limit > len(b.bytes) {
+		panic(fmt.Errorf("ByteBuffer.limit: %d outside 0..%d", limit, len(b.bytes)))
+	}
+	b.limit = limit
+	if b.position > limit {
+		b.position = limit
+	}
+	return b
+}
+
+func (b *ByteBuffer) Get(index any) int8 {
+	offset := lang.MustAsInt(index)
+	if offset < 0 || offset >= b.limit {
+		panic(fmt.Errorf("ByteBuffer.get: index %d outside 0..%d", offset, b.limit))
+	}
+	return int8(b.bytes[offset])
+}
+
+func (b *ByteBuffer) Slice() *ByteBuffer {
+	data := b.bytes[b.position:b.limit]
+	return &ByteBuffer{bytes: data, limit: len(data)}
+}
 
 // Link gives embedders an explicit package-retention reference.
 func Link() {}

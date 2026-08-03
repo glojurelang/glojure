@@ -23,6 +23,14 @@ func Equals(a, b any) bool {
 		}
 		return Equals(Seq(a), Seq(b))
 	}
+	// Clojure's type returns the same Class object used by class literals.
+	// Hosted execution may expose one side as a JVM Class wrapper and the
+	// other as its underlying reflect.Type; compare their host identities.
+	if aType, aIsType := ReflectType(a); aIsType {
+		if bType, bIsType := ReflectType(b); bIsType {
+			return aType == bType
+		}
+	}
 
 	if a == b {
 		return true
