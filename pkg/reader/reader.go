@@ -463,6 +463,17 @@ func (r *Reader) read(eofOK bool, stopRune rune) (expr any, err error) {
 		if err != nil {
 			return nil, err
 		}
+		if obj, ok := val.(lang.IObj); ok {
+			merged := obj.Meta()
+			if merged == nil {
+				merged = lang.NewMap()
+			}
+			for seq := meta.Seq(); seq != nil; seq = seq.Next() {
+				entry := seq.First().(lang.IMapEntry)
+				merged = lang.Assoc(merged, entry.Key(), entry.Val()).(lang.IPersistentMap)
+			}
+			return obj.WithMeta(merged), nil
+		}
 		return lang.WithMeta(val, meta)
 	default:
 		r.rs.UnreadRune()

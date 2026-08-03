@@ -107,6 +107,20 @@ func TestAutoResolvedKeywordAlias(t *testing.T) {
 	}
 }
 
+func TestAdjacentMetadataMerges(t *testing.T) {
+	r := New(strings.NewReader("^:private ^:dynamic *value*"))
+	value, err := r.ReadOne()
+	if err != nil {
+		t.Fatal(err)
+	}
+	meta := value.(lang.IMeta).Meta()
+	for _, key := range []string{"private", "dynamic"} {
+		if got := meta.ValAt(lang.NewKeyword(key)); got != true {
+			t.Fatalf("metadata %s = %v, want true", key, got)
+		}
+	}
+}
+
 func TestReadErrors(t *testing.T) {
 	type testCase struct {
 		name      string
