@@ -8,8 +8,27 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
+
+func TestBootstrapRegistersCoreTypes(t *testing.T) {
+	types := map[string]reflect.Type{
+		"clojure.lang.ChunkBuffer":                               reflect.TypeOf((*lang.ChunkBuffer)(nil)),
+		"clojure.lang.IChunk":                                    reflect.TypeOf((*lang.IChunk)(nil)).Elem(),
+		"github.com/glojurelang/glojure/pkg/lang.*TaggedLiteral": reflect.TypeOf((*lang.TaggedLiteral)(nil)),
+	}
+	for name, want := range types {
+		got, ok := pkgmap.Get(name)
+		if !ok {
+			t.Errorf("bootstrap package map does not contain %s", name)
+			continue
+		}
+		if got != want {
+			t.Errorf("bootstrap package map %s = %v, want %v", name, got, want)
+		}
+	}
+}
 
 func TestBootstrapRegistersGoTypesDependencies(t *testing.T) {
 	types := map[string]reflect.Type{

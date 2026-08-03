@@ -676,6 +676,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -753,7 +756,7 @@ func LoadNS() {
 		tmp0 := sym__STAR_initial_DASH_report_DASH_counters_STAR_
 		var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_ = ns.InternWithValue(tmp0, lang.NewMap(kw_test, int64(0), kw_pass, int64(0), kw_fail, int64(0), kw_error, int64(0)), true)
 		var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(263), kw_column, int(6), kw_end_DASH_line, int(263), kw_end_DASH_column, int(40), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+			return lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(263), kw_column, int(6), kw_end_DASH_line, int(263), kw_end_DASH_column, int(40), kw_dynamic, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 		var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_.SetDynamic()
 	}
@@ -762,7 +765,7 @@ func LoadNS() {
 		tmp0 := sym__STAR_load_DASH_tests_STAR_
 		var_clojure_DOT_test__STAR_load_DASH_tests_STAR_ = ns.InternWithValue(tmp0, true, true)
 		var_clojure_DOT_test__STAR_load_DASH_tests_STAR_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(244), kw_column, int(10), kw_end_DASH_line, int(249), kw_end_DASH_column, int(14), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(244), kw_column, int(10), kw_end_DASH_line, int(249), kw_end_DASH_column, int(14), kw_doc, "True by default.  If set to false, no test functions will\n   be created by deftest, set-test, or with-test.  Use this to omit\n   tests when compiling or loading production code.", kw_added, "1.1", kw_dynamic, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 		var_clojure_DOT_test__STAR_load_DASH_tests_STAR_.SetDynamic()
 	}
@@ -771,7 +774,7 @@ func LoadNS() {
 		tmp0 := sym__STAR_report_DASH_counters_STAR_
 		var_clojure_DOT_test__STAR_report_DASH_counters_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		var_clojure_DOT_test__STAR_report_DASH_counters_STAR_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(261), kw_column, int(6), kw_end_DASH_line, int(261), kw_end_DASH_column, int(32), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+			return lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(261), kw_column, int(6), kw_end_DASH_line, int(261), kw_end_DASH_column, int(32), kw_dynamic, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 		var_clojure_DOT_test__STAR_report_DASH_counters_STAR_.SetDynamic()
 	}
@@ -780,7 +783,7 @@ func LoadNS() {
 		tmp0 := sym__STAR_stack_DASH_trace_DASH_depth_STAR_
 		var_clojure_DOT_test__STAR_stack_DASH_trace_DASH_depth_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		var_clojure_DOT_test__STAR_stack_DASH_trace_DASH_depth_STAR_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(251), kw_column, int(6), kw_end_DASH_line, int(256), kw_end_DASH_column, int(20), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(251), kw_column, int(6), kw_end_DASH_line, int(256), kw_end_DASH_column, int(20), kw_doc, "The maximum depth of stack traces to print when an Exception\n  is thrown during a test.  Defaults to nil, which means print the\n  complete stack trace.", kw_added, "1.1", kw_dynamic, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 		var_clojure_DOT_test__STAR_stack_DASH_trace_DASH_depth_STAR_.SetDynamic()
 	}
@@ -789,7 +792,7 @@ func LoadNS() {
 		tmp0 := sym__STAR_test_DASH_out_STAR_
 		var_clojure_DOT_test__STAR_test_DASH_out_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		var_clojure_DOT_test__STAR_test_DASH_out_STAR_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(270), kw_column, int(6), kw_end_DASH_line, int(270), kw_end_DASH_column, int(32), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+			return lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(270), kw_column, int(6), kw_end_DASH_line, int(270), kw_end_DASH_column, int(32), kw_dynamic, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 		var_clojure_DOT_test__STAR_test_DASH_out_STAR_.SetDynamic()
 	}
@@ -798,7 +801,7 @@ func LoadNS() {
 		tmp0 := sym__STAR_testing_DASH_contexts_STAR_
 		var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_ = ns.InternWithValue(tmp0, lang.NewList(), true)
 		var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(268), kw_column, int(6), kw_end_DASH_line, int(268), kw_end_DASH_column, int(33), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+			return lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(268), kw_column, int(6), kw_end_DASH_line, int(268), kw_end_DASH_column, int(33), kw_dynamic, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 		var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_.SetDynamic()
 	}
@@ -807,7 +810,7 @@ func LoadNS() {
 		tmp0 := sym__STAR_testing_DASH_vars_STAR_
 		var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_ = ns.InternWithValue(tmp0, lang.NewList(), true)
 		var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(266), kw_column, int(6), kw_end_DASH_line, int(266), kw_end_DASH_column, int(29), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+			return lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(266), kw_column, int(6), kw_end_DASH_line, int(266), kw_end_DASH_column, int(29), kw_dynamic, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 		var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_.SetDynamic()
 	}
@@ -3135,7 +3138,7 @@ func LoadNS() {
 		tmp1.AddMethod(kw_end_DASH_test_DASH_var, tmp10)
 		var_clojure_DOT_test_report = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_test_report.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_doc, "Generic reporting function, may be overridden to plug in\n   different report formats (e.g., TAP, JUnit).  Assertions such as\n   'is' call 'report' to indicate results.  The argument given to\n   'report' will be a map with a :type key.  See the documentation at\n   the top of test_is.clj for more information on the types of\n   arguments for 'report'.", kw_dynamic, true, kw_added, "1.1", kw_file, "clojure/test.glj", kw_line, int(324), kw_column, int(3), kw_end_DASH_line, int(332), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(324), kw_column, int(3), kw_end_DASH_line, int(332), kw_end_DASH_column, int(8), kw_doc, "Generic reporting function, may be overridden to plug in\n   different report formats (e.g., TAP, JUnit).  Assertions such as\n   'is' call 'report' to indicate results.  The argument given to\n   'report' will be a map with a :type key.  See the documentation at\n   the top of test_is.clj for more information on the types of\n   arguments for 'report'.", kw_dynamic, true, kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 		var_clojure_DOT_test_report.SetDynamic()
 	}

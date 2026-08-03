@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"reflect"
 
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 	"github.com/glojurelang/glojure/pkg/runtime"
 	"github.com/google/uuid"
@@ -17,6 +18,10 @@ import (
 // standard library. Production builds use the generated AOT loaders and do not
 // need these bootstrap-only exports in their default interop registry.
 func init() {
+	pkgmap.Set("clojure.lang.ChunkBuffer", reflect.TypeOf((*lang.ChunkBuffer)(nil)))
+	pkgmap.Set("clojure.lang.IChunk", reflect.TypeOf((*lang.IChunk)(nil)).Elem())
+	pkgmap.Set("github.com/glojurelang/glojure/pkg/lang.*TaggedLiteral", reflect.TypeOf((*lang.TaggedLiteral)(nil)))
+
 	pkgmap.Set("go/ast.*Ident", reflect.TypeOf((*ast.Ident)(nil)))
 	pkgmap.Set("go/ast.*ArrayType", reflect.TypeOf((*ast.ArrayType)(nil)))
 	pkgmap.Set("go/ast.*MapType", reflect.TypeOf((*ast.MapType)(nil)))

@@ -335,6 +335,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -546,7 +549,7 @@ func LoadNS() {
 		var_clojure_DOT_string_capitalize = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_capitalize.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(172), kw_column, int(7), kw_end_DASH_line, int(172), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts first character of the string to upper-case, all other\n  characters to lower-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(172), kw_column, int(7), kw_end_DASH_line, int(172), kw_end_DASH_column, int(27), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts first character of the string to upper-case, all other\n  characters to lower-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// check-string
@@ -803,7 +806,7 @@ func LoadNS() {
 		var_clojure_DOT_string_escape = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_escape.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(254), kw_column, int(7), kw_end_DASH_line, int(254), kw_end_DASH_column, int(23), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_cmap)), kw_doc, "Return a new string, using cmap to escape each character ch\n   from s as follows:\n\n   If (cmap ch) is nil, append ch to the new string.\n   If (cmap ch) is non-nil, append (str (cmap ch)) instead.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(254), kw_column, int(7), kw_end_DASH_line, int(254), kw_end_DASH_column, int(23), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_cmap)), kw_doc, "Return a new string, using cmap to escape each character ch\n   from s as follows:\n\n   If (cmap ch) is nil, append ch to the new string.\n   If (cmap ch) is non-nil, append (str (cmap ch)) instead.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// includes?
@@ -1024,7 +1027,7 @@ func LoadNS() {
 		var_clojure_DOT_string_lower_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_lower_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(189), kw_column, int(7), kw_end_DASH_line, int(189), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all lower-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(189), kw_column, int(7), kw_end_DASH_line, int(189), kw_end_DASH_column, int(27), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all lower-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// re-quote-replacement
@@ -1042,7 +1045,7 @@ func LoadNS() {
 		var_clojure_DOT_string_re_DASH_quote_DASH_replacement = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_re_DASH_quote_DASH_replacement.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(30), kw_column, int(7), kw_end_DASH_line, int(30), kw_end_DASH_column, int(37), kw_arglists, lang.NewList(lang.NewVector(sym_replacement)), kw_doc, "Given a replacement string that you wish to be a literal\n   replacement for a pattern match in replace or replace-first, do the\n   necessary escaping of special characters in the replacement.", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(30), kw_column, int(7), kw_end_DASH_line, int(30), kw_end_DASH_column, int(37), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_replacement)), kw_doc, "Given a replacement string that you wish to be a literal\n   replacement for a pattern match in replace or replace-first, do the\n   necessary escaping of special characters in the replacement.", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// replace
@@ -1108,7 +1111,7 @@ func LoadNS() {
 		var_clojure_DOT_string_replace = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_replace.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(24), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces all instance of match with replacement in s.\n\n   match/replacement can be:\n\n   string / string\n   char / char\n   pattern / (string or function of match).\n\n   See also replace-first.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace \"Almost Pig Latin\" #\"\\b(\\w)(\\w+)\\b\" \"$2$1ay\")\n   -> \"lmostAay igPay atinLay\"", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(24), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces all instance of match with replacement in s.\n\n   match/replacement can be:\n\n   string / string\n   char / char\n   pattern / (string or function of match).\n\n   See also replace-first.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace \"Almost Pig Latin\" #\"\\b(\\w)(\\w+)\\b\" \"$2$1ay\")\n   -> \"lmostAay igPay atinLay\"", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// replace-by
@@ -1302,7 +1305,7 @@ func LoadNS() {
 		var_clojure_DOT_string_replace_DASH_first = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_replace_DASH_first.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(115), kw_column, int(7), kw_end_DASH_line, int(115), kw_end_DASH_column, int(30), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces the first instance of match with replacement in s.\n\n   match/replacement can be:\n\n   char / char\n   string / string\n   pattern / (string or function of match).\n\n   See also replace.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace-first \"swap first two words\"\n                                 #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")\n   -> \"first swap two words\"", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(115), kw_column, int(7), kw_end_DASH_line, int(115), kw_end_DASH_column, int(30), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces the first instance of match with replacement in s.\n\n   match/replacement can be:\n\n   char / char\n   string / string\n   pattern / (string or function of match).\n\n   See also replace.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace-first \"swap first two words\"\n                                 #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")\n   -> \"first swap two words\"", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// replace-first-by
@@ -1478,7 +1481,7 @@ func LoadNS() {
 		var_clojure_DOT_string_reverse = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_reverse.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(23), kw_column, int(7), kw_end_DASH_line, int(23), kw_end_DASH_column, int(24), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns s with its characters reversed.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(23), kw_column, int(7), kw_end_DASH_line, int(23), kw_end_DASH_column, int(24), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns s with its characters reversed.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// split
@@ -1586,7 +1589,7 @@ func LoadNS() {
 		var_clojure_DOT_string_trim = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_trim.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(212), kw_column, int(7), kw_end_DASH_line, int(212), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from both ends of string.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(212), kw_column, int(7), kw_end_DASH_line, int(212), kw_end_DASH_column, int(21), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from both ends of string.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// trim-newline
@@ -1603,7 +1606,7 @@ func LoadNS() {
 		var_clojure_DOT_string_trim_DASH_newline = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_trim_DASH_newline.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(230), kw_column, int(7), kw_end_DASH_line, int(230), kw_end_DASH_column, int(29), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes all trailing newline \\n or return \\r characters from\n  string.  Similar to Perl's chomp.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(230), kw_column, int(7), kw_end_DASH_line, int(230), kw_end_DASH_column, int(29), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes all trailing newline \\n or return \\r characters from\n  string.  Similar to Perl's chomp.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// triml
@@ -1620,7 +1623,7 @@ func LoadNS() {
 		var_clojure_DOT_string_triml = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_triml.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(218), kw_column, int(7), kw_end_DASH_line, int(218), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the left side of string.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(218), kw_column, int(7), kw_end_DASH_line, int(218), kw_end_DASH_column, int(22), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the left side of string.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// trimr
@@ -1637,7 +1640,7 @@ func LoadNS() {
 		var_clojure_DOT_string_trimr = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_trimr.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(224), kw_column, int(7), kw_end_DASH_line, int(224), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the right side of string.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(224), kw_column, int(7), kw_end_DASH_line, int(224), kw_end_DASH_column, int(22), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the right side of string.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// upper-case
@@ -1656,7 +1659,7 @@ func LoadNS() {
 		var_clojure_DOT_string_upper_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_upper_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(183), kw_column, int(7), kw_end_DASH_line, int(183), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all upper-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(183), kw_column, int(7), kw_end_DASH_line, int(183), kw_end_DASH_column, int(27), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all upper-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// join
@@ -1694,7 +1697,7 @@ func LoadNS() {
 		var_clojure_DOT_string_join = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_string_join.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(163), kw_column, int(7), kw_end_DASH_line, int(163), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_separator, sym_coll)), kw_doc, "Returns a string of all elements in coll, as returned by (seq coll),\n   separated by an optional separator.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(163), kw_column, int(7), kw_end_DASH_line, int(163), kw_end_DASH_column, int(21), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_separator, sym_coll)), kw_doc, "Returns a string of all elements in coll, as returned by (seq coll),\n   separated by an optional separator.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 }
