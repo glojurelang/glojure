@@ -30,3 +30,17 @@ func TestHasTypeAcceptsClass(t *testing.T) {
 		t.Fatal("Class wrapper matched the wrong host value")
 	}
 }
+
+func TestHasTypeAcceptsClassAliases(t *testing.T) {
+	class := NewClassWithTypes(
+		"example.Integer",
+		reflect.TypeOf(int(0)),
+		reflect.TypeOf(int32(0)),
+	)
+	if !HasType(class, int(1)) || !HasType(class, int32(1)) {
+		t.Fatal("Class wrapper did not match all accepted host types")
+	}
+	if HasType(class, int64(1)) {
+		t.Fatal("Class wrapper matched an unregistered host type")
+	}
+}

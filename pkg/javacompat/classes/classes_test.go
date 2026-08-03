@@ -8,10 +8,10 @@ import (
 
 func TestCommonClassesAreRegistered(t *testing.T) {
 	for _, name := range []string{
-		"Object", "Comparable", "Set", "List", "Map", "Keyword", "IDeref", "Associative",
+		"Object", "Byte", "Short", "Float", "Comparable", "Set", "List", "Map", "Keyword", "IDeref", "Associative",
 		"Counted", "IAtom", "IBlockingDeref", "IChunkedSeq", "IEditableCollection", "IFn",
 		"ILookup", "IMapEntry", "IMeta", "IObj", "IPending", "IPersistentCollection",
-		"IPersistentMap", "IPersistentSet", "IPersistentVector", "IRecord", "IReduceInit",
+		"IPersistentMap", "IPersistentSet", "IPersistentVector", "IRecord", "IReduce", "IReduceInit",
 		"IRef", "ISeq", "Indexed", "Named", "Reversible", "Seqable", "Sequential", "Sorted",
 		"Ratio", "Symbol", "ExceptionInfo", "Atom", "Volatile",
 	} {

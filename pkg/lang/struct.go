@@ -207,6 +207,25 @@ func unwrapError(err error) error {
 
 func directProtocolMethod(v interface{}, name string) (IFn, bool) {
 	switch name {
+	case "Reduce":
+		reducer, canReduce := v.(IReduce)
+		reducerInit, canReduceInit := v.(IReduceInit)
+		if canReduce || canReduceInit {
+			return FnFunc(func(args ...any) any {
+				switch len(args) {
+				case 1:
+					if canReduce {
+						return reducer.Reduce(MustHostCast[IFn](args[0]))
+					}
+				case 2:
+					if canReduceInit {
+						return reducerInit.ReduceInit(MustHostCast[IFn](args[0]), args[1])
+					}
+				}
+				panic(NewIllegalArgumentError(fmt.Sprintf(
+					"reduce: wrong number of arguments (%d)", len(args))))
+			}), true
+		}
 	case "Conj":
 		if transient, ok := v.(Conjer); ok {
 			return FnFunc1(func(value any) any {

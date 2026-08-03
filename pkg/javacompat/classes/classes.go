@@ -16,6 +16,9 @@ func register(name, javaPackage string, typ reflect.Type) {
 
 func init() {
 	register("Object", "java.lang", reflect.TypeOf((*any)(nil)).Elem())
+	register("Byte", "java.lang", reflect.TypeOf(int8(0)))
+	register("Short", "java.lang", reflect.TypeOf(int16(0)))
+	register("Float", "java.lang", reflect.TypeOf(float32(0)))
 	register("Comparable", "java.lang", reflect.TypeOf((*lang.Comparer)(nil)).Elem())
 	register("Set", "java.util", reflect.TypeOf((*lang.IPersistentSet)(nil)).Elem())
 	register("List", "java.util", reflect.TypeOf((*lang.Sequential)(nil)).Elem())
@@ -40,6 +43,7 @@ func init() {
 	register("IPersistentVector", "clojure.lang", reflect.TypeOf((*lang.IPersistentVector)(nil)).Elem())
 	register("IRecord", "clojure.lang", reflect.TypeOf((*lang.IRecord)(nil)).Elem())
 	register("IReduceInit", "clojure.lang", reflect.TypeOf((*lang.IReduceInit)(nil)).Elem())
+	register("IReduce", "clojure.lang", reflect.TypeOf((*lang.IReduce)(nil)).Elem())
 	register("IRef", "clojure.lang", reflect.TypeOf((*lang.IRef)(nil)).Elem())
 	register("ISeq", "clojure.lang", reflect.TypeOf((*lang.ISeq)(nil)).Elem())
 	register("Indexed", "clojure.lang", reflect.TypeOf((*lang.Indexed)(nil)).Elem())

@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"math"
 	"reflect"
 
 	"github.com/glojurelang/glojure/internal/murmur3"
@@ -291,7 +292,33 @@ func (l *List) Equals(other any) bool {
 }
 
 func (l *List) Equiv(other any) bool {
+	if otherList, ok := other.(*List); ok {
+		return listEquiv(l, otherList)
+	}
 	return aseqEquiv(l, other)
+}
+
+func listEquiv(a, b *List) bool {
+	if a.Count() != b.Count() {
+		return false
+	}
+	for left, right := ISeq(a), ISeq(b); left != nil; left, right = left.Next(), right.Next() {
+		lv, rv := left.First(), right.First()
+		if lf, ok := lv.(float64); ok && math.IsNaN(lf) {
+			if rf, ok := rv.(float64); ok && math.IsNaN(rf) {
+				continue
+			}
+		}
+		if lf, ok := lv.(float32); ok && math.IsNaN(float64(lf)) {
+			if rf, ok := rv.(float32); ok && math.IsNaN(float64(rf)) {
+				continue
+			}
+		}
+		if !Equiv(lv, rv) {
+			return false
+		}
+	}
+	return true
 }
 
 func (l *List) Hash() uint32 {

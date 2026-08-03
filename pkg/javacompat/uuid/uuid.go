@@ -14,6 +14,7 @@ import (
 	juuid "github.com/gloathub/gojava/uuid"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
+	guuid "github.com/google/uuid"
 )
 
 const pkg = "github.com/glojurelang/glojure/pkg/javacompat/uuid"
@@ -64,7 +65,11 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("UUID."+jvmName, v)
 	pkgmap.SetHostClassPackage("UUID", "java.util")
-	pkgmap.SetHostClass("UUID", lang.NewClass(reflect.TypeOf((*juuid.UUID)(nil)), "java.util.UUID"))
+	pkgmap.SetHostClass("UUID", lang.NewClassWithTypes(
+		"java.util.UUID",
+		reflect.TypeOf((*juuid.UUID)(nil)),
+		reflect.TypeOf(guuid.UUID{}),
+	))
 }
 
 func init() {

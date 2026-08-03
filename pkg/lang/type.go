@@ -24,6 +24,9 @@ func HasType(target any, v interface{}) bool {
 	if v == nil {
 		return false
 	}
+	if class, ok := target.(*Class); ok {
+		return class.accepts(v)
+	}
 	t, ok := ReflectType(target)
 	if !ok {
 		return false

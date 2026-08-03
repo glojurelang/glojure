@@ -16,7 +16,8 @@ import (
 // print as `java.lang.Math` rather than the underlying Go type name.
 type Class struct {
 	reflect.Type
-	JavaName string
+	JavaName      string
+	acceptedTypes []reflect.Type
 }
 
 var hostConstructors sync.Map
@@ -24,7 +25,34 @@ var hostConstructors sync.Map
 // NewClass wraps t with the given fully-qualified Java name. The Java
 // name is what shows up in print-method output and (.getName c).
 func NewClass(t reflect.Type, javaName string) *Class {
-	return &Class{Type: t, JavaName: javaName}
+	return NewClassWithTypes(javaName, t)
+}
+
+// NewClassWithTypes creates a JVM-style class represented by one or more Go
+// types. The first type remains the primary type used for host construction
+// and static interop; the remaining types are accepted by dynamic instance?.
+func NewClassWithTypes(javaName string, types ...reflect.Type) *Class {
+	if len(types) == 0 {
+		return &Class{JavaName: javaName}
+	}
+	return &Class{
+		Type:          types[0],
+		JavaName:      javaName,
+		acceptedTypes: append([]reflect.Type(nil), types...),
+	}
+}
+
+func (c *Class) accepts(v any) bool {
+	if c == nil || v == nil {
+		return false
+	}
+	vType := reflect.TypeOf(v)
+	for _, accepted := range c.acceptedTypes {
+		if accepted != nil && (vType == accepted || vType.AssignableTo(accepted)) {
+			return true
+		}
+	}
+	return false
 }
 
 // RegisterHostConstructor installs the implementation used by `(Class. ...)`

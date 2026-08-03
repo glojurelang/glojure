@@ -13,6 +13,8 @@ import (
 
 const pkg = "github.com/glojurelang/glojure/pkg/javacompat/boolean"
 
+var reflectBool = reflect.TypeOf(false)
+
 const (
 	TRUE  = jbool.TRUE
 	FALSE = jbool.FALSE
@@ -45,10 +47,17 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Boolean."+jvmName, v)
 	pkgmap.SetHostClassPackage("Boolean", "java.lang")
-	pkgmap.SetHostClass("Boolean", lang.NewClass(reflect.TypeOf(false), "java.lang.Boolean"))
+	pkgmap.SetHostClass("Boolean", lang.NewClass(reflectBool, "java.lang.Boolean"))
 }
 
 func init() {
+	lang.RegisterHostConstructor("java.lang.Boolean", lang.FnFunc(func(args ...any) any {
+		if len(args) != 1 {
+			panic(fmt.Sprintf("Boolean/new: wrong number of args (%d)", len(args)))
+		}
+		return ValueOf(args[0])
+	}))
+
 	register("TRUE", "TRUE", TRUE)
 	register("FALSE", "FALSE", FALSE)
 

@@ -69,6 +69,21 @@ func TestFieldOrMethodDifferentReceiversCached(t *testing.T) {
 	}
 }
 
+func TestFieldOrMethodDispatchesReduceArities(t *testing.T) {
+	vector := NewVector(int64(1), int64(2), int64(3))
+	reduce, ok := FieldOrMethod(vector, "reduce")
+	if !ok {
+		t.Fatal("reduce method was not resolved")
+	}
+	add := FnFunc2(func(a, b any) any { return a.(int64) + b.(int64) })
+	if got := Apply1(reduce, add); got != int64(6) {
+		t.Fatalf("reduce without init = %v, want 6", got)
+	}
+	if got := Apply2(reduce, add, int64(4)); got != int64(10) {
+		t.Fatalf("reduce with init = %v, want 10", got)
+	}
+}
+
 func TestFieldOrMethodReturnsField(t *testing.T) {
 	r := &testReceiver{Value: 42}
 	v, ok := FieldOrMethod(r, "value")

@@ -2,6 +2,7 @@ package lang
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -42,5 +43,15 @@ func TestEquiv(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestListNaNEqualityMatchesJVMQuirk(t *testing.T) {
+	nan := math.NaN()
+	if !Equiv(NewList(nan), NewList(nan)) {
+		t.Fatal("lists containing NaN should be equivalent")
+	}
+	if Equiv(NewVector(nan), NewVector(nan)) {
+		t.Fatal("vectors containing NaN should not be equivalent")
 	}
 }

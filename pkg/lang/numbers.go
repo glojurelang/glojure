@@ -1034,8 +1034,19 @@ func UncheckedCharCast(x any) Char {
 }
 
 func ShortCast(x any) int16 {
-	if v, ok := x.(int16); ok {
+	switch v := x.(type) {
+	case int16:
 		return v
+	case float32:
+		if v < math.MinInt16 || v > math.MaxInt16 {
+			panic(fmt.Errorf("value out of range for int16: %v", x))
+		}
+		return int16(v)
+	case float64:
+		if v < math.MinInt16 || v > math.MaxInt16 {
+			panic(fmt.Errorf("value out of range for int16: %v", x))
+		}
+		return int16(v)
 	}
 	v := AsInt64(x)
 	if v < math.MinInt16 || v > math.MaxInt16 {
