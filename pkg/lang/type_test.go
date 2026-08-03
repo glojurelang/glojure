@@ -21,6 +21,17 @@ func TestIsInstance(t *testing.T) {
 	}
 }
 
+func TestHasTypeRecordDescriptor(t *testing.T) {
+	recordType := InternRecordType("test", "TypedRecord", "value")
+	if !HasType(recordType, NewRecord(recordType, 1)) {
+		t.Fatal("record descriptor did not recognize its record")
+	}
+	otherType := InternRecordType("test", "OtherRecord", "value")
+	if HasType(recordType, NewRecord(otherType, 1)) {
+		t.Fatal("record descriptor recognized a different record")
+	}
+}
+
 func TestHasTypeAcceptsClass(t *testing.T) {
 	class := NewClass(reflect.TypeOf(""), "java.lang.String")
 	if !HasType(class, "value") {

@@ -1393,6 +1393,12 @@
    (sexpr-replace '(.getInterfaces c) nil) ;; no such concept in go
    (sexpr-replace '(.getSuperclass c) nil) ;; no such concept in go
 
+   ;; Preserve the public JVM compatibility class while giving AOT a concrete
+   ;; Go type for the predicate. The hosted class is registered at runtime,
+   ;; after clojure.core itself is compiled.
+   (sexpr-replace '(instance? clojure.lang.TaggedLiteral value)
+                  '(instance? github.com:glojurelang:glojure:pkg:lang.*TaggedLiteral value))
+
    ;; Omit some methods
    [(fn select [zloc] (and (z/list? zloc)
                            (let [sexpr (z/sexpr zloc)]

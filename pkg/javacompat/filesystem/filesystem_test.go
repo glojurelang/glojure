@@ -28,3 +28,12 @@ func TestCreateTempFile(t *testing.T) {
 		t.Fatalf("extension = %q, want .tmp", got)
 	}
 }
+
+func TestFileIsAbsolute(t *testing.T) {
+	if !NewFile(filepath.Join(string(os.PathSeparator), "tmp")).(*File).IsAbsolute() {
+		t.Fatal("absolute file was not recognized")
+	}
+	if NewFile("relative").(*File).IsAbsolute() {
+		t.Fatal("relative file was recognized as absolute")
+	}
+}

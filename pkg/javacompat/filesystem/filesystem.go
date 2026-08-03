@@ -69,6 +69,7 @@ func (f *File) GetCanonicalFile() *File {
 }
 func (f *File) AbsoluteFile() *File  { return f.GetAbsoluteFile() }
 func (f *File) CanonicalFile() *File { return f.GetCanonicalFile() }
+func (f *File) IsAbsolute() bool     { return filepath.IsAbs(f.Pathname) }
 func (f *File) Exists() bool         { _, err := os.Stat(f.Pathname); return err == nil }
 func (f *File) IsFile() bool {
 	info, err := os.Stat(f.Pathname)

@@ -3,9 +3,11 @@ package lang
 import (
 	"fmt"
 	"math/big"
+	"reflect"
 	"strings"
 
 	"bitbucket.org/pcastools/hash"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
 // BigDec is an arbitrary-precision floating point number. It wraps
@@ -20,8 +22,17 @@ import (
 // arithmetic with decimal fractions. A decimal representation
 // would avoid this problem.
 type BigDecimal struct {
-	val *big.Float
+	val      *big.Float
+	scale    int
+	hasScale bool
 }
+
+type RoundingMode string
+
+const (
+	RoundingModeDown     RoundingMode = "DOWN"
+	RoundingModeHalfEven RoundingMode = "HALF_EVEN"
+)
 
 // NewBigDecimal creates a new BigDecimal from a string.
 func NewBigDecimal(s string) (*BigDecimal, error) {
@@ -59,6 +70,49 @@ func NewBigDecimalFromRatio(x *Ratio) *BigDecimal {
 func (n *BigDecimal) ToBigInteger() *big.Int {
 	res, _ := n.val.Int(nil)
 	return res
+}
+
+// SetScale implements the java.math.BigDecimal rounding modes used by
+// portable Clojure libraries. DOWN truncates toward zero and HALF_EVEN uses
+// banker's rounding.
+func (n *BigDecimal) SetScale(scale any, mode any) *BigDecimal {
+	digits := MustAsInt(scale)
+	if digits < 0 {
+		panic(fmt.Errorf("BigDecimal.setScale: negative scale %d is unsupported", digits))
+	}
+
+	factor := new(big.Int).Exp(big.NewInt(10), big.NewInt(int64(digits)), nil)
+	rat, _ := n.val.Rat(nil)
+	scaledNumerator := new(big.Int).Mul(rat.Num(), factor)
+	quotient, remainder := new(big.Int), new(big.Int)
+	quotient.QuoRem(scaledNumerator, rat.Denom(), remainder)
+
+	if fmt.Sprint(mode) == string(RoundingModeHalfEven) && remainder.Sign() != 0 {
+		twiceRemainder := new(big.Int).Lsh(new(big.Int).Abs(remainder), 1)
+		denominator := new(big.Int).Abs(rat.Denom())
+		comparison := twiceRemainder.Cmp(denominator)
+		if comparison > 0 || (comparison == 0 && quotient.Bit(0) == 1) {
+			if scaledNumerator.Sign() < 0 {
+				quotient.Sub(quotient, big.NewInt(1))
+			} else {
+				quotient.Add(quotient, big.NewInt(1))
+			}
+		}
+	}
+
+	result := new(big.Rat).SetFrac(quotient, factor)
+	return &BigDecimal{
+		val:      new(big.Float).SetPrec(256).SetRat(result),
+		scale:    digits,
+		hasScale: true,
+	}
+}
+
+func (n *BigDecimal) ToPlainString() string {
+	if n.hasScale {
+		return n.val.Text('f', n.scale)
+	}
+	return n.val.Text('f', -1)
 }
 
 func (n *BigDecimal) ToBigFloat() *big.Float {
@@ -176,4 +230,34 @@ func (n *BigDecimal) Abs() *BigDecimal {
 		return &BigDecimal{val: new(big.Float).Abs(n.val)}
 	}
 	return n
+}
+
+func newHostBigDecimal(args ...any) any {
+	if len(args) != 1 {
+		panic(fmt.Errorf("BigDecimal/new: wrong number of args (%d)", len(args)))
+	}
+	if text, ok := args[0].(string); ok {
+		value, err := NewBigDecimal(text)
+		if err != nil {
+			panic(err)
+		}
+		return value
+	}
+	return AsBigDecimal(args[0])
+}
+
+func init() {
+	pkgmap.SetHostClassPackage("BigDecimal", "java.math")
+	pkgmap.SetHostClass("BigDecimal",
+		NewClass(reflect.TypeOf((*BigDecimal)(nil)), "java.math.BigDecimal"))
+	RegisterHostConstructor("java.math.BigDecimal",
+		FnFunc(func(args ...any) any { return newHostBigDecimal(args...) }))
+
+	pkgmap.SetHostClassPackage("RoundingMode", "java.math")
+	pkgmap.SetHostClass("RoundingMode",
+		NewClass(reflect.TypeOf(RoundingMode("")), "java.math.RoundingMode"))
+	for _, prefix := range []string{"RoundingMode", "java.math.RoundingMode"} {
+		pkgmap.Set(prefix+".DOWN", RoundingModeDown)
+		pkgmap.Set(prefix+".HALF_EVEN", RoundingModeHalfEven)
+	}
 }

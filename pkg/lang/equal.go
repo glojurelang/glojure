@@ -66,6 +66,18 @@ func Equals(a, b any) bool {
 		return b.Equiv(a)
 	}
 
+	// Java compatibility values may expose a typed Equals method (for example
+	// UUID.Equals(*UUID)) rather than Glojure's Equals(any) interface. Invoke
+	// that shape when the argument is assignable and the result is boolean.
+	if method := aVal.MethodByName("Equals"); method.IsValid() {
+		typeOfMethod := method.Type()
+		if typeOfMethod.NumIn() == 1 && typeOfMethod.NumOut() == 1 &&
+			typeOfMethod.Out(0).Kind() == reflect.Bool &&
+			bVal.Type().AssignableTo(typeOfMethod.In(0)) {
+			return method.Call([]reflect.Value{bVal})[0].Bool()
+		}
+	}
+
 	// TODO: match all clojure equality rules
 
 	return false

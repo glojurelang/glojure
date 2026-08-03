@@ -3,6 +3,7 @@ package throwable
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -12,10 +13,20 @@ import (
 var errorType = reflect.TypeOf((*error)(nil)).Elem()
 
 func New(args ...any) any {
-	if len(args) == 0 {
+	switch len(args) {
+	case 0:
 		return errors.New("")
+	case 1:
+		return errors.New(lang.ToString(args[0]))
+	case 2:
+		cause, ok := args[1].(error)
+		if !ok {
+			panic(fmt.Sprintf("Throwable/new: cause must be an error, got %T", args[1]))
+		}
+		return fmt.Errorf("%s: %w", lang.ToString(args[0]), cause)
+	default:
+		panic(fmt.Sprintf("Throwable/new: wrong number of args (%d)", len(args)))
 	}
-	return errors.New(lang.ToString(args[0]))
 }
 
 func register(name string) {

@@ -14,7 +14,8 @@ func TestStringBuilderSupportsJavaAndWriterCalls(t *testing.T) {
 	}
 	lang.AppendWriter(builder, " + bb!")
 	builder.Append("!")
-	if got, want := builder.ToString(), "Go + bb!!"; got != want {
+	builder.AppendCodePoint(int('✓'))
+	if got, want := builder.ToString(), "Go + bb!!✓"; got != want {
 		t.Fatalf("StringBuilder value = %q, want %q", got, want)
 	}
 }

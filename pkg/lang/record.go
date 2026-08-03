@@ -132,6 +132,8 @@ type Record struct {
 var (
 	_ RecordValue = (*Record)(nil)
 	_ Counted     = (*Record)(nil)
+	_ IReduce     = (*Record)(nil)
+	_ IReduceInit = (*Record)(nil)
 )
 
 func NewRecord(recordType *RecordType, values ...any) *Record {
@@ -187,6 +189,32 @@ func (r *Record) Cons(value any) Conser {
 
 func (r *Record) WithMeta(meta IPersistentMap) any {
 	return r.RecordWithMeta(meta)
+}
+
+func (r *Record) Reduce(f IFn) any {
+	seq := r.Seq()
+	if seq == nil {
+		return f.Invoke()
+	}
+	result := seq.First()
+	for seq = seq.Next(); seq != nil; seq = seq.Next() {
+		result = f.Invoke(result, seq.First())
+		if IsReduced(result) {
+			return result.(IDeref).Deref()
+		}
+	}
+	return result
+}
+
+func (r *Record) ReduceInit(f IFn, initial any) any {
+	result := initial
+	for seq := r.Seq(); seq != nil; seq = seq.Next() {
+		result = f.Invoke(result, seq.First())
+		if IsReduced(result) {
+			return result.(IDeref).Deref()
+		}
+	}
+	return result
 }
 
 func (r *Record) RecordWithField(index int, value any) RecordValue {

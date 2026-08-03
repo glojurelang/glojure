@@ -27796,7 +27796,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := aotDirectFn225(nil, v2)
+			tmp3 := lang.IsInstance[*lang.TaggedLiteral](v2)
 			return tmp3
 		})
 		aotDirectFn508 = tmp1

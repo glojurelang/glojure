@@ -44,6 +44,24 @@ func (d *Date) Compare(other any) int {
 }
 
 func (d *Date) CompareTo(other *Date) int32 { return int32(d.Compare(other)) }
+func (d *Date) Equals(other any) bool {
+	value, ok := other.(*Date)
+	return ok && d.millis == value.millis
+}
+
+// ParseInstantDate implements Clojure's built-in #inst reader using Go's
+// RFC3339 parser and returns the java.util.Date compatibility value.
+func ParseInstantDate(value any) any {
+	text, ok := value.(string)
+	if !ok {
+		panic(fmt.Sprintf("#inst data reader expected string, got %T", value))
+	}
+	parsed, err := time.Parse(time.RFC3339Nano, text)
+	if err != nil {
+		panic(err)
+	}
+	return &Date{millis: parsed.UnixMilli()}
+}
 
 func init() {
 	class := lang.NewClass(reflect.TypeOf((*Date)(nil)), "java.util.Date")
@@ -51,6 +69,8 @@ func init() {
 	pkgmap.SetHostClass("Date", class)
 	lang.RegisterHostConstructor("java.util.Date",
 		lang.FnFunc(func(args ...any) any { return New(args...) }))
+	pkgmap.Set("github.com/glojurelang/glojure/pkg/javacompat/date.ParseInstantDate",
+		lang.FnFunc1(ParseInstantDate))
 }
 
 func toInt64(value any) int64 {

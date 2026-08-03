@@ -207,6 +207,57 @@ func unwrapError(err error) error {
 
 func directProtocolMethod(v interface{}, name string) (IFn, bool) {
 	switch name {
+	case "Read":
+		// java.io.Reader.read() returns the next Unicode code point or -1 at
+		// EOF. Go's io.Reader reserves Read for a byte-buffer argument, so
+		// bridge the zero-argument JVM shape through io.RuneReader before
+		// falling back to ordinary reflected Go method dispatch.
+		if reader, ok := v.(io.RuneReader); ok {
+			return FnFunc(func(args ...any) any {
+				if len(args) != 0 {
+					panic(NewIllegalArgumentError(fmt.Sprintf(
+						"read: wrong number of arguments (%d)", len(args))))
+				}
+				rn, _, err := reader.ReadRune()
+				if err == io.EOF {
+					return -1
+				}
+				if err != nil {
+					panic(err)
+				}
+				return int(rn)
+			}), true
+		}
+	case "Write":
+		// java.io.OutputStream.write is overloaded for both byte[] and int.
+		// Go byte writers expose the scalar overload as WriteByte while their
+		// Write method accepts only []byte, so bridge both JVM shapes here.
+		if byteWriter, ok := v.(io.ByteWriter); ok {
+			return FnFunc(func(args ...any) any {
+				if len(args) != 1 {
+					panic(NewIllegalArgumentError(fmt.Sprintf(
+						"write: wrong number of arguments (%d)", len(args))))
+				}
+				if IsNumber(args[0]) {
+					if err := byteWriter.WriteByte(byte(MustAsInt(args[0]))); err != nil {
+						panic(err)
+					}
+					return nil
+				}
+				writer, ok := v.(io.Writer)
+				if !ok {
+					panic(fmt.Errorf("write: %T is not a byte-array writer", v))
+				}
+				bytes, err := coerceGoValue(reflect.TypeOf([]byte{}), args[0])
+				if err != nil {
+					panic(err)
+				}
+				if _, err := writer.Write(bytes.Interface().([]byte)); err != nil {
+					panic(err)
+				}
+				return nil
+			}), true
+		}
 	case "Reduce":
 		reducer, canReduce := v.(IReduce)
 		reducerInit, canReduceInit := v.(IReduceInit)

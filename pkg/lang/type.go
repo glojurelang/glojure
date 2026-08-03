@@ -24,6 +24,10 @@ func HasType(target any, v interface{}) bool {
 	if v == nil {
 		return false
 	}
+	if recordType, ok := target.(*RecordType); ok {
+		record, isRecord := v.(RecordValue)
+		return isRecord && record.RecordType() == recordType
+	}
 	if class, ok := target.(*Class); ok {
 		return class.accepts(v)
 	}

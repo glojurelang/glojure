@@ -12,8 +12,9 @@ import (
 	"sync"
 	"unicode"
 
+	"github.com/glojurelang/glojure/pkg/javacompat/date"
+	juuid "github.com/glojurelang/glojure/pkg/javacompat/uuid"
 	"github.com/glojurelang/glojure/pkg/lang"
-	"github.com/google/uuid"
 )
 
 var (
@@ -1038,11 +1039,22 @@ func (r *Reader) readDispatch(eofOK bool, stopRune rune) (interface{}, error) {
 				if !ok {
 					return nil, r.error("#uuid requires a string argument")
 				}
-				u, err := uuid.Parse(s)
-				if err != nil {
-					return nil, r.error("invalid UUID string: %s", s)
+				return juuid.FromString(s), nil
+			}
+			if tagSym.Name() == "inst" && tagSym.Namespace() == "" {
+				return date.ParseInstantDate(form), nil
+			}
+			// Match Clojure's *default-data-reader-fn* fallback. Embedding
+			// runtimes bind this Var for per-read :default handlers used by
+			// clojure.edn and portable configuration libraries.
+			if core := lang.FindNamespace(lang.SymbolCoreNamespace); core != nil {
+				if vr := core.FindInternedVar(lang.NewSymbol("*default-data-reader-fn*")); vr != nil {
+					if value := vr.Deref(); value != nil {
+						if fn, ok := value.(lang.IFn); ok {
+							return fn.Invoke(tagSym, form), nil
+						}
+					}
 				}
-				return u, nil
 			}
 			// Return as a tagged literal vector [tag form]
 			return lang.NewVector(tagSym, form), nil

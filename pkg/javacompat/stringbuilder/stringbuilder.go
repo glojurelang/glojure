@@ -30,6 +30,11 @@ func (b *StringBuilder) Append(value any) *StringBuilder {
 	return b
 }
 
+func (b *StringBuilder) AppendCodePoint(value any) *StringBuilder {
+	b.value += string(rune(lang.MustAsInt(value)))
+	return b
+}
+
 func (b *StringBuilder) Write(value []byte) (int, error) {
 	b.value += string(value)
 	return len(value), nil

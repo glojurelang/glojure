@@ -4,11 +4,13 @@ package streams
 import (
 	"bufio"
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"reflect"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
@@ -19,10 +21,20 @@ type OutputStream interface{ Write([]byte) (int, error) }
 
 type ByteArrayInputStream struct{ *bytes.Reader }
 type ByteArrayOutputStream struct{ bytes.Buffer }
-type StringReader struct{ *bufio.Reader }
+type StringReader struct {
+	data         []byte
+	position     int
+	mark         int
+	lastRuneSize int
+	closed       bool
+}
 type PushbackReader struct {
 	*bufio.Reader
-	closer io.Closer
+	closer         io.Closer
+	lineNumber     int
+	lastRune       rune
+	lastRuneSize   int
+	lastRuneWasNew bool
 }
 type PrintWriter struct {
 	io.Writer
@@ -45,7 +57,70 @@ func (s *ByteArrayOutputStream) ToByteArray() []byte {
 func (s *ByteArrayOutputStream) ToString() string { return s.String() }
 func (s *ByteArrayOutputStream) Size() int        { return s.Len() }
 func (s *ByteArrayOutputStream) Close()           {}
-func (s *StringReader) Close()                    {}
+func (s *StringReader) ensureOpen() {
+	if s.closed {
+		panic(errors.New("Stream closed"))
+	}
+}
+func (s *StringReader) Close() { s.closed = true }
+func (s *StringReader) Read(buffer []byte) (int, error) {
+	if s.closed {
+		return 0, errors.New("Stream closed")
+	}
+	if s.position >= len(s.data) {
+		return 0, io.EOF
+	}
+	n := copy(buffer, s.data[s.position:])
+	s.position += n
+	s.lastRuneSize = 0
+	return n, nil
+}
+func (s *StringReader) ReadRune() (rune, int, error) {
+	if s.closed {
+		return 0, 0, errors.New("Stream closed")
+	}
+	if s.position >= len(s.data) {
+		return 0, 0, io.EOF
+	}
+	rn, size := utf8.DecodeRune(s.data[s.position:])
+	s.position += size
+	s.lastRuneSize = size
+	return rn, size, nil
+}
+func (s *StringReader) UnreadRune() error {
+	if s.closed {
+		return errors.New("Stream closed")
+	}
+	if s.lastRuneSize == 0 {
+		return fmt.Errorf("StringReader.UnreadRune: previous operation was not ReadRune")
+	}
+	s.position -= s.lastRuneSize
+	s.lastRuneSize = 0
+	return nil
+}
+func (s *StringReader) Mark(_ int) {
+	s.ensureOpen()
+	s.mark = s.position
+}
+func (s *StringReader) Reset() {
+	s.ensureOpen()
+	s.position = s.mark
+	s.lastRuneSize = 0
+}
+func (s *StringReader) Skip(count any) int64 {
+	s.ensureOpen()
+	want := lang.MustAsInt(count)
+	if want < 0 {
+		panic(fmt.Sprintf("StringReader.skip: negative count (%d)", want))
+	}
+	remaining := len(s.data) - s.position
+	if want > remaining {
+		want = remaining
+	}
+	s.position += want
+	s.lastRuneSize = 0
+	return int64(want)
+}
 func (s *PushbackReader) Close() {
 	if s.closer != nil {
 		if err := s.closer.Close(); err != nil {
@@ -53,6 +128,31 @@ func (s *PushbackReader) Close() {
 		}
 	}
 }
+func (s *PushbackReader) ReadRune() (rune, int, error) {
+	rn, size, err := s.Reader.ReadRune()
+	if err != nil {
+		return rn, size, err
+	}
+	s.lastRune = rn
+	s.lastRuneSize = size
+	s.lastRuneWasNew = rn == '\n'
+	if s.lastRuneWasNew {
+		s.lineNumber++
+	}
+	return rn, size, nil
+}
+func (s *PushbackReader) UnreadRune() error {
+	if err := s.Reader.UnreadRune(); err != nil {
+		return err
+	}
+	if s.lastRuneWasNew {
+		s.lineNumber--
+	}
+	s.lastRuneSize = 0
+	s.lastRuneWasNew = false
+	return nil
+}
+func (s *PushbackReader) GetLineNumber() int { return s.lineNumber }
 func (w *PrintWriter) Close() {
 	if w.closer != nil {
 		if err := w.closer.Close(); err != nil {
@@ -68,7 +168,18 @@ func (w *PrintWriter) Flush() {
 	}
 }
 func (s *StringReader) ReadLine() any {
-	return readLine(s.Reader)
+	s.ensureOpen()
+	if s.position >= len(s.data) {
+		return nil
+	}
+	remaining := s.data[s.position:]
+	end := bytes.IndexByte(remaining, '\n')
+	if end < 0 {
+		s.position = len(s.data)
+		return strings.TrimSuffix(string(remaining), "\r")
+	}
+	s.position += end + 1
+	return strings.TrimSuffix(string(remaining[:end]), "\r")
 }
 func (s *FileInputStream) Read(buffer []byte) (int, error) { return s.reader.Read(buffer) }
 func (s *FileInputStream) ReadLine() any                   { return readLine(s.reader) }
@@ -106,7 +217,7 @@ func NewStringReader(args ...any) any {
 	if len(args) != 1 {
 		panic(fmt.Sprintf("StringReader/new: wrong number of args (%d)", len(args)))
 	}
-	return &StringReader{Reader: bufio.NewReader(strings.NewReader(lang.ToString(args[0])))}
+	return &StringReader{data: []byte(lang.ToString(args[0]))}
 }
 
 func NewStringWriter(args ...any) any {
@@ -124,7 +235,7 @@ func NewPushbackReader(args ...any) any {
 	if !ok {
 		panic(fmt.Sprintf("PushbackReader/new: %T is not a reader", args[0]))
 	}
-	pushback := &PushbackReader{Reader: bufio.NewReader(reader)}
+	pushback := &PushbackReader{Reader: bufio.NewReader(reader), lineNumber: 1}
 	pushback.closer, _ = args[0].(io.Closer)
 	return pushback
 }
