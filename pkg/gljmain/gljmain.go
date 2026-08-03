@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	// bootstrap the runtime
@@ -53,6 +54,7 @@ func printHelp() {
 Usage: glj [options] [file]
 
 Options:
+  -Sdeps <edn>          Merge inline deps data after the project deps.edn
   -e <expr>              Evaluate expression from command line
   --nrepl[=VALUE]        Start nREPL server
   --nrepl-connect H:P    Connect REPL to nREPL server
@@ -60,6 +62,9 @@ Options:
   --color                Syntax highlight stdin with ANSI colors
   -h, --help             Show this help message
   --version              Show version information
+
+A deps.edn in the current directory is resolved before evaluating code,
+running a file, or starting a REPL or REPL server.
 
 Examples:
   glj                           # Start REPL
@@ -79,11 +84,71 @@ For more information, visit: https://github.com/glojurelang/glojure
 `, runtime.Version)
 }
 
+func usesProjectDeps(args []string) bool {
+	if len(args) == 0 {
+		return true
+	}
+	arg := args[0]
+	return arg == "-e" || arg == "--nrepl" || strings.HasPrefix(arg, "--nrepl=") ||
+		arg == "--srepl" || strings.HasPrefix(arg, "--srepl=") ||
+		!strings.HasPrefix(arg, "-")
+}
+
+func splitDepsOption(args []string) (string, []string, error) {
+	if len(args) == 0 || args[0] != "-Sdeps" {
+		return "", args, nil
+	}
+	if len(args) < 2 {
+		return "", nil, fmt.Errorf("glj: -Sdeps requires an EDN map")
+	}
+	return args[1], args[2:], nil
+}
+
+func loadProjectDeps(extraEDN string) {
+	const path = "deps.edn"
+	projectEDN := "{}"
+	if content, err := os.ReadFile(path); err == nil {
+		projectEDN = string(content)
+	} else {
+		if os.IsNotExist(err) {
+			if extraEDN == "" {
+				return
+			}
+		} else {
+			log.Fatal(err)
+		}
+	}
+	if extraEDN == "" {
+		extraEDN = "{}"
+	}
+	runtime.ReadEval(
+		fmt.Sprintf(
+			`(require 'clojurestar.deps)
+             (let [merge-value (fn [left right]
+                                 (if (and (map? left) (map? right))
+                                   (merge left right)
+                                   right))]
+               (clojurestar.deps/add-deps
+                (merge-with merge-value
+                            (read-string %s)
+                            (read-string %s))))`,
+			strconv.Quote(projectEDN), strconv.Quote(extraEDN)),
+		runtime.WithFilename(path),
+	)
+}
+
 func Main(args []string) {
 	for _, path := range filepath.SplitList(os.Getenv("GLJ_CLASSPATH")) {
 		if path != "" {
 			runtime.AddLoadPath(os.DirFS(path))
 		}
+	}
+	extraEDN, args, err := splitDepsOption(args)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if usesProjectDeps(args) {
+		loadProjectDeps(extraEDN)
 	}
 
 	if len(args) == 0 {
