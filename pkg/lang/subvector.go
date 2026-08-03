@@ -14,6 +14,8 @@ var (
 	_ APersistentVector = (*SubVector)(nil)
 	_ IObj              = (*SubVector)(nil)
 	_ IPersistentVector = (*SubVector)(nil)
+	_ IReduce           = (*SubVector)(nil)
+	_ IReduceInit       = (*SubVector)(nil)
 )
 
 func NewSubVector(meta IPersistentMap, v IPersistentVector, start, end int) *SubVector {
@@ -166,6 +168,31 @@ func (v *SubVector) Invoke(args ...any) any {
 
 func (v *SubVector) HashEq() uint32 {
 	return apersistentVectorHashEq(&v.hasheq, v)
+}
+
+func (v *SubVector) ReduceInit(f IFn, init any) any {
+	result := init
+	for index := 0; index < v.Count(); index++ {
+		result = f.Invoke(result, v.Nth(index))
+		if IsReduced(result) {
+			return result.(IDeref).Deref()
+		}
+	}
+	return result
+}
+
+func (v *SubVector) Reduce(f IFn) any {
+	if v.Count() == 0 {
+		return f.Invoke()
+	}
+	result := v.Nth(0)
+	for index := 1; index < v.Count(); index++ {
+		result = f.Invoke(result, v.Nth(index))
+		if IsReduced(result) {
+			return result.(IDeref).Deref()
+		}
+	}
+	return result
 }
 
 func (v *SubVector) Compare(other any) int {

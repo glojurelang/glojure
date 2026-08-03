@@ -4,6 +4,7 @@ package date
 
 import (
 	"fmt"
+	"io"
 	"reflect"
 	"time"
 
@@ -27,6 +28,10 @@ func New(args ...any) any {
 }
 
 func (d *Date) GetTime() int64 { return d.millis }
+func (d *Date) HashCode() int32 {
+	value := uint64(d.millis)
+	return int32(uint32(value) ^ uint32(value>>32))
+}
 
 func (d *Date) Compare(other any) int {
 	o, ok := other.(*Date)
@@ -49,6 +54,11 @@ func (d *Date) Equals(other any) bool {
 	return ok && d.millis == value.millis
 }
 
+func (d *Date) PrintReadable(writer io.Writer) {
+	instant := time.UnixMilli(d.millis).UTC()
+	fmt.Fprintf(writer, "#inst %q", instant.Format("2006-01-02T15:04:05.000-07:00"))
+}
+
 // ParseInstantDate implements Clojure's built-in #inst reader using Go's
 // RFC3339 parser and returns the java.util.Date compatibility value.
 func ParseInstantDate(value any) any {
@@ -67,6 +77,10 @@ func init() {
 	class := lang.NewClass(reflect.TypeOf((*Date)(nil)), "java.util.Date")
 	pkgmap.SetHostClassPackage("Date", "java.util")
 	pkgmap.SetHostClass("Date", class)
+	pkgmap.Set("java.sql.Date",
+		lang.NewClass(reflect.TypeOf((*Date)(nil)), "java.sql.Date"))
+	pkgmap.Set("java.sql.Timestamp",
+		lang.NewClass(reflect.TypeOf((*Date)(nil)), "java.sql.Timestamp"))
 	lang.RegisterHostConstructor("java.util.Date",
 		lang.FnFunc(func(args ...any) any { return New(args...) }))
 	pkgmap.Set("github.com/glojurelang/glojure/pkg/javacompat/date.ParseInstantDate",

@@ -105,6 +105,16 @@ func register(jvmName, goName string, v any) {
 }
 
 func init() {
+	constructor := lang.FnFunc(func(args ...any) any {
+		if len(args) != 1 {
+			panic(fmt.Sprintf("Integer constructor: wrong number of args (%d)", len(args)))
+		}
+		return ValueOf(args[0])
+	})
+	lang.RegisterHostConstructor("java.lang.Integer", constructor)
+	lang.RegisterHostTypeConstructor(reflect.TypeOf(int(0)), constructor)
+	lang.RegisterHostTypeConstructor(reflect.TypeOf(int32(0)), constructor)
+
 	register("MIN_VALUE", "MIN_VALUE", MIN_VALUE)
 	register("MAX_VALUE", "MAX_VALUE", MAX_VALUE)
 	register("SIZE", "SIZE", int32(SIZE))

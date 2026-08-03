@@ -3,6 +3,7 @@
 package nio
 
 import (
+	"encoding/binary"
 	"fmt"
 	"reflect"
 	"unicode/utf8"
@@ -100,6 +101,17 @@ func (b *ByteBuffer) Get(index any) int8 {
 		panic(fmt.Errorf("ByteBuffer.get: index %d outside 0..%d", offset, b.limit))
 	}
 	return int8(b.bytes[offset])
+}
+
+// GetLong reads a signed, big-endian Java long at the current position and
+// advances the position by eight bytes.
+func (b *ByteBuffer) GetLong() int64 {
+	if b.position+8 > b.limit {
+		panic(fmt.Errorf("ByteBuffer.getLong: insufficient bytes remaining"))
+	}
+	value := int64(binary.BigEndian.Uint64(b.bytes[b.position : b.position+8]))
+	b.position += 8
+	return value
 }
 
 func (b *ByteBuffer) Slice() *ByteBuffer {

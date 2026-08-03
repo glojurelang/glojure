@@ -22,3 +22,31 @@ func TestBigDecimalJavaCompatibility(t *testing.T) {
 		t.Fatalf("scaled decimal = %q, want 3.000", got)
 	}
 }
+
+func TestBigDecimalPreservesParsedDecimalText(t *testing.T) {
+	input := "23380875855752415049.311059436287553537054164807932529589059912485"
+	value, err := NewBigDecimal(input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := value.String(); got != input {
+		t.Fatalf("String = %q, want %q", got, input)
+	}
+}
+
+func TestBigDecimalUnscaledConstructorPreservesDecimalText(t *testing.T) {
+	unscaled := newBigIntegerForTest("3145")
+	value := newHostBigDecimal(unscaled, int64(3)).(*BigDecimal)
+	want := "3.145"
+	if got := value.String(); got != want {
+		t.Fatalf("String = %q, want %q", got, want)
+	}
+}
+
+func newBigIntegerForTest(value string) *BigInt {
+	result, err := NewBigInt(value)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}

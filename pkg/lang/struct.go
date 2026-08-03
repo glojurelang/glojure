@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"sync"
 	"unicode"
+
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
 type fomKey struct {
@@ -36,6 +38,13 @@ type FieldOrMethodResolver interface {
 // responsible for argument-count validation and type coercion.
 type StringMethod func(s string, rest ...any) any
 
+// patternSplitter is the common surface of the hosted java.util.regex.Pattern
+// bridge. Its overloaded Java split method is represented by two Go methods.
+type patternSplitter interface {
+	Split(string) []string
+	SplitLimit(string, int) []string
+}
+
 var stringMethods = map[string]StringMethod{}
 
 // RegisterStringMethod registers fn as the implementation of the given
@@ -63,6 +72,14 @@ func lookupStringMethod(name string) (StringMethod, bool) {
 // Method results are cached and wrapped as FnFunc so that subsequent
 // Apply calls use the IFn fast path instead of reflection.
 func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
+	// The ported clojure.core make-array form retains Java's static
+	// Array/newInstance call. Its class receiver has no Go value, so bridge the
+	// static compatibility registration before ordinary nil reflection.
+	if v == nil && (name == "newInstance" || name == "NewInstance") {
+		if method, found := pkgmap.Get("Array.newInstance"); found {
+			return method, true
+		}
+	}
 	switch value := v.(type) {
 	case *Var:
 		switch name {
@@ -77,6 +94,24 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 		if name == "name" || name == "Name" {
 			return FnFunc0(func() any { return value.Name() }), true
 		}
+	}
+	if splitter, ok := v.(patternSplitter); ok && (name == "split" || name == "Split") {
+		return FnFunc(func(args ...any) any {
+			switch len(args) {
+			case 1:
+				return splitter.Split(ToString(args[0]))
+			case 2:
+				limit, ok := AsInt(args[1])
+				if !ok {
+					panic(NewIllegalArgumentError(fmt.Sprintf(
+						"split limit must be an integer, got %T", args[1])))
+				}
+				return splitter.SplitLimit(ToString(args[0]), limit)
+			default:
+				panic(NewIllegalArgumentError(fmt.Sprintf(
+					"split: wrong number of arguments (%d)", len(args))))
+			}
+		}), true
 	}
 	// java.lang.Class.getName maps to reflect.Type.Name in the hosted runtime.
 	// Handle it before ordinary reflection because reflect.Type's concrete
@@ -126,6 +161,13 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 		}
 		if fn, ok := lookupStringMethod(lookup); ok {
 			return FnFunc(func(args ...any) any { return fn(s, args...) }), true
+		}
+	}
+	if name == "toString" || name == "ToString" {
+		switch v.(type) {
+		case int, int8, int16, int32, int64,
+			uint, uint8, uint16, uint32, uint64, float32, float64:
+			return FnFunc0(func() any { return fmt.Sprint(v) }), true
 		}
 	}
 

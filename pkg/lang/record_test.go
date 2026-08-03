@@ -1,6 +1,10 @@
 package lang
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/glojurelang/glojure/pkg/pkgmap"
+)
 
 func TestRecordMapSemantics(t *testing.T) {
 	recordType := InternRecordType(
@@ -47,6 +51,14 @@ func TestRecordMapSemantics(t *testing.T) {
 	}
 	if withoutBasis.ContainsKey(y) {
 		t.Fatal("basis field remains after dissoc")
+	}
+}
+
+func TestRecordTypeIsResolvableByQualifiedName(t *testing.T) {
+	recordType := InternRecordType("record.test", "Resolvable", "value")
+	resolved, found := pkgmap.Get("record.test.Resolvable")
+	if !found || resolved != recordType {
+		t.Fatalf("resolved record type = %v, %v; want %v, true", resolved, found, recordType)
 	}
 }
 

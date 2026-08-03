@@ -118,11 +118,7 @@ func (k Keyword) Invoke2(coll, defaultVal interface{}) interface{} {
 	if lookup, ok := coll.(keywordLookup); ok {
 		return lookup.valAtKeyword(k, defaultVal)
 	}
-	lookup, ok := coll.(ILookup)
-	if !ok {
-		return defaultVal
-	}
-	return lookup.ValAtDefault(k, defaultVal)
+	return GetDefault(coll, k, defaultVal)
 }
 
 func (k Keyword) ApplyTo(args ISeq) interface{} {

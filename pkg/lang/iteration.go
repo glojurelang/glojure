@@ -3,6 +3,7 @@ package lang
 import (
 	"fmt"
 	"reflect"
+	"unicode/utf8"
 )
 
 // Nther is an interface for compound values whose elements can be
@@ -28,7 +29,7 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 		return x.Nth(n)
 	case Indexed:
 		val := x.NthDefault(n, notFound)
-		if val == notFound {
+		if Identical(val, notFound) {
 			return nil, false
 		}
 		return val, true
@@ -44,10 +45,22 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 			x = x.Next()
 		}
 	case string:
-		if n < 0 || n >= len(x) {
+		if n < 0 {
 			return nil, false
 		}
-		return NewChar(rune(x[n])), true
+		bytePos := 0
+		for i := 0; i < n; i++ {
+			if bytePos >= len(x) {
+				return nil, false
+			}
+			_, size := utf8.DecodeRuneInString(x[bytePos:])
+			bytePos += size
+		}
+		if bytePos >= len(x) {
+			return nil, false
+		}
+		r, _ := utf8.DecodeRuneInString(x[bytePos:])
+		return NewChar(r), true
 	}
 
 	if seq := Seq(x); seq != nil {

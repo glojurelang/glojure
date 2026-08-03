@@ -96,3 +96,32 @@ func TestKVReduceAutoRegisteredMethods(t *testing.T) {
 		}
 	}
 }
+
+func TestMultiFnDispatchesRecordsByConcreteIdentityAndInterfaces(t *testing.T) {
+	oldIsA := varIsA.Deref()
+	defer varIsA.BindRoot(oldIsA)
+	oldParents := VarParents.Deref()
+	defer VarParents.BindRoot(oldParents)
+
+	hierarchy := NewMap()
+	hierarchyVar := NewVar(NSCore, NewSymbol("test-record-hierarchy"))
+	hierarchyVar.BindRoot(hierarchy)
+	varIsA.BindRoot(FnFunc3(func(_, child, parent any) any { return child == parent }))
+	VarParents.BindRoot(FnFunc2(func(_, _ any) any { return nil }))
+
+	specificType := InternRecordType("test", "SpecificDispatchRecord", "value")
+	otherType := InternRecordType("test", "OtherDispatchRecord", "value")
+	mf := NewMultiFn("record-dispatch",
+		FnFunc1(func(value any) any { return TypeOf(value) }),
+		NewKeyword("default"), hierarchyVar)
+	mf.AddMethod(reflect.TypeOf((*IRecord)(nil)).Elem(),
+		FnFunc1(func(any) any { return "record" }))
+	mf.AddMethod(specificType, FnFunc1(func(any) any { return "specific" }))
+
+	if got := mf.Invoke(NewRecord(specificType, 1)); got != "specific" {
+		t.Fatalf("specific record dispatch = %v, want specific", got)
+	}
+	if got := mf.Invoke(NewRecord(otherType, 1)); got != "record" {
+		t.Fatalf("generic record dispatch = %v, want record", got)
+	}
+}

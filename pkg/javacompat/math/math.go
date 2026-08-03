@@ -14,6 +14,7 @@ package math
 
 import (
 	"fmt"
+	mathrand "math/rand"
 	"reflect"
 
 	jmath "github.com/gloathub/gojava/math"
@@ -28,6 +29,26 @@ const pkg = "github.com/glojurelang/glojure/pkg/javacompat/math"
 // instances ever exist; the value here only needs to make
 // (instance? Class Math) succeed so (ns-imports *ns*) sees the import.
 type Math struct{}
+
+// JavaRandom provides the small java.util.Random instance surface used by
+// clojure.data.generators and other portable libraries.
+type JavaRandom struct{ rng *mathrand.Rand }
+
+func NewJavaRandom(args ...any) any {
+	seed := int64(0)
+	if len(args) == 1 {
+		seed = lang.AsInt64(args[0])
+	}
+	if len(args) > 1 {
+		panic("java.util.Random expects zero or one constructor argument")
+	}
+	return &JavaRandom{rng: mathrand.New(mathrand.NewSource(seed))}
+}
+
+func (r *JavaRandom) NextBoolean() bool   { return r.rng.Int63()&1 == 0 }
+func (r *JavaRandom) NextDouble() float64 { return r.rng.Float64() }
+func (r *JavaRandom) NextFloat() float32  { return r.rng.Float32() }
+func (r *JavaRandom) NextLong() int64     { return r.rng.Int63() }
 
 var (
 	PI = jmath.PI
@@ -163,6 +184,14 @@ func register(jvmName, goName string, v any) {
 }
 
 func init() {
+	randomClass := lang.NewClass(
+		reflect.TypeOf((*JavaRandom)(nil)), "java.util.Random")
+	pkgmap.SetHostClassPackage("Random", "java.util")
+	pkgmap.SetHostClass("Random", randomClass)
+	lang.RegisterHostConstructor("java.util.Random", lang.FnFunc(NewJavaRandom))
+	lang.RegisterHostTypeConstructor(
+		reflect.TypeOf((*JavaRandom)(nil)), lang.FnFunc(NewJavaRandom))
+
 	register("PI", "PI", PI)
 	register("E", "E", E)
 

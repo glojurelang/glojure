@@ -23,6 +23,7 @@ import (
 // would avoid this problem.
 type BigDecimal struct {
 	val      *big.Float
+	text     string
 	scale    int
 	hasScale bool
 }
@@ -40,7 +41,7 @@ func NewBigDecimal(s string) (*BigDecimal, error) {
 	if !ok {
 		return nil, fmt.Errorf("invalid big decimal: %s", s)
 	}
-	return &BigDecimal{val: bf}, nil
+	return &BigDecimal{val: bf, text: s}, nil
 }
 
 // NewBigDecimalFromBigFloat
@@ -112,6 +113,9 @@ func (n *BigDecimal) ToPlainString() string {
 	if n.hasScale {
 		return n.val.Text('f', n.scale)
 	}
+	if n.text != "" {
+		return n.text
+	}
 	return n.val.Text('f', -1)
 }
 
@@ -122,6 +126,9 @@ func (n *BigDecimal) ToBigFloat() *big.Float {
 }
 
 func (n *BigDecimal) String() string {
+	if n.text != "" {
+		return n.text
+	}
 	s := n.val.Text('f', -1)
 	// Ensure decimal point is present (e.g. "0" → "0.0")
 	if !strings.Contains(s, ".") {
@@ -133,7 +140,7 @@ func (n *BigDecimal) String() string {
 // StripTrailingZeros returns a string representation with trailing
 // fractional zeros removed (e.g. "1.0" → "1", "1.50" → "1.5").
 func (n *BigDecimal) StripTrailingZeros() string {
-	s := n.val.Text('f', -1)
+	s := n.String()
 	if strings.Contains(s, ".") {
 		s = strings.TrimRight(s, "0")
 		s = strings.TrimRight(s, ".")
@@ -233,6 +240,33 @@ func (n *BigDecimal) Abs() *BigDecimal {
 }
 
 func newHostBigDecimal(args ...any) any {
+	if len(args) == 2 {
+		var value *big.Int
+		switch unscaled := args[0].(type) {
+		case *BigInt:
+			value = unscaled.ToBigInteger()
+		case *big.Int:
+			value = new(big.Int).Set(unscaled)
+		default:
+			panic(fmt.Errorf("BigDecimal/new: expected BigInteger, got %T", args[0]))
+		}
+		scale := AsInt64(args[1])
+		factor := new(big.Int).Exp(big.NewInt(10), big.NewInt(absInt64(scale)), nil)
+		if scale < 0 {
+			value.Mul(value, factor)
+			result, err := NewBigDecimal(value.String())
+			if err != nil {
+				panic(err)
+			}
+			return result
+		}
+		text := new(big.Rat).SetFrac(value, factor).FloatString(int(scale))
+		result, err := NewBigDecimal(text)
+		if err != nil {
+			panic(err)
+		}
+		return result
+	}
 	if len(args) != 1 {
 		panic(fmt.Errorf("BigDecimal/new: wrong number of args (%d)", len(args)))
 	}
@@ -244,6 +278,13 @@ func newHostBigDecimal(args ...any) any {
 		return value
 	}
 	return AsBigDecimal(args[0])
+}
+
+func absInt64(value int64) int64 {
+	if value < 0 {
+		return -value
+	}
+	return value
 }
 
 func init() {

@@ -27,3 +27,11 @@ func TestSeqToTypedArrayEmptySequenceUsesAny(t *testing.T) {
 		t.Fatalf("empty array type = %v, want []any", typ)
 	}
 }
+
+func TestSliceSetAcceptsNilForReferenceArrays(t *testing.T) {
+	values := []any{"old"}
+	SliceSet(values, 0, nil)
+	if values[0] != nil {
+		t.Fatalf("value = %v, want nil", values[0])
+	}
+}

@@ -53,6 +53,17 @@ func TestResolvedHostConstantsRetainTheirSymbols(t *testing.T) {
 	}
 }
 
+func TestSpecialFormsAreRecognizedBeforeMacroExpansion(t *testing.T) {
+	for _, name := range []string{"def", "if", "let*", "fn*", "try"} {
+		if !isSpecialFormSymbol(lang.NewSymbol(name)) {
+			t.Fatalf("%s was not recognized as a special form", name)
+		}
+	}
+	if isSpecialFormSymbol(lang.NewSymbol("ordinary-macro")) {
+		t.Fatal("ordinary macro was recognized as a special form")
+	}
+}
+
 func TestInlineExpansionSupportedChecksHostMethodArity(t *testing.T) {
 	resolveNumbers := func(sym *lang.Symbol) (interface{}, bool) {
 		if sym.String() == "test/Numbers" {

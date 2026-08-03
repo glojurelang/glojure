@@ -53,3 +53,11 @@ func TestKeywordFixedArityLookup(t *testing.T) {
 		t.Fatalf("keyword array-map lookup allocated %v objects, want 0", got)
 	}
 }
+
+func TestKeywordInvokesPersistentSet(t *testing.T) {
+	keyword := NewKeyword("at")
+	set := NewSet(keyword)
+	if got := keyword.Invoke1(set); !Equals(got, keyword) {
+		t.Fatalf("keyword set lookup = %v, want %v", got, keyword)
+	}
+}

@@ -26,6 +26,15 @@ func (*Encoder) EncodeToString(value any) string {
 	return stdbase64.StdEncoding.EncodeToString(byteSlice(value))
 }
 
+func (*Encoder) Encode(value any) []int8 {
+	encoded := stdbase64.StdEncoding.EncodeToString(byteSlice(value))
+	result := make([]int8, len(encoded))
+	for index := range encoded {
+		result[index] = int8(encoded[index])
+	}
+	return result
+}
+
 func (*Decoder) Decode(value any) []int8 {
 	var text string
 	switch value := value.(type) {

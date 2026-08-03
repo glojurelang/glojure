@@ -261,6 +261,17 @@ func TestJavaEscapeRegex(t *testing.T) {
 	}
 }
 
+func TestStringAcceptsUTF16SurrogatePairEscapes(t *testing.T) {
+	r := New(strings.NewReader(`"smiling face: \uD83D\uDE03"`))
+	value, err := r.ReadOne()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := value, "smiling face: 😃"; got != want {
+		t.Fatalf("string = %q, want %q", got, want)
+	}
+}
+
 func TestSpaceCharacterLiteral(t *testing.T) {
 	r := New(strings.NewReader("\\ "))
 	value, err := r.ReadOne()

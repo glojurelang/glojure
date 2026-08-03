@@ -591,12 +591,33 @@ func (r *Reader) readString() (interface{}, error) {
 		}
 	}
 
-	str, err := strconv.Unquote(`"` + str + `"`)
+	str, err := strconv.Unquote(`"` + normalizeSurrogateEscapes(str) + `"`)
 	if err != nil {
 		return nil, r.error("invalid string: %w", err)
 	}
 
 	return str, nil
+}
+
+func normalizeSurrogateEscapes(value string) string {
+	var result strings.Builder
+	for index := 0; index < len(value); {
+		if index+12 <= len(value) && value[index] == '\\' && value[index+1] == 'u' &&
+			value[index+6] == '\\' && value[index+7] == 'u' {
+			high, highErr := strconv.ParseUint(value[index+2:index+6], 16, 16)
+			low, lowErr := strconv.ParseUint(value[index+8:index+12], 16, 16)
+			if highErr == nil && lowErr == nil && high >= 0xD800 && high <= 0xDBFF &&
+				low >= 0xDC00 && low <= 0xDFFF {
+				codepoint := 0x10000 + ((high - 0xD800) << 10) + (low - 0xDC00)
+				fmt.Fprintf(&result, "\\U%08X", codepoint)
+				index += 12
+				continue
+			}
+		}
+		result.WriteByte(value[index])
+		index++
+	}
+	return result.String()
 }
 
 func (r *Reader) nextID() int {

@@ -45,6 +45,8 @@ func (m *RegexpMatcher) ResolveFieldOrMethod(
 		return FnFunc1(func(group any) any {
 			return m.GroupInt(MustAsInt(group))
 		}), true
+	case "End":
+		return FnFunc0(func() any { return m.End() }), true
 	case "Matches":
 		return FnFunc0(func() any { return m.Matches() }), true
 	case "AppendReplacement":
@@ -90,6 +92,14 @@ func (m *RegexpMatcher) Find() bool {
 // pattern.
 func (m *RegexpMatcher) GroupCount() int {
 	return m.re.NumSubexp()
+}
+
+// End returns the offset immediately after the most recent match.
+func (m *RegexpMatcher) End() int {
+	if len(m.lastMatch) == 0 {
+		panic(NewIllegalStateError("No match available"))
+	}
+	return m.lastMatchOffset + m.lastMatch[1]
 }
 
 // Group returns the input subsequence matched by the previous match.

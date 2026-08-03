@@ -103,8 +103,20 @@ func CharLiteralFromRune(rn rune) string {
 }
 
 func CharAt(s string, idx int) Char {
-	if idx < 0 || idx >= len(s) {
+	if idx < 0 {
 		panic(NewIndexOutOfBoundsError())
 	}
-	return NewChar(rune(s[idx]))
+	bytePos := 0
+	for i := 0; i < idx; i++ {
+		if bytePos >= len(s) {
+			panic(NewIndexOutOfBoundsError())
+		}
+		_, size := utf8.DecodeRuneInString(s[bytePos:])
+		bytePos += size
+	}
+	if bytePos >= len(s) {
+		panic(NewIndexOutOfBoundsError())
+	}
+	r, _ := utf8.DecodeRuneInString(s[bytePos:])
+	return NewChar(r)
 }

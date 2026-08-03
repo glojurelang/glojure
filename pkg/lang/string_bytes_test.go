@@ -5,16 +5,15 @@ import (
 	"testing"
 )
 
-func TestStringCollectionOperationsUseBytes(t *testing.T) {
+func TestStringCollectionOperationsUseUnicodeCodePoints(t *testing.T) {
 	s := "aé"
 	want := []any{
 		NewChar('a'),
-		NewChar(rune(0xc3)),
-		NewChar(rune(0xa9)),
+		NewChar('é'),
 	}
 
-	if got := Count(s); got != len(s) {
-		t.Fatalf("Count(%q) = %d, want %d", s, got, len(s))
+	if got := Count(s); got != len(want) {
+		t.Fatalf("Count(%q) = %d, want %d", s, got, len(want))
 	}
 
 	var fromSeq []any

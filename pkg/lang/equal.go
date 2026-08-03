@@ -32,7 +32,8 @@ func Equals(a, b any) bool {
 		}
 	}
 
-	if a == b {
+	if aVal.IsValid() && bVal.IsValid() &&
+		aVal.Type() == bVal.Type() && aVal.Type().Comparable() && a == b {
 		return true
 	}
 
@@ -123,6 +124,12 @@ func Identical(a, b any) bool {
 		return aVal.Pointer() == bVal.Pointer()
 	}
 
+	if !aVal.IsValid() || !bVal.IsValid() {
+		return !aVal.IsValid() && !bVal.IsValid()
+	}
+	if aVal.Type() != bVal.Type() || !aVal.Type().Comparable() {
+		return false
+	}
 	return a == b
 }
 

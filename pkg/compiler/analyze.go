@@ -247,6 +247,9 @@ func (a *Analyzer) analyzeSeq(form ISeq, env Env) (*ast.Node, error) {
 	if op == nil {
 		return nil, exInfo("can't call nil", nil) // TODO: include form and source info
 	}
+	if symbol, ok := op.(*Symbol); ok && isSpecialFormSymbol(symbol) {
+		return a.parse(form, env)
+	}
 	mform, err := a.Macroexpand1(form)
 	if err != nil {
 		return nil, err
@@ -262,6 +265,16 @@ func (a *Analyzer) analyzeSeq(form ISeq, env Env) (*ast.Node, error) {
 
 	// TODO: add resolved-op to meta
 	return withRawForm(n, form), nil
+}
+
+func isSpecialFormSymbol(symbol *Symbol) bool {
+	switch symbol.FullName() {
+	case "do", "if", "new", "quote", "set!", "try", "throw", "def", ".",
+		"let*", "letfn*", "loop*", "recur", "fn*", "var", "case*", "go/go":
+		return true
+	default:
+		return false
+	}
 }
 
 // analyzeConst performs semantic analysis on the given constant

@@ -1,5 +1,7 @@
 package lang
 
+import "github.com/glojurelang/glojure/pkg/pkgmap"
+
 type Reduced struct {
 	val interface{}
 }
@@ -19,4 +21,9 @@ func NewReduced(v interface{}) *Reduced {
 
 func (r *Reduced) Deref() interface{} {
 	return r.val
+}
+
+func init() {
+	pkgmap.Set("github.com/glojurelang/glojure/pkg/lang.IsReduced", IsReduced)
+	pkgmap.Set("github.com/glojurelang/glojure/pkg/lang.NewReduced", NewReduced)
 }

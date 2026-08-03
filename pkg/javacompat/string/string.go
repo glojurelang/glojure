@@ -54,11 +54,23 @@ func Join(args ...any) string {
 	return jstr.Join(delim, rest)
 }
 
-func ValueOf(x any) string { return jstr.ValueOf(x) }
+func ValueOf(x any) string {
+	if ch, ok := x.(lang.Char); ok {
+		return string(rune(ch))
+	}
+	return jstr.ValueOf(x)
+}
 
 func New(args ...any) any {
-	if len(args) < 1 || len(args) > 2 {
+	if len(args) < 1 || len(args) > 3 {
 		panic(fmt.Sprintf("String/new: wrong number of args (%d)", len(args)))
+	}
+	if len(args) == 3 {
+		chars, ok := toInt32Slice(args[0])
+		if !ok {
+			panic(fmt.Sprintf("String/new: cannot coerce %T to char[]", args[0]))
+		}
+		return jstr.CopyValueOf(chars, toInt32(args[1]), toInt32(args[2]))
 	}
 	switch value := args[0].(type) {
 	case string:
@@ -71,7 +83,7 @@ func New(args ...any) any {
 			bytes[index] = byte(item)
 		}
 		return string(bytes)
-	case lang.IPersistentVector:
+	case []lang.Char, []int32, lang.IPersistentVector:
 		chars, ok := toInt32Slice(value)
 		if ok {
 			return string(chars)
@@ -369,6 +381,12 @@ func toStringSlice(x any) ([]string, bool) {
 
 func toInt32Slice(x any) ([]int32, bool) {
 	switch v := x.(type) {
+	case []lang.Char:
+		out := make([]int32, len(v))
+		for index, value := range v {
+			out[index] = int32(value)
+		}
+		return out, true
 	case []int32:
 		return v, true
 	case []any:

@@ -3,6 +3,8 @@ package lang
 import (
 	"fmt"
 	"sync"
+
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
 // RecordMarker lets generated record implementations satisfy the private
@@ -50,9 +52,11 @@ func InternRecordType(namespace, name string, fieldNames ...string) *RecordType 
 	}
 	actual, loaded := recordTypes.LoadOrStore(qualifiedName, candidate)
 	if !loaded {
+		pkgmap.Set(qualifiedName, candidate)
 		return candidate
 	}
 	existing := actual.(*RecordType)
+	pkgmap.Set(qualifiedName, existing)
 	if len(existing.fieldNames) != len(fieldNames) {
 		panic(NewIllegalArgumentError(
 			"record type redefined with a different field layout: " +

@@ -4,8 +4,10 @@
 package double
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
+	"strconv"
 
 	jdouble "github.com/gloathub/gojava/double"
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -29,25 +31,25 @@ var (
 )
 
 func ParseDouble(x any) float64 {
-	n, err := jdouble.ParseDouble(toString(x))
-	if err != nil {
-		panic(err.Error())
-	}
-	return n
+	return parseDouble(toString(x))
 }
 
 // ValueOf accepts a string (parsed) or any numeric (coerced to float64).
 func ValueOf(x any) float64 {
 	switch v := x.(type) {
 	case string:
-		n, err := jdouble.ParseDouble(v)
-		if err != nil {
-			panic(err.Error())
-		}
-		return n
+		return parseDouble(v)
 	default:
 		return toFloat64(v)
 	}
+}
+
+func parseDouble(value string) float64 {
+	n, err := strconv.ParseFloat(value, 64)
+	if err == nil || errors.Is(err, strconv.ErrRange) {
+		return n
+	}
+	panic(fmt.Sprintf("NumberFormatException: For input string: %q", value))
 }
 
 func ToString(x any) string    { return jdouble.ToString(toFloat64(x)) }

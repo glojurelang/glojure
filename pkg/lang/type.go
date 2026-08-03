@@ -68,6 +68,18 @@ func IsInstance[T any](v interface{}) bool {
 	return ok
 }
 
-func TypeOf(v interface{}) reflect.Type {
+func TypeOf(v interface{}) any {
+	if record, ok := v.(RecordValue); ok {
+		return record.RecordType()
+	}
+	// Both Go regexp values and gojava's richer Pattern wrapper represent
+	// java.util.regex.Pattern. Protocol dispatch must therefore see one hosted
+	// class for regex literals and Pattern/compile results.
+	if _, ok := v.(interface {
+		Pattern() string
+		Split(string) []string
+	}); ok {
+		return reflect.TypeOf((*regexp.Regexp)(nil))
+	}
 	return reflect.TypeOf(v)
 }

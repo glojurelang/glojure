@@ -31,11 +31,50 @@ type StringReader struct {
 type PushbackReader struct {
 	*bufio.Reader
 	closer         io.Closer
+	pushback       []rune
 	lineNumber     int
 	lastRune       rune
 	lastRuneSize   int
 	lastRuneWasNew bool
 }
+
+func (s *PushbackReader) ResolveFieldOrMethod(name string) (any, bool) {
+	switch strings.ToLower(name) {
+	case "read":
+		return lang.FnFunc(func(args ...any) any {
+			switch len(args) {
+			case 0:
+				rn, _, err := s.ReadRune()
+				if errors.Is(err, io.EOF) {
+					return int64(-1)
+				}
+				if err != nil {
+					panic(err)
+				}
+				return int64(rn)
+			case 3:
+				return s.readChars(args[0], lang.MustAsInt(args[1]), lang.MustAsInt(args[2]))
+			default:
+				panic(fmt.Sprintf("PushbackReader.read: wrong number of args (%d)", len(args)))
+			}
+		}), true
+	case "unread":
+		return lang.FnFunc(func(args ...any) any {
+			switch len(args) {
+			case 1:
+				s.unreadRunes([]rune{rune(lang.MustAsInt(args[0]))})
+			case 3:
+				s.unreadChars(args[0], lang.MustAsInt(args[1]), lang.MustAsInt(args[2]))
+			default:
+				panic(fmt.Sprintf("PushbackReader.unread: wrong number of args (%d)", len(args)))
+			}
+			return nil
+		}), true
+	default:
+		return nil, false
+	}
+}
+
 type PrintWriter struct {
 	io.Writer
 	closer io.Closer
@@ -51,8 +90,13 @@ type BufferedOutputStream struct{ *bufio.Writer }
 
 func (s *ByteArrayInputStream) Available() int { return s.Len() }
 func (s *ByteArrayInputStream) Close()         {}
-func (s *ByteArrayOutputStream) ToByteArray() []byte {
-	return append([]byte(nil), s.Bytes()...)
+func (s *ByteArrayOutputStream) ToByteArray() []int8 {
+	bytes := s.Bytes()
+	result := make([]int8, len(bytes))
+	for index, value := range bytes {
+		result[index] = int8(value)
+	}
+	return result
 }
 func (s *ByteArrayOutputStream) ToString() string { return s.String() }
 func (s *ByteArrayOutputStream) Size() int        { return s.Len() }
@@ -129,7 +173,16 @@ func (s *PushbackReader) Close() {
 	}
 }
 func (s *PushbackReader) ReadRune() (rune, int, error) {
-	rn, size, err := s.Reader.ReadRune()
+	var rn rune
+	var size int
+	var err error
+	if len(s.pushback) > 0 {
+		rn = s.pushback[0]
+		s.pushback = s.pushback[1:]
+		size = utf8.RuneLen(rn)
+	} else {
+		rn, size, err = s.Reader.ReadRune()
+	}
 	if err != nil {
 		return rn, size, err
 	}
@@ -142,15 +195,63 @@ func (s *PushbackReader) ReadRune() (rune, int, error) {
 	return rn, size, nil
 }
 func (s *PushbackReader) UnreadRune() error {
-	if err := s.Reader.UnreadRune(); err != nil {
-		return err
+	if s.lastRuneSize == 0 {
+		return errors.New("PushbackReader.UnreadRune: previous operation was not ReadRune")
 	}
-	if s.lastRuneWasNew {
-		s.lineNumber--
-	}
+	s.unreadRunes([]rune{s.lastRune})
 	s.lastRuneSize = 0
 	s.lastRuneWasNew = false
 	return nil
+}
+
+func (s *PushbackReader) readChars(buffer any, offset, length int) int64 {
+	chars, ok := buffer.([]lang.Char)
+	if !ok {
+		panic(fmt.Sprintf("PushbackReader.read: %T is not a char[]", buffer))
+	}
+	if offset < 0 || length < 0 || offset+length > len(chars) {
+		panic("PushbackReader.read: index out of bounds")
+	}
+	read := 0
+	for read < length {
+		rn, _, err := s.ReadRune()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		chars[offset+read] = lang.Char(rn)
+		read++
+	}
+	if read == 0 {
+		return int64(-1)
+	}
+	return int64(read)
+}
+
+func (s *PushbackReader) unreadChars(buffer any, offset, length int) {
+	chars, ok := buffer.([]lang.Char)
+	if !ok {
+		panic(fmt.Sprintf("PushbackReader.unread: %T is not a char[]", buffer))
+	}
+	if offset < 0 || length < 0 || offset+length > len(chars) {
+		panic("PushbackReader.unread: index out of bounds")
+	}
+	runes := make([]rune, length)
+	for index := range runes {
+		runes[index] = rune(chars[offset+index])
+	}
+	s.unreadRunes(runes)
+}
+
+func (s *PushbackReader) unreadRunes(runes []rune) {
+	for _, rn := range runes {
+		if rn == '\n' {
+			s.lineNumber--
+		}
+	}
+	s.pushback = append(append(make([]rune, 0, len(runes)+len(s.pushback)), runes...), s.pushback...)
 }
 func (s *PushbackReader) GetLineNumber() int { return s.lineNumber }
 func (w *PrintWriter) Close() {
@@ -183,6 +284,42 @@ func (s *StringReader) ReadLine() any {
 }
 func (s *FileInputStream) Read(buffer []byte) (int, error) { return s.reader.Read(buffer) }
 func (s *FileInputStream) ReadLine() any                   { return readLine(s.reader) }
+
+func (s *FileInputStream) ResolveFieldOrMethod(name string) (any, bool) {
+	if strings.EqualFold(name, "read") {
+		return lang.FnFunc1(func(buffer any) any {
+			var target []byte
+			switch buffer := buffer.(type) {
+			case []byte:
+				target = buffer
+			case []int8:
+				target = make([]byte, len(buffer))
+				n, err := s.reader.Read(target)
+				for index := 0; index < n; index++ {
+					buffer[index] = int8(target[index])
+				}
+				if err == io.EOF && n == 0 {
+					return int64(-1)
+				}
+				if err != nil && err != io.EOF {
+					panic(err)
+				}
+				return int64(n)
+			default:
+				panic(fmt.Sprintf("InputStream.read: expected byte[], got %T", buffer))
+			}
+			n, err := s.reader.Read(target)
+			if err == io.EOF && n == 0 {
+				return int64(-1)
+			}
+			if err != nil && err != io.EOF {
+				panic(err)
+			}
+			return int64(n)
+		}), true
+	}
+	return nil, false
+}
 
 func readLine(reader *bufio.Reader) any {
 	line, err := reader.ReadString('\n')
@@ -228,14 +365,21 @@ func NewStringWriter(args ...any) any {
 }
 
 func NewPushbackReader(args ...any) any {
-	if len(args) != 1 {
+	if len(args) < 1 || len(args) > 2 {
 		panic(fmt.Sprintf("PushbackReader/new: wrong number of args (%d)", len(args)))
 	}
 	reader, ok := args[0].(io.Reader)
 	if !ok {
 		panic(fmt.Sprintf("PushbackReader/new: %T is not a reader", args[0]))
 	}
-	pushback := &PushbackReader{Reader: bufio.NewReader(reader), lineNumber: 1}
+	bufferSize := 1
+	if len(args) == 2 {
+		bufferSize = lang.MustAsInt(args[1])
+		if bufferSize <= 0 {
+			panic("PushbackReader/new: buffer size must be positive")
+		}
+	}
+	pushback := &PushbackReader{Reader: bufio.NewReaderSize(reader, bufferSize), lineNumber: 1}
 	pushback.closer, _ = args[0].(io.Closer)
 	return pushback
 }
@@ -305,6 +449,12 @@ func byteSlice(value any) []byte {
 	switch value := value.(type) {
 	case []byte:
 		return value
+	case []int8:
+		out := make([]byte, len(value))
+		for index, item := range value {
+			out[index] = byte(item)
+		}
+		return out
 	case string:
 		return []byte(value)
 	case lang.IPersistentVector:

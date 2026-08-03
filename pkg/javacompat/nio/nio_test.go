@@ -38,3 +38,17 @@ func TestByteBufferPositionLimitAndSlice(t *testing.T) {
 		t.Fatalf("slice get(0) = %d, want %d", got, 'N')
 	}
 }
+
+func TestByteBufferGetLongAdvancesPosition(t *testing.T) {
+	buffer := Wrap([]byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe,
+		0, 0, 0, 0, 0, 0, 0, 3})
+	if got := buffer.GetLong(); got != -2 {
+		t.Fatalf("first getLong = %d, want -2", got)
+	}
+	if got := buffer.GetLong(); got != 3 {
+		t.Fatalf("second getLong = %d, want 3", got)
+	}
+	if got := buffer.Remaining(); got != 0 {
+		t.Fatalf("remaining = %d, want 0", got)
+	}
+}

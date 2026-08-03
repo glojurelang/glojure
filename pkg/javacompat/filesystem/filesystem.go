@@ -112,6 +112,9 @@ func (f *File) LastModified() int64 {
 func (f *File) Mkdir() bool  { return os.Mkdir(f.Pathname, 0o777) == nil }
 func (f *File) Mkdirs() bool { return os.MkdirAll(f.Pathname, 0o777) == nil }
 func (f *File) Delete() bool { return os.Remove(f.Pathname) == nil }
+// DeleteOnExit accepts Java's lifecycle hint. Gobb processes are short-lived
+// and do not expose a JVM-style shutdown-hook registry, so this is best-effort.
+func (f *File) DeleteOnExit() {}
 func (f *File) List() []string {
 	entries, err := os.ReadDir(f.Pathname)
 	if err != nil {

@@ -73,6 +73,25 @@ func (n *BigInt) String() string {
 	return n.val.String()
 }
 
+// ToString mirrors java.math.BigInteger.toString, including its radix
+// overload used by portable JVM libraries.
+func (n *BigInt) ToString(args ...any) string {
+	if len(args) == 0 {
+		return n.String()
+	}
+	if len(args) != 1 {
+		panic(fmt.Sprintf("BigInteger.toString: wrong number of args (%d)", len(args)))
+	}
+	return n.val.Text(MustAsInt(args[0]))
+}
+
+func (n *BigInt) ResolveFieldOrMethod(name string) (any, bool) {
+	if strings.EqualFold(name, "toString") {
+		return FnFunc(func(args ...any) any { return n.ToString(args...) }), true
+	}
+	return nil, false
+}
+
 func (n *BigInt) Hash() uint32 {
 	if n.val.IsInt64() {
 		return uint32(hash.Int64(n.val.Int64()))

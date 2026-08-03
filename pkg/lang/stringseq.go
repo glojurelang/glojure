@@ -1,12 +1,13 @@
 package lang
 
 type (
-	// StringSeq exposes the bytes of an immutable Go string as Char values.
+	// StringSeq exposes the Unicode code points of an immutable Go string as
+	// Char values, matching Clojure's character sequence semantics.
 	StringSeq struct {
 		meta         IPersistentMap
 		hash, hasheq uint32
 
-		str string
+		str []rune
 		i   int
 	}
 )
@@ -19,13 +20,14 @@ var (
 )
 
 func NewStringSeq(s string, i int) *StringSeq {
-	if len(s) == 0 || i >= len(s) {
+	runes := []rune(s)
+	if len(runes) == 0 || i >= len(runes) {
 		return nil
 	}
-	return &StringSeq{str: s, i: i}
+	return &StringSeq{str: runes, i: i}
 }
 
-func newStringSeq(s string, i int) *StringSeq {
+func newStringSeq(s []rune, i int) *StringSeq {
 	if len(s) == 0 || i >= len(s) {
 		return nil
 	}
@@ -60,7 +62,7 @@ func (s *StringSeq) Cons(o any) Conser {
 }
 
 func (s *StringSeq) First() any {
-	return NewChar(rune(s.str[s.i]))
+	return NewChar(s.str[s.i])
 }
 
 func (s *StringSeq) Next() ISeq {
@@ -117,7 +119,7 @@ func (s *StringSeq) Drop(n int) Sequential {
 func (s *StringSeq) ReduceInit(f IFn, init any) any {
 	acc := init
 	for i := s.i; i < len(s.str); i++ {
-		acc = f.Invoke(acc, NewChar(rune(s.str[i])))
+		acc = f.Invoke(acc, NewChar(s.str[i]))
 		if IsReduced(acc) {
 			return acc.(IDeref).Deref()
 		}

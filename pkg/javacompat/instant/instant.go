@@ -22,6 +22,12 @@ const pkg = "github.com/glojurelang/glojure/pkg/javacompat/instant"
 // EPOCH mirrors Instant.EPOCH.
 var EPOCH = jinstant.EPOCH
 
+type DateTimeFormatter struct{}
+
+var ISO_INSTANT = &DateTimeFormatter{}
+
+func (*DateTimeFormatter) Format(value any) string { return toString(value) }
+
 // Now mirrors Instant.now.
 func Now() *jinstant.Instant { return jinstant.Now() }
 
@@ -64,6 +70,11 @@ func register(jvmName, goName string, v any) {
 }
 
 func init() {
+	formatterClass := lang.NewClass(
+		reflect.TypeOf((*DateTimeFormatter)(nil)),
+		"java.time.format.DateTimeFormatter")
+	pkgmap.Set("java.time.format.DateTimeFormatter", formatterClass)
+	pkgmap.Set("java.time.format.DateTimeFormatter.ISO_INSTANT", ISO_INSTANT)
 	register("EPOCH", "EPOCH", EPOCH)
 	register("now", "Now", lang.FnFunc(func(_ ...any) any { return Now() }))
 	register("parse", "Parse", lang.FnFunc(func(args ...any) any { return Parse(args...) }))

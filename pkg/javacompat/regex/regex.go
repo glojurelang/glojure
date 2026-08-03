@@ -12,6 +12,7 @@ package regex
 import (
 	"fmt"
 	"reflect"
+	stdregexp "regexp"
 	"strings"
 
 	jregex "github.com/gloathub/gojava/regex"
@@ -88,11 +89,21 @@ func ReplaceAll(pattern any, input, replacement string) string {
 	return compiled.Matcher(input).ReplaceAll(replacement)
 }
 
+func IsPatternCompat(value any) any { return IsPattern(value) }
+
+func ReplaceAllCompat(pattern, input, replacement any) any {
+	return ReplaceAll(pattern, toString(input), toString(replacement))
+}
+
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Pattern."+jvmName, v)
 	pkgmap.SetHostClassPackage("Pattern", "java.util.regex")
-	pkgmap.SetHostClass("Pattern", lang.NewClass(reflect.TypeOf((*jregex.Pattern)(nil)), "java.util.regex.Pattern"))
+	pkgmap.SetHostClass("Pattern", lang.NewClassWithTypes(
+		"java.util.regex.Pattern",
+		reflect.TypeOf((*stdregexp.Regexp)(nil)),
+		reflect.TypeOf((*jregex.Pattern)(nil)),
+	))
 }
 
 func init() {
@@ -105,10 +116,8 @@ func init() {
 	register("compile", "Compile", lang.FnFunc(func(args ...any) any { return Compile(args...) }))
 	register("matches", "Matches", lang.FnFunc(func(args ...any) any { return Matches(args...) }))
 	register("quote", "Quote", lang.FnFunc(func(args ...any) any { return Quote(args...) }))
-	pkgmap.Set(pkg+".IsPattern", lang.FnFunc1(func(value any) any { return IsPattern(value) }))
-	pkgmap.Set(pkg+".ReplaceAll", lang.FnFunc3(func(pattern, input, replacement any) any {
-		return ReplaceAll(pattern, toString(input), toString(replacement))
-	}))
+	pkgmap.Set(pkg+".IsPattern", IsPatternCompat)
+	pkgmap.Set(pkg+".ReplaceAll", ReplaceAllCompat)
 }
 
 func toString(x any) string {

@@ -131,6 +131,34 @@ func (nm *NumberMethods) UncheckedDec(x any) any {
 	return Ops(x).UncheckedDec(x)
 }
 
+func (nm *NumberMethods) Unchecked_int_add(x, y any) any {
+	return int32(MustAsInt(x)) + int32(MustAsInt(y))
+}
+
+func (nm *NumberMethods) Unchecked_int_dec(x any) any {
+	return int32(MustAsInt(x)) - 1
+}
+
+func (nm *NumberMethods) Unchecked_int_inc(x any) any {
+	return int32(MustAsInt(x)) + 1
+}
+
+func (nm *NumberMethods) Unchecked_int_multiply(x, y any) any {
+	return int32(MustAsInt(x)) * int32(MustAsInt(y))
+}
+
+func (nm *NumberMethods) Unchecked_int_negate(x any) any {
+	return -int32(MustAsInt(x))
+}
+
+func (nm *NumberMethods) Unchecked_int_remainder(x, y any) any {
+	return int32(MustAsInt(x)) % int32(MustAsInt(y))
+}
+
+func (nm *NumberMethods) Unchecked_int_subtract(x, y any) any {
+	return int32(MustAsInt(x)) - int32(MustAsInt(y))
+}
+
 func (nm *NumberMethods) UncheckedIntDivide(x, y int) any {
 	return x / y
 }

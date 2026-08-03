@@ -32,6 +32,14 @@ func TestHasTypeRecordDescriptor(t *testing.T) {
 	}
 }
 
+func TestTypeOfReturnsRecordIdentity(t *testing.T) {
+	recordType := InternRecordType("test", "TypeOfRecord", "value")
+	record := NewRecord(recordType, 1)
+	if got := TypeOf(record); got != recordType {
+		t.Fatalf("TypeOf(record) = %v, want %v", got, recordType)
+	}
+}
+
 func TestHasTypeAcceptsClass(t *testing.T) {
 	class := NewClass(reflect.TypeOf(""), "java.lang.String")
 	if !HasType(class, "value") {

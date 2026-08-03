@@ -20,7 +20,24 @@ type Class struct {
 	acceptedTypes []reflect.Type
 }
 
+// ReadablePrinter is implemented by hosted JVM compatibility values whose
+// Clojure readable representation cannot be inferred from their Go type.
+type ReadablePrinter interface {
+	PrintReadable(io.Writer)
+}
+
 var hostConstructors sync.Map
+var hostTypeConstructors sync.Map
+var readablePrinterMethods sync.Map
+
+// RegisterReadablePrinter installs a Clojure-readable print-method for a
+// hosted type that cannot implement ReadablePrinter itself.
+func RegisterReadablePrinter(t reflect.Type, printer func(any, io.Writer)) {
+	readablePrinterMethods.Store(t, FnFunc(func(args ...any) any {
+		printer(args[0], args[1].(io.Writer))
+		return nil
+	}))
+}
 
 // NewClass wraps t with the given fully-qualified Java name. The Java
 // name is what shows up in print-method output and (.getName c).
@@ -61,6 +78,12 @@ func RegisterHostConstructor(javaName string, constructor IFn) {
 	hostConstructors.Store(javaName, constructor)
 }
 
+// RegisterHostTypeConstructor preserves constructor dispatch when analysis
+// has reduced a compatibility Class wrapper to its primary reflect.Type.
+func RegisterHostTypeConstructor(t reflect.Type, constructor IFn) {
+	hostTypeConstructors.Store(t, constructor)
+}
+
 // NewHostInstance constructs a registered JVM compatibility class, falling
 // back to Go's zero-value allocation for ordinary reflect.Types.
 func NewHostInstance(class any, args ...any) any {
@@ -73,6 +96,9 @@ func NewHostInstance(class any, args ...any) any {
 	t, ok := class.(reflect.Type)
 	if !ok {
 		panic(fmt.Sprintf("new value must be a reflect.Type, got %T", class))
+	}
+	if constructor, found := hostTypeConstructors.Load(t); found {
+		return Apply(constructor.(IFn), args)
 	}
 	if len(args) != 0 {
 		panic(fmt.Sprintf("new %s with args unsupported", t))
@@ -98,5 +124,15 @@ var classPrintMethod = FnFunc(func(args ...any) any {
 		return nil
 	}
 	io.WriteString(w, c.JavaName)
+	return nil
+})
+
+var readablePrintMethod = FnFunc(func(args ...any) any {
+	value, _ := args[0].(ReadablePrinter)
+	writer, _ := args[1].(io.Writer)
+	if value == nil || writer == nil {
+		return nil
+	}
+	value.PrintReadable(writer)
 	return nil
 })

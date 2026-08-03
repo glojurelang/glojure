@@ -27,6 +27,9 @@ var (
 	loadPath     = []fs.FS{}
 	loadPathLock sync.Mutex
 
+	sourceTransformer     lang.IFn
+	sourceTransformerLock sync.RWMutex
+
 	useAot = func() bool {
 		// default to true
 		gua := strings.ToLower(os.Getenv("GLOJURE_USE_AOT"))
@@ -35,6 +38,15 @@ var (
 
 	warnNotAot = os.Getenv("GLOJURE_WARN_NOT_AOT") == "1"
 )
+
+// SetSourceTransformer installs an embedding-specific source rewrite applied
+// to dynamically loaded namespace resources before they are read. Passing nil
+// removes the transformer.
+func SetSourceTransformer(transformer lang.IFn) {
+	sourceTransformerLock.Lock()
+	sourceTransformer = transformer
+	sourceTransformerLock.Unlock()
+}
 
 func init() {
 	stdlibPath := os.Getenv("GLOJURE_STDLIB_PATH")
@@ -352,7 +364,19 @@ func (rt *RTMethods) Load(scriptBase string) {
 	if warnNotAot {
 		fmt.Fprintf(os.Stderr, "WARNING: loading %s (not AOT)\n", filename)
 	}
-	ReadEval(string(buf), WithFilename(filename))
+	code := string(buf)
+	sourceTransformerLock.RLock()
+	transformer := sourceTransformer
+	sourceTransformerLock.RUnlock()
+	if transformer != nil {
+		transformed := lang.Apply2(transformer, filename, code)
+		var ok bool
+		code, ok = transformed.(string)
+		if !ok {
+			panic(fmt.Errorf("source transformer returned %T, want string", transformed))
+		}
+	}
+	ReadEval(code, WithFilename(filename))
 
 	// if compileFiles is set, compile the namespace to a .go file
 	compileFiles := VarCompileFiles.Get().(bool)

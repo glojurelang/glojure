@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"time"
+	"unicode/utf8"
 )
 
 type (
@@ -32,6 +33,7 @@ type (
 	}
 
 	IRecord interface {
+		IPersistentMap
 		xxx_irecord()
 	}
 
@@ -502,9 +504,7 @@ func Count(coll any) int {
 	case nil:
 		return 0
 	case string:
-		// Go strings are immutable byte sequences. Text operations that need
-		// Unicode semantics decode UTF-8 explicitly.
-		return len(arg)
+		return utf8.RuneCountInString(arg)
 	case Counted:
 		return arg.Count()
 	}

@@ -9,6 +9,7 @@ package uuid
 
 import (
 	"fmt"
+	"io"
 	"reflect"
 
 	juuid "github.com/gloathub/gojava/uuid"
@@ -74,6 +75,12 @@ func register(jvmName, goName string, v any) {
 }
 
 func init() {
+	lang.RegisterReadablePrinter(reflect.TypeOf((*juuid.UUID)(nil)), func(value any, writer io.Writer) {
+		fmt.Fprintf(writer, "#uuid %q", value.(*juuid.UUID).String())
+	})
+	lang.RegisterHostTypeConstructor(
+		reflect.TypeOf((*juuid.UUID)(nil)),
+		lang.FnFunc(func(args ...any) any { return FromBits(args...) }))
 	register("randomUUID", "RandomUUID", lang.FnFunc(func(_ ...any) any { return RandomUUID() }))
 	register("fromString", "FromString", lang.FnFunc(func(args ...any) any { return FromString(args...) }))
 	register("nameUUIDFromBytes", "NameUUIDFromBytes", lang.FnFunc(func(args ...any) any { return NameUUIDFromBytes(args...) }))

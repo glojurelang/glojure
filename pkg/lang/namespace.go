@@ -173,6 +173,10 @@ func (ns *Namespace) Aliases() IPersistentMap {
 	return ns.aliasesBox().val.(IPersistentMap)
 }
 
+func (ns *Namespace) GetAliases() IPersistentMap {
+	return ns.Aliases()
+}
+
 func (ns *Namespace) isInternedMapping(sym *Symbol, v interface{}) bool {
 	vr, ok := v.(*Var)
 	return ok && vr.Namespace() == ns && Equals(vr.Symbol(), sym)

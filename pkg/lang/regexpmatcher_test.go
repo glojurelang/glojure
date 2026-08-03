@@ -130,6 +130,13 @@ func TestRegexpMatcherResolvesMethodsWithoutReflection(t *testing.T) {
 	if got := Apply0(groupCount); got != 2 {
 		t.Fatalf("groupCount returned %v, want 2", got)
 	}
+	end, ok := FieldOrMethod(matcher, "end")
+	if !ok {
+		t.Fatal("end method was not resolved")
+	}
+	if got := Apply0(end); got != 2 {
+		t.Fatalf("end returned %v, want 2", got)
+	}
 
 	groupInt, ok := FieldOrMethod(matcher, "groupInt")
 	if !ok {

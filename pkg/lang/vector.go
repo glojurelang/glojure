@@ -85,6 +85,24 @@ func (v *Vector) Length() int {
 	return v.Count()
 }
 
+func (v *Vector) IndexOf(value any) int {
+	for index := 0; index < v.Count(); index++ {
+		if Equals(v.Nth(index), value) {
+			return index
+		}
+	}
+	return -1
+}
+
+func (v *Vector) LastIndexOf(value any) int {
+	for index := v.Count() - 1; index >= 0; index-- {
+		if Equals(v.Nth(index), value) {
+			return index
+		}
+	}
+	return -1
+}
+
 func (v *Vector) Cons(x any) Conser {
 	storage := &vectorUpdateStorage{}
 	storage.attrs = newVectorAttrs(v.Meta())
@@ -137,7 +155,7 @@ func (v *Vector) EntryAt(key any) IMapEntry {
 		return nil
 	}
 	val := v.NthDefault(kInt, notFound)
-	if val == notFound {
+	if Identical(val, notFound) {
 		return nil
 	}
 	return &MapEntry{

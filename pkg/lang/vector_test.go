@@ -207,17 +207,17 @@ func TestNthStringASCII(t *testing.T) {
 	}
 }
 
-// TestNthStringMultibyte verifies strings use byte-oriented indexing.
+// TestNthStringMultibyte verifies strings use Unicode character indexing.
 func TestNthStringMultibyte(t *testing.T) {
-	s := "héllo" // 'é' is 2 bytes (U+00E9)
-	for i, want := range []byte(s) {
+	s := "héllo"
+	for i, want := range []rune(s) {
 		got, ok := Nth(s, i)
 		if !ok {
 			t.Errorf("Nth(%q, %d): ok=false, want true", s, i)
 			continue
 		}
-		if got != NewChar(rune(want)) {
-			t.Errorf("Nth(%q, %d) = %v, want %v", s, i, got, NewChar(rune(want)))
+		if got != NewChar(want) {
+			t.Errorf("Nth(%q, %d) = %v, want %v", s, i, got, NewChar(want))
 		}
 	}
 }
@@ -246,13 +246,13 @@ func TestCharAtASCII(t *testing.T) {
 	}
 }
 
-// TestCharAtMultibyte verifies CharAt uses byte-oriented indexing.
+// TestCharAtMultibyte verifies CharAt uses Unicode character indexing.
 func TestCharAtMultibyte(t *testing.T) {
 	s := "café"
-	for i, want := range []byte(s) {
+	for i, want := range []rune(s) {
 		got := CharAt(s, i)
-		if got != NewChar(rune(want)) {
-			t.Errorf("CharAt(%q, %d) = %v, want %v", s, i, got, NewChar(rune(want)))
+		if got != NewChar(want) {
+			t.Errorf("CharAt(%q, %d) = %v, want %v", s, i, got, NewChar(want))
 		}
 	}
 }
@@ -313,5 +313,18 @@ func TestGoSliceStringMatchesReflect(t *testing.T) {
 		if got != want {
 			t.Errorf("GoSlice(%q, %d, %d) = %q, want %q", c.s, c.i, c.j, got, want)
 		}
+	}
+}
+
+func TestVectorIndexOf(t *testing.T) {
+	vector := NewVector(NewKeyword("mut"), NewKeyword("lit"), NewKeyword("mut"))
+	if got := vector.IndexOf(NewKeyword("lit")); got != 1 {
+		t.Fatalf("IndexOf = %d, want 1", got)
+	}
+	if got := vector.LastIndexOf(NewKeyword("mut")); got != 2 {
+		t.Fatalf("LastIndexOf = %d, want 2", got)
+	}
+	if got := vector.IndexOf(NewKeyword("missing")); got != -1 {
+		t.Fatalf("missing IndexOf = %d, want -1", got)
 	}
 }

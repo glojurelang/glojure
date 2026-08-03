@@ -12,6 +12,14 @@ func TestBase64RoundTrip(t *testing.T) {
 	}
 }
 
+func TestBase64EncoderEncodeReturnsJavaBytes(t *testing.T) {
+	got := GetEncoder().Encode([]int8{1, 2, 3})
+	want := []int8{'A', 'Q', 'I', 'D'}
+	if !EqualsBytes(got, want) {
+		t.Fatalf("Encode = %v, want %v", got, want)
+	}
+}
+
 func EqualsBytes(left, right []int8) bool {
 	if len(left) != len(right) {
 		return false

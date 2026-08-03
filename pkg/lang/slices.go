@@ -7,6 +7,10 @@ import (
 
 func SliceSet(slc any, idx int, val any) {
 	slcVal := reflect.ValueOf(slc)
+	if val == nil {
+		slcVal.Index(idx).Set(reflect.Zero(slcVal.Type().Elem()))
+		return
+	}
 	valVal := reflect.ValueOf(val)
 	// coerce valVal to the element type of slcVal
 	if valVal.Type() != slcVal.Type().Elem() {
@@ -62,11 +66,12 @@ func ToSlice(x any) []any {
 		return res
 	}
 
-	// Handle string - convert each byte to a character value.
+	// Handle string - convert each Unicode code point to a character value.
 	if s, ok := x.(string); ok {
-		res := make([]any, len(s))
-		for i := 0; i < len(s); i++ {
-			res[i] = NewChar(rune(s[i]))
+		runes := []rune(s)
+		res := make([]any, len(runes))
+		for i, ch := range runes {
+			res[i] = NewChar(ch)
 		}
 		return res
 	}

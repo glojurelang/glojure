@@ -59,6 +59,8 @@ func Hash(x interface{}) uint32 {
 	switch x := x.(type) {
 	case Hasher:
 		return x.Hash()
+	case interface{ HashCode() int32 }:
+		return uint32(x.HashCode())
 	case string:
 		return hashStringFNV1a(x)
 	case reflect.Type:

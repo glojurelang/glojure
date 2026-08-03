@@ -49,6 +49,11 @@ func registerWellKnownMethods(mf *MultiFn) {
 	switch mf.name {
 	case "print-method", "print-dup":
 		mf.AddMethod(reflect.TypeOf((*Class)(nil)), classPrintMethod)
+		mf.AddMethod(reflect.TypeOf((*ReadablePrinter)(nil)).Elem(), readablePrintMethod)
+		readablePrinterMethods.Range(func(dispatch, method any) bool {
+			mf.AddMethod(dispatch, method.(IFn))
+			return true
+		})
 	case "kv-reduce":
 		mf.AddMethod(nil, kvReduceNilMethod)
 		mf.AddMethod(reflect.TypeOf((*Object)(nil)).Elem(), kvReduceObjectMethod)
@@ -84,14 +89,26 @@ func IsAutoRegisteredMethod(mfName string, dispatchVal any, method any) bool {
 	switch mfName {
 	case "print-method", "print-dup":
 		dv, ok := dispatchVal.(reflect.Type)
-		if !ok || dv != reflect.TypeOf((*Class)(nil)) {
+		if !ok {
 			return false
 		}
 		m, ok := method.(FnFunc)
 		if !ok {
 			return false
 		}
-		return reflect.ValueOf(m).Pointer() == reflect.ValueOf(classPrintMethod).Pointer()
+		switch dv {
+		case reflect.TypeOf((*Class)(nil)):
+			return reflect.ValueOf(m).Pointer() == reflect.ValueOf(classPrintMethod).Pointer()
+		case reflect.TypeOf((*ReadablePrinter)(nil)).Elem():
+			return reflect.ValueOf(m).Pointer() == reflect.ValueOf(readablePrintMethod).Pointer()
+		default:
+			registered, found := readablePrinterMethods.Load(dv)
+			if !found {
+				return false
+			}
+			registeredFn, ok := registered.(FnFunc)
+			return ok && reflect.ValueOf(m).Pointer() == reflect.ValueOf(registeredFn).Pointer()
+		}
 	case "kv-reduce":
 		m, ok := method.(FnFunc3)
 		if !ok {
@@ -200,6 +217,12 @@ func (m *MultiFn) prefers(hierarchy, x, y any) (res bool) {
 	// Some go-specific logic
 	// TODO: Vet go-specific multi-method preference logic.
 	// for now, prefer x if x is more specific than y
+	if _, ok := x.(*RecordType); ok {
+		if yType, ok := y.(reflect.Type); ok &&
+			reflect.TypeOf((*IRecord)(nil)).Elem().AssignableTo(yType) {
+			return true
+		}
+	}
 	xType, ok := x.(reflect.Type)
 	if !ok {
 		return false
@@ -296,6 +319,12 @@ func (m *MultiFn) findBestMethod(dispatchVal any) IFn {
 }
 
 func (m *MultiFn) isA(h, x, y any) bool {
+	if _, ok := x.(*RecordType); ok {
+		if yType, ok := y.(reflect.Type); ok &&
+			reflect.TypeOf((*IRecord)(nil)).Elem().AssignableTo(yType) {
+			return true
+		}
+	}
 	return varIsA.Invoke(h, x, y).(bool)
 }
 

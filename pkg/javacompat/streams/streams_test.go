@@ -2,8 +2,10 @@ package streams
 
 import (
 	"bytes"
+	"io"
 	"os"
 	"path/filepath"
+	"reflect"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -17,8 +19,19 @@ func TestByteArrayOutputStreamJavaWriteOverloads(t *testing.T) {
 	}
 	lang.Apply(write, []any{int('A')})
 	lang.Apply(write, []any{[]int8{'B', 'C'}})
-	if got := string(stream.ToByteArray()); got != "ABC" {
-		t.Fatalf("bytes = %q, want ABC", got)
+	if got := stream.ToByteArray(); !reflect.DeepEqual(got, []int8{65, 66, 67}) {
+		t.Fatalf("bytes = %v, want ASCII ABC", got)
+	}
+}
+
+func TestByteArrayInputStreamAcceptsSignedBytes(t *testing.T) {
+	stream := NewByteArrayInputStream([]int8{0, 127, -128, -1}).(*ByteArrayInputStream)
+	got, err := io.ReadAll(stream)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := []byte{0, 127, 128, 255}; !bytes.Equal(got, want) {
+		t.Fatalf("bytes = %v, want %v", got, want)
 	}
 }
 
@@ -99,6 +112,37 @@ func TestPushbackReaderRunes(t *testing.T) {
 	}
 }
 
+func TestPushbackReaderAcceptsBufferSize(t *testing.T) {
+	reader := NewPushbackReader(NewStringReader("ab"), int64(8)).(*PushbackReader)
+	r, _, err := reader.ReadRune()
+	if err != nil || r != 'a' {
+		t.Fatalf("ReadRune = %q, %v", r, err)
+	}
+}
+
+func TestPushbackReaderJavaReadAndUnreadOverloads(t *testing.T) {
+	reader := NewPushbackReader(NewStringReader("abcd"), int64(8)).(*PushbackReader)
+	readMethod, found := reader.ResolveFieldOrMethod("read")
+	if !found {
+		t.Fatal("read method not found")
+	}
+	buffer := make([]lang.Char, 4)
+	if got := readMethod.(lang.IFn).Invoke(buffer, int64(0), int64(4)); got != int64(4) {
+		t.Fatalf("read count = %v, want 4", got)
+	}
+	unreadMethod, found := reader.ResolveFieldOrMethod("unread")
+	if !found {
+		t.Fatal("unread method not found")
+	}
+	unreadMethod.(lang.IFn).Invoke(buffer, int64(1), int64(2))
+	if got := readMethod.(lang.IFn).Invoke(); got != int64('b') {
+		t.Fatalf("first unread character = %v, want %d", got, 'b')
+	}
+	if got := readMethod.(lang.IFn).Invoke(); got != int64('c') {
+		t.Fatalf("second unread character = %v, want %d", got, 'c')
+	}
+}
+
 func TestPushbackReaderTracksLineNumbers(t *testing.T) {
 	reader := NewPushbackReader(NewStringReader("a\nb")).(*PushbackReader)
 	if got := reader.GetLineNumber(); got != 1 {
@@ -157,5 +201,28 @@ func TestFileInputStreamReadLine(t *testing.T) {
 	}
 	if got, want := reader.ReadLine(), "second"; got != want {
 		t.Fatalf("second ReadLine = %v, want %v", got, want)
+	}
+}
+
+func TestFileInputStreamJavaRead(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "bytes.txt")
+	if err := os.WriteFile(path, []byte{0, 127, 128, 255}, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	reader := NewFileInputStream(path).(*FileInputStream)
+	defer reader.Close()
+	read, ok := reader.ResolveFieldOrMethod("read")
+	if !ok {
+		t.Fatal("read method not resolved")
+	}
+	buffer := make([]int8, 4)
+	if got := lang.Apply1(read, buffer); got != int64(4) {
+		t.Fatalf("read = %v, want 4", got)
+	}
+	if want := []int8{0, 127, -128, -1}; !reflect.DeepEqual(buffer, want) {
+		t.Fatalf("buffer = %v, want %v", buffer, want)
+	}
+	if got := lang.Apply1(read, buffer); got != int64(-1) {
+		t.Fatalf("EOF read = %v, want -1", got)
 	}
 }
