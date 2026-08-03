@@ -6,6 +6,7 @@ import (
 	errors6 "errors"
 	fmt "fmt"
 	filesystem9 "github.com/glojurelang/glojure/pkg/javacompat/filesystem"
+	uuidcompat "github.com/glojurelang/glojure/pkg/javacompat/uuid"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	pkgmap5 "github.com/glojurelang/glojure/pkg/pkgmap"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
@@ -30205,7 +30206,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.IsInstance[uuid12.UUID](v2)
+			tmp3 := uuidcompat.IsUUID(v2)
 			return tmp3
 		})
 		aotDirectFn555 = tmp1
