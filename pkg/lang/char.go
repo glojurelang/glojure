@@ -60,6 +60,18 @@ func RuneFromCharLiteral(lit string) (rune, error) {
 		}
 		char = string(unquoted)
 	}
+	// Clojure also accepts octal character literals in the form \oNNN.
+	if len(char) > 1 && char[0] == 'o' {
+		digits := char[1:]
+		if len(digits) > 3 {
+			return 0, fmt.Errorf("invalid octal character: %s", char)
+		}
+		value, err := strconv.ParseUint(digits, 8, 8)
+		if err != nil {
+			return 0, fmt.Errorf("invalid octal character: %s", char)
+		}
+		char = string(rune(value))
+	}
 
 	// if the character is more than one rune, it's invalid
 	if utf8.RuneCountInString(char) != 1 {
