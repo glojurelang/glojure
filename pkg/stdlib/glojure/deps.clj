@@ -3,10 +3,12 @@
 
   Installed JARs are safely extracted and their source roots are appended with
   `clojure.core/add-load-path`."
-  (:require [grenadine.runtime :as runtime]
+  (:require [clojure.string :as str]
+            [grenadine.runtime :as runtime]
             [glojure.deps.host :as host]))
 
-(defonce ^:private basis (atom {}))
+(defonce ^:private basis (atom {:libs {} :classpath {} :classpath-roots []
+                                :grenadine/loaded {}}))
 
 (defn current-basis [] (runtime/current-basis basis))
 
@@ -38,10 +40,17 @@
                (assoc :local-repo (:mvn/local-repo deps-map))
 
                (:mvn/repos deps-map)
-               (assoc :repos (:mvn/repos deps-map))))))
+               (assoc :repos (:mvn/repos deps-map))
+
+               (:gitlibs/dir deps-map)
+               (assoc :gitlibs-dir (:gitlibs/dir deps-map))))))
 
 (defn sync-deps
   ([] (sync-deps "deps.edn" nil))
   ([path] (sync-deps path nil))
   ([path opts]
-   (add-deps (read-string (slurp path)) opts)))
+   (let [index (max (or (str/last-index-of path "/") -1)
+                    (or (str/last-index-of path "\\") -1))]
+     (add-deps (read-string (slurp path))
+               (assoc (or opts {}) :base-dir
+                      (if (neg? index) "." (subs path 0 index)))))))

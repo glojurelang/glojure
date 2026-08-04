@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"archive/zip"
+	"bytes"
 	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/hex"
@@ -9,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -59,6 +61,26 @@ func grenadineHost() lang.IPersistentMap {
 			_, err := os.Stat(path.(string))
 			return err == nil
 		}),
+		lang.NewKeyword("directory?"), lang.FnFunc1(func(path any) any {
+			info, err := os.Stat(path.(string))
+			return err == nil && info.IsDir()
+		}),
+		lang.NewKeyword("regular-file?"), lang.FnFunc1(func(path any) any {
+			info, err := os.Stat(path.(string))
+			return err == nil && info.Mode().IsRegular()
+		}),
+		lang.NewKeyword("canonical-path"), lang.FnFunc1(func(path any) any {
+			return grenadineCanonicalPath(path.(string))
+		}),
+		lang.NewKeyword("absolute-path"), lang.FnFunc1(func(path any) any {
+			return grenadineCanonicalPath(path.(string))
+		}),
+		lang.NewKeyword("find-files"), lang.FnFunc2(func(root, predicate any) any {
+			return grenadineFindFiles(root.(string), predicate.(lang.IFn))
+		}),
+		lang.NewKeyword("run-process"), lang.FnFunc1(func(options any) any {
+			return grenadineRunProcess(options.(lang.IPersistentMap))
+		}),
 		lang.NewKeyword("mkdirs!"), lang.FnFunc1(func(path any) any {
 			if err := os.MkdirAll(path.(string), 0o755); err != nil {
 				panic(err)
@@ -72,6 +94,12 @@ func grenadineHost() lang.IPersistentMap {
 			return nil
 		}),
 		lang.NewKeyword("delete!"), lang.FnFunc1(func(path any) any {
+			if err := os.RemoveAll(path.(string)); err != nil {
+				panic(err)
+			}
+			return nil
+		}),
+		lang.NewKeyword("delete-tree!"), lang.FnFunc1(func(path any) any {
 			if err := os.RemoveAll(path.(string)); err != nil {
 				panic(err)
 			}
@@ -93,6 +121,82 @@ func grenadineHost() lang.IPersistentMap {
 		lang.NewKeyword("getenv"), lang.FnFunc1(func(name any) any {
 			return os.Getenv(name.(string))
 		}),
+	)
+}
+
+func grenadineCanonicalPath(path string) string {
+	real, err := filepath.EvalSymlinks(path)
+	if err != nil {
+		real = path
+	}
+	absolute, err := filepath.Abs(real)
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Clean(absolute)
+}
+
+func grenadineFindFiles(root string, predicate lang.IFn) any {
+	paths := []any{}
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			canonical := grenadineCanonicalPath(path)
+			if RT.BooleanCast(predicate.Invoke(canonical)) {
+				paths = append(paths, canonical)
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		panic(err)
+	}
+	return lang.NewVector(paths...)
+}
+
+func grenadineStrings(value any) []string {
+	values := []string{}
+	for seq := lang.Seq(value); seq != nil; seq = seq.Next() {
+		values = append(values, seq.First().(string))
+	}
+	return values
+}
+
+func grenadineRunProcess(options lang.IPersistentMap) lang.IPersistentMap {
+	args := grenadineStrings(lang.Get(options, lang.NewKeyword("args")))
+	if len(args) == 0 {
+		panic(fmt.Errorf("grenadine: run-process requires :args"))
+	}
+	command := exec.Command(args[0], args[1:]...)
+	if dir := lang.Get(options, lang.NewKeyword("dir")); !lang.IsNil(dir) {
+		command.Dir = dir.(string)
+	}
+	command.Env = os.Environ()
+	if environment := lang.Get(options, lang.NewKeyword("env")); !lang.IsNil(environment) {
+		for seq := lang.Seq(environment); seq != nil; seq = seq.Next() {
+			entry := seq.First().(*lang.MapEntry)
+			command.Env = append(command.Env,
+				fmt.Sprintf("%s=%s", entry.Key(), entry.Val()))
+		}
+	}
+	var stdout, stderr bytes.Buffer
+	command.Stdout, command.Stderr = &stdout, &stderr
+	err := command.Run()
+	exit := int64(0)
+	if err != nil {
+		exit = 1
+		if exitError, ok := err.(*exec.ExitError); ok {
+			exit = int64(exitError.ExitCode())
+		} else if stderr.Len() == 0 {
+			stderr.WriteString(err.Error())
+		}
+	}
+	return lang.NewMap(
+		lang.NewKeyword("exit"), exit,
+		lang.NewKeyword("out"), stdout.String(),
+		lang.NewKeyword("err"), stderr.String(),
 	)
 }
 

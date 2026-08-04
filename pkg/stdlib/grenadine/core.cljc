@@ -1,6 +1,7 @@
 (ns grenadine.core
-  "Portable Maven dependency resolution."
-  (:require [grenadine.expander :as expander]
+  "Portable Maven, Git, and local dependency resolution."
+  (:require [grenadine.basis :as basis]
+            [grenadine.expander :as expander]
             [grenadine.graph :as graph]
             [grenadine.lock :as lock]
             [grenadine.pom :as pom]
@@ -13,6 +14,7 @@
 (def lock->classpath lock/lock->classpath)
 (def fetch-lock! repo/fetch-lock!)
 (def prepare-source-roots! repo/prepare-source-roots!)
+(def calc-basis basis/calc-basis)
 
 (defn- cached-pom-provider
   [opts]
@@ -46,29 +48,14 @@
   Pass `:source-roots? true` to also extract and return portable Clojure source
   roots for non-JVM runtimes."
   [deps opts]
-  (let [pom-fn (or (:pom-fn opts) (cached-pom-provider opts))
-        resolution (graph/resolve-graph deps (assoc opts :pom-fn pom-fn))
-        initial-lock (lock/emit-lock resolution (assoc opts :pom-fn pom-fn))
-        fetched (repo/fetch-lock! initial-lock opts)]
-    (when (seq (:failed fetched))
-      (throw (ex-info "Failed to install Maven artifacts"
-                      {:type :grenadine.core/install-failed
-                       :failed (:failed fetched)})))
-    (let [final-lock (:lock fetched)
-          extraction
-          (when (:source-roots? opts)
-            (repo/prepare-source-roots! final-lock opts))]
-      (when (seq (:failed extraction))
-        (throw (ex-info "Failed to prepare Maven source roots"
-                        {:type :grenadine.core/extraction-failed
-                         :failed (:failed extraction)})))
-      {:classpath (lock/lock->classpath
-                   final-lock
-                   {:local-repo (repo/local-repo opts)})
-       :fetched (:fetched fetched)
-       :cached (:cached fetched)
-       :source-roots (:roots extraction)
-       :lock final-lock
-       :resolution resolution
-       :warnings (vec (concat (:warnings resolution)
-                              (:warnings fetched)))})))
+  (let [result (basis/calc-basis {:deps deps} opts)]
+    {:classpath (:classpath-roots result)
+     :fetched (:grenadine/fetched result)
+     :cached (:grenadine/cached result)
+     :installed-libs (:grenadine/installed-libs result)
+     :already-libs (:grenadine/already-libs result)
+     :source-roots (:grenadine/source-roots result)
+     :lock (:grenadine/lock result)
+     :resolution (:grenadine/resolution result)
+     :basis result
+     :warnings (:grenadine/warnings result)}))

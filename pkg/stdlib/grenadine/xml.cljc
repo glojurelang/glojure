@@ -12,7 +12,7 @@
   (loop [i 0 line 1 column 1]
     (if (= i offset)
       {:offset offset :line line :column column}
-      (if (= \newline (nth source i))
+      (if (= "\n" (nth source i))
         (recur (inc i) (inc line) 1)
         (recur (inc i) line (inc column))))))
 
@@ -25,13 +25,18 @@
 
 (defn- starts-at?
   [source offset token]
-  (let [end (+ offset (count token))]
+  (let [token (vec (re-seq #"(?s)." token))
+        end (+ offset (count token))]
     (and (<= end (count source))
-         (= token (subs source offset end)))))
+         (= token (subvec source offset end)))))
+
+(defn- source-slice
+  [source start end]
+  (apply str (subvec source start end)))
 
 (defn- whitespace?
   [c]
-  (or (= c \space) (= c \tab) (= c \newline) (= c \return)))
+  (contains? #{" " "\t" "\n" "\r"} c))
 
 (defn- skip-whitespace
   [source offset]
@@ -42,24 +47,24 @@
 
 (defn- ascii-letter?
   [c]
-  (let [n (int c)]
+  (let [n (int (if (string? c) (first c) c))]
     (or (<= 65 n 90) (<= 97 n 122))))
 
 (defn- ascii-digit?
   [c]
-  (let [n (int c)]
+  (let [n (int (if (string? c) (first c) c))]
     (<= 48 n 57)))
 
 (defn- name-start?
   [c]
-  (or (ascii-letter? c) (= c \_) (= c \:)))
+  (or (ascii-letter? c) (= c "_") (= c ":")))
 
 (defn- name-char?
   [c]
   (or (name-start? c)
       (ascii-digit? c)
-      (= c \-)
-      (= c \.)))
+      (= c "-")
+      (= c ".")))
 
 (defn- parse-name
   [source offset]
@@ -69,7 +74,7 @@
   (loop [i (inc offset)]
     (if (and (< i (count source)) (name-char? (nth source i)))
       (recur (inc i))
-      [(subs source offset i) i])))
+      [(source-slice source offset i) i])))
 
 (defn- local-keyword
   [name]
@@ -78,7 +83,7 @@
 
 (defn- digit-value
   [c radix]
-  (let [n (int c)
+  (let [n (int (if (string? c) (first c) c))
         value (cond
                 (<= 48 n 57) (- n 48)
                 (<= 65 n 70) (+ 10 (- n 65))
@@ -146,15 +151,16 @@
   [source start end]
   (loop [i start pieces [] piece-start start]
     (if (= i end)
-      (apply str (conj pieces (subs source piece-start end)))
-      (if (= \& (nth source i))
-        (let [semi (find-char source (inc i) \;)]
+      (apply str (conj pieces (source-slice source piece-start end)))
+      (if (= "&" (nth source i))
+        (let [semi (find-char source (inc i) ";")]
           (when (or (nil? semi) (> semi end))
             (xml-error source i "Unterminated XML entity"))
           (recur (inc semi)
                  (conj pieces
-                       (subs source piece-start i)
-                       (decode-entity source i (subs source (inc i) semi)))
+                       (source-slice source piece-start i)
+                       (decode-entity source i
+                                      (source-slice source (inc i) semi)))
                  (inc semi)))
         (recur (inc i) pieces piece-start)))))
 
@@ -163,13 +169,13 @@
   (let [[name after-name] (parse-name source offset)
         equals-at (skip-whitespace source after-name)]
     (when (or (= equals-at (count source))
-              (not= \= (nth source equals-at)))
+              (not= "=" (nth source equals-at)))
       (xml-error source equals-at "Expected '=' after XML attribute name"))
     (let [quote-at (skip-whitespace source (inc equals-at))]
       (when (= quote-at (count source))
         (xml-error source quote-at "Expected quoted XML attribute value"))
       (let [quote-char (nth source quote-at)]
-        (when (and (not= quote-char \") (not= quote-char \'))
+        (when (and (not= quote-char "\"") (not= quote-char "'"))
           (xml-error source quote-at "Expected quoted XML attribute value"))
         (if-let [end (find-char source (inc quote-at) quote-char)]
           [(local-keyword name)
@@ -189,7 +195,7 @@
         (starts-at? source i "/>")
         [{:tag (local-keyword name) :attrs attrs :content []} (+ i 2) true]
 
-        (= \> (nth source i))
+        (= ">" (nth source i))
         [{:tag (local-keyword name) :attrs attrs :content []} (inc i) false]
 
         :else
@@ -225,69 +231,71 @@
 
   Returns one element map. Whitespace outside the document element is ignored."
   [source]
-  (loop [i 0 stack [] roots []]
-    (if (= i (count source))
-      (cond
-        (seq stack)
-        (xml-error source i
-                   (str "Unclosed XML element: " (:tag (peek stack))))
-
-        (not= 1 (count roots))
-        (xml-error source i "XML must contain exactly one document element")
-
-        (not (map? (first roots)))
-        (xml-error source i "XML document root must be an element")
-
-        :else
-        (first roots))
-      (if (= \< (nth source i))
+  (let [source (vec (re-seq #"(?s)." source))]
+    (loop [i 0 stack [] roots []]
+      (if (= i (count source))
         (cond
-          (starts-at? source i "<!--")
-          (if-let [end (find-token source (+ i 4) "-->")]
-            (recur (+ end 3) stack roots)
-            (xml-error source i "Unterminated XML comment"))
-
-          (starts-at? source i "<?")
-          (if-let [end (find-token source (+ i 2) "?>")]
-            (recur (+ end 2) stack roots)
-            (xml-error source i "Unterminated XML processing instruction"))
-
-          (starts-at? source i "<![CDATA[")
-          (if-let [end (find-token source (+ i 9) "]]>")]
-            (let [text (subs source (+ i 9) end)
-                  [next-stack next-roots]
-                  (append-content stack roots text)]
-              (recur (+ end 3) next-stack next-roots))
-            (xml-error source i "Unterminated XML CDATA section"))
-
-          (starts-at? source i "</")
-          (let [[name after-name] (parse-name source (+ i 2))
-                close (skip-whitespace source after-name)]
-            (when (or (= close (count source))
-                      (not= \> (nth source close)))
-              (xml-error source close "Malformed XML closing tag"))
-            (when (empty? stack)
-              (xml-error source i "Closing tag without an open element"))
-            (let [node (peek stack)]
-              (when (not= (local-keyword name) (:tag node))
-                (xml-error source i
-                           (str "Mismatched XML closing tag: " name)))
-              (let [[next-stack next-roots]
-                    (append-content (pop stack) roots node)]
-                (recur (inc close) next-stack next-roots))))
-
-          (starts-at? source i "<!")
+          (seq stack)
           (xml-error source i
-                     "DOCTYPE and other XML declarations are not supported")
+                     (str "Unclosed XML element: " (:tag (peek stack))))
+
+          (not= 1 (count roots))
+          (xml-error source i "XML must contain exactly one document element")
+
+          (not (map? (first roots)))
+          (xml-error source i "XML document root must be an element")
 
           :else
-          (let [[node next-i self-closing?] (parse-open-tag source (inc i))]
-            (if self-closing?
-              (let [[next-stack next-roots]
-                    (append-content stack roots node)]
-                (recur next-i next-stack next-roots))
-              (recur next-i (conj stack node) roots))))
-        (let [end (or (find-char source i \<) (count source))
-              text (decode-text source i end)
-              [next-stack next-roots] (append-content stack roots text)]
-          (recur end next-stack next-roots))))))
+          (first roots))
+        (if (= "<" (nth source i))
+          (cond
+            (starts-at? source i "<!--")
+            (if-let [end (find-token source (+ i 4) "-->")]
+              (recur (+ end 3) stack roots)
+              (xml-error source i "Unterminated XML comment"))
+
+            (starts-at? source i "<?")
+            (if-let [end (find-token source (+ i 2) "?>")]
+              (recur (+ end 2) stack roots)
+              (xml-error source i "Unterminated XML processing instruction"))
+
+            (starts-at? source i "<![CDATA[")
+            (if-let [end (find-token source (+ i 9) "]]>")]
+              (let [text (source-slice source (+ i 9) end)
+                    [next-stack next-roots]
+                    (append-content stack roots text)]
+                (recur (+ end 3) next-stack next-roots))
+              (xml-error source i "Unterminated XML CDATA section"))
+
+            (starts-at? source i "</")
+            (let [[name after-name] (parse-name source (+ i 2))
+                  close (skip-whitespace source after-name)]
+              (when (or (= close (count source))
+                        (not= ">" (nth source close)))
+                (xml-error source close "Malformed XML closing tag"))
+              (when (empty? stack)
+                (xml-error source i "Closing tag without an open element"))
+              (let [node (peek stack)]
+                (when (not= (local-keyword name) (:tag node))
+                  (xml-error source i
+                             (str "Mismatched XML closing tag: " name)))
+                (let [[next-stack next-roots]
+                      (append-content (pop stack) roots node)]
+                  (recur (inc close) next-stack next-roots))))
+
+            (starts-at? source i "<!")
+            (xml-error source i
+                       "DOCTYPE and other XML declarations are not supported")
+
+            :else
+            (let [[node next-i self-closing?]
+                  (parse-open-tag source (inc i))]
+              (if self-closing?
+                (let [[next-stack next-roots]
+                      (append-content stack roots node)]
+                  (recur next-i next-stack next-roots))
+                (recur next-i (conj stack node) roots))))
+          (let [end (or (find-char source i "<") (count source))
+                text (decode-text source i end)
+                [next-stack next-roots] (append-content stack roots text)]
+            (recur end next-stack next-roots)))))))

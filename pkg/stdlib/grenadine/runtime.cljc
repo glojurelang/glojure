@@ -4,13 +4,13 @@
 
 (defn current-basis
   [basis]
-  @basis)
+  (dissoc @basis :grenadine/loaded))
 
 (defn- missing-libs
   [basis libs]
   (reduce
    (fn [result [lib coordinate]]
-     (if (contains? @basis lib)
+     (if (contains? (:grenadine/loaded @basis) lib)
        result
        (assoc result lib coordinate)))
    {}
@@ -21,7 +21,7 @@
   (->> libs
        (keep
         (fn [[lib requested]]
-          (when-let [loaded (get @basis lib)]
+          (when-let [loaded (get-in @basis [:grenadine/loaded lib])]
             (when (not= loaded requested)
               {:warning :loaded-lib-not-upgraded
                :lib lib
@@ -53,5 +53,20 @@
             roots (vec (:source-roots result))]
         (when (seq roots)
           (add-roots! roots))
-        (swap! basis merge missing)
+        (when-let [new-basis (:basis result)]
+          (let [current @basis]
+            (swap! basis merge
+                   (assoc (dissoc new-basis :libs :classpath :classpath-roots)
+                          :libs (merge (:libs current) (:libs new-basis))
+                          :classpath (merge (:classpath current)
+                                            (:classpath new-basis))
+                          :classpath-roots
+                          (vec (distinct
+                                (concat (:classpath-roots current)
+                                        (:classpath-roots new-basis))))))))
+        (when-not (:basis result)
+          (swap! basis merge {:libs (merge (:libs @basis) missing)}))
+        (swap! basis merge
+               {:grenadine/loaded
+                (merge (:grenadine/loaded @basis) missing)})
         (update result :warnings into retained)))))

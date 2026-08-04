@@ -14,7 +14,8 @@
             (is (map? (:host opts)))
             {:classpath [] :source-roots [] :warnings []})})]
     (is (= [] (:source-roots result)))
-    (is (= coordinate (get (deps/current-basis) 'example/library)))))
+    (is (= coordinate
+           (get-in (deps/current-basis) [:libs 'example/library])))))
 
 (deftest portable-facade
   (is (nil? (portable-deps/add-deps {}))))

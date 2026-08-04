@@ -132,24 +132,29 @@
   false)
 
 (defn- newer?
-  [lib candidate selected compare-versions warnings on-warning]
+  [lib candidate selected compare-versions warnings on-warning
+   fail-on-incomparable?]
   ;; Glojure resolves neither Exception nor Throwable; `go/any` is the catch-all
   ;; it takes, the same split grenadine.test-support/throws? already makes.
   #?(:glj
      (try
        (pos? (compare-versions lib candidate selected))
        (catch go/any error
-         (not-comparable! lib candidate selected warnings on-warning error)))
+         (if fail-on-incomparable?
+           (throw error)
+           (not-comparable! lib candidate selected warnings on-warning error))))
 
      :default
      (try
        (pos? (compare-versions lib candidate selected))
        (catch Exception error
-         (not-comparable! lib candidate selected warnings on-warning error)))))
+         (if fail-on-incomparable?
+           (throw error)
+           (not-comparable! lib candidate selected warnings on-warning error))))))
 
 (defn- include-coordinate
   [version-map lib coord coord-id path exclusions
-   base-lib compare-versions warnings on-warning]
+   base-lib compare-versions warnings on-warning fail-on-incomparable?]
   (cond
     (empty? path)
     {:include? true
@@ -182,7 +187,7 @@
      :version-map (add-version version-map lib coord path coord-id)}
 
     (newer? lib coord (selected-coordinate version-map lib)
-            compare-versions warnings on-warning)
+            compare-versions warnings on-warning fail-on-incomparable?)
     {:include? true
      :reason :newer-version
      :version-map
@@ -237,7 +242,8 @@
   `:order`, collected `:warnings`, and, with `:trace?`, a tools.deps-shaped
   `:trace` containing `:log` and `:vmap`."
   [deps {:keys [coord-id coord-deps compare-versions known-coordinate?
-                base-lib override-deps default-deps trace? on-warning]
+                base-lib override-deps default-deps trace? on-warning
+                fail-on-incomparable?]
          :or {known-coordinate? some?
               base-lib identity
               override-deps {}
@@ -281,7 +287,8 @@
                     decision
                     (include-coordinate
                      version-map lib coordinate id parents exclusions
-                     base-lib compare-versions warnings on-warning)
+                     base-lib compare-versions warnings on-warning
+                     fail-on-incomparable?)
                     include? (:include? decision)
                     version-map (:version-map decision)
                     reason (:reason decision)

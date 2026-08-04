@@ -1,6 +1,7 @@
 (ns grenadine.lock
   "Pure Grenadine lockfile construction."
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [grenadine.gitlibs :as gitlibs]))
 
 (def default-repos
   [{:id "central" :url "https://repo.maven.apache.org/maven2/"}
@@ -59,13 +60,26 @@
 
 (defn lock->classpath
   "Return local artifact paths without touching the filesystem."
-  [lock {:keys [local-repo]}]
+  [lock {:keys [local-repo] :as opts}]
   (let [local-repo
         (loop [value local-repo]
           (if (and (seq value)
                    (= \/ (nth value (dec (count value)))))
             (recur (subs value 0 (dec (count value))))
             value))]
-    (mapv #(str local-repo
-              "/" (:path %))
-          (:artifacts lock))))
+    (if (= 2 (:lock/version lock))
+      (vec
+       (mapcat
+        (fn [{:keys [lib coord classpath]}]
+          (map
+           (fn [{:keys [type path]}]
+             (case type
+               :mvn (str local-repo "/" path)
+               :git (str (gitlibs/checkout-dir lib (:git/sha coord) opts)
+                         (when (seq path) (str "/" path)))
+               :local path))
+           classpath))
+        (:libs lock)))
+      (mapv #(str local-repo
+                  "/" (:path %))
+            (:artifacts lock)))))
