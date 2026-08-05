@@ -209,7 +209,7 @@ vet: $(GO)
 	go vet ./...
 
 # vet is disabled until we fix errors in generated code
-test: test-aot-runtime test-glj  # vet
+test: test-aot-runtime test-glj test-repl-wasm  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
 
 TEST-COMPARE-LOAD := $(shell \
@@ -225,6 +225,10 @@ test-compare: $(YS)
 
 test-aot-runtime: $(GO)
 	go test -tags glj_aot_runtime ./pkg/glj ./pkg/gljmain ./pkg/runtime
+
+.PHONY: test-repl-wasm
+test-repl-wasm: $(GO)
+	GOOS=js GOARCH=wasm CGO_ENABLED=0 go build ./pkg/repl
 
 .PHONY: test-aot test-suite-aot
 test-aot: test-aot-runtime test-glj

@@ -7,6 +7,8 @@ import (
 	"github.com/glojurelang/glojure/pkg/nrepl"
 )
 
+const defaultShareBaseURL = "https://gloathub.org/repl"
+
 type options struct {
 	stdin        io.Reader
 	stdout       io.Writer

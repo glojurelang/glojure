@@ -686,8 +686,6 @@ func copyToClipboard(text string) {
 	}
 }
 
-const defaultShareBaseURL = "https://gloathub.org/repl"
-
 func shareURL(exprs []string, baseURL string) (string, error) {
 	data, err := json.Marshal(exprs)
 	if err != nil {
