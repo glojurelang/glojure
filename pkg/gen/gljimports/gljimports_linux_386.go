@@ -1053,6 +1053,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/repl.WithEnvironment", github_com_glojurelang_glojure_pkg_repl.WithEnvironment)
 	_register("github.com/glojurelang/glojure/pkg/repl.WithHistoryFile", github_com_glojurelang_glojure_pkg_repl.WithHistoryFile)
 	_register("github.com/glojurelang/glojure/pkg/repl.WithNREPLClient", github_com_glojurelang_glojure_pkg_repl.WithNREPLClient)
+	_register("github.com/glojurelang/glojure/pkg/repl.WithShareBaseURL", github_com_glojurelang_glojure_pkg_repl.WithShareBaseURL)
 	_register("github.com/glojurelang/glojure/pkg/repl.WithStdin", github_com_glojurelang_glojure_pkg_repl.WithStdin)
 	_register("github.com/glojurelang/glojure/pkg/repl.WithStdout", github_com_glojurelang_glojure_pkg_repl.WithStdout)
 
