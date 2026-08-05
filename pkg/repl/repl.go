@@ -336,7 +336,7 @@ func Start(opts ...Option) {
 			if len(exprs) == 0 {
 				return
 			}
-			url, err := shareURL(exprs)
+			url, err := shareURL(exprs, o.shareBaseURL)
 			if err != nil {
 				rl.Hint.SetTemporary(err.Error())
 				hintActive = true
@@ -686,14 +686,14 @@ func copyToClipboard(text string) {
 	}
 }
 
-const shareBaseURL = "https://gloathub.org/repl"
+const defaultShareBaseURL = "https://gloathub.org/repl"
 
-func shareURL(exprs []string) (string, error) {
+func shareURL(exprs []string, baseURL string) (string, error) {
 	data, err := json.Marshal(exprs)
 	if err != nil {
 		return "", err
 	}
-	return shareBaseURL + "#s:" + base64.StdEncoding.EncodeToString(data), nil
+	return baseURL + "#s:" + base64.StdEncoding.EncodeToString(data), nil
 }
 
 func shareClipboardText(exprs []string) string {
@@ -736,7 +736,6 @@ func isURLLikeInput(text string) bool {
 	text = strings.TrimSpace(text)
 	return strings.HasPrefix(text, "http://") ||
 		strings.HasPrefix(text, "https://") ||
-		strings.HasPrefix(text, shareBaseURL+"#s:") ||
 		strings.HasPrefix(text, "#s:")
 }
 

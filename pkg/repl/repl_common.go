@@ -20,9 +20,10 @@ type EvalFunc func(*options, interface{}) (string, error)
 
 func initOptions(opts []Option) options {
 	o := options{
-		stdin:     os.Stdin,
-		stdout:    os.Stdout,
-		namespace: "user",
+		stdin:        os.Stdin,
+		stdout:       os.Stdout,
+		namespace:    "user",
+		shareBaseURL: defaultShareBaseURL,
 	}
 	for _, opt := range opts {
 		opt(&o)

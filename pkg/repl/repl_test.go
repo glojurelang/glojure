@@ -95,7 +95,8 @@ func TestRemoteDocHasDetail(t *testing.T) {
 }
 
 func TestShareURL(t *testing.T) {
-	got, err := shareURL([]string{"(def a 1)", "(+ a 2)"})
+	expressions := []string{"(def a 1)", "(+ a 2)"}
+	got, err := shareURL(expressions, defaultShareBaseURL)
 	if err != nil {
 		t.Fatalf("shareURL() error = %v", err)
 	}
@@ -104,10 +105,28 @@ func TestShareURL(t *testing.T) {
 	if got != want {
 		t.Fatalf("shareURL() = %q, want %q", got, want)
 	}
+
+	got, err = shareURL(expressions, "https://gobb.site/repl/")
+	if err != nil {
+		t.Fatalf("shareURL() custom base error = %v", err)
+	}
+	want = "https://gobb.site/repl/#s:WyIoZGVmIGEgMSkiLCIoKyBhIDIpIl0="
+	if got != want {
+		t.Fatalf("shareURL() custom base = %q, want %q", got, want)
+	}
+}
+
+func TestWithShareBaseURL(t *testing.T) {
+	var opts options
+	WithShareBaseURL("https://gobb.site/repl/")(&opts)
+	if opts.shareBaseURL != "https://gobb.site/repl/" {
+		t.Fatalf("WithShareBaseURL() set %q", opts.shareBaseURL)
+	}
 }
 
 func TestShareExpressionsFromURL(t *testing.T) {
-	url, err := shareURL([]string{"(def a 1)", "(+ a 2)"})
+	url, err := shareURL(
+		[]string{"(def a 1)", "(+ a 2)"}, defaultShareBaseURL)
 	if err != nil {
 		t.Fatalf("shareURL() error = %v", err)
 	}

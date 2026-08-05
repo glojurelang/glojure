@@ -8,14 +8,15 @@ import (
 )
 
 type options struct {
-	stdin       io.Reader
-	stdout      io.Writer
-	namespace   string
-	env         lang.Environment
-	nreplClient *nrepl.Client
-	nreplServer *nrepl.Server
-	historyFile string
-	historyFmt  string // "json" (default) or "jline"
+	stdin        io.Reader
+	stdout       io.Writer
+	namespace    string
+	env          lang.Environment
+	nreplClient  *nrepl.Client
+	nreplServer  *nrepl.Server
+	historyFile  string
+	historyFmt   string // "json" (default) or "jline"
+	shareBaseURL string
 }
 
 // Option is a functional option for the REPL.
@@ -56,5 +57,12 @@ func WithHistoryFile(path, format string) Option {
 	return func(o *options) {
 		o.historyFile = path
 		o.historyFmt = format
+	}
+}
+
+// WithShareBaseURL sets the URL used when sharing REPL expressions.
+func WithShareBaseURL(baseURL string) Option {
+	return func(o *options) {
+		o.shareBaseURL = baseURL
 	}
 }
