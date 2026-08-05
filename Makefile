@@ -209,7 +209,7 @@ vet: $(GO)
 	go vet ./...
 
 # vet is disabled until we fix errors in generated code
-test: test-aot-runtime test-glj test-repl-wasm  # vet
+test: test-aot-runtime test-glj test-repl-wasm test-repl-bsd  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
 
 TEST-COMPARE-LOAD := $(shell \
@@ -229,6 +229,19 @@ test-aot-runtime: $(GO)
 .PHONY: test-repl-wasm
 test-repl-wasm: $(GO)
 	GOOS=js GOARCH=wasm CGO_ENABLED=0 go build ./pkg/repl
+
+.PHONY: test-repl-bsd
+test-repl-bsd: $(GO)
+	@set -e; \
+	for target in \
+	  dragonfly/amd64 \
+	  freebsd/386 freebsd/amd64 freebsd/arm64 \
+	  netbsd/amd64 netbsd/arm64 \
+	  openbsd/amd64 openbsd/arm64; do \
+	  echo "Building pkg/repl for $$target"; \
+	  GOOS=$${target%/*} GOARCH=$${target#*/} CGO_ENABLED=0 \
+	    go build ./pkg/repl; \
+	done
 
 .PHONY: test-aot test-suite-aot
 test-aot: test-aot-runtime test-glj
