@@ -1,11 +1,9 @@
 (ns clojurestar.deps
   "Dialect-neutral dynamic dependency loading."
   (:require
-   #?(:bb [grenadine.bb :as implementation]
+   #?(:gobb [gobb.deps :as implementation]
       :glj [glojure.deps :as implementation]
-      :jolt [jolt.deps :as implementation]
-      :lg [let-go.deps :as implementation]
-      :clj [grenadine.jvm :as implementation])))
+      :jolt [jolt.deps :as implementation])))
 
 (defn add-deps
   "Add the dependencies in a deps.edn map to the running dialect.

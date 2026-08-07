@@ -1,7 +1,21 @@
+;   Copyright (c) Rich Hickey. All rights reserved.
+;   The use and distribution terms for this software are covered by the
+;   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+;   which can be found in the file epl-v10.html at the root of this distribution.
+;   By using this software in any fashion, you are agreeing to be bound by
+;   the terms of this license.
+;   You must not remove this notice, or any other, from this software.
+;
+;   Portable adaptation of clojure.tools.deps extension and coordinate logic
+;   at v0.31.1642, plus canonicalization behavior from tools.deps.edn v0.9.48.
+;   Grenadine adaptations Copyright 2026 Ingy döt Net, under EPL 1.0.
+;   See Provenance.md for the exact source mapping and changes.
+
 (ns grenadine.coordinate
   "Coordinate recognition and canonicalization shared by every resolver host."
   (:require [clojure.string :as str]
             [grenadine.gitlibs :as gitlibs]
+            [grenadine.repo :as repo]
             [grenadine.version :as version]))
 
 (def coordinate-keysets
@@ -35,10 +49,52 @@
 
 (defn split-lib
   [lib]
-  (when-not (symbol? lib)
-    (throw (ex-info (str "Library name must be a symbol: " (pr-str lib))
-                    {:type :grenadine.coordinate/invalid-lib :lib lib})))
-  [(or (namespace lib) (name lib)) (name lib)])
+  (let [[group raw-artifact]
+        (cond
+          (symbol? lib) [(namespace lib) (name lib)]
+          (string? lib)
+          (if-let [slash (str/index-of lib "/")]
+            [(subs lib 0 slash) (subs lib (inc slash))]
+            [nil lib])
+          :else
+          (throw (ex-info (str "Library name must be a symbol or string: "
+                               (pr-str lib))
+                          {:type :grenadine.coordinate/invalid-lib :lib lib})))
+        classifier-index (str/index-of raw-artifact "$")
+        artifact (if classifier-index
+                   (subs raw-artifact 0 classifier-index)
+                   raw-artifact)
+        classifier (when classifier-index
+                     (subs raw-artifact (inc classifier-index)))]
+    [(or group artifact) artifact classifier]))
+
+(defn artifact-name
+  [artifact classifier]
+  (str artifact (when classifier (str "$" classifier))))
+
+(defn lib-key
+  [group artifact classifier]
+  [group (artifact-name artifact classifier)])
+
+(defn lib-symbol
+  [group artifact classifier]
+  (symbol group (artifact-name artifact classifier)))
+
+(defn base-lib
+  "Remove a Maven classifier while preserving the library's spelling."
+  [lib]
+  (if (symbol? lib)
+    (let [raw-name (name lib)
+          classifier-index (str/index-of raw-name "$")
+          base-name (if classifier-index
+                      (subs raw-name 0 classifier-index)
+                      raw-name)]
+      (if-let [lib-namespace (namespace lib)]
+        (symbol lib-namespace base-name)
+        (symbol base-name)))
+    (if-let [classifier-index (str/index-of lib "$")]
+      (subs lib 0 classifier-index)
+      lib)))
 
 (def git-url-hosts
   [["io.github." "https://github.com/" ".git"]
@@ -100,7 +156,14 @@
         (throw (ex-info (str "Maven coordinate requires :mvn/version: " lib)
                         {:type :grenadine.coordinate/invalid-maven
                          :lib lib :coordinate coordinate})))
-      coordinate)
+      (if (version/version-range? v)
+        (assoc coordinate :mvn/version
+               (or (version/exact-range-version v)
+                   (repo/resolve-version-range
+                    (let [[group artifact] (split-lib lib)]
+                      {:group group :artifact artifact})
+                    v opts)))
+        coordinate))
 
     :git
     (let [coordinate (cond-> coordinate

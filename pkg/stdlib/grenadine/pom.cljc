@@ -1,3 +1,5 @@
+;; This portable effective-POM implementation is tested against Apache Maven
+;; behavior but does not embed Maven Model Builder source. See Provenance.md.
 (ns grenadine.pom
   "Pure Maven POM normalization and effective-model construction."
   (:require [clojure.string :as str]

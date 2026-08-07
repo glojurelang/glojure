@@ -1,36 +1,28 @@
 (ns grenadine.graph
   "Pure path-aware dependency graph traversal and version mediation."
-  (:require [clojure.string :as str]
+  (:require [grenadine.coordinate :as coordinate]
             [grenadine.expander :as expander]
             [grenadine.version :as version]))
 
 (defn- split-lib
   [lib]
-  (cond
-    (symbol? lib)
-    [(or (namespace lib) (name lib)) (name lib)]
-
-    (string? lib)
-    (if-let [slash (str/index-of lib "/")]
-      [(subs lib 0 slash) (subs lib (inc slash))]
-      [lib lib])
-
-    :else
-    (throw (ex-info (str "Unsupported dependency name: " lib)
-                    {:type :grenadine.graph/invalid-lib
-                     :lib lib}))))
+  (coordinate/split-lib lib))
 
 (defn- ga
+  [{:keys [group artifact classifier]}]
+  (coordinate/lib-key group artifact classifier))
+
+(defn- base-ga
   [{:keys [group artifact]}]
   [group artifact])
 
 (defn- gav
-  [{:keys [group artifact version]}]
-  [group artifact version])
+  [{:keys [version] :as coordinate}]
+  (conj (ga coordinate) version))
 
 (defn- coord-order
-  [{:keys [group artifact version]}]
-  [group artifact version])
+  [{:keys [version] :as coordinate}]
+  (conj (ga coordinate) version))
 
 (defn- normalize-exclusions
   [exclusions]
@@ -38,8 +30,9 @@
    (map
     (fn [exclusion]
       (if (map? exclusion)
-        (ga exclusion)
-        (split-lib exclusion)))
+        (base-ga exclusion)
+        (let [[group artifact] (split-lib exclusion)]
+          [group artifact])))
     exclusions)))
 
 (defn- root-coordinates
@@ -48,7 +41,7 @@
        (map
         (fn [entry]
           (let [[lib coordinate] entry
-                [group artifact] (split-lib lib)
+                [group artifact classifier] (split-lib lib)
                 version (:mvn/version coordinate)]
             (when-not version
               (throw
@@ -56,7 +49,8 @@
                         {:type :grenadine.graph/unsupported-coordinate
                          :lib lib
                          :coordinate coordinate})))
-            {:coords {:group group :artifact artifact :version version}
+            {:coords (cond-> {:group group :artifact artifact :version version}
+                       classifier (assoc :classifier classifier))
              :edge-exclusions
              (normalize-exclusions (:exclusions coordinate #{}))})))
        (sort-by #(coord-order (:coords %)))
@@ -113,10 +107,9 @@
          :warnings warnings}
         (let [state (nth queue index)
               coords (:coords state)
-              current-ga (ga coords)
               path-gavs (set (map gav (butlast (:via state))))]
           (cond
-            (contains? (:blocked state) current-ga)
+            (contains? (:blocked state) (base-ga coords))
             (recur queue (inc index) order occurrences graph
                    (conj omitted-items (omitted state :excluded))
                    warnings)
@@ -146,7 +139,7 @@
                    (fn [dependency]
                      (let [child-coords
                            (select-keys dependency
-                                        [:group :artifact :version])]
+                                        [:group :artifact :classifier :version])]
                        {:coords child-coords
                         :depth (inc (:depth state))
                         :via (conj (:via state) child-coords)
@@ -232,7 +225,7 @@
 
 (defn- tools-coordinate
   [coordinate]
-  (cond-> (select-keys coordinate [:group :artifact :version])
+  (cond-> (select-keys coordinate [:group :artifact :classifier :version])
     (seq (:exclusions coordinate))
     (assoc :exclusions (normalize-exclusions (:exclusions coordinate)))))
 
@@ -241,7 +234,7 @@
   (let [global-exclusions (normalize-exclusions exclusions)
         roots
         (->> (root-coordinates deps)
-             (remove #(contains? global-exclusions (ga (:coords %))))
+             (remove #(contains? global-exclusions (base-ga (:coords %))))
              (mapv
               (fn [{:keys [coords edge-exclusions]}]
                 [(ga coords)
@@ -262,7 +255,7 @@
         (->> (:deps (pom-fn coordinate))
              (filter #(and (kept-scope? (:scope %))
                            (or include-optional? (not (:optional %)))
-                           (not (contains? global-exclusions (ga %)))))
+                           (not (contains? global-exclusions (base-ga %)))))
              (mapv (fn [dependency]
                      [(ga dependency) (tools-coordinate dependency)]))))})))
 
@@ -278,11 +271,11 @@
             (if (seq matches)
               (reduce nearer matches)
               {:coords (select-keys coordinate
-                                    [:group :artifact :version])
+                                    [:group :artifact :classifier :version])
                :depth 0
                :order 0
                :via [(select-keys coordinate
-                                  [:group :artifact :version])]
+                                  [:group :artifact :classifier :version])]
                :scope "compile"
                :direct? true})]
         [key selected]))
@@ -299,7 +292,8 @@
   "Resolve Maven dependency occurrences and mediate versions.
 
   `deps` is a deps.edn-style dependency map. `:pom-fn` must return an effective
-  POM. The result's `:selected` map is keyed by `[group artifact]`."
+  POM. The result's `:selected` map is keyed by `[group artifact]`, where a
+  classifier is represented as `artifact$classifier`."
   [deps opts]
   (let [enumerated (enumerate deps opts)
         mode (:mediation opts :newest)
@@ -327,10 +321,11 @@
      (into {}
            (filter
             (fn [entry]
-              (let [[group artifact version] (key entry)]
+              (let [version (peek (key entry))
+                    lib-key (pop (key entry))]
                 (= version
                    (get-in selected
-                           [[group artifact] :coords :version])))))
+                           [lib-key :coords :version])))))
            (:graph enumerated))
      :omitted (vec (concat (:omitted enumerated) conflicts))
      :warnings (vec (concat (:warnings enumerated)

@@ -1,4 +1,15 @@
-;; Adapted from org.clojure/tools.gitlibs (EPL-1.0).
+;   Copyright (c) Rich Hickey. All rights reserved.
+;   The use and distribution terms for this software are covered by the
+;   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+;   which can be found in the file epl-v10.html at the root of this distribution.
+;   By using this software in any fashion, you are agreeing to be bound by
+;   the terms of this license.
+;   You must not remove this notice, or any other, from this software.
+;
+;   Portable adaptation of org.clojure/tools.gitlibs at v2.6.217.
+;   Grenadine adaptations Copyright 2026 Ingy döt Net, under EPL 1.0.
+;   See Provenance.md for the exact source mapping and changes.
+
 (ns grenadine.gitlibs
   "Portable tools.gitlibs-compatible Git cache operations."
   (:require [clojure.string :as str]))

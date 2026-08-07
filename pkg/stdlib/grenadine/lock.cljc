@@ -1,7 +1,8 @@
 (ns grenadine.lock
   "Pure Grenadine lockfile construction."
   (:require [clojure.string :as str]
-            [grenadine.gitlibs :as gitlibs]))
+            [grenadine.gitlibs :as gitlibs]
+            [grenadine.version :as version]))
 
 (def default-repos
   [{:id "central" :url "https://repo.maven.apache.org/maven2/"}
@@ -10,7 +11,8 @@
 (defn artifact-path
   [{:keys [group artifact version classifier]}]
   (let [directory (str (str/replace group "." "/")
-                       "/" artifact "/" version "/")
+                       "/" artifact "/"
+                       (version/snapshot-base-version version) "/")
         filename (str artifact "-" version
                       (when classifier (str "-" classifier))
                       ".jar")]
@@ -21,8 +23,8 @@
   (if (map? repo) (:url repo) repo))
 
 (defn- gav
-  [{:keys [group artifact version]}]
-  [group artifact version])
+  [{:keys [group artifact version classifier]}]
+  [group (str artifact (when classifier (str "$" classifier))) version])
 
 (defn emit-lock
   "Convert a resolution into stable lockfile data.
@@ -38,7 +40,7 @@
         (->> (:selected resolution)
              vals
              (map :coords)
-             (sort-by (juxt :group :artifact :version))
+             (sort-by (juxt :group :artifact :classifier :version))
              (keep
               (fn [coords]
                 (let [pom (when pom-fn (pom-fn coords))
@@ -51,6 +53,7 @@
                       :packaging packaging
                       :path (artifact-path coords)
                       :repo (repo-fn coords)}
+                     (select-keys coords [:classifier])
                      (select-keys (get integrity (gav coords))
                                   [:sha256 :size]))))))
              vec)]

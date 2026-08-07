@@ -1,3 +1,16 @@
+;   Copyright (c) Rich Hickey. All rights reserved.
+;   The use and distribution terms for this software are covered by the
+;   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+;   which can be found in the file epl-v10.html at the root of this distribution.
+;   By using this software in any fashion, you are agreeing to be bound by
+;   the terms of this license.
+;   You must not remove this notice, or any other, from this software.
+;
+;   Portable adaptation of clojure.tools.deps basis and manifest-extension
+;   organization at v0.31.1642.
+;   Grenadine adaptations Copyright 2026 Ingy döt Net, under EPL 1.0.
+;   See Provenance.md for the exact source mapping and changes.
+
 (ns grenadine.basis
   "Portable mixed-coordinate resolution and tools.deps-shaped bases."
   (:require [clojure.string :as str]
@@ -47,15 +60,19 @@
                        :root root :deps/root relative})))
     nested))
 
+(defn- pom-lib
+  [group artifact classifier]
+  (coordinate/lib-symbol group artifact classifier))
+
 (defn- pom-deps
   [model]
   (into []
         (keep
-         (fn [{:keys [group artifact version scope optional exclusions]}]
+         (fn [{:keys [group artifact classifier version scope optional exclusions]}]
            (when (and group artifact version
                       (not (#{"test" "provided" "system"} scope))
                       (not optional))
-             [(symbol group artifact)
+             [(pom-lib group artifact classifier)
               (cond-> {:mvn/version version}
                 (seq exclusions)
                 (assoc :exclusions
@@ -70,15 +87,16 @@
         interpolate #(pom/interpolate-string % properties)]
     (into []
           (keep
-           (fn [{:keys [group artifact version scope optional exclusions]}]
+           (fn [{:keys [group artifact classifier version scope optional exclusions]}]
              (let [group (interpolate group)
                    artifact (interpolate artifact)
+                   classifier (interpolate classifier)
                    version (interpolate version)]
                (when (and group artifact version
                           (not (#{"test" "provided" "system"} scope))
                           (not optional)
                           (not (str/includes? version "${")))
-                 [(symbol group artifact)
+                 [(pom-lib group artifact classifier)
                   (cond-> {:mvn/version version}
                     (seq exclusions)
                     (assoc :exclusions
@@ -199,9 +217,13 @@
               (let [value
                     (case (coordinate/coordinate-type coord)
                       :mvn
-                      (let [[group artifact] (coordinate/split-lib lib)
-                            coords {:group group :artifact artifact
-                                    :version (:mvn/version coord)}]
+                      (let [[group artifact classifier]
+                            (coordinate/split-lib lib)
+                            coords (cond->
+                                   {:group group :artifact artifact
+                                    :version (:mvn/version coord)}
+                                     classifier
+                                     (assoc :classifier classifier))]
                         {:manifest :mvn
                          :children (normalize-deps
                                     (into {} (pom-deps (pom-fn coords)))
@@ -273,10 +295,13 @@
          (keep
           (fn [[lib coord]]
             (when (= :mvn (coordinate/coordinate-type coord))
-              (let [[group artifact] (coordinate/split-lib lib)]
-                [[group artifact]
-                 {:coords {:group group :artifact artifact
-                           :version (:mvn/version coord)}}]))))
+              (let [[group artifact classifier]
+                    (coordinate/split-lib lib)]
+                [(coordinate/lib-key group artifact classifier)
+                 {:coords (cond->
+                           {:group group :artifact artifact
+                            :version (:mvn/version coord)}
+                            classifier (assoc :classifier classifier))}]))))
          libs)})
 
 (defn calc-basis
@@ -297,6 +322,7 @@
          top
          {:coord-id (fn [_ coord] (coordinate/dep-id coord))
           :coord-deps (fn [lib coord] (:children (info lib coord)))
+          :base-lib coordinate/base-lib
           :compare-versions
           (fn [lib left right]
             (coordinate/compare-coordinates lib left right opts))
@@ -314,9 +340,11 @@
                  {:pom-fn pom-fn :mediation (:mediation opts)})]
             (into {}
                   (map
-                   (fn [[[group artifact] occurrence]]
-                     [(symbol group artifact)
-                      {:mvn/version (get-in occurrence [:coords :version])}]))
+                   (fn [[_ occurrence]]
+                     (let [{:keys [group artifact classifier version]}
+                           (:coords occurrence)]
+                       [(coordinate/lib-symbol group artifact classifier)
+                        {:mvn/version version}])))
                   (:selected legacy)))
           (:libs expansion))
         resolution (maven-resolution libs)
@@ -333,8 +361,8 @@
         final-lock (:lock fetched)
         artifacts
         (into {}
-              (map (fn [artifact]
-                     [(symbol (:group artifact) (:artifact artifact)) artifact]))
+              (map (fn [{:keys [group artifact classifier] :as entry}]
+                     [(coordinate/lib-symbol group artifact classifier) entry]))
               (:artifacts final-lock))
         parent-data (parents-data (:trace expansion) libs)
         expansion-libs (filter #(contains? libs %) (:order expansion))
@@ -438,9 +466,13 @@
                      :classpath classpath}))
                 ordered-libs))
         fetched-libs
-        (set (map #(symbol (:group %) (:artifact %)) (:fetched fetched)))
+        (set (map #(coordinate/lib-symbol (:group %) (:artifact %)
+                                          (:classifier %))
+                  (:fetched fetched)))
         cached-libs
-        (set (map #(symbol (:group %) (:artifact %)) (:cached fetched)))
+        (set (map #(coordinate/lib-symbol (:group %) (:artifact %)
+                                          (:classifier %))
+                  (:cached fetched)))
         installed-libs
         (vec
          (filter

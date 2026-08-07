@@ -1,3 +1,16 @@
+;   Copyright (c) Rich Hickey. All rights reserved.
+;   The use and distribution terms for this software are covered by the
+;   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+;   which can be found in the file epl-v10.html at the root of this distribution.
+;   By using this software in any fashion, you are agreeing to be bound by
+;   the terms of this license.
+;   You must not remove this notice, or any other, from this software.
+;
+;   Portable adaptation of clojure.tools.deps at v0.31.1642.
+;   Grenadine adaptations Copyright 2026 Ingy döt Net and contributors,
+;   under EPL 1.0.
+;   See Provenance.md for the exact source mapping and changes.
+
 (ns grenadine.expander
   "Portable tools.deps-style dependency tree expansion.
 
@@ -21,7 +34,9 @@
           true
           (recur (pop search)))))))
 
-(defn- update-exclusions
+(defn- update-excl
+  "Update exclusions and cuts for a new coordinate, another occurrence of an
+  existing coordinate, or an omitted coordinate."
   [lib coord coord-id use-path include? reason exclusions cuts]
   (let [coordinate-exclusions
         (when (contains? coord :exclusions)
@@ -66,17 +81,17 @@
              (cond-> {:select coord-id}
                direct? (assoc :top true))))
 
-(defn- selected-id
+(defn- selected-version
   [version-map lib]
   (get-in version-map [lib :select]))
 
-(defn- selected-coordinate
+(defn- selected-coord
   [version-map lib]
-  (get-in version-map [lib :versions (selected-id version-map lib)]))
+  (get-in version-map [lib :versions (selected-version version-map lib)]))
 
 (defn- selected-paths
   [version-map lib]
-  (get-in version-map [lib :paths (selected-id version-map lib)]))
+  (get-in version-map [lib :paths (selected-version version-map lib)]))
 
 (defn- parent-missing?
   [version-map parent-path]
@@ -152,7 +167,9 @@
            (throw error)
            (not-comparable! lib candidate selected warnings on-warning error))))))
 
-(defn- include-coordinate
+(defn- include-coord?
+  "Decide whether to select a coordinate and return the reason and updated
+  version map. This is the portable counterpart of tools.deps/include-coord?."
   [version-map lib coord coord-id path exclusions
    base-lib compare-versions warnings on-warning fail-on-incomparable?]
   (cond
@@ -173,7 +190,7 @@
     (parent-missing? version-map path)
     {:include? false :reason :parent-omitted :version-map version-map}
 
-    (nil? (selected-id version-map lib))
+    (nil? (selected-version version-map lib))
     {:include? true
      :reason :new-dep
      :version-map
@@ -181,12 +198,12 @@
          (add-version lib coord path coord-id)
          (select-version lib coord-id false))}
 
-    (= coord-id (selected-id version-map lib))
+    (= coord-id (selected-version version-map lib))
     {:include? false
      :reason :same-version
      :version-map (add-version version-map lib coord path coord-id)}
 
-    (newer? lib coord (selected-coordinate version-map lib)
+    (newer? lib coord (selected-coord version-map lib)
             compare-versions warnings on-warning fail-on-incomparable?)
     {:include? true
      :reason :newer-version
@@ -285,7 +302,7 @@
                        order trace))
               (let [id (coord-id lib coordinate)
                     decision
-                    (include-coordinate
+                    (include-coord?
                      version-map lib coordinate id parents exclusions
                      base-lib compare-versions warnings on-warning
                      fail-on-incomparable?)
@@ -293,7 +310,7 @@
                     version-map (:version-map decision)
                     reason (:reason decision)
                     update
-                    (update-exclusions
+                    (update-excl
                      lib coordinate id use-path include? reason
                      exclusions cuts)
                     child-predicate (:child-predicate update)

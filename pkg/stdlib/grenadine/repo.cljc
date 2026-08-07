@@ -43,7 +43,7 @@
 (defn- pom-path
   [{:keys [group artifact version]}]
   (str (str/replace group "." "/")
-       "/" artifact "/" version "/"
+       "/" artifact "/" (version/snapshot-base-version version) "/"
        artifact "-" version ".pom"))
 
 (defn- remote-url
@@ -66,7 +66,7 @@
     (let [value (str/trim (apply str (filter string? (:content node))))]
       (when (seq value) value))))
 
-(defn- metadata-version
+(defn- metadata-data
   [source]
   (let [metadata (xml/parse source)
         versioning (child-element metadata :versioning)
@@ -76,7 +76,12 @@
         versions
         (->> (child-elements versions-node :version)
              (keep element-text)
-             (remove #(str/ends-with? (str/upper-case %) "-SNAPSHOT")))]
+             vec)]
+    {:release release :latest latest :versions versions}))
+
+(defn- metadata-version
+  [source]
+  (let [{:keys [release latest versions]} (metadata-data source)]
     (or release
         latest
         (reduce
@@ -85,7 +90,53 @@
              candidate
              selected))
          nil
-         versions))))
+         (remove #(str/ends-with? (str/upper-case %) "-SNAPSHOT")
+                 versions)))))
+
+(defn resolve-version-range
+  "Resolve a Maven version range to the highest matching repository version."
+  [{:keys [group artifact] :as coords} range-spec {:keys [host repos]}]
+  (require-host host [:http-get :bytes->utf8])
+  (let [path (str (str/replace group "." "/")
+                  "/" artifact "/maven-metadata.xml")
+        repos (or repos lock/default-repos)
+        parsed-range (version/parse-version-range range-spec)
+        candidates
+        (mapcat
+         (fn [repository]
+           (let [url (remote-url repository path)
+                 response ((:http-get host) url)]
+             (if (= 200 (:status response))
+               (try
+                 (:versions
+                  (metadata-data ((:bytes->utf8 host) (:body response))))
+                 (catch Exception error
+                   (throw
+                    (ex-info (str "Invalid Maven metadata for "
+                                  group "/" artifact)
+                             {:type :grenadine.repo/invalid-metadata
+                              :coords coords
+                              :url url}
+                             error))))
+               [])))
+         repos)
+        matching (filter #(version/in-range? % parsed-range)
+                         (distinct candidates))
+        selected
+        (reduce
+         (fn [current candidate]
+           (if (or (nil? current) (version/newer? candidate current))
+             candidate
+             current))
+         nil
+         matching)]
+    (or selected
+        (throw
+         (ex-info (str "No Maven version satisfies " group "/" artifact
+                       " " range-spec)
+                  {:type :grenadine.repo/version-range-not-found
+                   :coords coords
+                   :range range-spec})))))
 
 (defn latest-version
   "Return the latest Maven release for a group/artifact coordinate.
@@ -306,8 +357,12 @@
         artifacts
         (if source-libs
           (filter
-           (fn [{:keys [group artifact]}]
-             (contains? source-libs (symbol group artifact)))
+           (fn [{:keys [group artifact classifier]}]
+             (contains? source-libs
+                        (symbol group
+                                (str artifact
+                                     (when classifier
+                                       (str "$" classifier))))))
            (:artifacts lock))
           (:artifacts lock))]
     (loop [remaining artifacts roots [] failed []]

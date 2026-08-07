@@ -1,7 +1,9 @@
 (ns glojure.test-glojure.deps
   (:require [clojure.test :refer [deftest is run-tests]]
             [clojurestar.deps :as portable-deps]
-            [glojure.deps :as deps]))
+            [glojure.deps :as deps]
+            [grenadine.coordinate :as coordinate]
+            [grenadine.version :as version]))
 
 (deftest embedded-grenadine-facade
   (let [coordinate {:mvn/version "1.0.0"}
@@ -19,5 +21,14 @@
 
 (deftest portable-facade
   (is (nil? (portable-deps/add-deps {}))))
+
+(deftest embedded-grenadine-legacy-maven-forms
+  (is (= ["hiccup" "hiccup" nil]
+         (coordinate/split-lib 'hiccup)))
+  (is (= ["org.lwjgl" "lwjgl-stb" "natives-macos"]
+         (coordinate/split-lib 'org.lwjgl/lwjgl-stb$natives-macos)))
+  (is (version/in-range? "1.9" "[1.0,2.0)"))
+  (is (= "0.0.1-SNAPSHOT"
+         (version/snapshot-base-version "0.0.1-20200715.082439-21"))))
 
 (run-tests)
