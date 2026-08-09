@@ -1,9 +1,31 @@
 package gljmain
 
 import (
+	"os"
+	"os/exec"
 	"slices"
+	"strings"
 	"testing"
 )
+
+func TestDashStdin(t *testing.T) {
+	const helperEnv = "GLJMAIN_TEST_DASH_STDIN_HELPER"
+	if os.Getenv(helperEnv) == "1" {
+		Main([]string{"-", "alpha", "beta"})
+		os.Exit(0)
+	}
+
+	cmd := exec.Command(os.Args[0], "-test.run=^TestDashStdin$")
+	cmd.Env = append(os.Environ(), helperEnv+"=1")
+	cmd.Stdin = strings.NewReader("(println 123)\n(println *command-line-args*)\n")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("glj - failed: %v\n%s", err, output)
+	}
+	if got, want := string(output), "123\n(alpha beta)\n"; got != want {
+		t.Errorf("glj - output = %q, want %q", got, want)
+	}
+}
 
 func TestUsesProjectDeps(t *testing.T) {
 	tests := []struct {
@@ -12,6 +34,7 @@ func TestUsesProjectDeps(t *testing.T) {
 	}{
 		{nil, true},
 		{[]string{"main.clj"}, true},
+		{[]string{"-"}, true},
 		{[]string{"-e", "(+ 1 2)"}, true},
 		{[]string{"--nrepl"}, true},
 		{[]string{"--nrepl=7888"}, true},

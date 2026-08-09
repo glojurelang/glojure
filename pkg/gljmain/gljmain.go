@@ -3,6 +3,7 @@ package gljmain
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -51,7 +52,7 @@ func interactiveCommands() InteractiveCommands {
 func printHelp() {
 	fmt.Printf(`Glojure v%s
 
-Usage: glj [options] [file]
+Usage: glj [options] [file | -]
 
 Options:
   -Sdeps <edn>          Merge inline deps data after the project deps.edn
@@ -70,6 +71,7 @@ Examples:
   glj                           # Start REPL
   glj -e "(+ 1 2)"              # Evaluate expression
   glj script.glj                # Run script file
+  printf '(println 42)\n' | glj - # Run script from stdin
   glj --nrepl                   # Start nREPL on random port
   glj --nrepl=7888              # Start nREPL on port 7888
   glj --nrepl=0.0.0.0:7888      # Bind to all interfaces
@@ -91,7 +93,31 @@ func usesProjectDeps(args []string) bool {
 	arg := args[0]
 	return arg == "-e" || arg == "--nrepl" || strings.HasPrefix(arg, "--nrepl=") ||
 		arg == "--srepl" || strings.HasPrefix(arg, "--srepl=") ||
-		!strings.HasPrefix(arg, "-")
+		arg == "-" || !strings.HasPrefix(arg, "-")
+}
+
+func runScript(input io.Reader, args []string) {
+	env := lang.GlobalEnv
+
+	core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
+	core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(args))
+
+	rdr := reader.New(bufio.NewReader(input), reader.WithGetCurrentNS(func() *lang.Namespace {
+		return env.CurrentNamespace()
+	}))
+	for {
+		val, err := rdr.ReadOne()
+		if err == reader.ErrEOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err = env.Eval(val)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 func splitDepsOption(args []string) (string, []string, error) {
@@ -232,6 +258,8 @@ func Main(args []string) {
 		if !lang.IsNil(lastResult) {
 			fmt.Println(lang.PrintString(lastResult))
 		}
+	} else if args[0] == "-" {
+		runScript(os.Stdin, args[1:])
 	} else if strings.HasPrefix(args[0], "-") {
 		log.Fatalf("glj: unknown option: %s\nRun 'glj --help' for usage.", args[0])
 	} else {
@@ -240,26 +268,11 @@ func Main(args []string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		env := lang.GlobalEnv
-
-		core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
-		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(args[1:]))
-
-		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() *lang.Namespace {
-			return env.CurrentNamespace()
-		}))
-		for {
-			val, err := rdr.ReadOne()
-			if err == reader.ErrEOF {
-				break
-			}
-			if err != nil {
+		defer func() {
+			if err := file.Close(); err != nil {
 				log.Fatal(err)
 			}
-			_, err = env.Eval(val)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
+		}()
+		runScript(file, args[1:])
 	}
 }
