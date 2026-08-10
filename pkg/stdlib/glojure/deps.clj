@@ -5,6 +5,7 @@
   `clojure.core/add-load-path`."
   (:require [clojure.string :as str]
             [grenadine.runtime :as runtime]
+            [grenadine.xml :as xml]
             [glojure.deps.host :as host]))
 
 (defonce ^:private basis (atom {:libs {} :classpath {} :classpath-roots []
@@ -25,7 +26,10 @@
   ([libs opts]
    (let [opts (or opts {})]
      (runtime/add-libs! basis add-roots! libs
-                        (assoc opts :host (or (:host opts) (host/host)))))))
+                        (assoc opts
+                               :host (or (:host opts) (host/host))
+                               :xml-parser (or (:xml-parser opts)
+                                               xml/parse))))))
 
 (defn add-lib
   ([lib coordinate] (add-lib lib coordinate nil))

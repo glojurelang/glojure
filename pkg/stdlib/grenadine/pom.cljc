@@ -3,22 +3,19 @@
 (ns grenadine.pom
   "Pure Maven POM normalization and effective-model construction."
   (:require [clojure.string :as str]
-            [grenadine.xml :as xml]))
+            [grenadine.xml-tree :as xml]))
 
 (defn- elements
   [node tag]
-  (filter #(and (map? %) (= tag (:tag %))) (:content node)))
+  (xml/elements node tag))
 
 (defn- element
   [node tag]
-  (first (elements node tag)))
+  (xml/element node tag))
 
 (defn- text
   [node]
-  (when node
-    (let [value (str/trim
-                 (apply str (filter string? (:content node))))]
-      (when (seq value) value))))
+  (xml/text node))
 
 (defn- field
   [node tag]
@@ -75,32 +72,34 @@
 (defn parse-pom
   "Parse POM XML into a canonical raw model. No inheritance or interpolation is
   performed here."
-  [xml-source]
-  (let [project (xml/parse xml-source)]
-    (when (not= :project (:tag project))
-      (throw (ex-info "POM document root must be <project>"
-                      {:type :grenadine.pom/not-project
-                       :tag (:tag project)})))
-    (let [parent-node (element project :parent)
-          parent
-          (when parent-node
-            {:group (field parent-node :groupId)
-             :artifact (field parent-node :artifactId)
-             :version (field parent-node :version)})
-          management-node
-          (some-> (element project :dependencyManagement)
-                  (element :dependencies))]
-      {:model-version (field project :modelVersion)
-       :declared-coords
-       {:group (field project :groupId)
-        :artifact (field project :artifactId)
-        :version (field project :version)}
-       :parent parent
-       :packaging (or (field project :packaging) "jar")
-       :properties (parse-properties (element project :properties))
-       :dependency-management (parse-dependencies management-node)
-       :dependencies
-       (parse-dependencies (element project :dependencies))})))
+  ([xml-source]
+   (parse-pom xml-source {}))
+  ([xml-source opts]
+   (let [project (xml/parse xml-source opts)]
+     (when-not (xml/tag? project :project)
+       (throw (ex-info "POM document root must be <project>"
+                       {:type :grenadine.pom/not-project
+                        :tag (:tag project)})))
+     (let [parent-node (element project :parent)
+           parent
+           (when parent-node
+             {:group (field parent-node :groupId)
+              :artifact (field parent-node :artifactId)
+              :version (field parent-node :version)})
+           management-node
+           (some-> (element project :dependencyManagement)
+                   (element :dependencies))]
+       {:model-version (field project :modelVersion)
+        :declared-coords
+        {:group (field project :groupId)
+         :artifact (field project :artifactId)
+         :version (field project :version)}
+        :parent parent
+        :packaging (or (field project :packaging) "jar")
+        :properties (parse-properties (element project :properties))
+        :dependency-management (parse-dependencies management-node)
+        :dependencies
+        (parse-dependencies (element project :dependencies))}))))
 
 (defn- coords-key
   [{:keys [group artifact version]}]
@@ -234,13 +233,13 @@
 (declare effective-pom*)
 
 (defn- import-boms
-  [management fetch-pom path]
+  [management fetch-pom path opts]
   (reduce
    (fn [result dependency]
      (if (and (= "import" (:scope dependency))
               (= "pom" (or (:type dependency) "jar")))
        (let [coords (select-keys dependency [:group :artifact :version])
-             bom (effective-pom* coords fetch-pom path)]
+             bom (effective-pom* coords fetch-pom path opts)]
          (merge-ordered result (vals (:dep-management bom))))
        result))
    []
@@ -258,7 +257,7 @@
     dependency))
 
 (defn- effective-pom*
-  [coords fetch-pom path]
+  [coords fetch-pom path opts]
   (let [identity (coords-key coords)]
     (when (some #(= identity %) path)
       (throw
@@ -267,7 +266,9 @@
                 {:type :grenadine.pom/model-cycle
                  :coordinates (conj path identity)})))
     (let [raw-source (fetch-pom coords)
-          raw (if (string? raw-source) (parse-pom raw-source) raw-source)]
+          raw (if (string? raw-source)
+                (parse-pom raw-source opts)
+                raw-source)]
       (when-not raw
         (throw (ex-info (str "POM not found: " identity)
                         {:type :grenadine.pom/not-found
@@ -278,7 +279,8 @@
                      (effective-pom*
                       (assert-resolved-coordinate "parent" parent-coords)
                       fetch-pom
-                      next-path))
+                      next-path
+                      opts))
             declared (:declared-coords raw)
             preliminary-coords
             {:group (or (:group declared) (get-in parent [:coords :group]))
@@ -312,7 +314,7 @@
             (mapv #(interpolate-map % interpolation-context)
                   (:dependency-management raw))
             imported-management
-            (import-boms declared-management fetch-pom next-path)
+            (import-boms declared-management fetch-pom next-path opts)
             parent-management (or (:dep-management parent) {})
             management-entries
             (merge-ordered
@@ -345,5 +347,7 @@
 
   `fetch-pom` is a pure lookup function from coordinate map to either XML text
   or a canonical raw model returned by `parse-pom`."
-  [coords fetch-pom]
-  (effective-pom* coords fetch-pom []))
+  ([coords fetch-pom]
+   (effective-pom coords fetch-pom {}))
+  ([coords fetch-pom opts]
+   (effective-pom* coords fetch-pom [] opts)))

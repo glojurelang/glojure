@@ -14,10 +14,21 @@
           (fn [libs opts]
             (is (= {'example/library coordinate} libs))
             (is (map? (:host opts)))
+            (is (fn? (:xml-parser opts)))
             {:classpath [] :source-roots [] :warnings []})})]
     (is (= [] (:source-roots result)))
     (is (= coordinate
            (get-in (deps/current-basis) [:libs 'example/library])))))
+
+(deftest caller-supplied-xml-parser-wins
+  (let [parser (fn [_] nil)]
+    (deps/add-libs
+     {'example/xml-parser {:mvn/version "1"}}
+     {:xml-parser parser
+      :install-fn
+      (fn [_ opts]
+        (is (identical? parser (:xml-parser opts)))
+        {:classpath [] :source-roots [] :warnings []})})))
 
 (deftest portable-facade
   (is (nil? (portable-deps/add-deps {}))))

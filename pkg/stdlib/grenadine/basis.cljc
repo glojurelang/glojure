@@ -81,8 +81,8 @@
         (:deps model)))
 
 (defn- raw-pom-deps
-  [text]
-  (let [raw (pom/parse-pom text)
+  [text opts]
+  (let [raw (pom/parse-pom text opts)
         properties (:properties raw)
         interpolate #(pom/interpolate-string % properties)]
     (into []
@@ -165,7 +165,7 @@
         {:manifest :pom
          :root root
          :children (normalize-deps
-                    (into {} (raw-pom-deps (read-text host pom-path)))
+                    (into {} (raw-pom-deps (read-text host pom-path) opts))
                     root opts)
          :paths (mapv #(canonical host (join-path root %))
                       ["src/main/java" "src/main/clojure"
@@ -190,7 +190,7 @@
        :source-root destination
        :children (if pom-path
                    (normalize-deps
-                    (into {} (raw-pom-deps (read-text host pom-path)))
+                    (into {} (raw-pom-deps (read-text host pom-path) opts))
                     (parent-path jar) opts)
                    [])
        :paths [jar]})))
@@ -206,7 +206,7 @@
               (fn [coords]
                 (if-let [entry (find @poms coords)]
                   (val entry)
-                  (let [value (pom/effective-pom coords fetch-pom)]
+                  (let [value (pom/effective-pom coords fetch-pom opts)]
                     (swap! poms assoc coords value)
                     value)))))
         info

@@ -7,7 +7,13 @@
             [grenadine.pom :as pom]
             [grenadine.repo :as repo]))
 
-(def parse-pom pom/parse-pom)
+(defn parse-pom
+  "Parse POM XML with the `:xml-parser` function in `opts`."
+  ([xml-source]
+   (parse-pom xml-source {}))
+  ([xml-source opts]
+   (pom/parse-pom xml-source opts)))
+
 (def interpolate pom/interpolate-string)
 (def expand-deps expander/expand-deps)
 (def emit-lock lock/emit-lock)
@@ -24,7 +30,7 @@
       (let [key [(:group coords) (:artifact coords) (:version coords)]]
         (if-let [cached (get @cache key)]
           cached
-          (let [effective (pom/effective-pom coords fetch-pom)]
+          (let [effective (pom/effective-pom coords fetch-pom opts)]
             (swap! cache assoc key effective)
             effective))))))
 

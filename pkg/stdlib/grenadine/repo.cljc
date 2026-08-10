@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]
             [grenadine.lock :as lock]
             [grenadine.version :as version]
-            [grenadine.xml :as xml]))
+            [grenadine.xml-tree :as xml]))
 
 (defn- require-host
   [host keys]
@@ -54,21 +54,19 @@
 
 (defn- child-elements
   [node tag]
-  (filter #(and (map? %) (= tag (:tag %))) (:content node)))
+  (xml/elements node tag))
 
 (defn- child-element
   [node tag]
-  (first (child-elements node tag)))
+  (xml/element node tag))
 
 (defn- element-text
   [node]
-  (when node
-    (let [value (str/trim (apply str (filter string? (:content node))))]
-      (when (seq value) value))))
+  (xml/text node))
 
 (defn- metadata-data
-  [source]
-  (let [metadata (xml/parse source)
+  [source opts]
+  (let [metadata (xml/parse source opts)
         versioning (child-element metadata :versioning)
         release (element-text (child-element versioning :release))
         latest (element-text (child-element versioning :latest))
@@ -80,8 +78,8 @@
     {:release release :latest latest :versions versions}))
 
 (defn- metadata-version
-  [source]
-  (let [{:keys [release latest versions]} (metadata-data source)]
+  [source opts]
+  (let [{:keys [release latest versions]} (metadata-data source opts)]
     (or release
         latest
         (reduce
@@ -95,7 +93,8 @@
 
 (defn resolve-version-range
   "Resolve a Maven version range to the highest matching repository version."
-  [{:keys [group artifact] :as coords} range-spec {:keys [host repos]}]
+  [{:keys [group artifact] :as coords} range-spec
+   {:keys [host repos] :as opts}]
   (require-host host [:http-get :bytes->utf8])
   (let [path (str (str/replace group "." "/")
                   "/" artifact "/maven-metadata.xml")
@@ -108,8 +107,8 @@
                  response ((:http-get host) url)]
              (if (= 200 (:status response))
                (try
-                 (:versions
-                  (metadata-data ((:bytes->utf8 host) (:body response))))
+                  (:versions
+                  (metadata-data ((:bytes->utf8 host) (:body response)) opts))
                  (catch Exception error
                    (throw
                     (ex-info (str "Invalid Maven metadata for "
@@ -143,7 +142,7 @@
 
   Repositories are tried in order. Metadata `release` wins, followed by
   `latest`, then the highest listed non-SNAPSHOT version."
-  [{:keys [group artifact] :as coords} {:keys [host repos]}]
+  [{:keys [group artifact] :as coords} {:keys [host repos] :as opts}]
   (require-host host [:http-get :bytes->utf8])
   (let [path (str (str/replace group "." "/")
                   "/" artifact "/maven-metadata.xml")
@@ -155,7 +154,8 @@
           (if (= 200 (:status response))
             (let [candidate
                   (try
-                    (metadata-version ((:bytes->utf8 host) (:body response)))
+                    (metadata-version ((:bytes->utf8 host) (:body response))
+                                      opts)
                     (catch Exception error
                       (throw
                        (ex-info (str "Invalid Maven metadata for "
