@@ -33,6 +33,26 @@
 (deftest portable-facade
   (is (nil? (portable-deps/add-deps {}))))
 
+(deftest dependency-acquiring-facade
+  (let [seen (atom [])]
+    (with-redefs
+     [deps/prepare-required!
+      (fn [coordinate options]
+        (swap! seen conj [(:coordinate coordinate) options])
+        'grenadine.version)]
+     (is (nil?
+          (portable-deps/require-deps
+           {:cache-dir "/cache"}
+           '["gist:ingydotnet/f70409675d234aa4f2fe379cd975a4f5"
+             :as required-version]
+           '["mvn:example/library@1.0.0/example.library"
+             :refer [compare-versions]])))
+     (is (= ["gist:ingydotnet/f70409675d234aa4f2fe379cd975a4f5"
+             "mvn:example/library@1.0.0/example.library"]
+            (mapv first @seen)))
+     (is (some? (resolve 'required-version/compare-versions)))
+     (is (some? (resolve 'compare-versions))))))
+
 (deftest embedded-grenadine-legacy-maven-forms
   (is (= ["hiccup" "hiccup" nil]
          (coordinate/split-lib 'hiccup)))
