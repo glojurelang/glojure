@@ -14,8 +14,8 @@
   (implementation/add-deps deps-map)
   nil)
 
-(defn require-deps
-  "Acquire and load one or more quoted dependency libspecs.
+(defn require-deps*
+  "Acquire and load one or more dependency libspec values.
 
   An optional leading map accepts :mvn/local-repo and :cache-dir. Libspecs
   support :as and an explicit :refer vector. Dependencies are prepared and
@@ -27,7 +27,7 @@
           [{} arguments])]
     (when (empty? libspecs)
       (throw
-       (ex-info "require-deps requires at least one quoted libspec vector"
+       (ex-info "require-deps requires at least one libspec vector"
                 {:type :clojurestar.deps/invalid-require})))
     (doseq [libspec libspecs]
       (let [{:keys [coordinate] alias-symbol :as refer-symbols :refer}
@@ -39,3 +39,17 @@
         (when refer-symbols
           (refer namespace-symbol :only refer-symbols))))
     nil))
+
+(defmacro require-deps
+  "Acquire and load dependencies using require-style libspec syntax.
+
+  Literal libspec vectors are treated as data automatically. Already quoted
+  vectors and expressions that evaluate to libspecs remain supported."
+  [& arguments]
+  (cons `require-deps*
+        (map
+         (fn [argument]
+           (if (vector? argument)
+             (list 'quote argument)
+             argument))
+         arguments)))

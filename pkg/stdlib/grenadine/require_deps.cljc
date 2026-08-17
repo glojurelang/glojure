@@ -118,7 +118,7 @@
              {:coordinate coordinate}))))
 
 (defn parse-libspec
-  "Validate a quoted require-deps libspec vector."
+  "Validate a require-deps libspec vector."
   [libspec]
   (when-not (and (vector? libspec) (seq libspec))
     (fail! "A require-deps libspec must be a non-empty vector"
