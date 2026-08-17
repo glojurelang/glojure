@@ -156,11 +156,16 @@ script can acquire a Maven library and import its namespace without a JVM:
 ```
 
 Literal libspec vectors do not need quoting; quoted vectors remain supported.
-`require-deps` accepts Maven and Gist coordinates, with `:as` or an explicit
+`require-deps` accepts Maven, Gist, and GitHub source-file coordinates, with `:as` or an explicit
 `:refer [...]` list. Use `clojurestar.deps/add-deps` or `glojure.deps`
 for deps.edn-style Maven, Git, and local coordinates.
 A pinned Gist file accepts either `gist:<owner>/<id>/<file>@<revision>` or
 `gist:<owner>/<id>/<revision>/<file>`; both forms use the same cache entry.
+A GitHub source file accepts either
+`github:<owner>/<repo>/<ref>/<path.clj|cljc>` or the equivalent
+`github:<owner>/<repo>/blob/<ref>/<path.clj|cljc>` form. Refs occupy one path
+segment; full commit SHAs reuse persistent cache while named refs refresh in a
+new process. Selected files must be self-contained and begin with an `ns` form.
 
 The Maven repository is selected in this order:
 
@@ -169,9 +174,10 @@ The Maven repository is selected in this order:
 3. `GRENADINE_MAVEN_REPOSITORY`;
 4. `$HOME/.m2/repository`.
 
-The Git and Gist cache root uses explicit `:gitlibs/dir` or `:gitlibs-dir`, then
+The Git, Gist, and GitHub source cache root uses explicit `:gitlibs/dir` or `:gitlibs-dir`, then
 `GLOJURE_GITLIBS_DIR`, `GRENADINE_GITLIBS_DIR`, `GITLIBS`, and finally
-`$HOME/.gitlibs`. Gist source is stored under `gist/` in that root;
+`$HOME/.gitlibs`. Gist and GitHub source are stored under `gist/` and
+`github/` in that root;
 `require-deps` also accepts `:cache-dir` as a compatibility alias.
 
 Glojure supplies `org.clojure/clojure` and `org.clojure/clojurescript`, so

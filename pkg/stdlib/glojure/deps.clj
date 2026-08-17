@@ -150,4 +150,15 @@
                        #(let [caller (ns-name *ns*)]
                           (try
                             (load-file path)
+                            (finally (in-ns caller))))))
+
+     :github
+     (let [{:keys [path source]}
+           (required/acquire-github! (required-host) options coordinate)
+           namespace-symbol
+           (required/github-namespace coordinate (read-first-form source))]
+       (load-required! coordinate namespace-symbol
+                       #(let [caller (ns-name *ns*)]
+                          (try
+                            (load-file path)
                             (finally (in-ns caller)))))))))

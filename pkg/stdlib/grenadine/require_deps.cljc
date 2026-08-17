@@ -1,5 +1,5 @@
 (ns grenadine.require-deps
-  "Portable parsing and Gist acquisition for clojurestar.deps/require-deps."
+  "Portable parsing and source-file acquisition for clojurestar.deps/require-deps."
   (:require [clojure.string :as str]))
 
 (defn- fail!
@@ -31,6 +31,11 @@
   (and (safe-part? value)
        (boolean (re-matches #"[A-Za-z0-9_.-]+\.cljc?" value))))
 
+(defn- full-sha?
+  [value]
+  (and (string? value)
+       (boolean (re-matches #"[A-Fa-f0-9]{40}" value))))
+
 (defn- unqualified-symbol?
   [value]
   (and (symbol? value)
@@ -52,7 +57,7 @@
         (when (str/includes? base "@")
           (fail! (str "Malformed Gist coordinate: " coordinate)
                  {:coordinate coordinate}))
-        (when-not (boolean (re-matches #"[A-Fa-f0-9]{40}" revision))
+        (when-not (full-sha? revision)
           (fail! "Pinned Gist revisions must be full 40-character commit SHAs"
                  {:coordinate coordinate :revision revision}))
         [base revision]))))
@@ -70,7 +75,7 @@
       (fail! (str "Malformed Gist coordinate: " coordinate)
              {:coordinate coordinate}))
     (when (and slash-revision?
-               (not (boolean (re-matches #"[A-Fa-f0-9]{40}" revision))))
+               (not (full-sha? revision)))
       (fail! "Pinned Gist revisions must be full 40-character commit SHAs"
              {:coordinate coordinate :revision revision}))
     (when-not (and (safe-owner? owner)
@@ -85,6 +90,32 @@
      :revision revision
      :coordinate coordinate
      :identity [:gist owner id filename revision]}))
+
+(defn- parse-github
+  [coordinate body]
+  (let [[owner repo & tail] (str/split body #"/" -1)
+        [revision path-parts]
+        (if (= "blob" (first tail))
+          [(second tail) (drop 2 tail)]
+          [(first tail) (rest tail)])
+        filename (last path-parts)
+        path (str/join "/" path-parts)]
+    (when-not (and (safe-owner? owner)
+                   (safe-part? repo)
+                   (safe-part? revision)
+                   (seq path-parts)
+                   (every? safe-part? path-parts)
+                   (safe-filename? filename))
+      (fail! (str "Malformed or unsafe GitHub coordinate: " coordinate)
+             {:coordinate coordinate}))
+    {:provider :github
+     :owner owner
+     :repo repo
+     :revision revision
+     :path path
+     :filename filename
+     :coordinate coordinate
+     :identity [:github owner repo revision path]}))
 
 (defn- parse-maven
   [coordinate]
@@ -117,6 +148,9 @@
 
     (str/starts-with? coordinate "gist:")
     (parse-gist coordinate (subs coordinate 5))
+
+    (str/starts-with? coordinate "github:")
+    (parse-github coordinate (subs coordinate 7))
 
     :else
     (if-let [[_ owner id]
@@ -199,8 +233,16 @@
        (when revision (str "/" revision))
        (when filename (str "/" filename))))
 
+(defn github-raw-url
+  "Return the raw.githubusercontent.com URL for a parsed GitHub coordinate."
+  [{:keys [owner repo revision path] :as coordinate}]
+  (when-not (= :github (:provider coordinate))
+    (fail! "Expected a parsed GitHub coordinate" {:coordinate coordinate}))
+  (str "https://raw.githubusercontent.com/" owner "/" repo "/"
+       revision "/" path))
+
 (defn cache-root
-  "Resolve the Gist cache under the effective tools.gitlibs-compatible root."
+  "Resolve source-file caches under the effective Gitlibs-compatible root."
   [host options]
   (or (:gitlibs/dir options)
       (:cache-dir options)
@@ -227,9 +269,39 @@
   (str (cache-root host options) "/gist/" owner "/" id "/"
        (or revision "latest") "/" (or filename "source.clj")))
 
+(defn github-cache-path
+  "Return the persistent cache file for a parsed GitHub coordinate."
+  [host options {:keys [owner repo revision path] :as coordinate}]
+  (when-not (= :github (:provider coordinate))
+    (fail! "Expected a parsed GitHub coordinate" {:coordinate coordinate}))
+  (str (cache-root host options) "/github/" owner "/" repo "/"
+       revision "/" path))
+
 (defn- parent-path
   [path]
   (subs path 0 (str/last-index-of path "/")))
+
+(defn- acquire-http-source!
+  [host coordinate target url immutable? source-label failure-type]
+  (let [pinned? immutable?
+        cached? ((:file-exists? host) target)]
+    (if (and pinned? cached?)
+      {:path target :source ((:read-text host) target) :cached? true}
+      (let [temporary (str target ".grenadine.part")]
+        ((:mkdirs! host) (parent-path target))
+        ((:delete! host) temporary)
+        (try
+          (when-not ((:download! host) url temporary)
+            (throw
+             (ex-info (str "Unable to download " source-label " source: "
+                           (:coordinate coordinate))
+                      {:type failure-type
+                       :coordinate (:coordinate coordinate)
+                       :url url})))
+          ((:atomic-move! host) temporary target)
+          {:path target :source ((:read-text host) target) :cached? false}
+          (finally
+            ((:delete! host) temporary)))))))
 
 (defn acquire-gist!
   "Acquire a Gist through a runtime host and return its cache path and source.
@@ -238,30 +310,30 @@
   :atomic-move!, and :delete!. Pinned files reuse persistent cache; latest
   files are fetched by the first preparation in every process."
   [host options coordinate]
-  (let [target (gist-cache-path host options coordinate)
-        pinned? (some? (:revision coordinate))
-        cached? ((:file-exists? host) target)]
-    (if (and pinned? cached?)
-      {:path target :source ((:read-text host) target) :cached? true}
-      (let [temporary (str target ".grenadine.part")]
-        ((:mkdirs! host) (parent-path target))
-        ((:delete! host) temporary)
-        (try
-          (when-not ((:download! host) (gist-raw-url coordinate) temporary)
-            (throw
-             (ex-info (str "Unable to download Gist source: "
-                           (:coordinate coordinate))
-                      {:type :clojurestar.deps/gist-http-failure
-                       :coordinate (:coordinate coordinate)
-                       :url (gist-raw-url coordinate)})))
-          ((:atomic-move! host) temporary target)
-          {:path target :source ((:read-text host) target) :cached? false}
-          (finally
-            ((:delete! host) temporary)))))))
+  (acquire-http-source!
+   host coordinate
+   (gist-cache-path host options coordinate)
+   (gist-raw-url coordinate)
+   (some? (:revision coordinate))
+   "Gist"
+   :clojurestar.deps/gist-http-failure))
 
-(defn gist-namespace
-  "Extract and validate the namespace from a Gist's first source form."
-  [coordinate first-form]
+(defn acquire-github!
+  "Acquire one GitHub source file through raw.githubusercontent.com.
+
+  Full commit SHAs reuse persistent cache. Named refs are refreshed when
+  acquisition is requested in a new process."
+  [host options coordinate]
+  (acquire-http-source!
+   host coordinate
+   (github-cache-path host options coordinate)
+   (github-raw-url coordinate)
+   (full-sha? (:revision coordinate))
+   "GitHub"
+   :clojurestar.deps/github-http-failure))
+
+(defn- source-namespace
+  [coordinate first-form source-label failure-type]
   (let [namespace-symbol
         (when (and (seq? first-form)
                    (= 'ns (first first-form))
@@ -269,10 +341,23 @@
           (second first-form))]
     (when-not namespace-symbol
       (throw
-       (ex-info "A selected Gist file must begin with an ns form"
-                {:type :clojurestar.deps/gist-missing-ns
+       (ex-info (str "A selected " source-label
+                     " file must begin with an ns form")
+                {:type failure-type
                  :coordinate (:coordinate coordinate)})))
     namespace-symbol))
+
+(defn gist-namespace
+  "Extract and validate the namespace from a Gist's first source form."
+  [coordinate first-form]
+  (source-namespace coordinate first-form "Gist"
+                    :clojurestar.deps/gist-missing-ns))
+
+(defn github-namespace
+  "Extract and validate the namespace from a GitHub source file's first form."
+  [coordinate first-form]
+  (source-namespace coordinate first-form "GitHub"
+                    :clojurestar.deps/github-missing-ns))
 
 (defn namespace-conflict!
   [namespace-symbol loaded-coordinate requested-coordinate]
