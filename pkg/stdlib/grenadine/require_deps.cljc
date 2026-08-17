@@ -59,24 +59,32 @@
 
 (defn- parse-gist
   [coordinate body]
-  (let [[body revision] (parse-revision coordinate body)
-        parts (str/split body #"/" -1)]
-    (when-not (<= 2 (count parts) 3)
+  (let [[body suffix-revision] (parse-revision coordinate body)
+        parts (str/split body #"/" -1)
+        slash-revision? (and (nil? suffix-revision)
+                             (= 4 (count parts)))
+        [owner id third fourth] parts
+        revision (if slash-revision? third suffix-revision)
+        filename (if slash-revision? fourth third)]
+    (when-not (or (<= 2 (count parts) 3) slash-revision?)
       (fail! (str "Malformed Gist coordinate: " coordinate)
              {:coordinate coordinate}))
-    (let [[owner id filename] parts]
-      (when-not (and (safe-owner? owner)
-                     (safe-gist-id? id)
-                     (or (nil? filename) (safe-filename? filename)))
-        (fail! (str "Malformed or unsafe Gist coordinate: " coordinate)
-               {:coordinate coordinate}))
-      {:provider :gist
-       :owner owner
-       :id id
-       :filename filename
-       :revision revision
-       :coordinate coordinate
-       :identity [:gist owner id filename revision]})))
+    (when (and slash-revision?
+               (not (boolean (re-matches #"[A-Fa-f0-9]{40}" revision))))
+      (fail! "Pinned Gist revisions must be full 40-character commit SHAs"
+             {:coordinate coordinate :revision revision}))
+    (when-not (and (safe-owner? owner)
+                   (safe-gist-id? id)
+                   (or (nil? filename) (safe-filename? filename)))
+      (fail! (str "Malformed or unsafe Gist coordinate: " coordinate)
+             {:coordinate coordinate}))
+    {:provider :gist
+     :owner owner
+     :id id
+     :filename filename
+     :revision revision
+     :coordinate coordinate
+     :identity [:gist owner id filename revision]}))
 
 (defn- parse-maven
   [coordinate]
