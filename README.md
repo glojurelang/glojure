@@ -141,6 +141,41 @@ $ glj server.glj
 Server starting on :8080...
 ```
 
+#### Dynamic dependencies
+
+Glojure embeds the ClojureStar dependency facade and Grenadine resolver. A
+script can acquire a Maven library and import its namespace without a JVM:
+
+```clojure
+(require '[clojurestar.deps :refer [require-deps]])
+
+(require-deps
+ ["mvn:dev.weavejester/medley@1.10.0/medley.core" :as medley])
+
+(println (medley/index-by :id [{:id 1} {:id 2}]))
+```
+
+Literal libspec vectors do not need quoting; quoted vectors remain supported.
+`require-deps` accepts Maven and Gist coordinates, with `:as` or an explicit
+`:refer [...]` list. Use `clojurestar.deps/add-deps` or `glojure.deps`
+for deps.edn-style Maven, Git, and local coordinates.
+
+The Maven repository is selected in this order:
+
+1. explicit `:mvn/local-repo` or `:local-repo`;
+2. `GLOJURE_MAVEN_REPOSITORY`;
+3. `GRENADINE_MAVEN_REPOSITORY`;
+4. `$HOME/.m2/repository`.
+
+The Git cache uses explicit `:gitlibs/dir` or `:gitlibs-dir`, then
+`GLOJURE_GITLIBS_CACHE`, `GRENADINE_GITLIBS_CACHE`, `GITLIBS`, and finally
+`$HOME/.gitlibs`.
+
+Glojure supplies `org.clojure/clojure` and `org.clojure/clojurescript`, so
+those coordinates are terminal: their artifacts and transitive dependencies
+are not acquired. Explicit dependencies such as `org.clojure/spec.alpha`
+remain ordinary coordinates, subject to Glojure's source compatibility.
+
 ### Embedding Glojure in Go Applications
 
 You can also embed Glojure as a scripting language within your Go applications.
