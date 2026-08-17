@@ -18,7 +18,7 @@
   "Acquire and load one or more dependency libspec values.
 
   An optional leading map accepts :mvn/local-repo and :gitlibs/dir;
-  :cache-dir remains a compatibility alias for the Gist cache root. Libspecs
+  :cache-dir remains a compatibility alias for source-file caches. Libspecs
   support :as and an explicit :refer vector. Dependencies are prepared and
   required from left to right."
   [& arguments]

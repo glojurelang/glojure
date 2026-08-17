@@ -87,6 +87,20 @@
     (is (= (required/gist-raw-url suffix)
            (required/gist-raw-url slash)))))
 
+(deftest github-source-coordinate
+  (let [short-coordinate
+        (required/parse-coordinate
+         "github:weavejester/medley/1.7.0/src/medley/core.cljc")
+        blob-coordinate
+        (required/parse-coordinate
+         "github:weavejester/medley/blob/1.7.0/src/medley/core.cljc")]
+    (is (= [:github "weavejester" "medley" "1.7.0"
+            "src/medley/core.cljc"]
+           (:identity short-coordinate)))
+    (is (= (:identity short-coordinate) (:identity blob-coordinate)))
+    (is (= "https://raw.githubusercontent.com/weavejester/medley/1.7.0/src/medley/core.cljc"
+           (required/github-raw-url short-coordinate)))))
+
 (deftest embedded-grenadine-legacy-maven-forms
   (is (= ["hiccup" "hiccup" nil]
          (coordinate/split-lib 'hiccup)))
