@@ -7,14 +7,23 @@
 
 (deftest embedded-grenadine-facade
   (let [coordinate {:mvn/version "1.0.0"}
+        runtime-host
+        {:getenv #(get {"GLOJURE_MAVEN_REPOSITORY" "/dialect/m2"
+                        "GLOJURE_GITLIBS_CACHE" "/dialect/gitlibs"} %)}
         result
         (deps/add-deps
-         {:deps {'example/library coordinate}}
-         {:install-fn
+         {:deps {'example/library coordinate
+                 'org.clojure/clojure {:mvn/version "1.12.4"}}}
+         {:host runtime-host
+          :install-fn
           (fn [libs opts]
             (is (= {'example/library coordinate} libs))
-            (is (map? (:host opts)))
-            (is (fn? (:xml-parser opts)))
+             (is (= runtime-host (:host opts)))
+             (is (fn? (:xml-parser opts)))
+             (is (= "/dialect/m2" (:local-repo opts)))
+             (is (= "/dialect/gitlibs" (:gitlibs-dir opts)))
+             (is (= '#{org.clojure/clojure org.clojure/clojurescript}
+                    (:provided-libs opts)))
             {:classpath [] :source-roots [] :warnings []})})]
     (is (= [] (:source-roots result)))
     (is (= coordinate

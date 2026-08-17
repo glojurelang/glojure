@@ -323,6 +323,7 @@
          {:coord-id (fn [_ coord] (coordinate/dep-id coord))
           :coord-deps (fn [lib coord] (:children (info lib coord)))
           :base-lib coordinate/base-lib
+          :provided-libs (set (:provided-libs opts))
           :compare-versions
           (fn [lib left right]
             (coordinate/compare-coordinates lib left right opts))
@@ -337,7 +338,9 @@
           (let [legacy
                 (graph/resolve-graph
                  (into {} top)
-                 {:pom-fn pom-fn :mediation (:mediation opts)})]
+                 {:pom-fn pom-fn
+                  :mediation (:mediation opts)
+                  :provided-libs (:provided-libs opts)})]
             (into {}
                   (map
                    (fn [[_ occurrence]]

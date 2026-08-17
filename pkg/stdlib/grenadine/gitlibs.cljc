@@ -17,13 +17,13 @@
 (defn gitlibs-dir
   "Resolve the Git cache directory.
 
-  Explicit :gitlibs-dir wins, followed by GRENADINE_GITLIBS, GITLIBS, and
-  ~/.gitlibs."
+  Explicit :gitlibs-dir wins, followed by GRENADINE_GITLIBS_CACHE, GITLIBS,
+  and ~/.gitlibs."
   [{:keys [host gitlibs-dir]}]
   (or gitlibs-dir
       (let [getenv (:getenv host)]
         (when getenv
-          (let [value (getenv "GRENADINE_GITLIBS")]
+          (let [value (getenv "GRENADINE_GITLIBS_CACHE")]
             (when (seq value) value))))
       (let [getenv (:getenv host)]
         (when getenv
