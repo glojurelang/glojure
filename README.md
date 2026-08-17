@@ -167,9 +167,10 @@ The Maven repository is selected in this order:
 3. `GRENADINE_MAVEN_REPOSITORY`;
 4. `$HOME/.m2/repository`.
 
-The Git cache uses explicit `:gitlibs/dir` or `:gitlibs-dir`, then
-`GLOJURE_GITLIBS_CACHE`, `GRENADINE_GITLIBS_CACHE`, `GITLIBS`, and finally
-`$HOME/.gitlibs`.
+The Git and Gist cache root uses explicit `:gitlibs/dir` or `:gitlibs-dir`, then
+`GLOJURE_GITLIBS_DIR`, `GRENADINE_GITLIBS_DIR`, `GITLIBS`, and finally
+`$HOME/.gitlibs`. Gist source is stored under `gist/` in that root;
+`require-deps` also accepts `:cache-dir` as a compatibility alias.
 
 Glojure supplies `org.clojure/clojure` and `org.clojure/clojurescript`, so
 those coordinates are terminal: their artifacts and transitive dependencies

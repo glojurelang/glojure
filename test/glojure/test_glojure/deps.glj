@@ -2,14 +2,16 @@
   (:require [clojure.test :refer [deftest is run-tests]]
             [clojurestar.deps :as portable-deps]
             [glojure.deps :as deps]
+            [glojure.deps.host :as deps-host]
             [grenadine.coordinate :as coordinate]
+            [grenadine.require-deps :as required]
             [grenadine.version :as version]))
 
 (deftest embedded-grenadine-facade
   (let [coordinate {:mvn/version "1.0.0"}
         runtime-host
         {:getenv #(get {"GLOJURE_MAVEN_REPOSITORY" "/dialect/m2"
-                        "GLOJURE_GITLIBS_CACHE" "/dialect/gitlibs"} %)}
+                        "GLOJURE_GITLIBS_DIR" "/dialect/gitlibs"} %)}
         result
         (deps/add-deps
          {:deps {'example/library coordinate
@@ -50,6 +52,18 @@
             (mapv first @seen)))
      (is (some? (resolve 'required-version/compare-versions)))
      (is (some? (resolve 'compare-versions))))))
+
+(deftest gist-cache-follows-gitlibs-directory
+  (let [runtime-host
+        {:getenv #(get {"GLOJURE_GITLIBS_DIR" "/dialect/gitlibs"} %)
+         :home-dir (constantly "/home/test")}]
+    (with-redefs [deps-host/host (constantly runtime-host)]
+      (let [required-host (@#'deps/required-host)]
+        (is (= "/dialect/gitlibs"
+               (required/cache-root required-host {})))
+        (is (= "/explicit/gitlibs"
+               (required/cache-root
+                required-host {:gitlibs/dir "/explicit/gitlibs"})))))))
 
 (deftest embedded-grenadine-legacy-maven-forms
   (is (= ["hiccup" "hiccup" nil]

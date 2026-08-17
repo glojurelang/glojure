@@ -5,6 +5,7 @@
   `clojure.core/add-load-path`."
   (:require [clojure.string :as str]
             [grenadine.require-deps :as required]
+            [grenadine.gitlibs :as gitlibs]
             [grenadine.runtime :as runtime]
             [glojure.deps.host :as host]))
 
@@ -37,7 +38,7 @@
          maven-repository
          (environment-option runtime-host "GLOJURE_MAVEN_REPOSITORY")
          gitlibs-cache
-         (environment-option runtime-host "GLOJURE_GITLIBS_CACHE")]
+         (environment-option runtime-host "GLOJURE_GITLIBS_DIR")]
      (runtime/add-libs! basis add-roots! libs
                         (cond-> (assoc opts :host runtime-host)
                           (and (nil? (:local-repo opts)) maven-repository)
@@ -78,6 +79,11 @@
   []
   (let [runtime-host (host/host)]
     {:home-dir (:home-dir runtime-host)
+     :gitlibs-dir
+     #(gitlibs/gitlibs-dir
+       {:host runtime-host
+        :gitlibs-dir
+        (environment-option runtime-host "GLOJURE_GITLIBS_DIR")})
      :file-exists? (:regular-file? runtime-host)
      :mkdirs! (:mkdirs! runtime-host)
      :delete! (:delete! runtime-host)

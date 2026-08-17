@@ -168,7 +168,7 @@
   "Validate the optional leading require-deps options map."
   [options]
   (let [options (or options {})
-        supported #{:mvn/local-repo :cache-dir}]
+        supported #{:mvn/local-repo :gitlibs/dir :cache-dir}]
     (when-not (map? options)
       (fail! "require-deps options must be a map" {:options options}))
     (when-let [unknown (first (remove supported (keys options)))]
@@ -192,13 +192,24 @@
        (when filename (str "/" filename))))
 
 (defn cache-root
-  "Resolve the clojurestar cache root from options and a host home directory."
+  "Resolve the Gist cache under the effective tools.gitlibs-compatible root."
   [host options]
-  (or (:cache-dir options)
+  (or (:gitlibs/dir options)
+      (:cache-dir options)
+      (when-let [gitlibs-dir (:gitlibs-dir host)]
+        (gitlibs-dir))
+      (let [getenv (:getenv host)]
+        (when getenv
+          (let [value (getenv "GRENADINE_GITLIBS_DIR")]
+            (when (seq value) value))))
+      (let [getenv (:getenv host)]
+        (when getenv
+          (let [value (getenv "GITLIBS")]
+            (when (seq value) value))))
       (when-let [home ((:home-dir host))]
-        (str home "/.cache/clojurestar"))
-      (fail! "Unable to determine the default clojurestar cache directory"
-             {:option :cache-dir})))
+        (str home "/.gitlibs"))
+      (fail! "Unable to determine the Gitlibs cache directory"
+             {:option :gitlibs/dir})))
 
 (defn gist-cache-path
   "Return the persistent cache file for a parsed Gist coordinate."
