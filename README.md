@@ -159,6 +159,8 @@ Literal libspec vectors do not need quoting; quoted vectors remain supported.
 `require-deps` accepts Maven and Gist coordinates, with `:as` or an explicit
 `:refer [...]` list. Use `clojurestar.deps/add-deps` or `glojure.deps`
 for deps.edn-style Maven, Git, and local coordinates.
+A pinned Gist file accepts either `gist:<owner>/<id>/<file>@<revision>` or
+`gist:<owner>/<id>/<revision>/<file>`; both forms use the same cache entry.
 
 The Maven repository is selected in this order:
 

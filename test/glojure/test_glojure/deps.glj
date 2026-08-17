@@ -76,6 +76,17 @@
                (required/cache-root
                 required-host {:gitlibs/dir "/explicit/gitlibs"})))))))
 
+(deftest pinned-gist-coordinate-aliases
+  (let [revision "0123456789abcdef0123456789abcdef01234567"
+        base "gist:ingydotnet/f70409675d234aa4f2fe379cd975a4f5/"
+        suffix (required/parse-coordinate
+                (str base "mathy.clj@" revision))
+        slash (required/parse-coordinate
+               (str base revision "/mathy.clj"))]
+    (is (= (:identity suffix) (:identity slash)))
+    (is (= (required/gist-raw-url suffix)
+           (required/gist-raw-url slash)))))
+
 (deftest embedded-grenadine-legacy-maven-forms
   (is (= ["hiccup" "hiccup" nil]
          (coordinate/split-lib 'hiccup)))
