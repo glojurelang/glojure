@@ -255,16 +255,19 @@
 
   Required options are `:coord-id`, `:coord-deps`, and `:compare-versions`.
   Optional coordinate maps `:override-deps` and `:default-deps` are applied at
-  every occurrence. The result contains selected `:libs`, stable inclusion
-  `:order`, collected `:warnings`, and, with `:trace?`, a tools.deps-shaped
-  `:trace` containing `:log` and `:vmap`."
+  every occurrence. `:provided-libs` names host-supplied libraries that are
+  satisfied without selecting their coordinates or expanding their children.
+  The result contains selected `:libs`, stable inclusion `:order`, collected
+  `:warnings`, and, with `:trace?`, a tools.deps-shaped `:trace` containing
+  `:log` and `:vmap`."
   [deps {:keys [coord-id coord-deps compare-versions known-coordinate?
                 base-lib override-deps default-deps trace? on-warning
-                fail-on-incomparable?]
+                fail-on-incomparable? provided-libs]
          :or {known-coordinate? some?
               base-lib identity
               override-deps {}
-              default-deps {}}}]
+              default-deps {}
+              provided-libs #{}}}]
   (when-not (and (ifn? coord-id)
                  (ifn? coord-deps)
                  (ifn? compare-versions))
@@ -291,16 +294,28 @@
                 (or (get override-deps lib)
                     original-coordinate
                     (get default-deps lib))]
-            (if (or (nil? coordinate)
+            (if (contains? provided-libs (base-lib lib))
+              (recur pending queue index version-map exclusions cuts
+                     order
+                     (if trace?
+                       (conj trace
+                             {:path (vec parents)
+                              :lib lib
+                              :coord coordinate
+                              :orig-coord original-coordinate
+                              :include false
+                              :reason :provided})
+                       trace))
+              (if (or (nil? coordinate)
                     (not (known-coordinate? coordinate)))
-              (do
-                (warn! warnings on-warning
-                       {:warning :unsupported-coordinate
-                        :lib lib
-                        :coordinate coordinate})
-                (recur pending queue index version-map exclusions cuts
-                       order trace))
-              (let [id (coord-id lib coordinate)
+                (do
+                  (warn! warnings on-warning
+                         {:warning :unsupported-coordinate
+                          :lib lib
+                          :coordinate coordinate})
+                  (recur pending queue index version-map exclusions cuts
+                         order trace))
+                (let [id (coord-id lib coordinate)
                     decision
                     (include-coord?
                      version-map lib coordinate id parents exclusions
@@ -341,10 +356,10 @@
                              :include (boolean include?)
                              :reason reason})
                       trace)]
-                (recur pending queue index version-map
-                       (:exclusions update) (:cuts update)
-                       (if include? (conj order lib) order)
-                       trace))))
+                  (recur pending queue index version-map
+                         (:exclusions update) (:cuts update)
+                         (if include? (conj order lib) order)
+                         trace)))))
           (let [version-map
                 (reduce
                  (fn [result [lib entry]]

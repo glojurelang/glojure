@@ -35,6 +35,15 @@
           [group artifact])))
     exclusions)))
 
+(defn- normalize-provided-libs
+  [provided-libs]
+  (set
+   (map
+    (fn [lib]
+      (let [[group artifact] (split-lib lib)]
+        [group artifact]))
+    provided-libs)))
+
 (defn- root-coordinates
   [deps]
   (->> deps
@@ -78,11 +87,12 @@
    :reason reason})
 
 (defn- enumerate
-  [deps {:keys [pom-fn include-optional? exclusions]}]
+  [deps {:keys [pom-fn include-optional? exclusions provided-libs]}]
   (when-not pom-fn
     (throw (ex-info "resolve-graph requires :pom-fn"
                     {:type :grenadine.graph/missing-pom-fn})))
   (let [global-exclusions (normalize-exclusions exclusions)
+        provided-libs (normalize-provided-libs provided-libs)
         initial
         (mapv
          (fn [{:keys [coords edge-exclusions]}]
@@ -109,6 +119,11 @@
               coords (:coords state)
               path-gavs (set (map gav (butlast (:via state))))]
           (cond
+            (contains? provided-libs (base-ga coords))
+            (recur queue (inc index) order occurrences graph
+                   (conj omitted-items (omitted state :provided))
+                   warnings)
+
             (contains? (:blocked state) (base-ga coords))
             (recur queue (inc index) order occurrences graph
                    (conj omitted-items (omitted state :excluded))
@@ -230,11 +245,13 @@
     (assoc :exclusions (normalize-exclusions (:exclusions coordinate)))))
 
 (defn- tools-deps-expansion
-  [deps {:keys [pom-fn include-optional? exclusions]}]
+  [deps {:keys [pom-fn include-optional? exclusions provided-libs]}]
   (let [global-exclusions (normalize-exclusions exclusions)
+        provided-libs (normalize-provided-libs provided-libs)
         roots
         (->> (root-coordinates deps)
-             (remove #(contains? global-exclusions (base-ga (:coords %))))
+             (remove #(or (contains? global-exclusions (base-ga (:coords %)))
+                          (contains? provided-libs (base-ga (:coords %)))))
              (mapv
               (fn [{:keys [coords edge-exclusions]}]
                 [(ga coords)
@@ -255,7 +272,8 @@
         (->> (:deps (pom-fn coordinate))
              (filter #(and (kept-scope? (:scope %))
                            (or include-optional? (not (:optional %)))
-                           (not (contains? global-exclusions (base-ga %)))))
+                           (not (contains? global-exclusions (base-ga %)))
+                           (not (contains? provided-libs (base-ga %)))))
              (mapv (fn [dependency]
                      [(ga dependency) (tools-coordinate dependency)]))))})))
 

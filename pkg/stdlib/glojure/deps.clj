@@ -24,12 +24,27 @@
                       {:type :grenadine.runtime/missing-load-path-hook})))
     (doseq [root roots] (add-load-path root))))
 
+(defn- environment-option
+  [runtime-host name]
+  (let [value ((:getenv runtime-host) name)]
+    (when (seq value) value)))
+
 (defn add-libs
   ([libs] (add-libs libs nil))
   ([libs opts]
-   (let [opts (or opts {})]
+   (let [opts (or opts {})
+         runtime-host (or (:host opts) (host/host))
+         maven-repository
+         (environment-option runtime-host "GLOJURE_MAVEN_REPOSITORY")
+         gitlibs-cache
+         (environment-option runtime-host "GLOJURE_GITLIBS_CACHE")]
      (runtime/add-libs! basis add-roots! libs
-                        (assoc opts :host (or (:host opts) (host/host)))))))
+                        (cond-> (assoc opts :host runtime-host)
+                          (and (nil? (:local-repo opts)) maven-repository)
+                          (assoc :local-repo maven-repository)
+
+                          (and (nil? (:gitlibs-dir opts)) gitlibs-cache)
+                          (assoc :gitlibs-dir gitlibs-cache))))))
 
 (defn add-lib
   ([lib coordinate] (add-lib lib coordinate nil))

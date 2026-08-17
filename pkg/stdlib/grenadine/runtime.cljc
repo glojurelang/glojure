@@ -2,6 +2,11 @@
   "Shared add-only behavior for non-JVM runtime facades."
   (:require [grenadine.core :as grenadine]))
 
+(def host-provided-libs
+  "Libraries supplied by a Clojure-compatible host runtime. Their coordinates
+  are satisfied without artifact acquisition or transitive expansion."
+  '#{org.clojure/clojure org.clojure/clojurescript})
+
 (defn current-basis
   [basis]
   (dissoc @basis :grenadine/loaded))
@@ -35,7 +40,8 @@
   `add-roots!` is the runtime's load-path mutation hook. `opts` must provide a
   Grenadine host map unless `:install-fn` is supplied for embedding or tests."
   [basis add-roots! libs opts]
-  (let [missing (missing-libs basis libs)
+  (let [provided-libs (into host-provided-libs (:provided-libs opts))
+        missing (apply dissoc (missing-libs basis libs) provided-libs)
         retained (retained-warnings basis libs)]
     (if (empty? missing)
       {:classpath []
@@ -47,6 +53,7 @@
                                (-> opts
                                    (dissoc :install-fn)
                                    (assoc :source-roots? true
+                                          :provided-libs provided-libs
                                           :mediation
                                           (or (:mediation opts)
                                               :tools-deps))))
