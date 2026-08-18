@@ -316,46 +316,46 @@
                   (recur pending queue index version-map exclusions cuts
                          order trace))
                 (let [id (coord-id lib coordinate)
-                    decision
-                    (include-coord?
-                     version-map lib coordinate id parents exclusions
-                     base-lib compare-versions warnings on-warning
-                     fail-on-incomparable?)
-                    include? (:include? decision)
-                    version-map (:version-map decision)
-                    reason (:reason decision)
-                    update
-                    (update-excl
-                     lib coordinate id use-path include? reason
-                     exclusions cuts)
-                    child-predicate (:child-predicate update)
-                    children
-                    (when child-predicate
-                      (if-let [cached
-                               (find @dependency-cache [lib id])]
-                        (val cached)
-                        (let [value (vec (coord-deps lib coordinate))]
-                          (swap! dependency-cache assoc [lib id] value)
-                          value)))
-                    queue
-                    (if child-predicate
-                      (conj queue
-                            {:grenadine.expander/children true
-                             :children children
-                             :parent-path use-path
-                             :child-predicate child-predicate})
-                      queue)
-                    trace
-                    (if trace?
-                      (conj trace
-                            {:path (vec parents)
-                             :lib lib
-                             :coord coordinate
-                             :orig-coord original-coordinate
-                             :coord-id id
-                             :include (boolean include?)
-                             :reason reason})
-                      trace)]
+                      decision
+                      (include-coord?
+                       version-map lib coordinate id parents exclusions
+                       base-lib compare-versions warnings on-warning
+                       fail-on-incomparable?)
+                      include? (:include? decision)
+                      version-map (:version-map decision)
+                      reason (:reason decision)
+                      update
+                      (update-excl
+                       lib coordinate id use-path include? reason
+                       exclusions cuts)
+                      child-predicate (:child-predicate update)
+                      children
+                      (when child-predicate
+                        (if-let [cached
+                                 (find @dependency-cache [lib id])]
+                          (val cached)
+                          (let [value (vec (coord-deps lib coordinate))]
+                            (swap! dependency-cache assoc [lib id] value)
+                            value)))
+                      queue
+                      (if child-predicate
+                        (conj queue
+                              {:grenadine.expander/children true
+                               :children children
+                               :parent-path use-path
+                               :child-predicate child-predicate})
+                        queue)
+                      trace
+                      (if trace?
+                        (conj trace
+                              {:path (vec parents)
+                               :lib lib
+                               :coord coordinate
+                               :orig-coord original-coordinate
+                               :coord-id id
+                               :include (boolean include?)
+                               :reason reason})
+                        trace)]
                   (recur pending queue index version-map
                          (:exclusions update) (:cuts update)
                          (if include? (conj order lib) order)

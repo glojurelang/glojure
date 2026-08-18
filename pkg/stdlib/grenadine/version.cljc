@@ -39,9 +39,14 @@
    "" 5
    "sp" 6})
 
+(defn- char-code
+  [c]
+  #?(:cljs (.charCodeAt c 0)
+     :default (int (if (string? c) (first c) c))))
+
 (defn- digit?
   [c]
-  (let [n (int c)]
+  (let [n (char-code c)]
     (<= 48 n 57)))
 
 (defn- normalize-number

@@ -34,7 +34,14 @@
       (let [{:keys [coordinate] alias-symbol :as refer-symbols :refer}
             (required/parse-libspec libspec)
             namespace-symbol
-            (implementation/prepare-required! coordinate options)]
+            #?(:jolt
+               (if-let [prepare (resolve 'jolt.deps/prepare-required!)]
+                 (prepare coordinate options)
+                 (throw
+                  (ex-info "Jolt does not provide require-deps support"
+                           {:type :clojurestar.deps/unsupported-runtime})))
+               :default
+               (implementation/prepare-required! coordinate options))]
         (when alias-symbol
           (alias alias-symbol namespace-symbol))
         (when refer-symbols

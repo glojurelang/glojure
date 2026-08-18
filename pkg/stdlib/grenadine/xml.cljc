@@ -45,14 +45,19 @@
       (recur (inc i))
       i)))
 
+(defn- char-code
+  [c]
+  #?(:cljs (.charCodeAt c 0)
+     :default (int (if (string? c) (first c) c))))
+
 (defn- ascii-letter?
   [c]
-  (let [n (int (if (string? c) (first c) c))]
+  (let [n (char-code c)]
     (or (<= 65 n 90) (<= 97 n 122))))
 
 (defn- ascii-digit?
   [c]
-  (let [n (int (if (string? c) (first c) c))]
+  (let [n (char-code c)]
     (<= 48 n 57)))
 
 (defn- name-start?
@@ -83,7 +88,7 @@
 
 (defn- digit-value
   [c radix]
-  (let [n (int (if (string? c) (first c) c))
+  (let [n (char-code c)
         value (cond
                 (<= 48 n 57) (- n 48)
                 (<= 65 n 70) (+ 10 (- n 65))
