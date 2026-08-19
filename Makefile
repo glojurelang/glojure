@@ -150,10 +150,18 @@ all: $(ALL-TARGETS)
 
 stdlib-targets: $(STDLIB-TARGETS)
 
+stdlib-present:
+	@for file in $(STDLIB-TARGETS); do \
+	  test -f "$$file" || { \
+	    echo "missing committed stdlib source: $$file" >&2; \
+	    exit 1; \
+	  }; \
+	done
+
 generate: $(GO)
 	go generate ./...
 
-aot: $(GO) $(STDLIB-TARGETS)
+aot: $(GO) stdlib-present
 	GLOJURE_USE_AOT=false \
 	GLOJURE_STDLIB_PATH=./pkg/stdlib \
 	go run -tags glj_no_aot_stdlib ./cmd/glj \
@@ -293,7 +301,7 @@ release-dist:
 	@$(if $(filter command line,$(origin VERSION)),,\
 	  $(error VERSION is required on the command line))
 	$(eval RELEASE_VER := $(patsubst v%,%,$(VERSION)))
-	GLJ_VERSION=v$(RELEASE_VER) $(MAKE) stdlib-targets generate aot glj-imports $(RELEASE-BINS)
+	GLJ_VERSION=v$(RELEASE_VER) $(MAKE) generate aot glj-imports $(RELEASE-BINS)
 	mkdir -p dist
 	$(foreach p,$(RELEASE-PLATFORMS), \
 	  tar -czf dist/glj-$(RELEASE_VER)-$(p).tar.gz -C bin/$(p) glj ;)
@@ -319,7 +327,6 @@ release: $(GH)
 	$(eval RELEASE_VER := $(patsubst v%,%,$(VERSION)))
 	@echo "=== Release v$(RELEASE_VER) ==="
 	$(MAKE) clean
-	$(MAKE) stdlib-targets
 	$(MAKE) generate aot
 	$(MAKE) glj-imports force=1
 	GLJ_VERSION=v$(RELEASE_VER) $(MAKE) build
