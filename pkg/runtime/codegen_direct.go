@@ -313,22 +313,36 @@ func (g *Generator) aotExternalIntrinsic(
 	switch {
 	case name == "assoc" && (arity == 3 || arity == 5):
 	case name == "count" && arity == 1:
+	case name == "deref" && arity == 1:
 	case name == "dec" && arity == 1:
 	case name == "cons" && arity == 2:
 	case name == "conj" && arity == 2:
 	case name == "empty?" && arity == 1:
+	case name == "fn?" && arity == 1:
 	case name == "first" && arity == 1:
 	case name == "get" && (arity == 2 || arity == 3):
+	case name == "identical?" && arity == 2:
 	case name == "inc" && arity == 1:
 	case name == "instance?" && arity == 2:
 		if _, ok := g.staticInstanceCall(invoke, []string{"", "value"}); !ok {
 			return ""
 		}
+	case name == "keyword?" && arity == 1:
+	case name == "long" && arity == 1:
+	case name == "map?" && arity == 1:
 	case name == "next" && arity == 1:
+	case name == "nil?" && arity == 1:
+	case name == "not" && arity == 1:
+	case name == "number?" && arity == 1:
 	case name == "nth" && (arity == 2 || arity == 3):
 	case name == "peek" && arity == 1:
 	case name == "pop" && arity == 1:
 	case name == "seq" && arity == 1:
+	case name == "string?" && arity == 1:
+	case name == "vector?" && arity == 1:
+	case name == "volatile!" && arity == 1:
+	case name == "vreset!" && arity == 2:
+	case name == "=" && arity == 2:
 	default:
 		return ""
 	}
@@ -340,6 +354,9 @@ func (g *Generator) aotExternalIntrinsicCall(
 	invoke *ast.InvokeNode,
 	args []string,
 ) string {
+	if call, ok := g.aotExternalIntrinsicBool(intrinsic, invoke, args); ok {
+		return call
+	}
 	switch intrinsic {
 	case "assoc":
 		if len(args) == 3 {
@@ -351,14 +368,14 @@ func (g *Generator) aotExternalIntrinsicCall(
 		)
 	case "count":
 		return fmt.Sprintf("lang.Count(%s)", args[0])
+	case "deref":
+		return fmt.Sprintf("lang.DerefValue(%s)", args[0])
 	case "dec":
 		return fmt.Sprintf("lang.Numbers.Dec(%s)", args[0])
 	case "cons":
 		return fmt.Sprintf("lang.NewCons(%s, %s)", args[0], args[1])
 	case "conj":
 		return fmt.Sprintf("lang.ConjAny(%s, %s)", args[0], args[1])
-	case "empty?":
-		return fmt.Sprintf("lang.IsEmpty(%s)", args[0])
 	case "first":
 		return fmt.Sprintf("lang.First(%s)", args[0])
 	case "get":
@@ -368,12 +385,8 @@ func (g *Generator) aotExternalIntrinsicCall(
 		return fmt.Sprintf("lang.GetDefault(%s, %s, %s)", args[0], args[1], args[2])
 	case "inc":
 		return fmt.Sprintf("lang.Numbers.Inc(%s)", args[0])
-	case "instance?":
-		call, ok := g.staticInstanceCall(invoke, args)
-		if !ok {
-			panic("static instance? intrinsic lost its target type")
-		}
-		return call
+	case "long":
+		return fmt.Sprintf("lang.BoxInt64(lang.LongCast(%s))", args[0])
 	case "next":
 		return fmt.Sprintf("lang.Next(%s)", args[0])
 	case "nth":
@@ -393,9 +406,54 @@ func (g *Generator) aotExternalIntrinsicCall(
 		return fmt.Sprintf("runtime.RT.Pop(%s)", args[0])
 	case "seq":
 		return fmt.Sprintf("lang.Seq(%s)", args[0])
+	case "volatile!":
+		return fmt.Sprintf("lang.NewVolatile(%s)", args[0])
+	case "vreset!":
+		return fmt.Sprintf("lang.VReset(%s, %s)", args[0], args[1])
 	default:
 		panic("unsupported AOT external intrinsic: " + intrinsic)
 	}
+}
+
+// aotExternalIntrinsicBool returns the Go bool expression for an intrinsic
+// whose core definition yields a boolean, so truth tests can branch on it
+// without boxing. The expression is also a valid any-typed value.
+func (g *Generator) aotExternalIntrinsicBool(
+	intrinsic string,
+	invoke *ast.InvokeNode,
+	args []string,
+) (string, bool) {
+	switch intrinsic {
+	case "=":
+		return fmt.Sprintf("lang.Equals(%s, %s)", args[0], args[1]), true
+	case "empty?":
+		return fmt.Sprintf("lang.IsEmpty(%s)", args[0]), true
+	case "fn?":
+		return fmt.Sprintf("lang.IsFn(%s)", args[0]), true
+	case "identical?":
+		return fmt.Sprintf("lang.Identical(%s, %s)", args[0], args[1]), true
+	case "instance?":
+		call, ok := g.staticInstanceCall(invoke, args)
+		if !ok {
+			panic("static instance? intrinsic lost its target type")
+		}
+		return call, true
+	case "keyword?":
+		return fmt.Sprintf("lang.IsKeyword(%s)", args[0]), true
+	case "map?":
+		return fmt.Sprintf("lang.IsMap(%s)", args[0]), true
+	case "nil?":
+		return fmt.Sprintf("lang.IsNil(%s)", args[0]), true
+	case "not":
+		return fmt.Sprintf("!lang.IsTruthy(%s)", args[0]), true
+	case "number?":
+		return fmt.Sprintf("lang.IsNumber(%s)", args[0]), true
+	case "string?":
+		return fmt.Sprintf("lang.IsString(%s)", args[0]), true
+	case "vector?":
+		return fmt.Sprintf("lang.IsVector(%s)", args[0]), true
+	}
+	return "", false
 }
 
 func (g *Generator) generateAOTExternalAdapters() {
@@ -428,13 +486,14 @@ func (g *Generator) generateAOTExternalAdapters() {
 				"fn := checkDerefVar(vr)\n",
 			arity, arity)
 		fmt.Fprintf(&g.aotDeclarations,
-			"if direct, ok := fn.(lang.FnFunc%d); ok {\n"+
+			"if direct, ok := %s; ok {\n"+
 				"return func(%s) any {\n"+
 				"if vr.RootVersion() == version { return direct(%s) }\n"+
 				"return lang.Apply%d(checkDerefVar(vr)%s)\n"+
 				"}\n"+
 				"}\n",
-			arity, paramList, argList, arity, aotAdapterArgs(args))
+			aotDirectFnExpr(arity), paramList, argList, arity,
+			aotAdapterArgs(args))
 		fmt.Fprintf(&g.aotDeclarations,
 			"if fixed, ok := fn.(lang.FixedArityFn%d); ok {\n"+
 				"return func(%s) any {\n"+
@@ -489,8 +548,8 @@ func (g *Generator) generateAOTExternalAdapters() {
 			argList,
 			arity, arity)
 		fmt.Fprintf(&g.aotDeclarations,
-			"if direct, ok := fn.(lang.FnFunc%d); ok { return direct }\n",
-			arity)
+			"if direct, ok := %s; ok { return direct }\n",
+			aotDirectFnExpr(arity))
 		fmt.Fprintf(&g.aotDeclarations,
 			"if fixed, ok := fn.(lang.FixedArityFn%d); ok { return fixed.Invoke%d }\n",
 			arity, arity)
@@ -499,6 +558,16 @@ func (g *Generator) generateAOTExternalAdapters() {
 				"}\n\n",
 			paramList, arity, aotAdapterArgs(args))
 	}
+}
+
+// aotDirectFnExpr returns the Go expression that resolves the value in fn
+// to a plain closure of the given arity. Arities with a lang.DirectFnN
+// helper also look through MetaFn and multi-arity fn wrappers.
+func aotDirectFnExpr(arity int) string {
+	if arity >= 1 && arity <= 4 {
+		return fmt.Sprintf("lang.DirectFn%d(fn)", arity)
+	}
+	return fmt.Sprintf("fn.(lang.FnFunc%d)", arity)
 }
 
 func hasAOTAdapterArity(arities [6]bool) bool {

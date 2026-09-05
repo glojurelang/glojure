@@ -7,6 +7,10 @@ package lang
 type MetaFn struct {
 	meta IPersistentMap
 	fn   IFn
+	fn1  FnFunc1
+	fn2  FnFunc2
+	fn3  FnFunc3
+	fn4  FnFunc4
 }
 
 var (
@@ -19,7 +23,18 @@ func NewMetaFn(fn IFn, meta IPersistentMap) any {
 	if meta == nil {
 		return fn
 	}
-	return &MetaFn{meta: meta, fn: fn}
+	f := &MetaFn{meta: meta, fn: fn}
+	switch direct := fn.(type) {
+	case FnFunc1:
+		f.fn1 = direct
+	case FnFunc2:
+		f.fn2 = direct
+	case FnFunc3:
+		f.fn3 = direct
+	case FnFunc4:
+		f.fn4 = direct
+	}
+	return f
 }
 
 // Fn returns the wrapped function.
@@ -39,15 +54,31 @@ func (*MetaFn) IsFnValue() {}
 
 func (f *MetaFn) Invoke0() any { return Apply0(f.fn) }
 
-func (f *MetaFn) Invoke1(a0 any) any { return Apply1(f.fn, a0) }
+func (f *MetaFn) Invoke1(a0 any) any {
+	if f.fn1 != nil {
+		return f.fn1(a0)
+	}
+	return Apply1(f.fn, a0)
+}
 
-func (f *MetaFn) Invoke2(a0, a1 any) any { return Apply2(f.fn, a0, a1) }
+func (f *MetaFn) Invoke2(a0, a1 any) any {
+	if f.fn2 != nil {
+		return f.fn2(a0, a1)
+	}
+	return Apply2(f.fn, a0, a1)
+}
 
 func (f *MetaFn) Invoke3(a0, a1, a2 any) any {
+	if f.fn3 != nil {
+		return f.fn3(a0, a1, a2)
+	}
 	return Apply3(f.fn, a0, a1, a2)
 }
 
 func (f *MetaFn) Invoke4(a0, a1, a2, a3 any) any {
+	if f.fn4 != nil {
+		return f.fn4(a0, a1, a2, a3)
+	}
 	return Apply4(f.fn, a0, a1, a2, a3)
 }
 

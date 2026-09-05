@@ -153,6 +153,7 @@ type Generator struct {
 	keywordMapConstructors map[string]string  // co-allocating constructors for those layouts
 	plainConstantMaps      bool               // var metadata keeps plain maps, it is read once
 	keywordLookupHelpers   map[string]*aotKeywordLookupHelper
+	keywordSites           int
 	keywordAssocHelpers    map[string]*aotKeywordAssocHelper
 	aotRecordTypes         map[*lang.RecordType]*aotRecordType
 
@@ -1870,18 +1871,18 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 			)
 		} else {
 			keyword := g.generateValue(lookup.Keyword)
-			if lookup.Default == nil {
-				g.writef("%s := %s.Invoke1(%s)\n", result, keyword, target)
-			} else {
-				fallback := g.generateASTNode(lookup.Default)
-				g.writef(
-					"%s := %s.Invoke2(%s, %s)\n",
-					result,
-					keyword,
-					target,
-					fallback,
-				)
+			fallback := "nil"
+			if lookup.Default != nil {
+				fallback = g.generateASTNode(lookup.Default)
 			}
+			g.writef(
+				"%s := %s.Get(%s, %s, %s)\n",
+				result,
+				g.allocKeywordSite(),
+				keyword,
+				target,
+				fallback,
+			)
 		}
 		return result
 	case ast.OpAssoc:
@@ -2138,11 +2139,16 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		return resultVar
 	}
 	if directKeywordCall {
-		g.writef("%s := %s.Invoke%d(%s)\n",
+		fallback := "nil"
+		if len(argExprs) == 2 {
+			fallback = argExprs[1]
+		}
+		g.writef("%s := %s.Get(%s, %s, %s)\n",
 			resultVar,
+			g.allocKeywordSite(),
 			fnExpr,
-			len(argExprs),
-			strings.Join(argExprs, ", "),
+			argExprs[0],
+			fallback,
 		)
 		return resultVar
 	}
@@ -2366,14 +2372,27 @@ func (g *Generator) generateTruthyTest(node *ast.Node) string {
 	}
 	invoke := node.Sub.(*ast.InvokeNode)
 	target := g.aotExternalInvokeTarget(invoke)
-	if target == nil || target.intrinsic != "seq" {
+	if target == nil || target.intrinsic == "" {
+		return fmt.Sprintf("lang.IsTruthy(%s)", g.generateASTNode(node))
+	}
+	boolTest := func(args []string) (string, bool) {
+		if target.intrinsic == "seq" {
+			return fmt.Sprintf("lang.IsSeqTruthy(%s)", args[0]), true
+		}
+		return g.aotExternalIntrinsicBool(target.intrinsic, invoke, args)
+	}
+	if _, ok := boolTest(make([]string, len(invoke.Args))); !ok {
 		return fmt.Sprintf("lang.IsTruthy(%s)", g.generateASTNode(node))
 	}
 
-	arg := g.generateASTNode(invoke.Args[0])
+	args := make([]string, len(invoke.Args))
+	for i, argNode := range invoke.Args {
+		args[i] = g.generateASTNode(argNode)
+	}
+	test, _ := boolTest(args)
 	if target.directLinked {
 		result := g.allocateTempVar()
-		g.writef("%s := lang.IsSeqTruthy(%s)\n", result, arg)
+		g.writef("%s := %s\n", result, test)
 		return result
 	}
 	varNode := invoke.Fn.Sub.(*ast.VarNode)
@@ -2388,13 +2407,13 @@ func (g *Generator) generateTruthyTest(node *ast.Node) string {
 		varID,
 		target.rootVersionVar,
 	)
-	g.writef("%s = lang.IsSeqTruthy(%s)\n", result, arg)
+	g.writef("%s = %s\n", result, test)
 	g.writef("} else {\n")
 	fallback := g.allocateTempVar()
 	g.writef("%s := checkDerefVar(%s)\n", fallback, varID)
 	fallbackResult := g.allocateTempVar()
 	g.writef("var %s any\n", fallbackResult)
-	g.generateApply(fallbackResult, fallback, []string{arg}, false)
+	g.generateApply(fallbackResult, fallback, args, false)
 	g.writef("%s = lang.IsTruthy(%s)\n", result, fallbackResult)
 	g.writef("}\n")
 	return result

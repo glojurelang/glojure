@@ -70,6 +70,23 @@ func (a *Analyzer) analyzeForm(form interface{}, env Env) (n *ast.Node, err erro
 	}
 }
 
+// constVarValue returns the root value of vr when it is a bound,
+// non-dynamic var marked ^:const whose value is a scalar constant.
+func constVarValue(vr *Var, meta IPersistentMap) (any, bool) {
+	if meta == nil || !IsTruthy(Get(meta, KWConst)) {
+		return nil, false
+	}
+	if !vr.IsBound() || vr.IsDynamic() || vr.IsMacro() {
+		return nil, false
+	}
+	value := vr.Get()
+	switch value.(type) {
+	case nil, bool, int64, float64, string, Keyword, Char:
+		return value, true
+	}
+	return nil, false
+}
+
 // analyzeSymbol performs semantic analysis on the given symbol,
 // returning an AST.
 func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
@@ -108,12 +125,22 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 		vr, ok := v.(*Var)
 		if ok {
 			m := vr.Meta()
-			n.Op = ast.OpVar
-			n.Sub = &ast.VarNode{
-				Var:  vr,
-				Meta: m,
+			if value, isConst := constVarValue(vr, m); isConst {
+				// A bound ^:const var holding a scalar reads as that
+				// value, as in Clojure, so uses need no var deref.
+				n.Op = ast.OpConst
+				n.Sub = &ast.ConstNode{
+					Type:  classifyType(value),
+					Value: value,
+				}
+			} else {
+				n.Op = ast.OpVar
+				n.Sub = &ast.VarNode{
+					Var:  vr,
+					Meta: m,
+				}
+				// IsAssignable: dynamicVar(vr, m), // TODO
 			}
-			// IsAssignable: dynamicVar(vr, m), // TODO
 		} else if v != nil {
 			// The symbol resolves to a non-var  Treat it as a
 			// constant.

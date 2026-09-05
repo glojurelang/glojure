@@ -161,3 +161,12 @@ func (g *Generator) generateAOTKeywordAssocHelper(
 	}
 	fmt.Fprintln(&g.aotDeclarations, "\t\treturn result\n\t}\n}")
 }
+
+// allocKeywordSite declares a package level lang.KeywordSite inline
+// cache for one keyword lookup site and returns its name.
+func (g *Generator) allocKeywordSite() string {
+	name := fmt.Sprintf("aotKeywordSite%d", g.keywordSites)
+	g.keywordSites++
+	fmt.Fprintf(&g.aotDeclarations, "var %s lang.KeywordSite\n", name)
+	return name
+}

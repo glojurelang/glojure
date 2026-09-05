@@ -768,7 +768,7 @@ func TestGenerateResolvedHostClassValue(t *testing.T) {
 	}
 }
 
-func TestGenerateKeywordInvocationUsesDirectFixedArityCall(t *testing.T) {
+func TestGenerateKeywordInvocationUsesSiteCache(t *testing.T) {
 	var output bytes.Buffer
 	generator := NewGenerator(&output)
 	keyword := aotTestConst(lang.NewKeyword("answer"))
@@ -780,7 +780,7 @@ func TestGenerateKeywordInvocationUsesDirectFixedArityCall(t *testing.T) {
 
 	result := generator.generateASTNode(invoke)
 	generated := output.String()
-	if !strings.Contains(generated, ".Invoke2(nil, int64(42))") {
+	if !strings.Contains(generated, "aotKeywordSite0.Get(kw_answer, nil, int64(42))") {
 		t.Fatalf("keyword invocation was not emitted directly: %s = %s", result, generated)
 	}
 	if strings.Contains(generated, "lang.Apply2") {

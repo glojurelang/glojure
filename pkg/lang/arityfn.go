@@ -11,6 +11,10 @@ import "fmt"
 type MultiArityFn struct {
 	meta        IPersistentMap
 	fixed       [6]IFn
+	fn1         FnFunc1
+	fn2         FnFunc2
+	fn3         FnFunc3
+	fn4         FnFunc4
 	fixedOther  map[int]IFn
 	maxFixed    int
 	variadic    IFn
@@ -35,6 +39,7 @@ func NewArityFn(
 			f.maxFixed = arity
 		}
 	}
+	f.resolveDirect()
 	return f
 }
 
@@ -60,7 +65,18 @@ func NewArityFnMethods(
 			f.maxFixed = arity
 		}
 	}
+	f.resolveDirect()
 	return f
+}
+
+// resolveDirect records the fixed arity methods that are plain Go
+// closures so the fixed arity Invoke methods can call them without a
+// dispatch on the method's type.
+func (f *MultiArityFn) resolveDirect() {
+	f.fn1, _ = f.fixed[1].(FnFunc1)
+	f.fn2, _ = f.fixed[2].(FnFunc2)
+	f.fn3, _ = f.fixed[3].(FnFunc3)
+	f.fn4, _ = f.fixed[4].(FnFunc4)
 }
 
 func (f *MultiArityFn) fixedMethod(arity int) IFn {
@@ -88,6 +104,9 @@ func (f *MultiArityFn) Invoke0() any {
 }
 
 func (f *MultiArityFn) Invoke1(a0 any) any {
+	if f.fn1 != nil {
+		return f.fn1(a0)
+	}
 	if method := f.fixed[1]; method != nil {
 		return Apply1(method, a0)
 	}
@@ -95,6 +114,9 @@ func (f *MultiArityFn) Invoke1(a0 any) any {
 }
 
 func (f *MultiArityFn) Invoke2(a0, a1 any) any {
+	if f.fn2 != nil {
+		return f.fn2(a0, a1)
+	}
 	if method := f.fixed[2]; method != nil {
 		return Apply2(method, a0, a1)
 	}
@@ -102,6 +124,9 @@ func (f *MultiArityFn) Invoke2(a0, a1 any) any {
 }
 
 func (f *MultiArityFn) Invoke3(a0, a1, a2 any) any {
+	if f.fn3 != nil {
+		return f.fn3(a0, a1, a2)
+	}
 	if method := f.fixed[3]; method != nil {
 		return Apply3(method, a0, a1, a2)
 	}
@@ -109,6 +134,9 @@ func (f *MultiArityFn) Invoke3(a0, a1, a2 any) any {
 }
 
 func (f *MultiArityFn) Invoke4(a0, a1, a2, a3 any) any {
+	if f.fn4 != nil {
+		return f.fn4(a0, a1, a2, a3)
+	}
 	if method := f.fixed[4]; method != nil {
 		return Apply4(method, a0, a1, a2, a3)
 	}

@@ -134,6 +134,10 @@ func Identical(a, b any) bool {
 		return b == nil
 	case Char, int64, string, bool, Keyword:
 		return a == b
+	case *Map, *Vector, *List, *EmptyList, *PersistentHashMap, *Symbol,
+		*Var, *LazySeq, *Cons, *Atom, *MetaFn, *MultiArityFn, *Volatile:
+		// Pointer types compare by identity without reflection.
+		return a == b
 	}
 	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)
 
