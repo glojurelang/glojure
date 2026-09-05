@@ -745,3 +745,28 @@ func TestNativeMapvPreservesOrder(t *testing.T) {
 		t.Fatalf("mapv result = %v, want %v", got, want)
 	}
 }
+
+func TestNativeCoreMetaUsesInterfaceAndFallback(t *testing.T) {
+	fallbackCalls := 0
+	fallback := lang.FnFunc(func(args ...interface{}) interface{} {
+		fallbackCalls++
+		return "fallback"
+	})
+	fn := nativeCoreMeta{fallback: fallback}
+	meta := lang.NewMap(lang.NewKeyword("a"), int64(1))
+	value := lang.NewVector(int64(1)).WithMeta(meta)
+
+	if got := fn.Invoke1(value); got != meta {
+		t.Fatalf("meta = %v, want %v", got, meta)
+	}
+	if got := fn.Invoke1(int64(3)); got != nil {
+		t.Fatalf("meta of a non-IMeta value = %v, want nil", got)
+	}
+	if got := fn.Invoke(value); got != meta {
+		t.Fatalf("variadic meta = %v, want %v", got, meta)
+	}
+	if got := fn.Invoke(); got != "fallback" || fallbackCalls != 1 {
+		t.Fatalf("zero-arity meta = %v (fallback calls %d), want fallback",
+			got, fallbackCalls)
+	}
+}

@@ -46,6 +46,15 @@
          ;; Not in a list context, fall back to regular replacement with a list
          (z/replace zloc (cons 'do replacement-list)))))])
 
+(defn in-reader-cond?
+  "True when zloc is inside a #? or #?@ reader conditional."
+  [zloc]
+  (loop [z (z/up zloc)]
+    (cond
+      (nil? z) false
+      (= :reader-macro (z/tag z)) true
+      :else (recur (z/up z)))))
+
 (defn sexpr-remove [old]
   [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
    (fn visit [zloc] (z/remove zloc))])
@@ -829,8 +838,11 @@
     (sexpr-replace '(. x (set val)) '(. x (Set val)))
 
    ;; ===== Omissions and Deferrals =====
+   ;; A deftype inside a reader conditional branch is left to the
+   ;; reader: dropping it would leave the branch without its form.
    (omitp #(and (z/list? %)
-                (= 'deftype (first (z/sexpr %)))))
+                (= 'deftype (first (z/sexpr %)))
+                (not (in-reader-cond? %))))
    (omitp #(and (z/list? %)
                 (= 'defmethod (first (z/sexpr %)))
                 (= 'Eduction (nth (z/sexpr %) 2))))

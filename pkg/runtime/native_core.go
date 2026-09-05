@@ -20,6 +20,7 @@ func (nativeCoreAssoc) IsFnValue()      {}
 func (nativeStringIncludes) IsFnValue() {}
 func (nativeStringReplace) IsFnValue()  {}
 func (nativeCoreDeref) IsFnValue()      {}
+func (nativeCoreMeta) IsFnValue()       {}
 func (nativeCoreReduce) IsFnValue()     {}
 func (nativeCoreSwap) IsFnValue()       {}
 func (nativeCoreApply) IsFnValue()      {}
@@ -425,6 +426,34 @@ func (fn nativeStringReplace) Invoke3(value, match, replacement interface{}) int
 
 func (fn nativeStringReplace) ApplyTo(args lang.ISeq) interface{} {
 	return fn.Invoke(seqToSlice(args)...)
+}
+
+// nativeCoreMeta reads metadata through the IMeta interface. The
+// compiled definition reaches Meta through a reflective host call on
+// every use, which dominated hot loops that read fn metadata.
+type nativeCoreMeta struct {
+	fallback lang.IFn
+}
+
+func (fn nativeCoreMeta) Invoke(args ...interface{}) interface{} {
+	if len(args) == 1 {
+		return fn.Invoke1(args[0])
+	}
+	return fn.fallback.Invoke(args...)
+}
+
+func (fn nativeCoreMeta) Invoke1(x interface{}) interface{} {
+	if m, ok := x.(lang.IMeta); ok {
+		return m.Meta()
+	}
+	return nil
+}
+
+func (fn nativeCoreMeta) ApplyTo(args lang.ISeq) interface{} {
+	if args != nil && args.Next() == nil {
+		return fn.Invoke1(args.First())
+	}
+	return fn.fallback.ApplyTo(args)
 }
 
 // nativeCoreDeref keeps the common reference path on the IDeref interface.
@@ -928,6 +957,11 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	}
 	if assoc := core.FindInternedVar(lang.NewSymbol("assoc")); assoc != nil {
 		assoc.BindRoot(nativeCoreAssoc{})
+	}
+	if meta := core.FindInternedVar(lang.NewSymbol("meta")); meta != nil {
+		if fallback, ok := meta.Get().(lang.IFn); ok {
+			meta.BindRoot(nativeCoreMeta{fallback: fallback})
+		}
 	}
 	if deref := core.FindInternedVar(lang.NewSymbol("deref")); deref != nil {
 		if fallback, ok := deref.Get().(lang.IFn); ok {
