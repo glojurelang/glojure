@@ -19,6 +19,10 @@ type (
 	vectorAttrs struct {
 		meta         IPersistentMap
 		hash, hasheq uint32
+		// flat holds every element in order for vectors built in one go
+		// from a known length, so Nth is a slice index instead of a trie
+		// walk. Derived vectors get fresh attrs and never inherit it.
+		flat []any
 	}
 
 	// vectorUpdateStorage co-allocates a vector version with the immutable tail
@@ -184,6 +188,12 @@ func (v *Vector) ValAtDefault(k, def any) any {
 }
 
 func (v *Vector) Nth(i int) any {
+	if a := v.attrs; a != nil && a.flat != nil {
+		if i < 0 || i >= len(a.flat) {
+			panic(NewIndexOutOfBoundsError())
+		}
+		return a.flat[i]
+	}
 	res, ok := v.vec.Index(i)
 	if !ok {
 		panic(NewIndexOutOfBoundsError())
@@ -192,6 +202,12 @@ func (v *Vector) Nth(i int) any {
 }
 
 func (v *Vector) NthDefault(i int, def any) any {
+	if a := v.attrs; a != nil && a.flat != nil {
+		if i >= 0 && i < len(a.flat) {
+			return a.flat[i]
+		}
+		return def
+	}
 	if i >= 0 && i < v.Count() {
 		return v.Nth(i)
 	}

@@ -283,6 +283,11 @@ func (nm *NumberMethods) Rationalize(x any) any {
 }
 
 func (nm *NumberMethods) And(x, y any) any {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return BoxInt64(a & b)
+		}
+	}
 	return bitOpsCast(x) & bitOpsCast(y)
 }
 
@@ -295,6 +300,11 @@ func (nm *NumberMethods) Not(x any) any {
 }
 
 func (nm *NumberMethods) Or(x, y any) any {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return BoxInt64(a | b)
+		}
+	}
 	return bitOpsCast(x) | bitOpsCast(y)
 }
 
@@ -307,22 +317,37 @@ func (nm *NumberMethods) SetBit(x, y any) any {
 }
 
 func IsZero(x any) bool {
+	if a, ok := x.(int64); ok {
+		return a == 0
+	}
 	return Ops(x).IsZero(x)
 }
 
 func (nm *NumberMethods) IsZero(x any) bool {
-	return IsZero(x)
+	if a, ok := x.(int64); ok {
+		return a == 0
+	}
+	return Ops(x).IsZero(x)
 }
 
 func (nm *NumberMethods) IsPos(x any) bool {
+	if a, ok := x.(int64); ok {
+		return a > 0
+	}
 	return Ops(x).IsPos(x)
 }
 
 func (nm *NumberMethods) IsNeg(x any) bool {
+	if a, ok := x.(int64); ok {
+		return a < 0
+	}
 	return Ops(x).IsNeg(x)
 }
 
 func (nm *NumberMethods) Inc(v any) any {
+	if a, ok := v.(int64); ok {
+		return BoxInt64(CheckedAddInt64(a, 1))
+	}
 	return nm.Add(v, 1)
 }
 
@@ -335,6 +360,9 @@ func (nm *NumberMethods) Unchecked_inc(v any) any {
 }
 
 func (nm *NumberMethods) Dec(x any) any {
+	if a, ok := x.(int64); ok {
+		return BoxInt64(CheckedSubInt64(a, 1))
+	}
 	return nm.Add(x, -1)
 }
 
@@ -347,6 +375,11 @@ func (nm *NumberMethods) ClearBit(x, y any) int64 {
 }
 
 func (nm *NumberMethods) ShiftLeft(x, y any) int64 {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return a << (b & 0x3f)
+		}
+	}
 	x64, y64 := bitOpsCast(x), bitOpsCast(y)
 	return x64 << (y64 & 0x3f)
 }
@@ -378,8 +411,8 @@ func (nm *NumberMethods) Min(x, y any) any {
 }
 
 func (nm *NumberMethods) Lt(x, y any) bool {
-	if a, ok := x.(int64); ok {
-		if b, ok := y.(int64); ok {
+	if a, ok := int64Operand(x); ok {
+		if b, ok := int64Operand(y); ok {
 			return a < b
 		}
 	}
@@ -387,8 +420,8 @@ func (nm *NumberMethods) Lt(x, y any) bool {
 }
 
 func (nm *NumberMethods) Gt(x, y any) bool {
-	if a, ok := x.(int64); ok {
-		if b, ok := y.(int64); ok {
+	if a, ok := int64Operand(x); ok {
+		if b, ok := int64Operand(y); ok {
 			return a > b
 		}
 	}
@@ -396,8 +429,8 @@ func (nm *NumberMethods) Gt(x, y any) bool {
 }
 
 func (nm *NumberMethods) Lte(x, y any) bool {
-	if a, ok := x.(int64); ok {
-		if b, ok := y.(int64); ok {
+	if a, ok := int64Operand(x); ok {
+		if b, ok := int64Operand(y); ok {
 			return a <= b
 		}
 	}
@@ -405,8 +438,8 @@ func (nm *NumberMethods) Lte(x, y any) bool {
 }
 
 func (nm *NumberMethods) Gte(x, y any) bool {
-	if a, ok := x.(int64); ok {
-		if b, ok := y.(int64); ok {
+	if a, ok := int64Operand(x); ok {
+		if b, ok := int64Operand(y); ok {
 			return a >= b
 		}
 	}
@@ -414,6 +447,11 @@ func (nm *NumberMethods) Gte(x, y any) bool {
 }
 
 func (nm *NumberMethods) Equiv(x, y any) bool {
+	if a, ok := int64Operand(x); ok {
+		if b, ok := int64Operand(y); ok {
+			return a == b
+		}
+	}
 	return Ops(x).Combine(Ops(y)).Equiv(x, y)
 }
 
@@ -1246,4 +1284,16 @@ func isInf(x any) bool {
 	default:
 		return false
 	}
+}
+
+// int64Operand unboxes the two integer representations that reach the
+// comparison fast paths: int64 from arithmetic and literals, int from IntCast.
+func int64Operand(x any) (int64, bool) {
+	switch x := x.(type) {
+	case int64:
+		return x, true
+	case int:
+		return int64(x), true
+	}
+	return 0, false
 }

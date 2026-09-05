@@ -2,6 +2,8 @@ package lang
 
 import (
 	"fmt"
+	"sync"
+	"sync/atomic"
 )
 
 const (
@@ -9,6 +11,9 @@ const (
 	arrayMapKeywordThreshold = 128
 	arrayMapInlineSize       = arrayMapHashThreshold - 2
 	keywordMapDeltaMax       = 8
+	// keywordShapeExtensionMax bounds the shapes assoc can derive from the
+	// compiler-emitted ones so data-driven keys cannot grow them without end.
+	keywordShapeExtensionMax = 4096
 
 	// PersistentArrayMapInlineKeyValueCount lets the compiler preserve the
 	// one-allocation constructor for maps whose entries fit inline.
@@ -34,6 +39,13 @@ type (
 	// the same AOT keyword-map literal. Shaped maps store only their values.
 	KeywordMapShape struct {
 		keys []Keyword
+		// slots is an open-addressed table from keyword hash to key index,
+		// built only for shapes wide enough that a linear scan costs more.
+		slots []int16
+		mask  uint32
+		// ext caches the shapes reached by assoc of one new keyword key, so
+		// maps built the same way share a layout (see extend).
+		ext sync.Map
 	}
 
 	// keywordMapDelta is a bounded immutable overlay on a shaped map's base
@@ -158,7 +170,35 @@ func NewKeywordMapShape(names ...string) *KeywordMapShape {
 	for i, name := range names {
 		keys[i] = NewKeyword(name)
 	}
-	return &KeywordMapShape{keys: keys}
+	return newKeywordMapShape(keys)
+}
+
+// keywordShapeSlotsMin is the key count from which a shape indexes its keys
+// by hash instead of scanning them.
+const keywordShapeSlotsMin = 6
+
+func newKeywordMapShape(keys []Keyword) *KeywordMapShape {
+	s := &KeywordMapShape{keys: keys}
+	if len(keys) < keywordShapeSlotsMin {
+		return s
+	}
+	size := uint32(2)
+	for size < uint32(len(keys))*2 {
+		size <<= 1
+	}
+	s.slots = make([]int16, size)
+	for i := range s.slots {
+		s.slots[i] = -1
+	}
+	s.mask = size - 1
+	for i, key := range keys {
+		slot := key.hash & s.mask
+		for s.slots[slot] >= 0 {
+			slot = (slot + 1) & s.mask
+		}
+		s.slots[slot] = int16(i)
+	}
+	return s
 }
 
 // NewStaticKeywordMap constructs a persistent map whose immutable keyword
@@ -184,7 +224,40 @@ func InitStaticKeywordMap(m *Map, shape *KeywordMapShape, values []any) *Map {
 	return m
 }
 
+var keywordShapeExtensions atomic.Int32
+
+// extend returns the shape with key appended, or nil once the global
+// extension budget is spent and the caller must fall back to an array map.
+func (s *KeywordMapShape) extend(key Keyword) *KeywordMapShape {
+	if next, ok := s.ext.Load(key); ok {
+		return next.(*KeywordMapShape)
+	}
+	if keywordShapeExtensions.Add(1) > keywordShapeExtensionMax {
+		keywordShapeExtensions.Add(-1)
+		return nil
+	}
+	keys := make([]Keyword, len(s.keys)+1)
+	copy(keys, s.keys)
+	keys[len(s.keys)] = key
+	next, loaded := s.ext.LoadOrStore(key, newKeywordMapShape(keys))
+	if loaded {
+		keywordShapeExtensions.Add(-1)
+	}
+	return next.(*KeywordMapShape)
+}
+
 func (s *KeywordMapShape) indexOf(key Keyword) int {
+	if s.slots != nil {
+		for slot := key.hash & s.mask; ; slot = (slot + 1) & s.mask {
+			i := s.slots[slot]
+			if i < 0 {
+				return -1
+			}
+			if s.keys[i] == key {
+				return int(i)
+			}
+		}
+	}
 	for i, candidate := range s.keys {
 		if candidate == key {
 			return i
@@ -354,8 +427,9 @@ func (m *Map) keywordValueAt(index int) any {
 	return m.keyVals[index]
 }
 
-func (m *Map) materializedKeywordValues() []any {
-	values := append([]any(nil), m.keyVals...)
+func (m *Map) materializedKeywordValues(extra int) []any {
+	values := make([]any, len(m.keyVals), len(m.keyVals)+extra)
+	copy(values, m.keyVals)
 	var deltas [keywordMapDeltaMax]*keywordMapDelta
 	count := 0
 	for delta := m.keywordDelta; delta != nil; delta = delta.prev {
@@ -393,7 +467,7 @@ func (m *Map) clone() *Map {
 	if m.keywordShape != nil {
 		return &Map{
 			meta:         m.meta,
-			keyVals:      m.materializedKeywordValues(),
+			keyVals:      m.materializedKeywordValues(0),
 			keywordShape: m.keywordShape,
 		}
 	}
@@ -451,6 +525,10 @@ func (m *Map) Assoc(k, v any) Associative {
 				newMap := m.clone()
 				newMap.keyVals[i] = v
 				return newMap
+			}
+			if next := m.keywordShape.extend(kw); next != nil {
+				values := append(m.materializedKeywordValues(1), v)
+				return &Map{meta: m.meta, keyVals: values, keywordShape: next}
 			}
 		}
 		keyVals := m.interleavedKeyVals(1)

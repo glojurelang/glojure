@@ -107,7 +107,7 @@ func main() {
 		fmt.Fprintln(&out, "}")
 		fmt.Fprintln(&out)
 
-		fmt.Fprintf(&out, "func (f ArityFn) Invoke%d(%s) any {\n", arity, typedParams)
+		fmt.Fprintf(&out, "func (f *MultiArityFn) Invoke%d(%s) any {\n", arity, typedParams)
 		fmt.Fprintf(&out, "\tif method := f.fixedMethod(%d); method != nil {\n", arity)
 		fmt.Fprintf(&out, "\t\treturn Apply%d(method, %s)\n", arity, params)
 		fmt.Fprintln(&out, "\t}")
@@ -119,7 +119,7 @@ func main() {
 	fmt.Fprintln(&out, "var (")
 	for arity := 6; arity <= maxFixedArity; arity++ {
 		fmt.Fprintf(&out, "\t_ IFn = FnFunc%d(nil)\n", arity)
-		fmt.Fprintf(&out, "\t_ FixedArityFn%d = ArityFn{}\n", arity)
+		fmt.Fprintf(&out, "\t_ FixedArityFn%d = ArityFn(nil)\n", arity)
 	}
 	fmt.Fprintln(&out, ")")
 

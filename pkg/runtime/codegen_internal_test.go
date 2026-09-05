@@ -605,7 +605,7 @@ func TestCoreDirectLinkingCanBeDisabled(t *testing.T) {
 			if test.directLink {
 				for _, bootstrapGuard := range []string{
 					"if vr.IsBound()",
-					"var once sync.Once",
+					"var linked atomic.Pointer[lang.FnFunc1]",
 				} {
 					if !strings.Contains(generated, bootstrapGuard) {
 						t.Fatalf("direct-link adapter omitted bootstrap guard %q:\n%s",

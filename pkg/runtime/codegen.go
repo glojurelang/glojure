@@ -151,6 +151,7 @@ type Generator struct {
 	symbolVariables        map[string]string  // set of all generated symbols to minimize allocations
 	kwVariables            map[string]string  // set of all generated keywords to minimize allocations
 	keywordMapConstructors map[string]string  // co-allocating constructors for those layouts
+	plainConstantMaps      bool               // var metadata keeps plain maps, it is read once
 	keywordLookupHelpers   map[string]*aotKeywordLookupHelper
 	keywordAssocHelpers    map[string]*aotKeywordAssocHelper
 	aotRecordTypes         map[*lang.RecordType]*aotRecordType
@@ -741,7 +742,9 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	if meta != nil {
 		g.writef("%s.SetMetaLazy(func() lang.IPersistentMap {\n", varVar)
 		g.pushVarScope()
+		g.plainConstantMaps = true
 		metaVariable := g.generateValue(meta)
+		g.plainConstantMaps = false
 		g.writef("\treturn %s\n", metaVariable)
 		g.popVarScope()
 		g.writef("})\n")
@@ -1200,6 +1203,11 @@ func (g *Generator) generateRefValue(ref *lang.Ref) string {
 
 // generateMapValue generates Go code for a Clojure map
 func (g *Generator) generateMapValue(m lang.IPersistentMap) string {
+	if !g.plainConstantMaps {
+		if constructor, values, ok := g.staticKeywordMapValue(m); ok {
+			return constructor + "(" + strings.Join(values, ", ") + ")"
+		}
+	}
 	var buf bytes.Buffer
 	if m.Count()*2 > lang.PersistentArrayMapInlineKeyValueCount {
 		buf.WriteString("lang.NewMapUniqueKeys(")
@@ -1224,6 +1232,29 @@ func (g *Generator) generateMapValue(m lang.IPersistentMap) string {
 
 	buf.WriteString(")")
 	return buf.String()
+}
+
+// staticKeywordMapValue emits a constant map whose keys are all keywords
+// through the shared shape constructor, so metadata and other compile
+// time maps get the same O(1) keyword lookups as map literals.
+func (g *Generator) staticKeywordMapValue(m lang.IPersistentMap) (string, []string, bool) {
+	count := m.Count()
+	if count == 0 || count*2 > lang.PersistentArrayMapMaxKeywordKeyValueCount {
+		return "", nil, false
+	}
+	names := make([]string, 0, count)
+	values := make([]string, 0, count)
+	for seq := m.Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First()
+		keyword, ok := lang.First(entry).(lang.Keyword)
+		if !ok {
+			return "", nil, false
+		}
+		value, _ := lang.Nth(entry, 1)
+		names = append(names, keywordName(keyword))
+		values = append(values, g.generateValue(value))
+	}
+	return g.allocKeywordMapConstructor(names), values, true
 }
 
 // generateVectorValue generates Go code for a Clojure vector
@@ -2807,7 +2838,7 @@ func (g *Generator) generateMap(node *ast.Node) string {
 	mapNode := node.Sub.(*ast.MapNode)
 
 	keyValueCount := len(mapNode.Keys) * 2
-	if keyValueCount > lang.PersistentArrayMapInlineKeyValueCount &&
+	if keyValueCount > 0 &&
 		keyValueCount <= lang.PersistentArrayMapMaxKeywordKeyValueCount {
 		if names, ok := staticKeywordMapNames(mapNode.Keys); ok {
 			valueIDs := make([]string, len(mapNode.Vals))

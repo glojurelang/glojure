@@ -141,6 +141,12 @@ func (rt *RTMethods) NextID() int {
 }
 
 func (rt *RTMethods) Nth(x any, i int) any {
+	switch x := x.(type) {
+	case nil:
+		return nil
+	case *lang.Vector:
+		return x.Nth(i)
+	}
 	if lang.IsNil(x) {
 		return nil
 	}

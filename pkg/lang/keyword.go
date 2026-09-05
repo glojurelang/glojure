@@ -115,6 +115,9 @@ func (k Keyword) Invoke1(coll interface{}) interface{} {
 }
 
 func (k Keyword) Invoke2(coll, defaultVal interface{}) interface{} {
+	if m, ok := coll.(*Map); ok {
+		return m.valAtKeyword(k, defaultVal)
+	}
 	if lookup, ok := coll.(keywordLookup); ok {
 		return lookup.valAtKeyword(k, defaultVal)
 	}

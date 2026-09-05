@@ -36,12 +36,15 @@ func HasType(target any, v interface{}) bool {
 		return false
 	}
 	vType := reflect.TypeOf(v)
-	switch {
-	case vType == t, vType.AssignableTo(t):
+	if vType == t {
 		return true
-	default:
+	}
+	// Two distinct named non-interface types are never assignable, so
+	// the common predicate miss skips the reflect assignability walk.
+	if t.Kind() != reflect.Interface && t.Name() != "" && vType.Name() != "" {
 		return false
 	}
+	return vType.AssignableTo(t)
 }
 
 // ReflectType unwraps both native Go reflect.Type values and JVM-style Class

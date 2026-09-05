@@ -408,7 +408,7 @@ func (g *Generator) generateAOTExternalAdapters() {
 		}
 	}
 	if hasAOTAdapterArity(linkedArities) {
-		g.addImport("sync")
+		g.addImport("sync/atomic")
 	}
 	for arity, used := range cachedArities {
 		if !used {
@@ -468,12 +468,13 @@ func (g *Generator) generateAOTExternalAdapters() {
 		fmt.Fprintf(&g.aotDeclarations,
 			"func aotLinkFn%d(vr *lang.Var) lang.FnFunc%d {\n"+
 				"if vr.IsBound() { return aotLinkBoundFn%d(vr) }\n"+
-				"var once sync.Once\n"+
-				"var linked lang.FnFunc%d\n"+
+				"var linked atomic.Pointer[lang.FnFunc%d]\n"+
 				"return func(%s) any {\n"+
+				"if fn := linked.Load(); fn != nil { return (*fn)(%s) }\n"+
 				"if !vr.IsBound() { return lang.Apply%d(checkDerefVar(vr)%s) }\n"+
-				"once.Do(func() { linked = aotLinkBoundFn%d(vr) })\n"+
-				"return linked(%s)\n"+
+				"fn := aotLinkBoundFn%d(vr)\n"+
+				"linked.Store(&fn)\n"+
+				"return fn(%s)\n"+
 				"}\n"+
 				"}\n\n"+
 				"func aotLinkBoundFn%d(vr *lang.Var) lang.FnFunc%d {\n"+
@@ -482,6 +483,7 @@ func (g *Generator) generateAOTExternalAdapters() {
 			arity,
 			arity,
 			paramList,
+			argList,
 			arity, aotAdapterArgs(args),
 			arity,
 			argList,

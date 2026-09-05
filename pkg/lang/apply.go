@@ -133,6 +133,12 @@ func Apply1(fn interface{}, a0 any) any {
 		return f(a0)
 	case FnFunc:
 		return f(a0)
+	case *MetaFn:
+		return f.Invoke1(a0)
+	case ArityFn:
+		return f.Invoke1(a0)
+	case Keyword:
+		return f.Invoke1(a0)
 	case func(any) any:
 		return f(a0)
 	case func(any) bool:
@@ -172,6 +178,12 @@ func Apply2(fn interface{}, a0, a1 any) any {
 		return f(a0, a1)
 	case FnFunc:
 		return f(a0, a1)
+	case *MetaFn:
+		return f.Invoke2(a0, a1)
+	case ArityFn:
+		return f.Invoke2(a0, a1)
+	case Keyword:
+		return f.Invoke2(a0, a1)
 	case func(any, any) any:
 		return f(a0, a1)
 	case func(any, any) bool:
@@ -212,6 +224,10 @@ func Apply3(fn interface{}, a0, a1, a2 any) any {
 		return f(a0, a1, a2)
 	case FnFunc:
 		return f(a0, a1, a2)
+	case *MetaFn:
+		return f.Invoke3(a0, a1, a2)
+	case ArityFn:
+		return f.Invoke3(a0, a1, a2)
 	case func(string, ...any) string:
 		return f(a0.(string), a1, a2)
 	case FixedArityFn3:
@@ -230,6 +246,10 @@ func Apply4(fn interface{}, a0, a1, a2, a3 any) any {
 		return f(a0, a1, a2, a3)
 	case FnFunc:
 		return f(a0, a1, a2, a3)
+	case *MetaFn:
+		return f.Invoke4(a0, a1, a2, a3)
+	case ArityFn:
+		return f.Invoke4(a0, a1, a2, a3)
 	case func(string, ...any) string:
 		return f(a0.(string), a1, a2, a3)
 	case FixedArityFn4:

@@ -9,6 +9,12 @@ func Equiv(a, b any) bool {
 }
 
 func Equals(a, b any) bool {
+	if a == nil {
+		return IsNil(b)
+	}
+	if b == nil {
+		return IsNil(a)
+	}
 	// Fast paths for values whose dynamic types are comparable and whose
 	// Equals semantics are plain ==, so the common cases skip reflection.
 	switch a := a.(type) {
@@ -16,6 +22,7 @@ func Equals(a, b any) bool {
 		if b, ok := b.(Char); ok {
 			return a == b
 		}
+		return false
 	case int64:
 		if b, ok := b.(int64); ok {
 			return a == b
@@ -24,14 +31,17 @@ func Equals(a, b any) bool {
 		if b, ok := b.(string); ok {
 			return a == b
 		}
+		return false
 	case Keyword:
 		if b, ok := b.(Keyword); ok {
 			return a == b
 		}
+		return false
 	case bool:
 		if b, ok := b.(bool); ok {
 			return a == b
 		}
+		return false
 	}
 	// check functions first, because == panics on func comparison.
 	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)

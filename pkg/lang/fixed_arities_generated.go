@@ -72,7 +72,7 @@ func Apply6(fn interface{}, a0, a1, a2, a3, a4, a5 any) any {
 	}
 }
 
-func (f ArityFn) Invoke6(a0, a1, a2, a3, a4, a5 any) any {
+func (f *MultiArityFn) Invoke6(a0, a1, a2, a3, a4, a5 any) any {
 	if method := f.fixedMethod(6); method != nil {
 		return Apply6(method, a0, a1, a2, a3, a4, a5)
 	}
@@ -127,7 +127,7 @@ func Apply7(fn interface{}, a0, a1, a2, a3, a4, a5, a6 any) any {
 	}
 }
 
-func (f ArityFn) Invoke7(a0, a1, a2, a3, a4, a5, a6 any) any {
+func (f *MultiArityFn) Invoke7(a0, a1, a2, a3, a4, a5, a6 any) any {
 	if method := f.fixedMethod(7); method != nil {
 		return Apply7(method, a0, a1, a2, a3, a4, a5, a6)
 	}
@@ -184,7 +184,7 @@ func Apply8(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7 any) any {
 	}
 }
 
-func (f ArityFn) Invoke8(a0, a1, a2, a3, a4, a5, a6, a7 any) any {
+func (f *MultiArityFn) Invoke8(a0, a1, a2, a3, a4, a5, a6, a7 any) any {
 	if method := f.fixedMethod(8); method != nil {
 		return Apply8(method, a0, a1, a2, a3, a4, a5, a6, a7)
 	}
@@ -241,7 +241,7 @@ func Apply9(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8 any) any {
 	}
 }
 
-func (f ArityFn) Invoke9(a0, a1, a2, a3, a4, a5, a6, a7, a8 any) any {
+func (f *MultiArityFn) Invoke9(a0, a1, a2, a3, a4, a5, a6, a7, a8 any) any {
 	if method := f.fixedMethod(9); method != nil {
 		return Apply9(method, a0, a1, a2, a3, a4, a5, a6, a7, a8)
 	}
@@ -300,7 +300,7 @@ func Apply10(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 any) any {
 	}
 }
 
-func (f ArityFn) Invoke10(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 any) any {
+func (f *MultiArityFn) Invoke10(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 any) any {
 	if method := f.fixedMethod(10); method != nil {
 		return Apply10(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
 	}
@@ -359,7 +359,7 @@ func Apply11(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 any) an
 	}
 }
 
-func (f ArityFn) Invoke11(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 any) any {
+func (f *MultiArityFn) Invoke11(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 any) any {
 	if method := f.fixedMethod(11); method != nil {
 		return Apply11(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
 	}
@@ -418,7 +418,7 @@ func Apply12(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 an
 	}
 }
 
-func (f ArityFn) Invoke12(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 any) any {
+func (f *MultiArityFn) Invoke12(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 any) any {
 	if method := f.fixedMethod(12); method != nil {
 		return Apply12(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
 	}
@@ -477,7 +477,7 @@ func Apply13(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a
 	}
 }
 
-func (f ArityFn) Invoke13(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 any) any {
+func (f *MultiArityFn) Invoke13(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 any) any {
 	if method := f.fixedMethod(13); method != nil {
 		return Apply13(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
 	}
@@ -536,7 +536,7 @@ func Apply14(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a
 	}
 }
 
-func (f ArityFn) Invoke14(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13 any) any {
+func (f *MultiArityFn) Invoke14(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13 any) any {
 	if method := f.fixedMethod(14); method != nil {
 		return Apply14(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13)
 	}
@@ -595,7 +595,7 @@ func Apply15(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a
 	}
 }
 
-func (f ArityFn) Invoke15(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14 any) any {
+func (f *MultiArityFn) Invoke15(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14 any) any {
 	if method := f.fixedMethod(15); method != nil {
 		return Apply15(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14)
 	}
@@ -654,7 +654,7 @@ func Apply16(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a
 	}
 }
 
-func (f ArityFn) Invoke16(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15 any) any {
+func (f *MultiArityFn) Invoke16(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15 any) any {
 	if method := f.fixedMethod(16); method != nil {
 		return Apply16(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15)
 	}
@@ -713,7 +713,7 @@ func Apply17(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a
 	}
 }
 
-func (f ArityFn) Invoke17(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16 any) any {
+func (f *MultiArityFn) Invoke17(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16 any) any {
 	if method := f.fixedMethod(17); method != nil {
 		return Apply17(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)
 	}
@@ -772,7 +772,7 @@ func Apply18(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a
 	}
 }
 
-func (f ArityFn) Invoke18(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17 any) any {
+func (f *MultiArityFn) Invoke18(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17 any) any {
 	if method := f.fixedMethod(18); method != nil {
 		return Apply18(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17)
 	}
@@ -831,7 +831,7 @@ func Apply19(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a
 	}
 }
 
-func (f ArityFn) Invoke19(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18 any) any {
+func (f *MultiArityFn) Invoke19(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18 any) any {
 	if method := f.fixedMethod(19); method != nil {
 		return Apply19(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18)
 	}
@@ -890,7 +890,7 @@ func Apply20(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a
 	}
 }
 
-func (f ArityFn) Invoke20(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19 any) any {
+func (f *MultiArityFn) Invoke20(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19 any) any {
 	if method := f.fixedMethod(20); method != nil {
 		return Apply20(method, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19)
 	}
@@ -899,33 +899,33 @@ func (f ArityFn) Invoke20(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12,
 
 var (
 	_ IFn            = FnFunc6(nil)
-	_ FixedArityFn6  = ArityFn{}
+	_ FixedArityFn6  = ArityFn(nil)
 	_ IFn            = FnFunc7(nil)
-	_ FixedArityFn7  = ArityFn{}
+	_ FixedArityFn7  = ArityFn(nil)
 	_ IFn            = FnFunc8(nil)
-	_ FixedArityFn8  = ArityFn{}
+	_ FixedArityFn8  = ArityFn(nil)
 	_ IFn            = FnFunc9(nil)
-	_ FixedArityFn9  = ArityFn{}
+	_ FixedArityFn9  = ArityFn(nil)
 	_ IFn            = FnFunc10(nil)
-	_ FixedArityFn10 = ArityFn{}
+	_ FixedArityFn10 = ArityFn(nil)
 	_ IFn            = FnFunc11(nil)
-	_ FixedArityFn11 = ArityFn{}
+	_ FixedArityFn11 = ArityFn(nil)
 	_ IFn            = FnFunc12(nil)
-	_ FixedArityFn12 = ArityFn{}
+	_ FixedArityFn12 = ArityFn(nil)
 	_ IFn            = FnFunc13(nil)
-	_ FixedArityFn13 = ArityFn{}
+	_ FixedArityFn13 = ArityFn(nil)
 	_ IFn            = FnFunc14(nil)
-	_ FixedArityFn14 = ArityFn{}
+	_ FixedArityFn14 = ArityFn(nil)
 	_ IFn            = FnFunc15(nil)
-	_ FixedArityFn15 = ArityFn{}
+	_ FixedArityFn15 = ArityFn(nil)
 	_ IFn            = FnFunc16(nil)
-	_ FixedArityFn16 = ArityFn{}
+	_ FixedArityFn16 = ArityFn(nil)
 	_ IFn            = FnFunc17(nil)
-	_ FixedArityFn17 = ArityFn{}
+	_ FixedArityFn17 = ArityFn(nil)
 	_ IFn            = FnFunc18(nil)
-	_ FixedArityFn18 = ArityFn{}
+	_ FixedArityFn18 = ArityFn(nil)
 	_ IFn            = FnFunc19(nil)
-	_ FixedArityFn19 = ArityFn{}
+	_ FixedArityFn19 = ArityFn(nil)
 	_ IFn            = FnFunc20(nil)
-	_ FixedArityFn20 = ArityFn{}
+	_ FixedArityFn20 = ArityFn(nil)
 )
