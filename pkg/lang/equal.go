@@ -9,6 +9,30 @@ func Equiv(a, b any) bool {
 }
 
 func Equals(a, b any) bool {
+	// Fast paths for values whose dynamic types are comparable and whose
+	// Equals semantics are plain ==, so the common cases skip reflection.
+	switch a := a.(type) {
+	case Char:
+		if b, ok := b.(Char); ok {
+			return a == b
+		}
+	case int64:
+		if b, ok := b.(int64); ok {
+			return a == b
+		}
+	case string:
+		if b, ok := b.(string); ok {
+			return a == b
+		}
+	case Keyword:
+		if b, ok := b.(Keyword); ok {
+			return a == b
+		}
+	case bool:
+		if b, ok := b.(bool); ok {
+			return a == b
+		}
+	}
 	// check functions first, because == panics on func comparison.
 	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)
 	if aVal.Kind() == reflect.Func || bVal.Kind() == reflect.Func {
@@ -93,6 +117,14 @@ func Equals(a, b any) bool {
 }
 
 func Identical(a, b any) bool {
+	// Fast paths for common comparable dynamic types; == on interfaces
+	// only panics when both sides hold the same uncomparable type.
+	switch a.(type) {
+	case nil:
+		return b == nil
+	case Char, int64, string, bool, Keyword:
+		return a == b
+	}
 	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)
 
 	// check if comparing functions, because == panics on func comparison.

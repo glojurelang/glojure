@@ -1,6 +1,10 @@
 package lang
 
-import "reflect"
+import (
+	"reflect"
+
+	"github.com/glojurelang/glojure/internal/persistent/vector"
+)
 
 // CreateOwningLazilyPersistentVector creates a persistent vector that
 // owns the items in items. items must be a slice or array.
@@ -31,6 +35,17 @@ func CreateLazilyPersistentVector(obj any) IPersistentVector {
 		return NewVector(slc...)
 	case Seqable:
 		return CreateLazilyPersistentVector(obj.Seq())
+	case string:
+		// Build the vector straight from the runes; going through
+		// ToSlice would allocate a boxed copy of every character
+		// first.
+		runes := []rune(obj)
+		if len(runes) == 0 {
+			return emptyVector
+		}
+		return &Vector{vec: vector.Build(len(runes), func(i int) any {
+			return NewChar(runes[i])
+		})}
 	default:
 		return NewVector(ToSlice(obj)...)
 	}

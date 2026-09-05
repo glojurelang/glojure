@@ -201,3 +201,32 @@ func parseOps(t *testing.T, jsOps [][]any) []testOp {
 	}
 	return ops
 }
+
+func TestBuildMatchesConj(t *testing.T) {
+	for _, n := range []int{0, 1, 31, 32, 33, 64, 65, 1024, 1025, 1056,
+		1057, 2000, 32769, 40000} {
+		built := Build(n, func(i int) interface{} { return i })
+		trans := NewTransient(&Persistent{})
+		for i := 0; i < n; i++ {
+			trans.Conj(i)
+		}
+		want := trans.Persistent()
+		if built.count != want.count || built.height != want.height {
+			t.Fatalf("n=%d: count/height %d/%d, want %d/%d",
+				n, built.count, built.height, want.count, want.height)
+		}
+		for i := 0; i < n; i++ {
+			got, ok := built.Index(i)
+			if !ok || got != i {
+				t.Fatalf("n=%d: index %d gave %v %v", n, i, got, ok)
+			}
+		}
+		if _, ok := built.Index(n); ok {
+			t.Fatalf("n=%d: index past end succeeded", n)
+		}
+		more := built.Conj(n).Conj(n + 1)
+		if got, _ := more.Index(n + 1); got != n+1 || more.Len() != n+2 {
+			t.Fatalf("n=%d: conj after build broken", n)
+		}
+	}
+}

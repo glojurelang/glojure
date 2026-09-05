@@ -29,7 +29,8 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 		return x.Nth(n)
 	case Indexed:
 		val := x.NthDefault(n, notFound)
-		if Identical(val, notFound) {
+		// notFound is a pointer, so == cannot panic and needs no reflection.
+		if val == notFound {
 			return nil, false
 		}
 		return val, true

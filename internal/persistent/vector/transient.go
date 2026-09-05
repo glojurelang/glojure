@@ -34,11 +34,58 @@ func NewPersistent(elems ...interface{}) Persistent {
 		}
 	}
 
-	trans := NewTransient(&Persistent{})
-	for _, e := range elems {
-		trans.Conj(e)
+	return Build(len(elems), func(i int) interface{} { return elems[i] })
+}
+
+// Build returns a persistent vector of n elements, reading element i
+// from at(i). It fills the leaf nodes and the tail directly and links
+// the tree bottom up, so bulk construction writes each element once
+// instead of cloning the root path on every full tail as Conj does.
+func Build(n int, at func(int) interface{}) Persistent {
+	if n <= 0 {
+		return Persistent{}
 	}
-	return *trans.Persistent()
+	if n <= tailMaxLen {
+		tail := make([]interface{}, n)
+		for i := range tail {
+			tail[i] = at(i)
+		}
+		return Persistent{count: n, tail: newTailBase(tail)}
+	}
+	treeSize := ((n - 1) >> chunkBits) << chunkBits
+	level := make([]node, treeSize>>chunkBits)
+	for l := range level {
+		leaf := newNode()
+		base := l << chunkBits
+		for i := range leaf {
+			leaf[i] = at(base + i)
+		}
+		level[l] = leaf
+	}
+	tail := make([]interface{}, n-treeSize)
+	for i := range tail {
+		tail[i] = at(treeSize + i)
+	}
+	var height uint
+	for len(level) > 1 {
+		parents := make([]node, (len(level)+chunkMask)>>chunkBits)
+		for p := range parents {
+			parent := newNode()
+			base := p << chunkBits
+			for i := 0; i < nodeSize && base+i < len(level); i++ {
+				parent[i] = level[base+i]
+			}
+			parents[p] = parent
+		}
+		level = parents
+		height++
+	}
+	return Persistent{
+		count:  n,
+		height: height,
+		root:   level[0],
+		tail:   newTailBase(tail),
+	}
 }
 
 type Transient struct {
