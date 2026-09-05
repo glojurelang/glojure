@@ -1,10 +1,10 @@
 package lang
 
-import "sync"
-
+// Volatile is a mutable cell for single threaded use, matching Clojure's
+// volatile! which offers no coordination between threads beyond
+// visibility. Callers needing synchronization should use an atom.
 type Volatile struct {
 	val interface{}
-	mtx sync.RWMutex
 }
 
 var (
@@ -18,14 +18,10 @@ func NewVolatile(val interface{}) *Volatile {
 }
 
 func (v *Volatile) Deref() interface{} {
-	v.mtx.RLock()
-	defer v.mtx.RUnlock()
 	return v.val
 }
 
 func (v *Volatile) Reset(val interface{}) interface{} {
-	v.mtx.Lock()
-	defer v.mtx.Unlock()
 	v.val = val
 	return val
 }

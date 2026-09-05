@@ -48,10 +48,12 @@ func (f FnFunc6) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5])
 }
 
-func (f FnFunc6) Meta() IPersistentMap          { return nil }
-func (f FnFunc6) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc6) Meta() IPersistentMap             { return nil }
+func (f FnFunc6) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc6) IsFnValue() {}
+
+func (f *MetaFn) Invoke6(a0, a1, a2, a3, a4, a5 any) any { return Apply6(f.fn, a0, a1, a2, a3, a4, a5) }
 
 func Apply6(fn interface{}, a0, a1, a2, a3, a4, a5 any) any {
 	switch f := fn.(type) {
@@ -99,10 +101,14 @@ func (f FnFunc7) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6])
 }
 
-func (f FnFunc7) Meta() IPersistentMap          { return nil }
-func (f FnFunc7) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc7) Meta() IPersistentMap             { return nil }
+func (f FnFunc7) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc7) IsFnValue() {}
+
+func (f *MetaFn) Invoke7(a0, a1, a2, a3, a4, a5, a6 any) any {
+	return Apply7(f.fn, a0, a1, a2, a3, a4, a5, a6)
+}
 
 func Apply7(fn interface{}, a0, a1, a2, a3, a4, a5, a6 any) any {
 	switch f := fn.(type) {
@@ -152,10 +158,14 @@ func (f FnFunc8) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7])
 }
 
-func (f FnFunc8) Meta() IPersistentMap          { return nil }
-func (f FnFunc8) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc8) Meta() IPersistentMap             { return nil }
+func (f FnFunc8) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc8) IsFnValue() {}
+
+func (f *MetaFn) Invoke8(a0, a1, a2, a3, a4, a5, a6, a7 any) any {
+	return Apply8(f.fn, a0, a1, a2, a3, a4, a5, a6, a7)
+}
 
 func Apply8(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7 any) any {
 	switch f := fn.(type) {
@@ -205,10 +215,14 @@ func (f FnFunc9) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8])
 }
 
-func (f FnFunc9) Meta() IPersistentMap          { return nil }
-func (f FnFunc9) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc9) Meta() IPersistentMap             { return nil }
+func (f FnFunc9) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc9) IsFnValue() {}
+
+func (f *MetaFn) Invoke9(a0, a1, a2, a3, a4, a5, a6, a7, a8 any) any {
+	return Apply9(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8)
+}
 
 func Apply9(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8 any) any {
 	switch f := fn.(type) {
@@ -260,10 +274,14 @@ func (f FnFunc10) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9])
 }
 
-func (f FnFunc10) Meta() IPersistentMap          { return nil }
-func (f FnFunc10) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc10) Meta() IPersistentMap             { return nil }
+func (f FnFunc10) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc10) IsFnValue() {}
+
+func (f *MetaFn) Invoke10(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 any) any {
+	return Apply10(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
+}
 
 func Apply10(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 any) any {
 	switch f := fn.(type) {
@@ -315,10 +333,14 @@ func (f FnFunc11) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10])
 }
 
-func (f FnFunc11) Meta() IPersistentMap          { return nil }
-func (f FnFunc11) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc11) Meta() IPersistentMap             { return nil }
+func (f FnFunc11) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc11) IsFnValue() {}
+
+func (f *MetaFn) Invoke11(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 any) any {
+	return Apply11(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
+}
 
 func Apply11(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 any) any {
 	switch f := fn.(type) {
@@ -370,10 +392,14 @@ func (f FnFunc12) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11])
 }
 
-func (f FnFunc12) Meta() IPersistentMap          { return nil }
-func (f FnFunc12) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc12) Meta() IPersistentMap             { return nil }
+func (f FnFunc12) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc12) IsFnValue() {}
+
+func (f *MetaFn) Invoke12(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 any) any {
+	return Apply12(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
+}
 
 func Apply12(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 any) any {
 	switch f := fn.(type) {
@@ -425,10 +451,14 @@ func (f FnFunc13) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12])
 }
 
-func (f FnFunc13) Meta() IPersistentMap          { return nil }
-func (f FnFunc13) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc13) Meta() IPersistentMap             { return nil }
+func (f FnFunc13) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc13) IsFnValue() {}
+
+func (f *MetaFn) Invoke13(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 any) any {
+	return Apply13(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
+}
 
 func Apply13(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 any) any {
 	switch f := fn.(type) {
@@ -480,10 +510,14 @@ func (f FnFunc14) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13])
 }
 
-func (f FnFunc14) Meta() IPersistentMap          { return nil }
-func (f FnFunc14) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc14) Meta() IPersistentMap             { return nil }
+func (f FnFunc14) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc14) IsFnValue() {}
+
+func (f *MetaFn) Invoke14(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13 any) any {
+	return Apply14(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13)
+}
 
 func Apply14(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13 any) any {
 	switch f := fn.(type) {
@@ -535,10 +569,14 @@ func (f FnFunc15) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13], values[14])
 }
 
-func (f FnFunc15) Meta() IPersistentMap          { return nil }
-func (f FnFunc15) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc15) Meta() IPersistentMap             { return nil }
+func (f FnFunc15) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc15) IsFnValue() {}
+
+func (f *MetaFn) Invoke15(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14 any) any {
+	return Apply15(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14)
+}
 
 func Apply15(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14 any) any {
 	switch f := fn.(type) {
@@ -590,10 +628,14 @@ func (f FnFunc16) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13], values[14], values[15])
 }
 
-func (f FnFunc16) Meta() IPersistentMap          { return nil }
-func (f FnFunc16) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc16) Meta() IPersistentMap             { return nil }
+func (f FnFunc16) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc16) IsFnValue() {}
+
+func (f *MetaFn) Invoke16(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15 any) any {
+	return Apply16(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15)
+}
 
 func Apply16(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15 any) any {
 	switch f := fn.(type) {
@@ -645,10 +687,14 @@ func (f FnFunc17) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13], values[14], values[15], values[16])
 }
 
-func (f FnFunc17) Meta() IPersistentMap          { return nil }
-func (f FnFunc17) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc17) Meta() IPersistentMap             { return nil }
+func (f FnFunc17) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc17) IsFnValue() {}
+
+func (f *MetaFn) Invoke17(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16 any) any {
+	return Apply17(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)
+}
 
 func Apply17(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16 any) any {
 	switch f := fn.(type) {
@@ -700,10 +746,14 @@ func (f FnFunc18) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13], values[14], values[15], values[16], values[17])
 }
 
-func (f FnFunc18) Meta() IPersistentMap          { return nil }
-func (f FnFunc18) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc18) Meta() IPersistentMap             { return nil }
+func (f FnFunc18) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc18) IsFnValue() {}
+
+func (f *MetaFn) Invoke18(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17 any) any {
+	return Apply18(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17)
+}
 
 func Apply18(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17 any) any {
 	switch f := fn.(type) {
@@ -755,10 +805,14 @@ func (f FnFunc19) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13], values[14], values[15], values[16], values[17], values[18])
 }
 
-func (f FnFunc19) Meta() IPersistentMap          { return nil }
-func (f FnFunc19) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc19) Meta() IPersistentMap             { return nil }
+func (f FnFunc19) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc19) IsFnValue() {}
+
+func (f *MetaFn) Invoke19(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18 any) any {
+	return Apply19(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18)
+}
 
 func Apply19(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18 any) any {
 	switch f := fn.(type) {
@@ -810,10 +864,14 @@ func (f FnFunc20) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13], values[14], values[15], values[16], values[17], values[18], values[19])
 }
 
-func (f FnFunc20) Meta() IPersistentMap          { return nil }
-func (f FnFunc20) WithMeta(_ IPersistentMap) any { return f }
+func (f FnFunc20) Meta() IPersistentMap             { return nil }
+func (f FnFunc20) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
 
 func (FnFunc20) IsFnValue() {}
+
+func (f *MetaFn) Invoke20(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19 any) any {
+	return Apply20(f.fn, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19)
+}
 
 func Apply20(fn interface{}, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19 any) any {
 	switch f := fn.(type) {

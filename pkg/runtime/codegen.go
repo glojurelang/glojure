@@ -157,8 +157,12 @@ type Generator struct {
 
 	valueInits []*valueInit // map of value initializations
 
-	aotDeclarations        bytes.Buffer
-	aotCallTargets         map[*lang.Var]*aotSpecializationTarget
+	aotDeclarations bytes.Buffer
+	aotCallTargets  map[*lang.Var]*aotSpecializationTarget
+	// metaFnRaw maps the variable holding a metadata-carrying function
+	// wrapper (see lang.MetaFn) back to the raw FnFuncN variable, so
+	// direct call targets keep linking to the unwrapped closure.
+	metaFnRaw              map[string]string
 	aotExternalCallTargets map[aotExternalCallKey]*aotExternalCallTarget
 	aotNamespace           *lang.Namespace
 	directLink             bool
@@ -215,6 +219,7 @@ func newGenerator(w io.Writer, directLink bool) *Generator {
 		liftedValues:           make(map[liftedKey]*liftedValue),
 		liftedCounter:          0,
 		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
+		metaFnRaw:              make(map[string]string),
 		aotExternalCallTargets: make(map[aotExternalCallKey]*aotExternalCallTarget),
 		directLink:             directLink,
 	}
@@ -718,7 +723,11 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 		}
 		valueExpr := g.generateValue(v)
 		if target := g.specializationTarget; target != nil {
-			g.writef("%s = %s\n", target.directFnVar, valueExpr)
+			direct := valueExpr
+			if raw, ok := g.metaFnRaw[valueExpr]; ok {
+				direct = raw
+			}
+			g.writef("%s = %s\n", target.directFnVar, direct)
 		}
 		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, valueExpr)
 		if target := g.specializationTarget; target != nil && target.rootVersionVar != "" {
@@ -1422,6 +1431,18 @@ func (g *Generator) generateFn(fn *Fn) string {
 	// scoped variable for the function itself, if the function is named
 	g.writef("var %s %s\n", fnVar, fnType)
 
+	// FnFuncN and ArityFn values cannot hold metadata themselves;
+	// WithMeta yields a *lang.MetaFn wrapper (or a copy for ArityFn),
+	// so a function with runtime metadata is returned through an
+	// any-typed variable declared in the caller's scope, while the raw
+	// closure stays available for direct call linking.
+	runtimeMeta := runtimeFunctionMeta(fn.Meta())
+	wrapped := ""
+	if runtimeMeta != nil {
+		wrapped = g.allocateTempVar()
+		g.writef("var %s any\n", wrapped)
+	}
+
 	// Push a new scope for the function definition
 	g.pushVarScope()
 	defer g.popVarScope()
@@ -1562,9 +1583,11 @@ func (g *Generator) generateFn(fn *Fn) string {
 	// defn uses :rettag to communicate a return hint to the compiler. It is
 	// not runtime function metadata, so do not serialize it into the AOT
 	// value. Preserve any metadata explicitly attached to the function.
-	if meta := runtimeFunctionMeta(fn.Meta()); meta != nil {
-		metaVar := g.generateValue(meta)
-		g.writeAssign(fnVar, fmt.Sprintf("%s.WithMeta(%s).(%s)", fnVar, metaVar, fnType))
+	if runtimeMeta != nil {
+		metaVar := g.generateValue(runtimeMeta)
+		g.writef("%s = %s.WithMeta(%s)\n", wrapped, fnVar, metaVar)
+		g.metaFnRaw[wrapped] = fnVar
+		return wrapped
 	}
 
 	// Return the function variable

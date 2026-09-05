@@ -59,8 +59,7 @@ func (f FnFunc) Meta() IPersistentMap {
 }
 
 func (f FnFunc) WithMeta(meta IPersistentMap) any {
-	// no-op
-	return f
+	return NewMetaFn(f, meta)
 }
 
 func (FnFunc) IsFnValue() {}
@@ -145,9 +144,9 @@ func (f FnFunc0) ApplyTo(args ISeq) any {
 	return f()
 }
 
-func (f FnFunc0) Meta() IPersistentMap          { return nil }
-func (f FnFunc0) WithMeta(_ IPersistentMap) any { return f }
-func (FnFunc0) IsFnValue()                      {}
+func (f FnFunc0) Meta() IPersistentMap             { return nil }
+func (f FnFunc0) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
+func (FnFunc0) IsFnValue()                         {}
 
 // FnFunc1 is a one-argument function implementing IFn with no []any allocation.
 type FnFunc1 func(any) any
@@ -168,9 +167,9 @@ func (f FnFunc1) ApplyTo(args ISeq) any {
 	return f(values[0])
 }
 
-func (f FnFunc1) Meta() IPersistentMap          { return nil }
-func (f FnFunc1) WithMeta(_ IPersistentMap) any { return f }
-func (FnFunc1) IsFnValue()                      {}
+func (f FnFunc1) Meta() IPersistentMap             { return nil }
+func (f FnFunc1) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
+func (FnFunc1) IsFnValue()                         {}
 
 // FnFunc2 is a two-argument function implementing IFn with no []any allocation.
 type FnFunc2 func(any, any) any
@@ -191,9 +190,9 @@ func (f FnFunc2) ApplyTo(args ISeq) any {
 	return f(values[0], values[1])
 }
 
-func (f FnFunc2) Meta() IPersistentMap          { return nil }
-func (f FnFunc2) WithMeta(_ IPersistentMap) any { return f }
-func (FnFunc2) IsFnValue()                      {}
+func (f FnFunc2) Meta() IPersistentMap             { return nil }
+func (f FnFunc2) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
+func (FnFunc2) IsFnValue()                         {}
 
 // FnFunc3 is a three-argument function implementing IFn with no []any allocation.
 type FnFunc3 func(any, any, any) any
@@ -214,9 +213,9 @@ func (f FnFunc3) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2])
 }
 
-func (f FnFunc3) Meta() IPersistentMap          { return nil }
-func (f FnFunc3) WithMeta(_ IPersistentMap) any { return f }
-func (FnFunc3) IsFnValue()                      {}
+func (f FnFunc3) Meta() IPersistentMap             { return nil }
+func (f FnFunc3) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
+func (FnFunc3) IsFnValue()                         {}
 
 // FnFunc4 is a four-argument function implementing IFn with no []any allocation.
 type FnFunc4 func(any, any, any, any) any
@@ -237,9 +236,9 @@ func (f FnFunc4) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3])
 }
 
-func (f FnFunc4) Meta() IPersistentMap          { return nil }
-func (f FnFunc4) WithMeta(_ IPersistentMap) any { return f }
-func (FnFunc4) IsFnValue()                      {}
+func (f FnFunc4) Meta() IPersistentMap             { return nil }
+func (f FnFunc4) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
+func (FnFunc4) IsFnValue()                         {}
 
 // FnFunc5 is a five-argument function implementing IFn with no []any allocation.
 type FnFunc5 func(any, any, any, any, any) any
@@ -262,9 +261,9 @@ func (f FnFunc5) ApplyTo(args ISeq) any {
 	return f(values[0], values[1], values[2], values[3], values[4])
 }
 
-func (f FnFunc5) Meta() IPersistentMap          { return nil }
-func (f FnFunc5) WithMeta(_ IPersistentMap) any { return f }
-func (FnFunc5) IsFnValue()                      {}
+func (f FnFunc5) Meta() IPersistentMap             { return nil }
+func (f FnFunc5) WithMeta(meta IPersistentMap) any { return NewMetaFn(f, meta) }
+func (FnFunc5) IsFnValue()                         {}
 
 // requireFixedSeqArity reads up to five fixed arguments directly from an
 // ISeq. Unlike seqToSlice, the successful path does not allocate a variadic
