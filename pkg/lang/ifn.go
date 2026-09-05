@@ -12,6 +12,12 @@ type FnValue interface {
 
 // IsFn reports whether value represents a Clojure function.
 func IsFn(value any) bool {
+	// The compiled fn types come first so hot fn? checks skip the
+	// interface table lookup behind the marker assertion.
+	switch value.(type) {
+	case *MetaFn, FnFunc1, FnFunc2, FnFunc3, *MultiArityFn, VariadicFn:
+		return true
+	}
 	_, ok := value.(FnValue)
 	return ok
 }

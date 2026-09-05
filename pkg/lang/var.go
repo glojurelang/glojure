@@ -242,6 +242,18 @@ func (v *Var) SetMetaLazy(fn func() IPersistentMap) {
 	v.meta.Store(NewBox(&lazyVarMeta{fn: fn}))
 }
 
+// SetMetaLazyMacro is SetMetaLazy for generated code that already knows
+// whether the metadata marks a macro, so IsMacro can answer without
+// realizing the metadata.
+func (v *Var) SetMetaLazyMacro(fn func() IPersistentMap, macro bool) {
+	v.meta.Store(NewBox(&lazyVarMeta{fn: fn}))
+	if macro {
+		v.isMacroCached.Store(2)
+	} else {
+		v.isMacroCached.Store(1)
+	}
+}
+
 func (v *Var) AlterMeta(alter IFn, args ISeq) IPersistentMap {
 	meta := alter.ApplyTo(NewCons(v.Meta(), args)).(IPersistentMap)
 	v.SetMeta(meta)

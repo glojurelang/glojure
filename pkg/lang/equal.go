@@ -129,11 +129,24 @@ func Equals(a, b any) bool {
 func Identical(a, b any) bool {
 	// Fast paths for common comparable dynamic types; == on interfaces
 	// only panics when both sides hold the same uncomparable type.
-	switch a.(type) {
+	switch a := a.(type) {
 	case nil:
 		return b == nil
-	case Char, int64, string, bool, Keyword:
-		return a == b
+	case Char:
+		bc, ok := b.(Char)
+		return ok && a == bc
+	case int64:
+		bi, ok := b.(int64)
+		return ok && a == bi
+	case string:
+		bs, ok := b.(string)
+		return ok && a == bs
+	case bool:
+		bb, ok := b.(bool)
+		return ok && a == bb
+	case Keyword:
+		bk, ok := b.(Keyword)
+		return ok && a == bk
 	case *Map, *Vector, *List, *EmptyList, *PersistentHashMap, *Symbol,
 		*Var, *LazySeq, *Cons, *Atom, *MetaFn, *MultiArityFn, *Volatile:
 		// Pointer types compare by identity without reflection.

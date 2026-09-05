@@ -16,6 +16,18 @@ func IsTruthy(v interface{}) bool {
 }
 
 func isTruthyOther(v interface{}) bool {
+	// The three types generated parsers test most often get plain type
+	// assertions ahead of the switch, which the compiler turns into a
+	// hash search once it has this many cases.
+	if m, ok := v.(*Map); ok {
+		return m != nil
+	}
+	if vec, ok := v.(*Vector); ok {
+		return vec != nil
+	}
+	if _, ok := v.(int64); ok {
+		return true
+	}
 	switch v := v.(type) {
 	case nil:
 		return false
@@ -67,6 +79,8 @@ func IsNil(v interface{}) bool {
 		return v == nil
 	case *Record:
 		return v == nil
+	case IRecord:
+		return false
 	case *Cons:
 		return v == nil
 	case FnFunc1:

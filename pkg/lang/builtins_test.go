@@ -5,10 +5,21 @@ import (
 	"testing"
 )
 
-func TestBuiltinSliceIsFnFunc(t *testing.T) {
+func TestBuiltinSliceHasFixedArities(t *testing.T) {
 	b := Builtins["slice"]
-	if _, ok := b.(FnFunc); !ok {
-		t.Errorf("Builtins[\"slice\"] is %T, want FnFunc", b)
+	fn, ok := b.(ArityFn)
+	if !ok {
+		t.Fatalf("Builtins[\"slice\"] is %T, want ArityFn", b)
+	}
+	if got := fn.Invoke2("hello", int64(2)); got != "llo" {
+		t.Errorf("slice(\"hello\", 2) = %q, want \"llo\"", got)
+	}
+	if got := fn.Invoke3("hello", nil, int64(2)); got != "he" {
+		t.Errorf("slice(\"hello\", nil, 2) = %q, want \"he\"", got)
+	}
+	got := fn.Invoke3([]int{1, 2, 3}, int64(1), int64(3))
+	if !reflect.DeepEqual(got, []int{2, 3}) {
+		t.Errorf("slice([1 2 3], 1, 3) = %v, want [2 3]", got)
 	}
 }
 

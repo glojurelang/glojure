@@ -187,6 +187,15 @@ func SetHostClass(class string, t reflect.Type) {
 	}
 }
 
+// HostClassCount returns the number of registered host classes.
+// lang.NewNamespace uses it to notice new registrations without
+// copying the whole map on every namespace creation.
+func HostClassCount() int {
+	hostClassTypeMtx.RLock()
+	defer hostClassTypeMtx.RUnlock()
+	return len(hostClassType)
+}
+
 // HostClass returns the reflect.Type registered for the given class
 // and whether it was found.
 func HostClass(class string) (reflect.Type, bool) {

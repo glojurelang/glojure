@@ -103,12 +103,13 @@ func NamespaceFor(inns *Namespace, sym *Symbol) *Namespace {
 }
 
 func NewNamespace(name *Symbol) *Namespace {
+	seed := hostClassSeedEntries()
 	ns := &Namespace{
 		name:     name,
-		mappings: make(map[string]namespaceMapping),
+		mappings: make(map[string]namespaceMapping, len(seed)+32),
 	}
 
-	seedHostClassImports(ns.mappings)
+	seedHostClassImports(ns.mappings, seed)
 	ns.aliases.Store(NewBox(emptyMap))
 
 	return ns
@@ -118,11 +119,38 @@ func NewNamespace(name *Symbol) *Namespace {
 // pkgmap. Mirrors real Clojure's auto-import of
 // java.lang.* (and other packages we publish) so (ns-imports *ns*)
 // returns a populated map.
-func seedHostClassImports(m map[string]namespaceMapping) {
-	for name, typ := range pkgmap.HostClassTypes() {
-		sym := NewSymbol(name)
-		m[sym.String()] = namespaceMapping{sym: sym, val: typ}
+func seedHostClassImports(m map[string]namespaceMapping,
+	seed []namespaceMapping) {
+	for _, entry := range seed {
+		m[entry.sym.String()] = entry
 	}
+}
+
+var hostClassSeed struct {
+	mu      sync.Mutex
+	count   int
+	entries []namespaceMapping
+}
+
+// hostClassSeedEntries returns the host class import entries shared by
+// every namespace, rebuilt only when a bridge registers a new class.
+// Building them once avoids validating every class symbol again for
+// each of the dozens of namespaces a program creates at startup.
+func hostClassSeedEntries() []namespaceMapping {
+	hostClassSeed.mu.Lock()
+	defer hostClassSeed.mu.Unlock()
+	if count := pkgmap.HostClassCount(); count != hostClassSeed.count ||
+		hostClassSeed.entries == nil {
+		types := pkgmap.HostClassTypes()
+		entries := make([]namespaceMapping, 0, len(types))
+		for name, typ := range types {
+			sym := NewSymbol(name)
+			entries = append(entries, namespaceMapping{sym: sym, val: typ})
+		}
+		hostClassSeed.count = count
+		hostClassSeed.entries = entries
+	}
+	return hostClassSeed.entries
 }
 
 func (ns *Namespace) String() string {
@@ -468,31 +496,17 @@ func (ns *Namespace) ensureMappingsMutableLocked() {
 	ns.mappingsShared = false
 }
 
+// shareMappings returns the mappings of ns for a ReferAllSnapshot and
+// marks them copy-on-write.
+// Entries ns sees through its own reference snapshots are left out on
+// purpose: a snapshot only exposes vars interned in its source, so an
+// entry borrowed from another namespace could never be visible through
+// it, and merging them cost a full copy per referring namespace.
 func (ns *Namespace) shareMappings() map[string]namespaceMapping {
 	ns.mappingsMtx.Lock()
 	defer ns.mappingsMtx.Unlock()
-	if len(ns.referenceSnapshots) == 0 {
-		ns.mappingsShared = true
-		return ns.mappings
-	}
-
-	visible := make(map[string]namespaceMapping, len(ns.mappings))
-	for _, snapshot := range ns.referenceSnapshots {
-		for key, mapping := range snapshot.mappings {
-			if _, excluded := snapshot.excluded[key]; excluded {
-				continue
-			}
-			vr, ok := mapping.val.(*Var)
-			if ok && vr.Namespace() == snapshot.source &&
-				vr.Symbol().String() == key {
-				visible[key] = mapping
-			}
-		}
-	}
-	for key, mapping := range ns.mappings {
-		visible[key] = mapping
-	}
-	return visible
+	ns.mappingsShared = true
+	return ns.mappings
 }
 
 func (ns *Namespace) Meta() IPersistentMap {

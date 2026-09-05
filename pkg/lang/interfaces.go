@@ -517,6 +517,9 @@ func Count(coll any) int {
 }
 
 func IsEmpty(coll any) bool {
+	if s, ok := coll.(string); ok {
+		return len(s) == 0
+	}
 	if counted, ok := coll.(Counted); ok {
 		return counted.Count() == 0
 	}

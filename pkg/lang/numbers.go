@@ -285,7 +285,7 @@ func (nm *NumberMethods) Rationalize(x any) any {
 func (nm *NumberMethods) And(x, y any) any {
 	if a, ok := x.(int64); ok {
 		if b, ok := y.(int64); ok {
-			return BoxInt64(a & b)
+			return boxInt64Bits(a & b)
 		}
 	}
 	return bitOpsCast(x) & bitOpsCast(y)
@@ -302,7 +302,7 @@ func (nm *NumberMethods) Not(x any) any {
 func (nm *NumberMethods) Or(x, y any) any {
 	if a, ok := x.(int64); ok {
 		if b, ok := y.(int64); ok {
-			return BoxInt64(a | b)
+			return boxInt64Bits(a | b)
 		}
 	}
 	return bitOpsCast(x) | bitOpsCast(y)
@@ -1194,6 +1194,20 @@ func UncheckedIntCast(x any) int {
 		return v
 	}
 	return int(AsInt64(x))
+}
+
+// LongCastBoxed is LongCast for callers that keep the boxed result:
+// an int64 comes back as is, so the common case makes no new box and
+// the check is small enough to inline.
+func LongCastBoxed(x any) any {
+	if _, ok := x.(int64); ok {
+		return x
+	}
+	return longCastBoxedOther(x)
+}
+
+func longCastBoxedOther(x any) any {
+	return BoxInt64(LongCast(x))
 }
 
 func LongCast(x any) int64 {

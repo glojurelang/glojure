@@ -112,9 +112,20 @@ var (
 		"index": FnFunc2(func(a, b any) any { // index(slc, i) -> val
 			return GoIndex(a, b)
 		}),
-		"slice": FnFunc(func(args ...any) any { // variadic: keep FnFunc
-			return GoSlice(args[0], args[1:]...)
-		}),
+		// slice takes one or two bounds, so the two fixed arities call
+		// goSlice directly and only other arities pay for an args slice.
+		"slice": NewArityFn(nil, nil,
+			FnFunc2(func(slc, from any) any { // slice(slc, i) -> slc[i:]
+				return goSlice(slc, from, nil, false)
+			}),
+			FnFunc3(func(slc, from, to any) any { // slice(slc, i, j)
+				return goSlice(slc, from, to, true)
+			}),
+			nil,
+			FnFunc(func(args ...any) any {
+				return GoSlice(args[0], args[1:]...)
+			}),
+			1),
 		"map-index": FnFunc2(func(a, b any) any { // mapindex(m, key) -> val
 			return GoMapIndex(a, b)
 		}),
@@ -262,39 +273,48 @@ func GoSetMapIndex(m, k, v interface{}) {
 }
 
 func GoSlice(slc interface{}, indices ...interface{}) interface{} {
-	if len(indices) == 0 {
+	switch len(indices) {
+	case 1:
+		return goSlice(slc, indices[0], nil, false)
+	case 2:
+		return goSlice(slc, indices[0], indices[1], true)
+	case 0:
 		panic(fmt.Errorf("slice: no indices"))
 	}
-	if len(indices) > 2 {
-		panic(fmt.Errorf("slice: too many indices %d", len(indices)))
-	}
+	panic(fmt.Errorf("slice: too many indices %d", len(indices)))
+}
 
-	// Fast path for strings — avoid reflect overhead.
+// goSliceBound converts a slice bound, keeping boxed int64 off the
+// generic conversion path.
+func goSliceBound(bound any, dflt int) int {
+	if i, ok := bound.(int64); ok {
+		return int(i)
+	}
+	if IsNil(bound) {
+		return dflt
+	}
+	return MustAsInt(bound)
+}
+
+// goSlice slices slc from the from bound to the to bound, which is
+// used only when hasTo is set.
+// A nil bound means the corresponding end of slc.
+func goSlice(slc, from, to any, hasTo bool) any {
+	// Fast path for strings: no reflect.
 	if s, ok := slc.(string); ok {
-		i := 0
-		if !IsNil(indices[0]) {
-			i = MustAsInt(indices[0])
+		i := goSliceBound(from, 0)
+		j := len(s)
+		if hasTo {
+			j = goSliceBound(to, len(s))
 		}
-		if len(indices) == 2 {
-			j := len(s)
-			if !IsNil(indices[1]) {
-				j = MustAsInt(indices[1])
-			}
-			return s[i:j]
-		}
-		return s[i:]
+		return s[i:j]
 	}
 
 	slcVal := reflect.ValueOf(slc)
-	i := 0
+	i := goSliceBound(from, 0)
 	j := slcVal.Len()
-	if !IsNil(indices[0]) {
-		i = MustAsInt(indices[0])
-	}
-	if len(indices) == 2 {
-		if !IsNil(indices[1]) {
-			j = MustAsInt(indices[1])
-		}
+	if hasTo {
+		j = goSliceBound(to, slcVal.Len())
 	}
 	return slcVal.Slice(i, j).Interface()
 }
