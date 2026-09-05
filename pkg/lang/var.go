@@ -44,6 +44,9 @@ type (
 	varRoot struct {
 		val     interface{}
 		version *VarRootVersion
+		// cell backs version for roots made by newVarRoot, so a
+		// rebinding costs one allocation instead of two.
+		cell VarRootVersion
 	}
 
 	lazyVarMeta struct {
@@ -117,22 +120,42 @@ func InternVar(ns *Namespace, sym *Symbol, root interface{}, replaceRoot bool) *
 	return dvout
 }
 
+// internVarNamespace caches the namespace of the last InternVarName
+// call. Generated loaders intern every var of a namespace in a row, so
+// the cache turns the namespace registry lookup into a pointer compare.
+var internVarNamespace atomic.Pointer[Namespace]
+
 func InternVarName(nsSym, nameSym *Symbol) *Var {
-	ns := FindOrCreateNamespace(nsSym)
+	ns := internVarNamespace.Load()
+	if ns == nil || (ns.name != nsSym && ns.name.String() != nsSym.String()) {
+		ns = FindOrCreateNamespace(nsSym)
+		internVarNamespace.Store(ns)
+	}
 	return ns.Intern(nameSym)
 }
 
+// varBlock allocates a Var together with its initial root, unbound
+// marker, root version and meta box in one object. A program interns
+// thousands of vars at startup, so this saves four allocations each.
+type varBlock struct {
+	v       Var
+	root    varRoot
+	unbound UnboundVar
+	meta    Box
+}
+
 func NewVar(ns *Namespace, sym *Symbol) *Var {
-	v := &Var{
-		ns:      ns,
-		sym:     sym,
-		watches: emptyMap,
-	}
-	v.root.Store(&varRoot{
-		val:     &UnboundVar{v: v},
-		version: &VarRootVersion{},
-	})
-	v.meta.Store(NewBox(emptyMap))
+	b := &varBlock{}
+	v := &b.v
+	v.ns = ns
+	v.sym = sym
+	v.watches = emptyMap
+	b.unbound.v = v
+	b.root.val = &b.unbound
+	b.root.version = &b.root.cell
+	v.root.Store(&b.root)
+	b.meta.val = emptyMap
+	v.meta.Store(&b.meta)
 	return v
 }
 
@@ -166,11 +189,14 @@ func (v *Var) HasRoot() bool {
 
 func (v *Var) BindRoot(root interface{}) {
 	// TODO: handle metadata correctly
-	old := v.root.Swap(&varRoot{
-		val:     root,
-		version: &VarRootVersion{},
-	})
+	old := v.root.Swap(newVarRoot(root))
 	v.notifyWatches(old.val, root)
+}
+
+func newVarRoot(val interface{}) *varRoot {
+	r := &varRoot{val: val}
+	r.version = &r.cell
+	return r
 }
 
 func (v *Var) IsBound() bool {
@@ -239,14 +265,27 @@ func (v *Var) SetMeta(meta IPersistentMap) {
 // that most programs never inspect.
 func (v *Var) SetMetaLazy(fn func() IPersistentMap) {
 	v.isMacroCached.Store(0)
-	v.meta.Store(NewBox(&lazyVarMeta{fn: fn}))
+	v.meta.Store(newLazyMetaBox(fn))
+}
+
+// lazyMetaBox allocates the meta box and its lazy metadata together.
+type lazyMetaBox struct {
+	box  Box
+	lazy lazyVarMeta
+}
+
+func newLazyMetaBox(fn func() IPersistentMap) *Box {
+	b := &lazyMetaBox{}
+	b.lazy.fn = fn
+	b.box.val = &b.lazy
+	return &b.box
 }
 
 // SetMetaLazyMacro is SetMetaLazy for generated code that already knows
 // whether the metadata marks a macro, so IsMacro can answer without
 // realizing the metadata.
 func (v *Var) SetMetaLazyMacro(fn func() IPersistentMap, macro bool) {
-	v.meta.Store(NewBox(&lazyVarMeta{fn: fn}))
+	v.meta.Store(newLazyMetaBox(fn))
 	if macro {
 		v.isMacroCached.Store(2)
 	} else {
@@ -332,10 +371,7 @@ func (v *Var) AlterRoot(alter IFn, args ISeq) interface{} {
 	oldRoot := v.Get()
 	newRoot := alter.ApplyTo(NewCons(oldRoot, args))
 	// TODO: validate
-	v.root.Store(&varRoot{
-		val:     newRoot,
-		version: &VarRootVersion{},
-	})
+	v.root.Store(newVarRoot(newRoot))
 	v.notifyWatches(oldRoot, newRoot)
 	return newRoot
 }

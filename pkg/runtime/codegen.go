@@ -2404,6 +2404,11 @@ func (g *Generator) generateTruthyTest(node *ast.Node) string {
 
 	args := make([]string, len(invoke.Args))
 	for i, argNode := range invoke.Args {
+		if i == 0 && target.directLinked && target.intrinsic == "instance?" {
+			// The static check names the type itself; generating the
+			// class constant would leave an unused temporary.
+			continue
+		}
 		args[i] = g.generateASTNode(argNode)
 	}
 	test, _ := boolTest(args)

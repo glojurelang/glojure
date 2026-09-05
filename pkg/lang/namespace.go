@@ -18,6 +18,9 @@ type Namespace struct {
 	mappingsShared     bool
 	referenceSnapshots []namespaceReferenceSnapshot
 	mappingsSnapshot   IPersistentMap
+	// hostExcluded holds host class imports removed with Unmap; the
+	// imports themselves live in the shared host class seed.
+	hostExcluded map[string]struct{}
 
 	aliases atomic.Value
 
@@ -88,6 +91,7 @@ func RemoveNamespace(sym *Symbol) {
 	nsMtx.Lock()
 	defer nsMtx.Unlock()
 	delete(namespaces, sym.String())
+	internVarNamespace.Store(nil)
 }
 
 func NamespaceFor(inns *Namespace, sym *Symbol) *Namespace {
@@ -103,54 +107,65 @@ func NamespaceFor(inns *Namespace, sym *Symbol) *Namespace {
 }
 
 func NewNamespace(name *Symbol) *Namespace {
-	seed := hostClassSeedEntries()
 	ns := &Namespace{
 		name:     name,
-		mappings: make(map[string]namespaceMapping, len(seed)+32),
+		mappings: make(map[string]namespaceMapping, 32),
 	}
-
-	seedHostClassImports(ns.mappings, seed)
 	ns.aliases.Store(NewBox(emptyMap))
 
 	return ns
 }
 
-// seedHostClassImports adds entries for every host class registered in
-// pkgmap. Mirrors real Clojure's auto-import of
-// java.lang.* (and other packages we publish) so (ns-imports *ns*)
-// returns a populated map.
-func seedHostClassImports(m map[string]namespaceMapping,
-	seed []namespaceMapping) {
-	for _, entry := range seed {
-		m[entry.sym.String()] = entry
-	}
+// hostClassSeedTable holds the host class import entries shared by
+// every namespace. Mirrors real Clojure's auto-import of java.lang.*
+// (and other packages we publish) so (ns-imports *ns*) returns a
+// populated map. Namespaces consult it as the last lookup step instead
+// of copying it, which used to cost a map fill per namespace created.
+type hostClassSeedTable struct {
+	count    int
+	mappings map[string]namespaceMapping
 }
 
 var hostClassSeed struct {
-	mu      sync.Mutex
-	count   int
-	entries []namespaceMapping
+	mu    sync.Mutex
+	table atomic.Pointer[hostClassSeedTable]
 }
 
-// hostClassSeedEntries returns the host class import entries shared by
-// every namespace, rebuilt only when a bridge registers a new class.
-// Building them once avoids validating every class symbol again for
-// each of the dozens of namespaces a program creates at startup.
-func hostClassSeedEntries() []namespaceMapping {
+// hostClassSeedMappings returns the shared host class imports, rebuilt
+// only when a bridge registers a new class.
+func hostClassSeedMappings() map[string]namespaceMapping {
+	count := pkgmap.HostClassCount()
+	if table := hostClassSeed.table.Load(); table != nil &&
+		table.count == count {
+		return table.mappings
+	}
 	hostClassSeed.mu.Lock()
 	defer hostClassSeed.mu.Unlock()
-	if count := pkgmap.HostClassCount(); count != hostClassSeed.count ||
-		hostClassSeed.entries == nil {
-		types := pkgmap.HostClassTypes()
-		entries := make([]namespaceMapping, 0, len(types))
-		for name, typ := range types {
-			sym := NewSymbol(name)
-			entries = append(entries, namespaceMapping{sym: sym, val: typ})
-		}
-		hostClassSeed.count = count
-		hostClassSeed.entries = entries
+	if table := hostClassSeed.table.Load(); table != nil &&
+		table.count == count {
+		return table.mappings
 	}
-	return hostClassSeed.entries
+	types := pkgmap.HostClassTypes()
+	mappings := make(map[string]namespaceMapping, len(types))
+	for name, typ := range types {
+		mappings[name] = namespaceMapping{sym: NewSymbol(name), val: typ}
+	}
+	hostClassSeed.table.Store(&hostClassSeedTable{
+		count:    len(types),
+		mappings: mappings,
+	})
+	return mappings
+}
+
+// hostClassMappingLocked returns the host class import for key unless
+// this namespace unmapped it.
+func (ns *Namespace) hostClassMappingLocked(key string) (namespaceMapping,
+	bool) {
+	if _, excluded := ns.hostExcluded[key]; excluded {
+		return namespaceMapping{}, false
+	}
+	mapping, exists := hostClassSeedMappings()[key]
+	return mapping, exists
 }
 
 func (ns *Namespace) String() string {
@@ -168,7 +183,14 @@ func (ns *Namespace) Mappings() IPersistentMap {
 	if ns.mappingsSnapshot != nil {
 		return ns.mappingsSnapshot
 	}
-	visible := make(map[string]namespaceMapping, len(ns.mappings))
+	seed := hostClassSeedMappings()
+	visible := make(map[string]namespaceMapping, len(ns.mappings)+len(seed))
+	for key, mapping := range seed {
+		if _, excluded := ns.hostExcluded[key]; excluded {
+			continue
+		}
+		visible[key] = mapping
+	}
 	for _, snapshot := range ns.referenceSnapshots {
 		for key, mapping := range snapshot.mappings {
 			if _, excluded := snapshot.excluded[key]; excluded {
@@ -302,6 +324,12 @@ func (ns *Namespace) Unmap(sym *Symbol) {
 		if _, exists := ns.referenceSnapshots[i].mappings[key]; exists {
 			ns.referenceSnapshots[i].excluded[key] = struct{}{}
 		}
+	}
+	if _, exists := hostClassSeedMappings()[key]; exists {
+		if ns.hostExcluded == nil {
+			ns.hostExcluded = make(map[string]struct{})
+		}
+		ns.hostExcluded[key] = struct{}{}
 	}
 	ns.mappingsSnapshot = nil
 }
@@ -481,7 +509,7 @@ func (ns *Namespace) visibleMappingLocked(key string) (namespaceMapping, bool) {
 			return mapping, true
 		}
 	}
-	return namespaceMapping{}, false
+	return ns.hostClassMappingLocked(key)
 }
 
 func (ns *Namespace) ensureMappingsMutableLocked() {

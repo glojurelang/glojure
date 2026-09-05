@@ -1528,7 +1528,9 @@ func (r *Reader) resolveSymbol(sym *lang.Symbol) *lang.Symbol {
 	case *lang.Var:
 		return lang.InternSymbol(o.Namespace().Name().Name(), o.Symbol().Name())
 	}
-	return nil
+	// A host class import resolves to its own short name, which every
+	// namespace maps through the shared host class imports.
+	return sym
 }
 
 func isSpace(r rune) bool {
