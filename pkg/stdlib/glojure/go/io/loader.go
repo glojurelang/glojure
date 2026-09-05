@@ -10,30 +10,66 @@ import (
 	url5 "net/url"
 	os6 "os"
 	reflect "reflect"
-	sync "sync"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.ArityFn
 var aotDirectFn1 lang.ArityFn
 
+var aotKeywordMapShape0 = lang.NewKeywordMapShape("make-reader", "make-writer", "make-input-stream", "make-output-stream")
+
+type aotKeywordMapStorage0 struct {
+	lang.Map
+	values [4]any
+}
+
+func aotKeywordMapNew0(v0 any, v1 any, v2 any, v3 any) *lang.Map {
+	storage := &aotKeywordMapStorage0{}
+	storage.values = [4]any{v0, v1, v2, v3}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape0,
+		storage.values[:],
+	)
+}
+
+var aotKeywordMapShape1 = lang.NewKeywordMapShape("multis", "on-interface", "sigs")
+
+type aotKeywordMapStorage1 struct {
+	lang.Map
+	values [3]any
+}
+
+func aotKeywordMapNew1(v0 any, v1 any, v2 any) *lang.Map {
+	storage := &aotKeywordMapStorage1{}
+	storage.values = [3]any{v0, v1, v2}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape1,
+		storage.values[:],
+	)
+}
 func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
 	if vr.IsBound() {
 		return aotLinkBoundFn1(vr)
 	}
-	var once sync.Once
-	var linked lang.FnFunc1
+	var linked atomic.Pointer[lang.FnFunc1]
 	return func(p0 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0)
+		}
 		if !vr.IsBound() {
 			return lang.Apply1(checkDerefVar(vr), p0)
 		}
-		once.Do(func() { linked = aotLinkBoundFn1(vr) })
-		return linked(p0)
+		fn := aotLinkBoundFn1(vr)
+		linked.Store(&fn)
+		return fn(p0)
 	}
 }
 
 func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
 	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc1); ok {
+	if direct, ok := lang.DirectFn1(fn); ok {
 		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn1); ok {
@@ -46,20 +82,23 @@ func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
 	if vr.IsBound() {
 		return aotLinkBoundFn2(vr)
 	}
-	var once sync.Once
-	var linked lang.FnFunc2
+	var linked atomic.Pointer[lang.FnFunc2]
 	return func(p0 any, p1 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1)
+		}
 		if !vr.IsBound() {
 			return lang.Apply2(checkDerefVar(vr), p0, p1)
 		}
-		once.Do(func() { linked = aotLinkBoundFn2(vr) })
-		return linked(p0, p1)
+		fn := aotLinkBoundFn2(vr)
+		linked.Store(&fn)
+		return fn(p0, p1)
 	}
 }
 
 func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
 	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc2); ok {
+	if direct, ok := lang.DirectFn2(fn); ok {
 		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn2); ok {
@@ -72,20 +111,23 @@ func aotLinkFn3(vr *lang.Var) lang.FnFunc3 {
 	if vr.IsBound() {
 		return aotLinkBoundFn3(vr)
 	}
-	var once sync.Once
-	var linked lang.FnFunc3
+	var linked atomic.Pointer[lang.FnFunc3]
 	return func(p0 any, p1 any, p2 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1, p2)
+		}
 		if !vr.IsBound() {
 			return lang.Apply3(checkDerefVar(vr), p0, p1, p2)
 		}
-		once.Do(func() { linked = aotLinkBoundFn3(vr) })
-		return linked(p0, p1, p2)
+		fn := aotLinkBoundFn3(vr)
+		linked.Store(&fn)
+		return fn(p0, p1, p2)
 	}
 }
 
 func aotLinkBoundFn3(vr *lang.Var) lang.FnFunc3 {
 	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc3); ok {
+	if direct, ok := lang.DirectFn3(fn); ok {
 		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn3); ok {
@@ -98,20 +140,23 @@ func aotLinkFn4(vr *lang.Var) lang.FnFunc4 {
 	if vr.IsBound() {
 		return aotLinkBoundFn4(vr)
 	}
-	var once sync.Once
-	var linked lang.FnFunc4
+	var linked atomic.Pointer[lang.FnFunc4]
 	return func(p0 any, p1 any, p2 any, p3 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1, p2, p3)
+		}
 		if !vr.IsBound() {
 			return lang.Apply4(checkDerefVar(vr), p0, p1, p2, p3)
 		}
-		once.Do(func() { linked = aotLinkBoundFn4(vr) })
-		return linked(p0, p1, p2, p3)
+		fn := aotLinkBoundFn4(vr)
+		linked.Store(&fn)
+		return fn(p0, p1, p2, p3)
 	}
 }
 
 func aotLinkBoundFn4(vr *lang.Var) lang.FnFunc4 {
 	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc4); ok {
+	if direct, ok := lang.DirectFn4(fn); ok {
 		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn4); ok {
@@ -146,7 +191,6 @@ func checkArityGTE(args []any, min int) {
 // LoadNS initializes the namespace "glojure.go.io"
 func LoadNS() {
 	sym__AMP_ := lang.NewSymbolUnchecked("&")
-	sym__EQ_ := lang.NewSymbolUnchecked("=")
 	sym_IOFactory := lang.NewSymbolUnchecked("IOFactory")
 	sym_apply := lang.NewSymbolUnchecked("apply")
 	sym_byte_DASH_array_DASH_type := lang.NewSymbolUnchecked("byte-array-type")
@@ -188,7 +232,6 @@ func LoadNS() {
 	sym_throw := lang.NewSymbolUnchecked("throw")
 	sym_type := lang.NewSymbolUnchecked("type")
 	sym_vector := lang.NewSymbolUnchecked("vector")
-	sym_vector_QMARK_ := lang.NewSymbolUnchecked("vector?")
 	sym_x := lang.NewSymbolUnchecked("x")
 	kw_added := lang.NewKeyword("added")
 	kw_arglists := lang.NewKeyword("arglists")
@@ -201,18 +244,10 @@ func LoadNS() {
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
 	kw_macro := lang.NewKeyword("macro")
-	kw_make_DASH_input_DASH_stream := lang.NewKeyword("make-input-stream")
-	kw_make_DASH_output_DASH_stream := lang.NewKeyword("make-output-stream")
-	kw_make_DASH_reader := lang.NewKeyword("make-reader")
-	kw_make_DASH_writer := lang.NewKeyword("make-writer")
-	kw_multis := lang.NewKeyword("multis")
 	kw_ns := lang.NewKeyword("ns")
-	kw_on_DASH_interface := lang.NewKeyword("on-interface")
 	kw_private := lang.NewKeyword("private")
-	kw_sigs := lang.NewKeyword("sigs")
 	kw_tag := lang.NewKeyword("tag")
-	// var clojure.core/=
-	var_clojure_DOT_core__EQ_ := lang.InternVarName(sym_clojure_DOT_core, sym__EQ_)
+	builtin_any := lang.Builtins["any"]
 	// var clojure.core/apply
 	var_clojure_DOT_core_apply := lang.InternVarName(sym_clojure_DOT_core, sym_apply)
 	// var clojure.core/class
@@ -235,8 +270,6 @@ func LoadNS() {
 	var_clojure_DOT_core_type := lang.InternVarName(sym_clojure_DOT_core, sym_type)
 	// var clojure.core/vector
 	var_clojure_DOT_core_vector := lang.InternVarName(sym_clojure_DOT_core, sym_vector)
-	// var clojure.core/vector?
-	var_clojure_DOT_core_vector_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_vector_QMARK_)
 	// var glojure.go.io/IOFactory
 	var_glojure_DOT_go_DOT_io_IOFactory := lang.InternVarName(sym_glojure_DOT_go_DOT_io, sym_IOFactory)
 	// var glojure.go.io/byte-array-type
@@ -266,11 +299,9 @@ func LoadNS() {
 	aotExternalFn15 := aotLinkFn1(var_clojure_DOT_core_concat)
 	aotExternalFn16 := aotLinkFn2(var_clojure_DOT_core_concat)
 	aotExternalFn17 := aotLinkFn3(var_clojure_DOT_core_concat)
-	aotExternalFn18 := aotLinkFn2(var_clojure_DOT_core__EQ_)
 	aotExternalFn3 := aotLinkFn3(var_clojure_DOT_core_str)
 	aotExternalFn4 := aotLinkFn1(var_clojure_DOT_core_pr_DASH_str)
 	aotExternalFn5 := aotLinkFn1(var_clojure_DOT_core_type)
-	aotExternalFn6 := aotLinkFn1(var_clojure_DOT_core_vector_QMARK_)
 	aotExternalFn8 := aotLinkFn1(var_clojure_DOT_core_last)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
@@ -428,9 +459,9 @@ func LoadNS() {
 		tmp0 := sym_byte_DASH_array_DASH_type
 		tmp1 := reflect.TypeOf([]uint8(nil))
 		var_glojure_DOT_go_DOT_io_byte_DASH_array_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_byte_DASH_array_DASH_type.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_byte_DASH_array_DASH_type.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/io.glj", kw_line, int(16), kw_column, int(5), kw_end_DASH_line, int(19), kw_end_DASH_column, int(16), kw_doc, "Type object for a Go primitive byte slice.", kw_private, true, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 	// do-copy
 	{
@@ -468,8 +499,8 @@ func LoadNS() {
 				_ = v11
 				// let binding "vec__799"
 				var tmp12 any
-				tmp13 := aotExternalFn6(v11)
-				if lang.IsTruthy(tmp13) {
+				tmp13 := lang.IsVector(v11)
+				if tmp13 {
 					tmp14 := runtime.RT.Pop(v11)
 					tmp15 := aotExternalFn8(v11)
 					tmp16 := lang.NewVector(tmp14, tmp15)
@@ -531,9 +562,9 @@ func LoadNS() {
 		})
 		tmp1.AddMethod(lang.NewVector(tmp3, tmp4), tmp5)
 		var_glojure_DOT_go_DOT_io_do_DASH_copy = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_do_DASH_copy.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_do_DASH_copy.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/io.glj", kw_line, int(296), kw_column, int(3), kw_end_DASH_line, int(299), kw_end_DASH_column, int(9), kw_doc, "Internal helper for copy", kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym_opts)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 	// make-input-stream
 	{
@@ -638,9 +669,9 @@ func LoadNS() {
 		)
 		tmp1.AddMethod(tmp9, tmp10)
 		var_glojure_DOT_go_DOT_io_make_DASH_input_DASH_stream = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_make_DASH_input_DASH_stream.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_make_DASH_input_DASH_stream.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(86), kw_column, int(4), kw_end_DASH_line, int(86), kw_end_DASH_column, int(36), kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 	// make-output-stream
 	{
@@ -745,9 +776,9 @@ func LoadNS() {
 		)
 		tmp1.AddMethod(tmp9, tmp10)
 		var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(87), kw_column, int(4), kw_end_DASH_line, int(87), kw_end_DASH_column, int(37), kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 	// make-reader
 	{
@@ -832,9 +863,9 @@ func LoadNS() {
 		)
 		tmp1.AddMethod(tmp7, tmp8)
 		var_glojure_DOT_go_DOT_io_make_DASH_reader = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_make_DASH_reader.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_make_DASH_reader.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(84), kw_column, int(4), kw_end_DASH_line, int(84), kw_end_DASH_column, int(30), kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 	// make-writer
 	{
@@ -919,9 +950,9 @@ func LoadNS() {
 		)
 		tmp1.AddMethod(tmp7, tmp8)
 		var_glojure_DOT_go_DOT_io_make_DASH_writer = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_make_DASH_writer.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_make_DASH_writer.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(85), kw_column, int(4), kw_end_DASH_line, int(85), kw_end_DASH_column, int(30), kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 	{
 		var tmp0 lang.FnFunc2
@@ -947,7 +978,7 @@ func LoadNS() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
+						if lang.CatchMatches(r, builtin_any) {
 							v4 := r
 							_ = v4
 							tmp5 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream)
@@ -960,8 +991,8 @@ func LoadNS() {
 								_ = v9
 								// let binding "vec__793"
 								var tmp10 any
-								tmp11 := aotExternalFn6(v9)
-								if lang.IsTruthy(tmp11) {
+								tmp11 := lang.IsVector(v9)
+								if tmp11 {
 									tmp12 := runtime.RT.Pop(v9)
 									tmp13 := aotExternalFn8(v9)
 									tmp14 := lang.NewVector(tmp12, tmp13)
@@ -1036,8 +1067,8 @@ func LoadNS() {
 					_ = v8
 					// let binding "vec__787"
 					var tmp9 any
-					tmp10 := aotExternalFn6(v8)
-					if lang.IsTruthy(tmp10) {
+					tmp10 := lang.IsVector(v8)
+					if tmp10 {
 						tmp11 := runtime.RT.Pop(v8)
 						tmp12 := aotExternalFn8(v8)
 						tmp13 := lang.NewVector(tmp11, tmp12)
@@ -1137,8 +1168,8 @@ func LoadNS() {
 			default:
 				tmp6 = tmp5
 			}
-			tmp7 := aotExternalFn18("file", tmp6)
-			if lang.IsTruthy(tmp7) {
+			tmp7 := lang.Equals("file", tmp6)
+			if tmp7 {
 				tmp8 := lang.Apply1(nil, v1)
 				tmp4 = tmp8
 			} else {
@@ -1150,8 +1181,8 @@ func LoadNS() {
 					_ = v11
 					// let binding "vec__772"
 					var tmp12 any
-					tmp13 := aotExternalFn6(v11)
-					if lang.IsTruthy(tmp13) {
+					tmp13 := lang.IsVector(v11)
+					if tmp13 {
 						tmp14 := runtime.RT.Pop(v11)
 						tmp15 := aotExternalFn8(v11)
 						tmp16 := lang.NewVector(tmp14, tmp15)
@@ -1258,7 +1289,7 @@ func LoadNS() {
 						default:
 							tmp15 = tmp14
 						}
-						tmp16 := aotExternalFn18("", tmp15)
+						tmp16 := lang.Equals("", tmp15)
 						tmp13 = tmp16
 					}
 					tmp11 = tmp13
@@ -1273,8 +1304,8 @@ func LoadNS() {
 						_ = v15
 						// let binding "vec__781"
 						var tmp16 any
-						tmp17 := aotExternalFn6(v15)
-						if lang.IsTruthy(tmp17) {
+						tmp17 := lang.IsVector(v15)
+						if tmp17 {
 							tmp18 := runtime.RT.Pop(v15)
 							tmp19 := aotExternalFn8(v15)
 							tmp20 := lang.NewVector(tmp18, tmp19)
@@ -1364,8 +1395,8 @@ func LoadNS() {
 			default:
 				tmp5 = tmp4
 			}
-			tmp6 := aotExternalFn18("file", tmp5)
-			if lang.IsTruthy(tmp6) {
+			tmp6 := lang.Equals("file", tmp5)
+			if tmp6 {
 				tmp7 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream)
 				tmp8 := lang.Apply1(nil, v1)
 				tmp9 := lang.Apply2(tmp7, tmp8, v2)
@@ -1738,11 +1769,11 @@ func LoadNS() {
 			1,
 		)
 		tmp28.AddMethod(tmp36, tmp37)
-		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_make_DASH_reader, tmp2, kw_make_DASH_writer, tmp10, kw_make_DASH_input_DASH_stream, tmp18, kw_make_DASH_output_DASH_stream, tmp28), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_make_DASH_reader, lang.NewVector(sym_x, sym_opts), "Creates an io.Reader. See also IOFactory docs."), lang.NewList(sym_make_DASH_writer, lang.NewVector(sym_x, sym_opts), "Creates an io.Reader. See also IOFactory docs."), lang.NewList(sym_make_DASH_input_DASH_stream, lang.NewVector(sym_x, sym_opts), "Creates a BufferedInputStream. See also IOFactory docs."), lang.NewList(sym_make_DASH_output_DASH_stream, lang.NewVector(sym_x, sym_opts), "Creates a BufferedOutputStream. See also IOFactory docs."))))
+		tmp1 := lang.NewAtom(aotKeywordMapNew1(aotKeywordMapNew0(tmp2, tmp10, tmp18, tmp28), true, lang.NewList(lang.NewList(sym_make_DASH_reader, lang.NewVector(sym_x, sym_opts), "Creates an io.Reader. See also IOFactory docs."), lang.NewList(sym_make_DASH_writer, lang.NewVector(sym_x, sym_opts), "Creates an io.Reader. See also IOFactory docs."), lang.NewList(sym_make_DASH_input_DASH_stream, lang.NewVector(sym_x, sym_opts), "Creates a BufferedInputStream. See also IOFactory docs."), lang.NewList(sym_make_DASH_output_DASH_stream, lang.NewVector(sym_x, sym_opts), "Creates a BufferedOutputStream. See also IOFactory docs."))))
 		var_glojure_DOT_go_DOT_io_IOFactory = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_IOFactory.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_IOFactory.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(72), kw_column, int(14), kw_end_DASH_line, int(72), kw_end_DASH_column, int(38), kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 	// default-streams-impl
 	{
@@ -1791,10 +1822,10 @@ func LoadNS() {
 			tmp9 := lang.Apply1(lang.NewIllegalArgumentError, tmp8)
 			panic(tmp9)
 		})
-		var_glojure_DOT_go_DOT_io_default_DASH_streams_DASH_impl = ns.InternWithValue(tmp0, lang.NewMap(kw_make_DASH_reader, tmp1, kw_make_DASH_writer, tmp2, kw_make_DASH_input_DASH_stream, tmp3, kw_make_DASH_output_DASH_stream, tmp4), true)
-		var_glojure_DOT_go_DOT_io_default_DASH_streams_DASH_impl.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_default_DASH_streams_DASH_impl = ns.InternWithValue(tmp0, aotKeywordMapNew0(tmp1, tmp2, tmp3, tmp4), true)
+		var_glojure_DOT_go_DOT_io_default_DASH_streams_DASH_impl.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(166), kw_column, int(6), kw_end_DASH_line, int(166), kw_end_DASH_column, int(25), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 	// copy
 	{
@@ -1828,9 +1859,9 @@ func LoadNS() {
 		)
 		aotDirectFn0 = tmp1
 		var_glojure_DOT_go_DOT_io_copy = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_copy.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_copy.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/io.glj", kw_line, int(386), kw_column, int(7), kw_end_DASH_line, int(386), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym__AMP_, sym_opts)), kw_doc, "Copies input to output.  Returns nil or throws IOException.\n  Input may be an InputStream, Reader, File, byte[], char[], or String.\n  Output may be an OutputStream, Writer, or File.\n\n  Options are key/value pairs and may be one of\n\n    :buffer-size  buffer size to use, default is 1024.\n    :encoding     encoding to use if converting between\n                  byte and char streams.   \n\n  Does not close any streams except those it opens itself \n  (on a File).", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 	// go-try!
 	{
@@ -1980,9 +2011,9 @@ func LoadNS() {
 			2,
 		)
 		var_glojure_DOT_go_DOT_io_go_DASH_try_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_go_DASH_try_BANG_.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_go_DASH_try_BANG_.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/io.glj", kw_line, int(21), kw_column, int(11), kw_end_DASH_line, int(21), kw_end_DASH_column, int(27), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_call)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_macro, true)
-		})
+		}, true)
 	}
 	// reader
 	{
@@ -2014,9 +2045,9 @@ func LoadNS() {
 		)
 		aotDirectFn1 = tmp1
 		var_glojure_DOT_go_DOT_io_reader = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_io_reader.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_io_reader.SetMetaLazyMacro(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/io.glj", kw_line, int(89), kw_column, int(7), kw_end_DASH_line, int(89), kw_end_DASH_column, int(23), kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_opts)), kw_doc, "Attempts to coerce its argument into an open io.Reader.\n\n   Default implementations are provided for Reader, BufferedReader,\n   InputStream, File, URI, URL, Socket, byte slices, rune slices,\n   and string.\n\n   If argument is a string, it tries to resolve it first as a URI, then\n   as a local file name.  URIs with a 'file' protocol are converted to\n   local file names.\n\n   Should be used inside with-open to ensure the io.Reader is properly\n   closed.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
-		})
+		}, false)
 	}
 }

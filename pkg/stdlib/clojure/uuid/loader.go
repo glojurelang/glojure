@@ -8,7 +8,7 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
-	sync "sync"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc1
@@ -17,20 +17,23 @@ func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
 	if vr.IsBound() {
 		return aotLinkBoundFn1(vr)
 	}
-	var once sync.Once
-	var linked lang.FnFunc1
+	var linked atomic.Pointer[lang.FnFunc1]
 	return func(p0 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0)
+		}
 		if !vr.IsBound() {
 			return lang.Apply1(checkDerefVar(vr), p0)
 		}
-		once.Do(func() { linked = aotLinkBoundFn1(vr) })
-		return linked(p0)
+		fn := aotLinkBoundFn1(vr)
+		linked.Store(&fn)
+		return fn(p0)
 	}
 }
 
 func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
 	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc1); ok {
+	if direct, ok := lang.DirectFn1(fn); ok {
 		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn1); ok {
@@ -68,7 +71,6 @@ func LoadNS() {
 	sym_clojure_DOT_uuid := lang.NewSymbolUnchecked("clojure.uuid")
 	sym_default_DASH_uuid_DASH_reader := lang.NewSymbolUnchecked("default-uuid-reader")
 	sym_form := lang.NewSymbolUnchecked("form")
-	sym_string_QMARK_ := lang.NewSymbolUnchecked("string?")
 	kw_arglists := lang.NewKeyword("arglists")
 	kw_column := lang.NewKeyword("column")
 	kw_end_DASH_column := lang.NewKeyword("end-column")
@@ -77,11 +79,8 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_private := lang.NewKeyword("private")
-	// var clojure.core/string?
-	var_clojure_DOT_core_string_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_string_QMARK_)
 	// var clojure.uuid/default-uuid-reader
 	var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader := lang.InternVarName(sym_clojure_DOT_uuid, sym_default_DASH_uuid_DASH_reader)
-	aotExternalFn0 := aotLinkFn1(var_clojure_DOT_core_string_QMARK_)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -172,8 +171,8 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := aotExternalFn0(v2)
-			if lang.IsTruthy(tmp4) {
+			tmp4 := lang.IsString(v2)
+			if tmp4 {
 				tmp5 := lang.Apply1(uuid4.FromString, v2)
 				tmp3 = tmp5
 			} else {
@@ -184,8 +183,8 @@ func LoadNS() {
 		})
 		aotDirectFn0 = tmp1
 		var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader = ns.InternWithValue(tmp0, tmp1, true)
-		var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader.SetMetaLazy(func() lang.IPersistentMap {
+		var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/uuid.glj", kw_line, int(11), kw_column, int(8), kw_end_DASH_line, int(11), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_uuid))
-		})
+		}, false)
 	}
 }

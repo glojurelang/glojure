@@ -10,7 +10,7 @@ import (
 	parser5 "go/parser"
 	reflect "reflect"
 	strconv6 "strconv"
-	sync "sync"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc1
@@ -18,24 +18,60 @@ var aotDirectFn1 lang.ArityFn
 var aotDirectFn1Arity1 lang.FnFunc1
 var aotDirectFn1Arity2 lang.FnFunc2
 
+var aotKeywordMapShape0 = lang.NewKeywordMapShape("ast->type")
+
+type aotKeywordMapStorage0 struct {
+	lang.Map
+	values [1]any
+}
+
+func aotKeywordMapNew0(v0 any) *lang.Map {
+	storage := &aotKeywordMapStorage0{}
+	storage.values = [1]any{v0}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape0,
+		storage.values[:],
+	)
+}
+
+var aotKeywordMapShape1 = lang.NewKeywordMapShape("multis", "on-interface", "sigs")
+
+type aotKeywordMapStorage1 struct {
+	lang.Map
+	values [3]any
+}
+
+func aotKeywordMapNew1(v0 any, v1 any, v2 any) *lang.Map {
+	storage := &aotKeywordMapStorage1{}
+	storage.values = [3]any{v0, v1, v2}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape1,
+		storage.values[:],
+	)
+}
 func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
 	if vr.IsBound() {
 		return aotLinkBoundFn1(vr)
 	}
-	var once sync.Once
-	var linked lang.FnFunc1
+	var linked atomic.Pointer[lang.FnFunc1]
 	return func(p0 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0)
+		}
 		if !vr.IsBound() {
 			return lang.Apply1(checkDerefVar(vr), p0)
 		}
-		once.Do(func() { linked = aotLinkBoundFn1(vr) })
-		return linked(p0)
+		fn := aotLinkBoundFn1(vr)
+		linked.Store(&fn)
+		return fn(p0)
 	}
 }
 
 func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
 	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc1); ok {
+	if direct, ok := lang.DirectFn1(fn); ok {
 		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn1); ok {
@@ -48,20 +84,23 @@ func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
 	if vr.IsBound() {
 		return aotLinkBoundFn2(vr)
 	}
-	var once sync.Once
-	var linked lang.FnFunc2
+	var linked atomic.Pointer[lang.FnFunc2]
 	return func(p0 any, p1 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1)
+		}
 		if !vr.IsBound() {
 			return lang.Apply2(checkDerefVar(vr), p0, p1)
 		}
-		once.Do(func() { linked = aotLinkBoundFn2(vr) })
-		return linked(p0, p1)
+		fn := aotLinkBoundFn2(vr)
+		linked.Store(&fn)
+		return fn(p0, p1)
 	}
 }
 
 func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
 	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc2); ok {
+	if direct, ok := lang.DirectFn2(fn); ok {
 		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn2); ok {
@@ -74,20 +113,23 @@ func aotLinkFn3(vr *lang.Var) lang.FnFunc3 {
 	if vr.IsBound() {
 		return aotLinkBoundFn3(vr)
 	}
-	var once sync.Once
-	var linked lang.FnFunc3
+	var linked atomic.Pointer[lang.FnFunc3]
 	return func(p0 any, p1 any, p2 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1, p2)
+		}
 		if !vr.IsBound() {
 			return lang.Apply3(checkDerefVar(vr), p0, p1, p2)
 		}
-		once.Do(func() { linked = aotLinkBoundFn3(vr) })
-		return linked(p0, p1, p2)
+		fn := aotLinkBoundFn3(vr)
+		linked.Store(&fn)
+		return fn(p0, p1, p2)
 	}
 }
 
 func aotLinkBoundFn3(vr *lang.Var) lang.FnFunc3 {
 	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc3); ok {
+	if direct, ok := lang.DirectFn3(fn); ok {
 		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn3); ok {
@@ -121,7 +163,6 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "glojure.go.types"
 func LoadNS() {
-	sym__EQ_ := lang.NewSymbolUnchecked("=")
 	sym_AstType := lang.NewSymbolUnchecked("AstType")
 	sym_apply := lang.NewSymbolUnchecked("apply")
 	sym_ast := lang.NewSymbolUnchecked("ast")
@@ -136,14 +177,11 @@ func LoadNS() {
 	sym_last := lang.NewSymbolUnchecked("last")
 	sym_map := lang.NewSymbolUnchecked("map")
 	sym_name := lang.NewSymbolUnchecked("name")
-	sym_not := lang.NewSymbolUnchecked("not")
 	sym_repeat := lang.NewSymbolUnchecked("repeat")
-	sym_string_QMARK_ := lang.NewSymbolUnchecked("string?")
 	sym_struct_DASH_field := lang.NewSymbolUnchecked("struct-field")
 	sym_typ := lang.NewSymbolUnchecked("typ")
 	sym_type_DASH_ast := lang.NewSymbolUnchecked("type-ast")
 	kw_arglists := lang.NewKeyword("arglists")
-	kw_ast_DASH__GT_type := lang.NewKeyword("ast->type")
 	kw_column := lang.NewKeyword("column")
 	kw_default := lang.NewKeyword("default")
 	kw_doc := lang.NewKeyword("doc")
@@ -151,13 +189,18 @@ func LoadNS() {
 	kw_end_DASH_line := lang.NewKeyword("end-line")
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
-	kw_multis := lang.NewKeyword("multis")
 	kw_ns := lang.NewKeyword("ns")
-	kw_on_DASH_interface := lang.NewKeyword("on-interface")
 	kw_private := lang.NewKeyword("private")
-	kw_sigs := lang.NewKeyword("sigs")
-	// var clojure.core/=
-	var_clojure_DOT_core__EQ_ := lang.InternVarName(sym_clojure_DOT_core, sym__EQ_)
+	builtin__LT__DASH_chan_DASH_of := lang.Builtins["<-chan-of"]
+	builtin_array_DASH_of := lang.Builtins["array-of"]
+	builtin_chan_DASH_of := lang.Builtins["chan-of"]
+	builtin_chan_LT__DASH__DASH_of := lang.Builtins["chan<--of"]
+	builtin_deref := lang.Builtins["deref"]
+	builtin_func_DASH_of := lang.Builtins["func-of"]
+	builtin_len := lang.Builtins["len"]
+	builtin_map_DASH_of := lang.Builtins["map-of"]
+	builtin_new := lang.Builtins["new"]
+	builtin_slice_DASH_of := lang.Builtins["slice-of"]
 	// var clojure.core/apply
 	var_clojure_DOT_core_apply := lang.InternVarName(sym_clojure_DOT_core, sym_apply)
 	// var clojure.core/butlast
@@ -170,12 +213,8 @@ func LoadNS() {
 	var_clojure_DOT_core_last := lang.InternVarName(sym_clojure_DOT_core, sym_last)
 	// var clojure.core/map
 	var_clojure_DOT_core_map := lang.InternVarName(sym_clojure_DOT_core, sym_map)
-	// var clojure.core/not
-	var_clojure_DOT_core_not := lang.InternVarName(sym_clojure_DOT_core, sym_not)
 	// var clojure.core/repeat
 	var_clojure_DOT_core_repeat := lang.InternVarName(sym_clojure_DOT_core, sym_repeat)
-	// var clojure.core/string?
-	var_clojure_DOT_core_string_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_string_QMARK_)
 	// var glojure.go.types/AstType
 	var_glojure_DOT_go_DOT_types_AstType := lang.InternVarName(sym_glojure_DOT_go_DOT_types, sym_AstType)
 	// var glojure.go.types/ast->type
@@ -189,9 +228,6 @@ func LoadNS() {
 	aotExternalFn10 := aotLinkFn1(var_clojure_DOT_core_last)
 	aotExternalFn12 := aotLinkFn2(var_clojure_DOT_core_concat)
 	aotExternalFn13 := aotLinkFn1(var_clojure_DOT_core_butlast)
-	aotExternalFn3 := aotLinkFn1(var_clojure_DOT_core_not)
-	aotExternalFn4 := aotLinkFn1(var_clojure_DOT_core_string_QMARK_)
-	aotExternalFn6 := aotLinkFn2(var_clojure_DOT_core__EQ_)
 	aotExternalFn8 := aotLinkFn2(var_clojure_DOT_core_map)
 	aotExternalFn9 := aotLinkFn2(var_clojure_DOT_core_repeat)
 	// reference fmt to avoid unused import error
@@ -463,9 +499,9 @@ func LoadNS() {
 		)
 		tmp1.AddMethod(tmp13, tmp14)
 		var_glojure_DOT_go_DOT_types_ast_DASH__GT_type = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_types_ast_DASH__GT_type.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_types_ast_DASH__GT_type.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(4), kw_column, int(4), kw_end_DASH_line, int(4), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
-		})
+		}, false)
 	}
 	// from-string
 	{
@@ -475,9 +511,9 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := aotExternalFn4(v2)
-			tmp5 := aotExternalFn3(tmp4)
-			if lang.IsTruthy(tmp5) {
+			tmp4 := lang.IsString(v2)
+			tmp5 := !lang.IsTruthy(tmp4)
+			if tmp5 {
 				tmp6 := lang.Apply2(fmt.Errorf, "from-string: argument must be a string, got %T", v2)
 				panic(tmp6)
 			} else {
@@ -512,9 +548,9 @@ func LoadNS() {
 		})
 		aotDirectFn0 = tmp1
 		var_glojure_DOT_go_DOT_types_from_DASH_string = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_types_from_DASH_string.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_types_from_DASH_string.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/types.glj", kw_line, int(92), kw_column, int(7), kw_end_DASH_line, int(92), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_typ)), kw_doc, "Returns a Go type from a go type expression.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
-		})
+		}, false)
 	}
 	// struct-field
 	{
@@ -540,8 +576,8 @@ func LoadNS() {
 				_ = v7
 				// let binding "name"
 				var tmp8 any
-				tmp9 := aotExternalFn6("", v3)
-				if lang.IsTruthy(tmp9) {
+				tmp9 := lang.Equals("", v3)
+				if tmp9 {
 				} else {
 					tmp8 = v3
 				}
@@ -580,7 +616,7 @@ func LoadNS() {
 				_ = v14
 				// let binding "sf"
 				tmp15 := reflect.TypeOf((*reflect.StructField)(nil)).Elem()
-				tmp16 := lang.Apply1(lang.Builtins["new"], tmp15)
+				tmp16 := lang.Apply1(builtin_new, tmp15)
 				var v17 any = tmp16
 				_ = v17
 				// set! host field
@@ -672,7 +708,7 @@ func LoadNS() {
 				} else {
 				}
 				_ = tmp20
-				tmp22 := lang.Apply1(lang.Builtins["deref"], v17)
+				tmp22 := lang.Apply1(builtin_deref, v17)
 				tmp4 = tmp22
 			} // end let
 			return tmp4
@@ -688,9 +724,9 @@ func LoadNS() {
 		)
 		aotDirectFn1 = tmp1
 		var_glojure_DOT_go_DOT_types_struct_DASH_field = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_types_struct_DASH_field.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_types_struct_DASH_field.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/types.glj", kw_line, int(6), kw_column, int(8), kw_end_DASH_line, int(6), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_type_DASH_ast), lang.NewVector(sym_type_DASH_ast, sym_name)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
-		})
+		}, false)
 	}
 	{
 		var tmp0 lang.FnFunc1
@@ -744,10 +780,10 @@ func LoadNS() {
 					}
 					tmp14 := lang.Apply1(strconv6.Atoi, tmp13)
 					tmp15 := lang.First(tmp14)
-					tmp16 := lang.Apply2(lang.Builtins["array-of"], tmp15, v10)
+					tmp16 := lang.Apply2(builtin_array_DASH_of, tmp15, v10)
 					tmp11 = tmp16
 				} else {
-					tmp17 := lang.Apply1(lang.Builtins["slice-of"], v10)
+					tmp17 := lang.Apply1(builtin_slice_DASH_of, v10)
 					tmp11 = tmp17
 				}
 				tmp2 = tmp11
@@ -787,7 +823,7 @@ func LoadNS() {
 				tmp8 = tmp7
 			}
 			tmp9 := lang.Apply1(tmp6, tmp8)
-			tmp10 := lang.Apply2(lang.Builtins["map-of"], tmp5, tmp9)
+			tmp10 := lang.Apply2(builtin_map_DASH_of, tmp5, tmp9)
 			return tmp10
 		})
 		closed2 = tmp0
@@ -815,16 +851,16 @@ func LoadNS() {
 				_ = v5
 				// let binding "ctor"
 				var tmp6 any
-				tmp7 := aotExternalFn6(v5, ast4.SEND)
-				if lang.IsTruthy(tmp7) {
-					tmp6 = lang.Builtins["chan<--of"]
+				tmp7 := lang.Equals(v5, ast4.SEND)
+				if tmp7 {
+					tmp6 = builtin_chan_LT__DASH__DASH_of
 				} else {
 					var tmp8 any
-					tmp9 := aotExternalFn6(v5, ast4.RECV)
-					if lang.IsTruthy(tmp9) {
-						tmp8 = lang.Builtins["<-chan-of"]
+					tmp9 := lang.Equals(v5, ast4.RECV)
+					if tmp9 {
+						tmp8 = builtin__LT__DASH_chan_DASH_of
 					} else {
-						tmp8 = lang.Builtins["chan-of"]
+						tmp8 = builtin_chan_DASH_of
 					}
 					tmp6 = tmp8
 				}
@@ -907,7 +943,7 @@ func LoadNS() {
 							default:
 								tmp12 = tmp11
 							}
-							tmp13 := lang.Apply1(lang.Builtins["len"], tmp12)
+							tmp13 := lang.Apply1(builtin_len, tmp12)
 							tmp14 := lang.Numbers.Max(int64(1), tmp13)
 							tmp15, ok := lang.FieldOrMethod(v10, "Type")
 							if !ok {
@@ -954,8 +990,8 @@ func LoadNS() {
 				_ = v10
 				// let binding "params"
 				var tmp11 any
-				tmp12 := aotExternalFn3(v10)
-				if lang.IsTruthy(tmp12) {
+				tmp12 := !lang.IsTruthy(v10)
+				if tmp12 {
 					tmp13 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
 					tmp14 := aotExternalFn8(tmp13, v6)
 					tmp11 = tmp14
@@ -976,7 +1012,7 @@ func LoadNS() {
 						tmp20 = tmp19
 					}
 					tmp21 := lang.Apply1(tmp18, tmp20)
-					tmp22 := lang.Apply1(lang.Builtins["slice-of"], tmp21)
+					tmp22 := lang.Apply1(builtin_slice_DASH_of, tmp21)
 					tmp23 := lang.NewVector(tmp22)
 					tmp24 := aotExternalFn12(tmp17, tmp23)
 					tmp11 = tmp24
@@ -1034,7 +1070,7 @@ func LoadNS() {
 							default:
 								tmp36 = tmp35
 							}
-							tmp37 := lang.Apply1(lang.Builtins["len"], tmp36)
+							tmp37 := lang.Apply1(builtin_len, tmp36)
 							tmp38 := lang.Numbers.Max(int64(1), tmp37)
 							tmp39, ok := lang.FieldOrMethod(v34, "Type")
 							if !ok {
@@ -1072,7 +1108,7 @@ func LoadNS() {
 				} // end let
 				var v29 any = tmp28
 				_ = v29
-				tmp30 := lang.Apply3(lang.Builtins["func-of"], v25, v29, v10)
+				tmp30 := lang.Apply3(builtin_func_DASH_of, v25, v29, v10)
 				tmp2 = tmp30
 			} // end let
 			return tmp2
@@ -1181,15 +1217,15 @@ func LoadNS() {
 						_ = v22
 						var tmp23 any
 						tmp24 := lang.IsEmpty(v16)
-						if lang.IsTruthy(tmp24) {
+						if tmp24 {
 							tmp25 := aotDirectFn1Arity1(v19)
 							tmp26 := lang.NewVector(tmp25)
 							tmp23 = tmp26
 						} else {
 							var tmp27 any
 							tmp28 := lang.Count(v16)
-							tmp29 := aotExternalFn6(int64(1), tmp28)
-							if lang.IsTruthy(tmp29) {
+							tmp29 := lang.Equals(int64(1), tmp28)
+							if tmp29 {
 								tmp30 := lang.First(v16)
 								tmp31 := aotDirectFn1Arity2(v19, tmp30)
 								tmp32 := lang.NewVector(tmp31)
@@ -1364,10 +1400,10 @@ func LoadNS() {
 			1,
 		)
 		tmp2.AddMethod(tmp14, tmp15)
-		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_ast_DASH__GT_type, tmp2), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_ast_DASH__GT_type, lang.NewVector(sym_ast)))))
+		tmp1 := lang.NewAtom(aotKeywordMapNew1(aotKeywordMapNew0(tmp2), true, lang.NewList(lang.NewList(sym_ast_DASH__GT_type, lang.NewVector(sym_ast)))))
 		var_glojure_DOT_go_DOT_types_AstType = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_types_AstType.SetMetaLazy(func() lang.IPersistentMap {
+		var_glojure_DOT_go_DOT_types_AstType.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(3), kw_column, int(14), kw_end_DASH_line, int(3), kw_end_DASH_column, int(20), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
-		})
+		}, false)
 	}
 }
