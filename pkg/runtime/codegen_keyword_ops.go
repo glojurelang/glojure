@@ -79,6 +79,9 @@ func (g *Generator) generateAOTKeywordHelpers() {
 		keyVar := helper.name + "Key"
 		fmt.Fprintf(&g.aotDeclarations,
 			"\nvar %s = lang.NewKeyword(%q)\n", keyVar, helper.keyword)
+		siteVar := helper.name + "Site"
+		fmt.Fprintf(&g.aotDeclarations,
+			"var %s lang.KeywordSite\n", siteVar)
 		fmt.Fprintf(&g.aotDeclarations,
 			"func %s(value, fallback any) any {\n"+
 				"\tswitch value := value.(type) {\n",
@@ -94,9 +97,9 @@ func (g *Generator) generateAOTKeywordHelpers() {
 			}
 		}
 		fmt.Fprintf(&g.aotDeclarations,
-			"\tdefault: return %s.Invoke2(value, fallback)\n"+
+			"\tdefault: return %s.Get(%s, value, fallback)\n"+
 				"\t}\n}\n",
-			keyVar)
+			siteVar, keyVar)
 	}
 
 	assocs := make([]*aotKeywordAssocHelper, 0, len(g.keywordAssocHelpers))

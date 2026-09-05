@@ -343,6 +343,10 @@ func (g *Generator) aotExternalIntrinsic(
 	case name == "volatile!" && arity == 1:
 	case name == "vreset!" && arity == 2:
 	case name == "=" && arity == 2:
+	case aotComparisonIntrinsic(name) != "" && arity >= 3 && arity <= 5:
+		if !aotSimpleArgs(invoke) {
+			return ""
+		}
 	default:
 		return ""
 	}
@@ -386,7 +390,7 @@ func (g *Generator) aotExternalIntrinsicCall(
 	case "inc":
 		return fmt.Sprintf("lang.Numbers.Inc(%s)", args[0])
 	case "long":
-		return fmt.Sprintf("lang.BoxInt64(lang.LongCast(%s))", args[0])
+		return fmt.Sprintf("lang.LongCastBoxed(%s)", args[0])
 	case "next":
 		return fmt.Sprintf("lang.Next(%s)", args[0])
 	case "nth":
@@ -426,6 +430,8 @@ func (g *Generator) aotExternalIntrinsicBool(
 	switch intrinsic {
 	case "=":
 		return fmt.Sprintf("lang.Equals(%s, %s)", args[0], args[1]), true
+	case "<", "<=", ">", ">=", "==":
+		return aotComparisonChain(intrinsic, args), true
 	case "empty?":
 		return fmt.Sprintf("lang.IsEmpty(%s)", args[0]), true
 	case "fn?":
@@ -609,4 +615,52 @@ func aotSupportsArity(value any, arity int) bool {
 	default:
 		return false
 	}
+}
+
+// aotComparisonIntrinsic names the lang.Numbers method behind a core
+// numeric comparison, or returns "" for any other function.
+func aotComparisonIntrinsic(name string) string {
+	switch name {
+	case "<":
+		return "Lt"
+	case "<=":
+		return "Lte"
+	case ">":
+		return "Gt"
+	case ">=":
+		return "Gte"
+	case "==":
+		return "Equiv"
+	}
+	return ""
+}
+
+// aotSimpleArgs reports whether every argument is a constant or a local,
+// so an intrinsic may mention an argument expression more than once.
+func aotSimpleArgs(invoke *ast.InvokeNode) bool {
+	for _, arg := range invoke.Args {
+		switch arg.Sub.(type) {
+		case *ast.ConstNode, *ast.LocalNode:
+		default:
+			return false
+		}
+	}
+	return true
+}
+
+// aotComparisonChain expands (< a b c) into pairwise comparisons joined
+// with &&, which is how the core variadic arity evaluates it once the
+// arguments are already values.
+// Only the two-argument arities of these functions are inlined by core,
+// so without this a three-argument compare pays a rest-args list on
+// every call.
+func aotComparisonChain(name string, args []string) string {
+	method := aotComparisonIntrinsic(name)
+	parts := make([]string, 0, len(args)-1)
+	for i := 0; i+1 < len(args); i++ {
+		parts = append(parts, fmt.Sprintf(
+			"lang.Numbers.%s(%s, %s)", method, args[i], args[i+1],
+		))
+	}
+	return strings.Join(parts, " && ")
 }

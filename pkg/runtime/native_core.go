@@ -443,7 +443,14 @@ func (fn nativeCoreMeta) Invoke(args ...interface{}) interface{} {
 }
 
 func (fn nativeCoreMeta) Invoke1(x interface{}) interface{} {
-	if m, ok := x.(lang.IMeta); ok {
+	// The fn and map cases come first so the common callers skip the
+	// interface table lookup behind the IMeta assertion.
+	switch m := x.(type) {
+	case *lang.MetaFn:
+		return m.Meta()
+	case *lang.Map:
+		return m.Meta()
+	case lang.IMeta:
 		return m.Meta()
 	}
 	return nil

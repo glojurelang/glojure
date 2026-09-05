@@ -150,6 +150,7 @@ type Generator struct {
 	varVariables           map[varInfo]string // map of vars to their Go variable names
 	symbolVariables        map[string]string  // set of all generated symbols to minimize allocations
 	kwVariables            map[string]string  // set of all generated keywords to minimize allocations
+	builtinVariables       map[string]string  // Go builtins hoisted out of the call sites
 	keywordMapConstructors map[string]string  // co-allocating constructors for those layouts
 	plainConstantMaps      bool               // var metadata keeps plain maps, it is read once
 	keywordLookupHelpers   map[string]*aotKeywordLookupHelper
@@ -214,6 +215,7 @@ func newGenerator(w io.Writer, directLink bool) *Generator {
 		varVariables:           make(map[varInfo]string),
 		symbolVariables:        make(map[string]string),
 		kwVariables:            make(map[string]string),
+		builtinVariables:       make(map[string]string),
 		keywordMapConstructors: make(map[string]string),
 		keywordLookupHelpers:   make(map[string]*aotKeywordLookupHelper),
 		keywordAssocHelpers:    make(map[string]*aotKeywordAssocHelper),
@@ -491,6 +493,20 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 	}
 
 	//////////////////////////
+	// Go builtins
+	// Looking a builtin up in lang.Builtins hashes its name, so each one
+	// is read once here and the call sites use the local.
+	var builtinNames []string
+	for name := range g.builtinVariables {
+		builtinNames = append(builtinNames, name)
+	}
+	sort.Strings(builtinNames)
+	for _, name := range builtinNames {
+		varName := g.builtinVariables[name]
+		initBuf.WriteString(fmt.Sprintf("%s := lang.Builtins[%q]\n", varName, name))
+	}
+
+	//////////////////////////
 	// Vars initialization
 	var varNames []string
 	var inverseVarMap = make(map[string]varInfo)
@@ -741,14 +757,15 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 
 	// Set metadata on the var if the symbol has metadata
 	if meta != nil {
-		g.writef("%s.SetMetaLazy(func() lang.IPersistentMap {\n", varVar)
+		isMacro := RT.BooleanCast(lang.Get(meta, lang.KWMacro))
+		g.writef("%s.SetMetaLazyMacro(func() lang.IPersistentMap {\n", varVar)
 		g.pushVarScope()
 		g.plainConstantMaps = true
 		metaVariable := g.generateValue(meta)
 		g.plainConstantMaps = false
 		g.writef("\treturn %s\n", metaVariable)
 		g.popVarScope()
-		g.writef("})\n")
+		g.writef("}, %t)\n", isMacro)
 	}
 	if isDynamic {
 		g.writef("%s.SetDynamic()\n", varVar)
@@ -2817,7 +2834,7 @@ func (g *Generator) generateGoBuiltin(node *ast.Node) string {
 		panic(fmt.Sprintf("unknown Go builtin: %s", sym.Name()))
 	}
 
-	return "lang.Builtins[\"" + sym.Name() + "\"]"
+	return g.allocBuiltinVar(sym.Name())
 }
 
 // generateWithMeta generates code for a WithMeta node
@@ -3943,6 +3960,15 @@ func (g *Generator) allocKWVar(kw string) string {
 	}
 	varName := "kw_" + mungeID(kw)
 	g.kwVariables[kw] = varName
+	return varName
+}
+
+func (g *Generator) allocBuiltinVar(name string) string {
+	if v, ok := g.builtinVariables[name]; ok {
+		return v
+	}
+	varName := "builtin_" + mungeID(name)
+	g.builtinVariables[name] = varName
 	return varName
 }
 
