@@ -291,7 +291,7 @@
                 (range-error spec "an interval is missing its closing bracket"))
               (let [closer (nth value end)
                     content (subs value (inc index) end)]
-                (recur (inc end)
+                (recur (long (inc end))
                        (conj result (interval spec opener closer content)))))))))))
 
 (defn version-range?

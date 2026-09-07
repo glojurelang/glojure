@@ -295,7 +295,7 @@
                     original-coordinate
                     (get default-deps lib))]
             (if (contains? provided-libs (base-lib lib))
-              (recur pending queue index version-map exclusions cuts
+              (recur pending queue (long index) version-map exclusions cuts
                      order
                      (if trace?
                        (conj trace
@@ -313,7 +313,7 @@
                          {:warning :unsupported-coordinate
                           :lib lib
                           :coordinate coordinate})
-                  (recur pending queue index version-map exclusions cuts
+                  (recur pending queue (long index) version-map exclusions cuts
                          order trace))
                 (let [id (coord-id lib coordinate)
                       decision
@@ -356,7 +356,7 @@
                                :include (boolean include?)
                                :reason reason})
                         trace)]
-                  (recur pending queue index version-map
+                  (recur pending queue (long index) version-map
                          (:exclusions update) (:cuts update)
                          (if include? (conj order lib) order)
                          trace)))))

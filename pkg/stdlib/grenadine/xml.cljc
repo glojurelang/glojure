@@ -256,12 +256,12 @@
           (cond
             (starts-at? source i "<!--")
             (if-let [end (find-token source (+ i 4) "-->")]
-              (recur (+ end 3) stack roots)
+              (recur (long (+ end 3)) stack roots)
               (xml-error source i "Unterminated XML comment"))
 
             (starts-at? source i "<?")
             (if-let [end (find-token source (+ i 2) "?>")]
-              (recur (+ end 2) stack roots)
+              (recur (long (+ end 2)) stack roots)
               (xml-error source i "Unterminated XML processing instruction"))
 
             (starts-at? source i "<![CDATA[")
@@ -269,7 +269,7 @@
               (let [text (source-slice source (+ i 9) end)
                     [next-stack next-roots]
                     (append-content stack roots text)]
-                (recur (+ end 3) next-stack next-roots))
+                (recur (long (+ end 3)) next-stack next-roots))
               (xml-error source i "Unterminated XML CDATA section"))
 
             (starts-at? source i "</")
@@ -286,7 +286,7 @@
                              (str "Mismatched XML closing tag: " name)))
                 (let [[next-stack next-roots]
                       (append-content (pop stack) roots node)]
-                  (recur (inc close) next-stack next-roots))))
+                  (recur (long (inc close)) next-stack next-roots))))
 
             (starts-at? source i "<!")
             (xml-error source i
@@ -298,9 +298,9 @@
               (if self-closing?
                 (let [[next-stack next-roots]
                       (append-content stack roots node)]
-                  (recur next-i next-stack next-roots))
-                (recur next-i (conj stack node) roots))))
+                  (recur (long next-i) next-stack next-roots))
+                (recur (long next-i) (conj stack node) roots))))
           (let [end (or (find-char source i "<") (count source))
                 text (decode-text source i end)
                 [next-stack next-roots] (append-content stack roots text)]
-            (recur end next-stack next-roots)))))))
+            (recur (long end) next-stack next-roots)))))))

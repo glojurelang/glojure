@@ -142,9 +142,10 @@
                  (= \{ (nth value (inc i))))
           (if-let [end (find-property-end value (+ i 2))]
             (let [key (subs value (+ i 2) end)
-                  replacement (property-value properties key trail)]
-              (recur (inc end)
-                     (inc end)
+                  replacement (property-value properties key trail)
+                  next-index (long (inc end))]
+              (recur next-index
+                     next-index
                      (conj pieces
                            (subs value piece-start i)
                            (if (nil? replacement)
