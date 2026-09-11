@@ -298,10 +298,15 @@ RELEASE-PLATFORMS := \
 
 RELEASE-BINS := $(foreach p,$(RELEASE-PLATFORMS),bin/$(p)/glj)
 
+# Long-form command-line variables take precedence over their aliases.
+RELEASE-VERSION := \
+  $(strip $(if $(filter command line,$(origin VERSION)),$(VERSION),\
+    $(if $(filter command line,$(origin v)),$(v))))
+
 release-dist:
-	@$(if $(filter command line,$(origin VERSION)),,\
-	  $(error VERSION is required on the command line))
-	$(eval RELEASE_VER := $(patsubst v%,%,$(VERSION)))
+	@$(if $(RELEASE-VERSION),,\
+	  $(error v or VERSION is required on the command line))
+	$(eval RELEASE_VER := $(patsubst v%,%,$(RELEASE-VERSION)))
 	GLJ_VERSION=v$(RELEASE_VER) $(MAKE) generate aot glj-imports $(RELEASE-BINS)
 	mkdir -p dist
 	$(foreach p,$(RELEASE-PLATFORMS), \
@@ -323,9 +328,9 @@ git-push:
 	git push $(SSH-URL) $(shell git rev-parse --abbrev-ref HEAD)
 
 release: $(GH)
-	@$(if $(filter command line,$(origin VERSION)),,\
-	  $(error VERSION is required on the command line))
-	$(eval RELEASE_VER := $(patsubst v%,%,$(VERSION)))
+	@$(if $(RELEASE-VERSION),,\
+	  $(error v or VERSION is required on the command line))
+	$(eval RELEASE_VER := $(patsubst v%,%,$(RELEASE-VERSION)))
 	@echo "=== Release v$(RELEASE_VER) ==="
 	$(MAKE) clean
 	$(MAKE) generate aot
@@ -335,7 +340,7 @@ release: $(GH)
 	git add -A
 	git diff --cached --quiet || \
 	  git commit -m "Builds for v$(RELEASE_VER)"
-	$(MAKE) release-dist VERSION=$(VERSION)
+	$(MAKE) release-dist VERSION=$(RELEASE-VERSION)
 	git tag -f -a v$(RELEASE_VER) -m "Release v$(RELEASE_VER)"
 ifeq ($(release-branch),main)
 	git push $(remote) HEAD:$(release-branch)
