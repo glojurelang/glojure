@@ -9,12 +9,6 @@ IFS='_' read -ra OS_ARCH <<< "$PLATFORM"
 OS=${OS_ARCH[0]}
 ARCH=${OS_ARCH[1]}
 
-if [ "$ARCH" == "" ]; then
-    BUILD_TAG="$OS"
-else
-    BUILD_TAG="$ARCH && $OS"
-fi
-
 LDFLAGS="-s -w"
 if [ -n "$GLJ_VERSION" ]; then
     LDFLAGS="$LDFLAGS -X github.com/glojurelang/glojure/pkg/runtime.version=$GLJ_VERSION"
@@ -33,4 +27,6 @@ if [ -n "$GO_REPLACE" ]; then
     trap gowork_cleanup EXIT
 fi
 
-GOOS=$OS GOARCH=$ARCH go build -trimpath -ldflags "$LDFLAGS" -o "$1" ./cmd/glj
+# Release executables must run on hosts with older libc versions.
+CGO_ENABLED=0 GOOS=$OS GOARCH=$ARCH \
+    go build -trimpath -ldflags "$LDFLAGS" -o "$1" ./cmd/glj

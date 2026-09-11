@@ -292,6 +292,7 @@ update-clojure-sources:
 RELEASE-PLATFORMS := \
   linux_amd64 \
   linux_arm64 \
+  darwin_amd64 \
   darwin_arm64 \
   $(EXTRA-RELEASE-PLATFORMS)
 
