@@ -1,0 +1,59 @@
+(ns glojure.test-glojure.portable-core
+  (:require [clojure.test :refer [deftest is run-tests]]
+            [glojure.go.io :as io]))
+
+(deftest locking-reentry-and-exceptions
+  (let [lock (atom nil)]
+    (is (= 42 (locking lock (locking lock 42))))
+    (is (thrown? go/any (locking lock (throw (ex-info "failure" {})))))
+    (is (= :released (locking lock :released)))))
+
+(deftest portable-iteration
+  (let [calls (atom 0)
+        values (iteration (fn [k] (swap! calls inc) (inc k))
+                          :initk 0 :somef #(< % 4))]
+    (is (= 0 @calls))
+    (is (= [1 2 3] (vec (seq values))))
+    (reset! calls 0)
+    (is (= 1 (reduce (fn [_ x] (reduced x)) nil values)))
+    (is (= 1 @calls))))
+
+(deftest portable-arrays-and-readers
+  (let [a (make-array go/int64 2 3)]
+    (aset (aget a 0) 1 42)
+    (is (= 42 (aget a 0 1)))
+    (is (= 0 (aget a 1 1))))
+  (is (= ["first" "" "last" nil]
+         (with-in-str "first\r\n\nlast"
+           [(read-line) (read-line) (read-line) (read-line)])))
+  (is (= 42 (load-string "(+ 20 22)")))
+  (is (= 0 (inst-ms #inst "1970-01-01T00:00:00.000Z"))))
+
+(deftest unsupported-core-apis-are-explicit
+  (is (nil? (await)))
+  (is (true? (await-for 0)))
+  (doseq [f [#(await (atom nil)) #(await-for 0 (atom nil))
+             #(seque [1 2]) #(read) #(read+string)]]
+    (is (try (f) false
+             (catch go/any e
+               (clojure.string/includes? (ex-message e) "not supported"))))))
+
+(deftest portable-file-urls
+  (let [[file err] (os.CreateTemp "" "glojure-portable-*")
+        path (.Name file)
+        url (str "file://" path)]
+    (.Close file)
+    (try
+      (with-open [out (io/make-writer url {})] (.WriteString out "first"))
+      (with-open [out (io/make-writer url {:append true})] (.WriteString out " second"))
+      (with-open [in (io/reader url)]
+        (is (= "first second" (binding [*in* in] (read-line)))))
+      (finally (os.Remove path)))))
+
+(deftest portable-type-references
+  (is (= {} (array-map)))
+  (is (future? (future 42)))
+  (is (not (reader-conditional? nil))))
+
+(let [result (run-tests)]
+  (assert (zero? (+ (:fail result) (:error result)))))

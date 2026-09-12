@@ -223,6 +223,8 @@
 (extend os.*File
   IOFactory
   (assoc {} ;; default-streams-impl
+    :make-reader (fn [^os.*File x opts] x)
+    :make-writer (fn [^os.*File x opts] x)
     :make-input-stream (fn [^os.*File x opts] x)
     :make-output-stream (fn [^os.*File x opts] x)))
 
@@ -231,15 +233,15 @@
   (assoc default-streams-impl
     :make-input-stream (fn [^net:url.*URL x opts]
                          (make-input-stream
-                          (if (= "file" (.scheme x))
-                            (as-file x)
+                          (if (= "file" (.Scheme x))
+                            (.Path x)
                             (go-try!
                              github.com:glojurelang:glojure:pkg:runtime.OpenURL
                              x))
                           opts))
     :make-output-stream (fn [^net:url.*URL x opts]
-                          (if (= "file" (.scheme x))
-                            (make-output-stream (as-file x) opts)
+                          (if (= "file" (.Scheme x))
+                            (make-output-stream (.Path x) opts)
                             (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError (str "Can not write to non-file URL <" x ">")))))))
 
 ;; (extend URI
@@ -257,10 +259,13 @@
                              (make-input-stream (go-try! os.Open x) opts)
                              (make-input-stream url opts))))
     :make-output-stream (fn [^go/string x opts]
-                          (try
-                           (make-output-stream (go-try! (net:url.Parse x)) opts)
-                           (catch go/any err
-                             (make-output-stream (go-try! (os.Open x)) opts))))))
+                          (let [[url err] (net:url.ParseRequestURI x)]
+                            (if (or err (= "" (.Scheme url)))
+                              (go-try! os.OpenFile x
+                                (bit-or os.O_WRONLY os.O_CREATE
+                                  (if (:append opts) os.O_APPEND os.O_TRUNC))
+                                438)
+                              (make-output-stream url opts))))))
 
 ;; (extend Socket
 ;;   IOFactory

@@ -120,6 +120,7 @@
 
 (def type-mappings
   {;; Simple type replacements when appearing alone
+   'java.util.concurrent.Future 'github.com:glojurelang:glojure:pkg:lang.Future
    'String 'go/string
    'Long 'go/int64
    'java.lang.Long 'go/int64
@@ -425,8 +426,91 @@
   [classes & opts]
   (map #(apply clojure-lang->glojure-pkg % opts) classes))
 
+(defn definition-replace [name replacement]
+  [(fn [loc]
+     (and (z/list? loc)
+          (let [form (z/sexpr loc)]
+            (and (contains? '#{defn defn- defmacro} (first form))
+                 (= name (second form))))))
+   (fn [loc]
+     (let [form (z/sexpr loc)
+           attributes (take-while #(or (string? %) (map? %)) (drop 2 form))]
+       (z/replace loc (concat (take 2 form) attributes (drop 2 replacement)))))])
+
+(def portable-core-definitions
+  '{locking
+    (defmacro locking [x & body]
+      (list 'github.com:glojurelang:glojure:pkg:lang.WithMonitor
+            x (list* 'fn* [] body)))
+    serialized-require
+    (defn- serialized-require [& args]
+      (locking #'require (apply require args)))
+    make-array
+    (defn make-array
+      ([type len] (github.com:glojurelang:glojure:pkg:lang.MakeArray type len))
+      ([type dim & dims]
+       (apply github.com:glojurelang:glojure:pkg:lang.MakeArray type dim dims)))
+    inst-ms
+    (defn inst-ms [inst] (github.com:glojurelang:glojure:pkg:lang.InstMillis inst))
+    iteration
+    (defn iteration [step & {:keys [somef vf kf initk]
+                            :or {vf identity kf identity somef some? initk nil}}]
+      (github.com:glojurelang:glojure:pkg:lang.NewIteration
+        step somef vf kf initk))
+    load-string
+    (defn load-string [s] (github.com:glojurelang:glojure:pkg:runtime.ReadEval s))
+    read-line
+    (defn read-line [] (github.com:glojurelang:glojure:pkg:runtime.ReadLine *in*))
+    with-in-str
+    (defmacro with-in-str [s & body]
+      (list* 'binding ['*in* (list 'strings.NewReader s)] body))
+    throw-if
+    (defn- throw-if [pred fmt & args]
+      (when pred (throw (github.com:glojurelang:glojure:pkg:lang.NewError
+                         (apply format fmt args)))))
+    elide-top-frames
+    (defn elide-top-frames [ex class-name] ex)
+    file-position
+    (defn file-position [n]
+      (github.com:glojurelang:glojure:pkg:lang.FilePosition n))
+    await
+    (defn await [& agents]
+      (when (seq agents)
+        (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError
+                 "await is not supported: Glojure agents are not implemented"))))
+    await-for
+    (defn await-for [timeout-ms & agents]
+      (if (seq agents)
+        (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError
+                 "await-for is not supported: Glojure agents are not implemented"))
+        true))
+    seque
+    (defn seque [& args]
+      (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError
+               "seque is not supported: Glojure agents are not implemented")))
+    read
+    (defn read [& args]
+      (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError
+               "read is not supported; use read-string")))
+    read+string
+    (defn read+string [& args]
+      (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError
+               "read+string is not supported by the Glojure reader")))
+    reader-conditional?
+    (defn reader-conditional? [value] false)
+    reader-conditional
+    (defn reader-conditional [form splicing?]
+      (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError
+               "preserved reader conditionals are not supported")))
+    load-data-reader-file
+    (defn- load-data-reader-file [mappings url]
+      (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError
+               "classpath data reader files are not supported")))})
+
 (def replacements
   (concat
+    (map (fn [[name form]] (definition-replace name form))
+         portable-core-definitions)
     ;; Simple mappings from data structures
     (create-simple-replacements namespace-mappings)
     (create-simple-replacements type-mappings)
@@ -569,6 +653,10 @@
 
    (sexpr-replace 'clojure.lang.Cycle/create 'github.com:glojurelang:glojure:pkg:lang.NewCycle)
 
+   (sexpr-replace '(. clojure.lang.PersistentArrayMap EMPTY)
+                  '(github.com:glojurelang:glojure:pkg:lang.NewMap))
+   (sexpr-replace 'clojure.lang.PersistentArrayMap/EMPTY
+                  '(github.com:glojurelang:glojure:pkg:lang.NewMap))
    (sexpr-replace 'clojure.lang.PersistentArrayMap/createAsIfByAssoc
                   'github.com:glojurelang:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc)
 
@@ -949,6 +1037,12 @@
    (sexpr-replace '(. s (substring start)) '(go/slice s start))
    (sexpr-replace '(. s (substring start end)) '(go/slice s start end))
 
+   [(fn [loc]
+      (and (z/list? loc)
+           (= '(new java.lang.IllegalAccessError) (take 2 (z/sexpr loc)))))
+    (fn [loc]
+      (z/replace loc (cons 'github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError
+                           (drop 2 (z/sexpr loc)))))]
    (sexpr-replace 'clojure.lang.RT/readString 'github.com:glojurelang:glojure:pkg:runtime.RTReadString)
 
    (sexpr-replace '.lastIndexOf 'strings.LastIndex)

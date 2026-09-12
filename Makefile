@@ -217,7 +217,7 @@ vet: $(GO)
 	go vet ./...
 
 # vet is disabled until we fix errors in generated code
-test: test-aot-runtime test-glj test-repl-wasm test-repl-bsd  # vet
+test: test-aot-runtime test-aot-codegen test-glj test-repl-wasm test-repl-bsd  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
 
 TEST-COMPARE-LOAD := $(shell \
@@ -233,6 +233,10 @@ test-compare: $(YS)
 
 test-aot-runtime: $(GO)
 	go test -tags glj_aot_runtime ./pkg/glj ./pkg/gljmain ./pkg/runtime
+
+test-aot-codegen: $(GO)
+	GLOJURE_USE_AOT=false go test -tags glj_no_aot_stdlib \
+	  ./pkg/runtime -run '^TestPortableStdlibCodegenDiagnostics$$'
 
 .PHONY: test-repl-wasm
 test-repl-wasm: $(GO)
@@ -252,7 +256,7 @@ test-repl-bsd: $(GO)
 	done
 
 .PHONY: test-aot test-suite-aot
-test-aot: test-aot-runtime test-glj
+test-aot: test-aot-runtime test-aot-codegen test-glj
 	$(MAKE) test-suite-aot
 
 test-suite-aot: $(GO) $(STDLIB-TARGETS) generate aot $(TEST-SUITE-DIR)

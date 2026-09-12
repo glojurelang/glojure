@@ -1648,19 +1648,7 @@
   {:added "1.9"}
   [x] (boolean (and (keyword? x) (namespace x) true)))
 
-(defmacro locking
-  "Executes exprs in an implicit do, while holding the monitor of x.
-  Will release the monitor of x in all circumstances."
-  {:added "1.0"}
-  [x & body]
-  `(let [lockee# ~x]
-     (try
-       (let [locklocal# lockee#]
-         (monitor-enter locklocal#)
-         (try
-           ~@body
-           (finally
-            (monitor-exit locklocal#)))))))
+(defmacro locking "Executes exprs in an implicit do, while holding the monitor of x.\n  Will release the monitor of x in all circumstances." {:added "1.0"} [x & body] (list (quote github.com:glojurelang:glojure:pkg:lang.WithMonitor) x (list* (quote fn*) [] body)))
 
 (defmacro ..
   "form => fieldName-symbol or (instanceMethodName-symbol args*)
@@ -2302,9 +2290,9 @@
     r)))
 
 (defn ^:private deref-future
-  ([^java.util.concurrent.Future fut]
+  ([^github.com:glojurelang:glojure:pkg:lang.Future fut]
      (.Get fut))
-  ([^java.util.concurrent.Future fut timeout-ms timeout-val]
+  ([^github.com:glojurelang:glojure:pkg:lang.Future fut timeout-ms timeout-val]
      (try (.Get fut timeout-ms time.Millisecond)
           (catch github.com:glojurelang:glojure:pkg:lang.TimeoutError e
             timeout-val))))
@@ -3286,44 +3274,14 @@
                                    ~@(when needrec [recform]))))))])))))]
     (nth (step nil (seq seq-exprs)) 1)))
 
-(defn await
-  "Blocks the current thread (indefinitely!) until all actions
-  dispatched thus far, from this thread or agent, to the agent(s) have
-  occurred.  Will block on failed agents.  Will never return if
-  a failed agent is restarted with :clear-actions true or shutdown-agents was called."
-  {:added "1.0"
-   :static true}
-  [& agents]
-  (io! "await in transaction"
-    (when *agent*
-      (throw (errors.New "Can't await in agent action")))
-    (let [latch (new java.util.concurrent.CountDownLatch (count agents))
-          count-down (fn [agent] (. latch (countDown)) agent)]
-      (doseq [agent agents]
-        (send agent count-down))
-      (. latch (await)))))
+(defn await "Blocks the current thread (indefinitely!) until all actions\n  dispatched thus far, from this thread or agent, to the agent(s) have\n  occurred.  Will block on failed agents.  Will never return if\n  a failed agent is restarted with :clear-actions true or shutdown-agents was called." {:added "1.0", :static true} [& agents] (when (seq agents) (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError "await is not supported: Glojure agents are not implemented"))))
 
 (defn ^:static await1 [^github.com:glojurelang:glojure:pkg:lang.*Agent a]
   (when (pos? (.getQueueCount a))
     (await a))
     a)
 
-(defn await-for
-  "Blocks the current thread until all actions dispatched thus
-  far (from this thread or agent) to the agents have occurred, or the
-  timeout (in milliseconds) has elapsed. Returns logical false if
-  returning due to timeout, logical true otherwise."
-  {:added "1.0"
-   :static true}
-  [timeout-ms & agents]
-    (io! "await-for in transaction"
-     (when *agent*
-       (throw (errors.New "Can't await in agent action")))
-     (let [latch (new java.util.concurrent.CountDownLatch (count agents))
-           count-down (fn [agent] (. latch (countDown)) agent)]
-       (doseq [agent agents]
-           (send agent count-down))
-       (. latch (await  timeout-ms (. java.util.concurrent.TimeUnit MILLISECONDS))))))
+(defn await-for "Blocks the current thread until all actions dispatched thus\n  far (from this thread or agent) to the agents have occurred, or the\n  timeout (in milliseconds) has elapsed. Returns logical false if\n  returning due to timeout, logical true otherwise." {:added "1.0", :static true} [timeout-ms & agents] (if (seq agents) (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError "await-for is not supported: Glojure agents are not implemented")) true))
 
 (defmacro dotimes
   "bindings => name n
@@ -3796,69 +3754,11 @@
     (binding [*print-readably* nil]
       (apply prn more)))
 
-(defn read
-  "Reads the next object from stream, which must be an instance of
-  java.io.PushbackReader or some derivee.  stream defaults to the
-  current value of *in*.
+(defn read "Reads the next object from stream, which must be an instance of\n  java.io.PushbackReader or some derivee.  stream defaults to the\n  current value of *in*.\n\n  Opts is a persistent map with valid keys:\n    :read-cond - :allow to process reader conditionals, or\n                 :preserve to keep all branches\n    :features - persistent set of feature keywords for reader conditionals\n    :eof - on eof, return value unless :eofthrow, then throw.\n           if not specified, will throw\n\n  Note that read can execute code (controlled by *read-eval*),\n  and as such should be used only with trusted sources.\n\n  For data structure interop use clojure.edn/read" {:added "1.0", :static true} [& args] (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError "read is not supported; use read-string")))
 
-  Opts is a persistent map with valid keys:
-    :read-cond - :allow to process reader conditionals, or
-                 :preserve to keep all branches
-    :features - persistent set of feature keywords for reader conditionals
-    :eof - on eof, return value unless :eofthrow, then throw.
-           if not specified, will throw
+(defn read+string "Like read, and taking the same args. stream must be a LineNumberingPushbackReader.\n  Returns a vector containing the object read and the (whitespace-trimmed) string read." {:added "1.10"} [& args] (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError "read+string is not supported by the Glojure reader")))
 
-  Note that read can execute code (controlled by *read-eval*),
-  and as such should be used only with trusted sources.
-
-  For data structure interop use clojure.edn/read"
-  {:added "1.0"
-   :static true}
-  ([]
-   (read *in*))
-  ([stream]
-   (read stream true nil))
-  ([stream eof-error? eof-value]
-   (read stream eof-error? eof-value false))
-  ([stream eof-error? eof-value recursive?]
-   (. clojure.lang.LispReader (read stream (boolean eof-error?) eof-value recursive?)))
-  ([opts stream]
-   (. clojure.lang.LispReader (read stream opts))))
-
-(defn read+string
-  "Like read, and taking the same args. stream must be a LineNumberingPushbackReader.
-  Returns a vector containing the object read and the (whitespace-trimmed) string read."
-  {:added "1.10"}
-  ([] (read+string *in*))
-  ([stream] (read+string stream true nil))
-  ([stream eof-error? eof-value] (read+string stream eof-error? eof-value false))
-  ([^clojure.lang.LineNumberingPushbackReader stream eof-error? eof-value recursive?]
-   (try
-     (.captureString stream)
-     (let [o (read stream eof-error? eof-value recursive?)
-           s (.trim (.getString stream))]
-       [o s])
-     (catch go/any ex
-       (.getString stream)
-       (throw ex))))
-  ([opts ^clojure.lang.LineNumberingPushbackReader stream]
-   (try
-     (.captureString stream)
-     (let [o (read opts stream)
-           s (.trim (.getString stream))]
-       [o s])
-     (catch go/any ex
-       (.getString stream)
-       (throw ex)))))
-
-(defn read-line
-  "Reads the next line from stream that is the current value of *in* ."
-  {:added "1.0"
-   :static true}
-  []
-  (if (instance? clojure.lang.LineNumberingPushbackReader *in*)
-    (.readLine ^clojure.lang.LineNumberingPushbackReader *in*)
-    (.readLine ^java.io.BufferedReader *in*)))
+(defn read-line "Reads the next line from stream that is the current value of *in* ." {:added "1.0", :static true} [] (github.com:glojurelang:glojure:pkg:runtime.ReadLine *in*))
 
 (defn read-string
   "Reads one object from the string s. Optionally include reader
@@ -4039,22 +3939,7 @@
     :added "1.0"}
   aset-char setChar char)
 
-(defn make-array
-  "Creates and returns an array of instances of the specified class of
-  the specified dimension(s).  Note that a class object is required.
-  Class objects can be obtained by using their imported or
-  fully-qualified name.  Class objects for the primitive types can be
-  obtained using, e.g., Integer/TYPE."
-  {:added "1.0"
-   :static true}
-  ([^reflect.Type type len]
-   (. Array (newInstance type (int len))))
-  ([^reflect.Type type dim & more-dims]
-   (let [dims (cons dim more-dims)
-         ^"[I" dimarray (make-array (. Integer TYPE)  (count dims))]
-     (dotimes [i (alength dimarray)]
-       (aset-int dimarray i (nth dims i)))
-     (. Array (newInstance type dimarray)))))
+(defn make-array "Creates and returns an array of instances of the specified class of\n  the specified dimension(s).  Note that a class object is required.\n  Class objects can be obtained by using their imported or\n  fully-qualified name.  Class objects for the primitive types can be\n  obtained using, e.g., Integer/TYPE." {:added "1.0", :static true} ([type len] (github.com:glojurelang:glojure:pkg:lang.MakeArray type len)) ([type dim & dims] (apply github.com:glojurelang:glojure:pkg:lang.MakeArray type dim dims)))
 
 (defn to-array-2d
   "Returns a (potentially-ragged) 2-dimensional array of Objects
@@ -4142,15 +4027,7 @@
    :static true}
   [rdr] (. github.com:glojurelang:glojure:pkg:runtime.Compiler (load rdr)))
 
-(defn load-string
-  "Sequentially read and evaluate the set of forms contained in the
-  string"
-  {:added "1.0"
-   :static true}
-  [s]
-  (let [rdr (-> (java.io.StringReader. s)
-                (clojure.lang.LineNumberingPushbackReader.))]
-    (load-reader rdr)))
+(defn load-string "Sequentially read and evaluate the set of forms contained in the\n  string" {:added "1.0", :static true} [s] (github.com:glojurelang:glojure:pkg:runtime.ReadEval s))
 
 (defn set?
   "Returns true if x implements IPersistentSet"
@@ -4301,7 +4178,7 @@
         (when-not (exclude sym)
           (let [v (nspublics sym)]
             (when-not v
-              (throw (new java.lang.IllegalAccessError
+              (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError
                           (if (get (ns-interns ns) sym)
                             (str sym " is not public")
                             (str sym " does not exist")))))
@@ -4803,14 +4680,7 @@
        ~@body
        (str s#))))
 
-(defmacro with-in-str
-  "Evaluates body in a context in which *in* is bound to a fresh
-  StringReader initialized with the string s."
-  {:added "1.0"}
-  [s & body]
-  `(with-open [s# (-> (java.io.StringReader. ~s) clojure.lang.LineNumberingPushbackReader.)]
-     (binding [*in* s#]
-       ~@body)))
+(defmacro with-in-str "Evaluates body in a context in which *in* is bound to a fresh\n  StringReader initialized with the string s." {:added "1.0"} [s & body] (list* (quote binding) [(quote *in*) (list (quote strings.NewReader) s)] body))
 
 (defn pr-str
   "pr to a string, returning it"
@@ -4848,14 +4718,7 @@
     (with-out-str
      (apply println xs)))
 
-(defn ^:private elide-top-frames
-  [^go/any ex class-name]
-  (let [tr (.getStackTrace ex)]
-    (doto ex
-      (.setStackTrace
-        (when tr
-          (into-array StackTraceElement
-            (drop-while #(= class-name (.getClassName ^StackTraceElement %1)) tr)))))))
+(defn ^:private elide-top-frames [ex class-name] ex)
 
 (defn ex-info "Create an instance of ExceptionInfo, a RuntimeException subclass
    that carries a map of additional data." {:added "1.4"} ([msg map] (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfo msg map)) ([msg map cause] (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfoWithCause msg map cause)))
@@ -5468,51 +5331,7 @@
         false
         (-> x class .getComponentType (= Byte/TYPE))))
 
-(defn seque
-  "Creates a queued seq on another (presumably lazy) seq s. The queued
-  seq will produce a concrete seq in the background, and can get up to
-  n items ahead of the consumer. n-or-q can be an integer n buffer
-  size, or an instance of java.util.concurrent BlockingQueue. Note
-  that reading from a seque can block if the reader gets ahead of the
-  producer."
-  {:added "1.0"
-   :static true}
-  ([s] (seque 100 s))
-  ([n-or-q s]
-   (let [^BlockingQueue q (if (instance? BlockingQueue n-or-q)
-                             n-or-q
-                             (LinkedBlockingQueue. (int n-or-q)))
-         NIL (-> nil reflect.StructOf reflect.New .Interface) ;nil sentinel since LBQ doesn't support nils
-         agt (agent (lazy-seq s)) ; never start with nil; that signifies we've already put eos
-         log-error (fn [q e]
-                     (if (.offer q q)
-                       (throw e)
-                       e))
-         fill (fn [s]
-                (when s
-                  (if (instance? Exception s) ; we failed to .offer an error earlier
-                    (log-error q s)
-                    (try
-                      (loop [[x & xs :as s] (seq s)]
-                        (if s
-                          (if (.offer q (if (nil? x) NIL x))
-                            (recur xs)
-                            s)
-                          (when-not (.offer q q) ; q itself is eos sentinel
-                            ()))) ; empty seq, not nil, so we know to put eos next time
-                      (catch go/any e
-                        (log-error q e))))))
-         drain (fn drain []
-                 (lazy-seq
-                  (let [x (.take q)]
-                    (if (identical? x q) ;q itself is eos sentinel
-                      (do @agt nil)  ;touch agent just to propagate errors
-                      (do
-                        (send-off agt fill)
-                        (release-pending-sends)
-                        (cons (if (identical? x NIL) nil x) (drain)))))))]
-     (send-off agt fill)
-     (drain))))
+(defn seque "Creates a queued seq on another (presumably lazy) seq s. The queued\n  seq will produce a concrete seq in the background, and can get up to\n  n items ahead of the consumer. n-or-q can be an integer n buffer\n  size, or an instance of java.util.concurrent BlockingQueue. Note\n  that reading from a seque can block if the reader gets ahead of the\n  producer." {:added "1.0", :static true} [& args] (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError "seque is not supported: Glojure agents are not implemented")))
 
 (defn class?
   "Returns true if x is an instance of Class"
@@ -5886,21 +5705,7 @@
      "True while a verbose load is pending"}
   *loading-verbosely* false)
 
-(defn- throw-if
-  "Throws a CompilerException with a message if pred is true"
-  [pred fmt & args]
-  (when pred
-    (let [^go/string message (apply format fmt args)
-          exception (github.com:glojurelang:glojure:pkg:lang.NewError message)
-          raw-trace (.getStackTrace exception)
-          boring? #(not= (.getMethodName ^StackTraceElement %) "doInvoke")
-          trace (into-array StackTraceElement (drop 2 (drop-while boring? raw-trace)))]
-      (.setStackTrace exception trace)
-      (throw (github.com:glojurelang:glojure:pkg:lang.NewCompilerError
-              *file*
-              (.Deref clojure.lang.Compiler/LINE)
-              (.Deref clojure.lang.Compiler/COLUMN)
-              exception)))))
+(defn- throw-if "Throws a CompilerException with a message if pred is true" [pred fmt & args] (when pred (throw (github.com:glojurelang:glojure:pkg:lang.NewError (apply format fmt args)))))
 
 (defn- libspec?
   "Returns true if x is a libspec"
@@ -6113,14 +5918,7 @@
   [& args]
   (apply load-libs :require args))
 
-(defn- serialized-require
-  "Like 'require', but serializes loading.
-  Interim function preferred over 'require' for known asynchronous loads.
-  Future changes may make these equivalent."
-  {:added "1.10"}
-  [& args]
-  (locking clojure.lang.RT/REQUIRE_LOCK
-    (apply require args)))
+(defn- serialized-require "Like 'require', but serializes loading.\n  Interim function preferred over 'require' for known asynchronous loads.\n  Future changes may make these equivalent." {:added "1.10"} [& args] (locking (var require) (apply require args)))
 
 (defn requiring-resolve
   "Resolves namespace-qualified sym per 'resolve'. If initial resolve
@@ -6590,13 +6388,13 @@ fails, attempts to require sym's namespace and retries."
   "Returns true if x is a future"
   {:added "1.1"
    :static true}
-  [x] (instance? java.util.concurrent.Future x))
+  [x] (instance? github.com:glojurelang:glojure:pkg:lang.Future x))
 
 (defn future-done?
   "Returns true if future f is done"
   {:added "1.1"
    :static true}
-  [^java.util.concurrent.Future f] (.isDone f))
+  [^github.com:glojurelang:glojure:pkg:lang.Future f] (.isDone f))
 
 
 (defmacro letfn
@@ -6885,11 +6683,7 @@ fails, attempts to require sym's namespace and retries."
 
 (do)
 
-(defn inst-ms
-  "Return the number of milliseconds since January 1, 1970, 00:00:00 GMT"
-  {:added "1.9"}
-  [inst]
-  (inst-ms* inst))
+(defn inst-ms "Return the number of milliseconds since January 1, 1970, 00:00:00 GMT" {:added "1.9"} [inst] (github.com:glojurelang:glojure:pkg:lang.InstMillis inst))
 
 (defn inst?
   "Return true if x satisfies Inst"
@@ -7083,13 +6877,13 @@ fails, attempts to require sym's namespace and retries."
   "Cancels the future, if possible."
   {:added "1.1"
    :static true}
-  [^java.util.concurrent.Future f] (.cancel f true))
+  [^github.com:glojurelang:glojure:pkg:lang.Future f] (.cancel f true))
 
 (defn future-cancelled?
   "Returns true if future f is cancelled"
   {:added "1.1"
    :static true}
-  [^java.util.concurrent.Future f] (.isCancelled f))
+  [^github.com:glojurelang:glojure:pkg:lang.Future f] (.isCancelled f))
 
 (defn pmap
   "Like map, except f is applied in parallel. Semi-lazy in that the
@@ -7776,52 +7570,7 @@ fails, attempts to require sym's namespace and retries."
   (reduce #(proc %2) nil coll)
   nil)
 
-(defn iteration
-  "Creates a seqable/reducible via repeated calls to step,
-  a function of some (continuation token) 'k'. The first call to step
-  will be passed initk, returning 'ret'. Iff (somef ret) is true,
-  (vf ret) will be included in the iteration, else iteration will
-  terminate and vf/kf will not be called. If (kf ret) is non-nil it
-  will be passed to the next step call, else iteration will terminate.
-
-  This can be used e.g. to consume APIs that return paginated or batched data.
-
-   step - (possibly impure) fn of 'k' -> 'ret'
-
-   :somef - fn of 'ret' -> logical true/false, default 'some?'
-   :vf - fn of 'ret' -> 'v', a value produced by the iteration, default 'identity'
-   :kf - fn of 'ret' -> 'next-k' or nil (signaling 'do not continue'), default 'identity'
-   :initk - the first value passed to step, default 'nil'
-
-  It is presumed that step with non-initk is unreproducible/non-idempotent.
-  If step with initk is unreproducible it is on the consumer to not consume twice."
-  {:added "1.11"}
-  [step & {:keys [somef vf kf initk]
-            :or {vf identity
-                 kf identity
-                 somef some?
-                 initk nil}}]
-  (reify
-   clojure.lang.Seqable
-   (seq [_]
-        ((fn next [ret]
-           (when (somef ret)
-             (cons (vf ret)
-                   (when-some [k (kf ret)]
-                     (lazy-seq (next (step k)))))))
-         (step initk)))
-   github.com:glojurelang:glojure:pkg:lang.IReduceInit
-   (reduce [_ rf init]
-           (loop [acc init
-                  ret (step initk)]
-             (if (somef ret)
-               (let [acc (rf acc (vf ret))]
-                 (if (reduced? acc)
-                   @acc
-                   (if-some [k (kf ret)]
-                     (recur acc (step k))
-                     acc)))
-               acc)))))
+(defn iteration "Creates a seqable/reducible via repeated calls to step,\n  a function of some (continuation token) 'k'. The first call to step\n  will be passed initk, returning 'ret'. Iff (somef ret) is true,\n  (vf ret) will be included in the iteration, else iteration will\n  terminate and vf/kf will not be called. If (kf ret) is non-nil it\n  will be passed to the next step call, else iteration will terminate.\n\n  This can be used e.g. to consume APIs that return paginated or batched data.\n\n   step - (possibly impure) fn of 'k' -> 'ret'\n\n   :somef - fn of 'ret' -> logical true/false, default 'some?'\n   :vf - fn of 'ret' -> 'v', a value produced by the iteration, default 'identity'\n   :kf - fn of 'ret' -> 'next-k' or nil (signaling 'do not continue'), default 'identity'\n   :initk - the first value passed to step, default 'nil'\n\n  It is presumed that step with non-initk is unreproducible/non-idempotent.\n  If step with initk is unreproducible it is on the consumer to not consume twice." {:added "1.11"} [step & {:keys [somef vf kf initk], :or {vf identity, kf identity, somef some?, initk nil}}] (github.com:glojurelang:glojure:pkg:lang.NewIteration step somef vf kf initk))
 
 (defn tagged-literal?
   "Return true if the value is the data representation of a tagged literal"
@@ -7836,18 +7585,9 @@ fails, attempts to require sym's namespace and retries."
   [^github.com:glojurelang:glojure:pkg:lang.*Symbol tag form]
   (clojure.lang.TaggedLiteral/create tag form))
 
-(defn reader-conditional?
-  "Return true if the value is the data representation of a reader conditional"
-  {:added "1.7"}
-  [value]
-  (instance? clojure.lang.ReaderConditional value))
+(defn reader-conditional? "Return true if the value is the data representation of a reader conditional" {:added "1.7"} [value] false)
 
-(defn reader-conditional
-  "Construct a data representation of a reader conditional.
-  If true, splicing? indicates read-cond-splicing."
-  {:added "1.7"}
-  [form ^go/bool splicing?]
-  (clojure.lang.ReaderConditional/create form splicing?))
+(defn reader-conditional "Construct a data representation of a reader conditional.\n  If true, splicing? indicates read-cond-splicing." {:added "1.7"} [form splicing?] (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError "preserved reader conditionals are not supported")))
 
 
 
@@ -7896,34 +7636,7 @@ fails, attempts to require sym's namespace and retries."
   (intern (create-ns (symbol (namespace sym)))
           (symbol (name sym))))
 
-(defn- load-data-reader-file [mappings ^java.net.URL url]
-  (with-open [rdr (clojure.lang.LineNumberingPushbackReader.
-                   (java.io.InputStreamReader.
-                    (.openStream url) "UTF-8"))]
-    (binding [*file* (.getFile url)]
-      (let [read-opts (if (.endsWith (.getPath url) "cljc")
-                        {:eof nil :read-cond :allow}
-                        {:eof nil})
-            new-mappings (read read-opts rdr)]
-        (when (not (map? new-mappings))
-          (throw (ex-info (str "Not a valid data-reader map")
-                          {:url url})))
-        (reduce
-         (fn [m [k v]]
-           (when (not (symbol? k))
-             (throw (ex-info (str "Invalid form in data-reader file")
-                             {:url url
-                              :form k})))
-           (let [v-var (data-reader-var v)]
-             (when (and (contains? mappings k)
-                        (not= (mappings k) v-var))
-               (throw (ex-info "Conflicting data-reader mapping"
-                               {:url url
-                                :conflict k
-                                :mappings m})))
-             (assoc m k v-var)))
-         mappings
-         new-mappings)))))
+(defn- load-data-reader-file [mappings url] (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalStateError "classpath data reader files are not supported")))
 
 (defn- load-data-readers []
   (alter-var-root #'*data-readers*

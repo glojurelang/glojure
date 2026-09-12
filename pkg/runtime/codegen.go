@@ -3064,7 +3064,7 @@ func (g *Generator) generateGoExportedName(pkg string) string {
 
 	if _, ok := expectedInvalidImports[packageName]; ok {
 		// TODO: fix all these invalid imports
-		fmt.Println("Warning: skipping invalid import:", packageName)
+		fmt.Println("Warning: skipping invalid import:", pkg)
 		return "nil"
 	}
 	alias := g.addImportWithAlias(packageName)

@@ -556,7 +556,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "vec__690"
+				// let binding "vec__641"
 				tmp4 := lang.Apply1(builtin_recv, v2)
 				var v5 any = tmp4
 				_ = v5
@@ -587,7 +587,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "vec__690"
+				// let binding "vec__641"
 				tmp4 := lang.Apply1(builtin_recv, v2)
 				var v5 any = tmp4
 				_ = v5
@@ -653,10 +653,10 @@ func LoadNS() {
 				_ = v3
 				var tmp4 any
 				{ // let
-					// let binding "map__706"
+					// let binding "map__657"
 					var v5 any = v3
 					_ = v5
-					// let binding "map__706"
+					// let binding "map__657"
 					var tmp6 any
 					tmp7 := aotExternalFn3(v5)
 					if lang.IsTruthy(tmp7) {
@@ -717,10 +717,10 @@ func LoadNS() {
 				_ = v3
 				var tmp4 any
 				{ // let
-					// let binding "map__706"
+					// let binding "map__657"
 					var v5 any = v3
 					_ = v5
-					// let binding "map__706"
+					// let binding "map__657"
 					var tmp6 any
 					tmp7 := aotExternalFn3(v5)
 					if lang.IsTruthy(tmp7) {
@@ -1093,7 +1093,7 @@ func LoadNS() {
 				tmp4 := aotDirectFn18(v2)
 				var v5 any = tmp4
 				_ = v5
-				// let binding "vec__699"
+				// let binding "vec__650"
 				var v6 any = v5
 				_ = v6
 				// let binding "val"
@@ -1354,7 +1354,7 @@ func LoadNS() {
 				tmp8 := aotDirectFn9()
 				var v9 any = tmp8
 				_ = v9
-				// let binding "vec__693"
+				// let binding "vec__644"
 				tmp10 := lang.NewVector(v7, v9)
 				tmp11 := aotExternalFn7(builtin_deref, tmp10)
 				tmp12 := lang.Apply1(reflect.Select, tmp11)
@@ -1491,7 +1491,7 @@ func LoadNS() {
 				}
 				var v15 any = tmp14
 				_ = v15
-				// let binding "vec__696"
+				// let binding "vec__647"
 				tmp16 := lang.NewVector(v6, v13)
 				tmp17 := aotExternalFn7(builtin_deref, tmp16)
 				tmp18 := lang.Apply1(reflect.Select, tmp17)
@@ -1591,7 +1591,7 @@ func LoadNS() {
 				tmp21 := aotDirectFn9()
 				var v22 any = tmp21
 				_ = v22
-				// let binding "vec__702"
+				// let binding "vec__653"
 				tmp23 := aotExternalFn7(builtin_deref, v20)
 				tmp24 := lang.Apply1(reflect.Select, tmp23)
 				var v25 any = tmp24
@@ -1721,7 +1721,7 @@ func LoadNS() {
 				tmp11 := aotExternalFn15(v8, v6)
 				var v12 any = tmp11
 				_ = v12
-				// let binding "vec__707"
+				// let binding "vec__658"
 				var tmp13 lang.FnFunc2
 				tmp13 = lang.FnFunc2(func(p0, p1 any) any {
 					v14 := p0
@@ -1730,7 +1730,7 @@ func LoadNS() {
 					_ = v15
 					var tmp16 any
 					{ // let
-						// let binding "vec__712"
+						// let binding "vec__663"
 						var v17 any = v14
 						_ = v17
 						// let binding "clauses"
@@ -1741,7 +1741,7 @@ func LoadNS() {
 						tmp20 := runtime.RT.NthDefault(v17, lang.IntCast(int64(1)), nil)
 						var v21 any = tmp20
 						_ = v21
-						// let binding "vec__715"
+						// let binding "vec__666"
 						var v22 any = v15
 						_ = v22
 						// let binding "ports"
@@ -1765,7 +1765,7 @@ func LoadNS() {
 							}
 							var v31 any = tmp28
 							_ = v31
-							// let binding "vec__718"
+							// let binding "vec__669"
 							var tmp32 lang.FnFunc2
 							tmp32 = lang.FnFunc2(func(p0, p1 any) any {
 								v33 := p0
@@ -1774,7 +1774,7 @@ func LoadNS() {
 								_ = v34
 								var tmp35 any
 								{ // let
-									// let binding "vec__722"
+									// let binding "vec__673"
 									var v36 any = v33
 									_ = v36
 									// let binding "ports"
@@ -1790,7 +1790,7 @@ func LoadNS() {
 									if tmp42 {
 										var tmp43 any
 										{ // let
-											// let binding "vec__725"
+											// let binding "vec__676"
 											var v44 any = v34
 											_ = v44
 											// let binding "port"
@@ -1932,7 +1932,7 @@ func LoadNS() {
 					_ = v73
 					var tmp74 any
 					{ // let
-						// let binding "vec__729"
+						// let binding "vec__680"
 						var v75 any = v73
 						_ = v75
 						// let binding "ports"
