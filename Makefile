@@ -298,9 +298,12 @@ RELEASE-PLATFORMS := \
   linux_arm64 \
   darwin_amd64 \
   darwin_arm64 \
+  windows_amd64 \
   $(EXTRA-RELEASE-PLATFORMS)
 
 RELEASE-BINS := $(foreach p,$(RELEASE-PLATFORMS),bin/$(p)/glj)
+RELEASE-ASSET-windows_amd64 := win-amd64
+release-asset = $(or $(RELEASE-ASSET-$1),$1)
 
 # Long-form command-line variables take precedence over their aliases.
 RELEASE-VERSION := \
@@ -314,7 +317,9 @@ release-dist:
 	GLJ_VERSION=v$(RELEASE_VER) $(MAKE) generate aot glj-imports $(RELEASE-BINS)
 	mkdir -p dist
 	$(foreach p,$(RELEASE-PLATFORMS), \
-	  tar -czf dist/glj-$(RELEASE_VER)-$(p).tar.gz -C bin/$(p) glj ;)
+	  tar -czf \
+	    dist/glj-$(RELEASE_VER)-$(call release-asset,$(p)).tar.gz \
+	    -C bin/$(p) glj ;)
 ifdef RELEASE-PLAN9-AMD64
 	@echo "Building Plan 9/amd64 binary (nospinbitmutex)"
 	mkdir -p bin/plan9_amd64
