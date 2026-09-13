@@ -217,8 +217,20 @@ vet: $(GO)
 	go vet ./...
 
 # vet is disabled until we fix errors in generated code
-test: test-aot-runtime test-aot-codegen test-glj test-repl-wasm test-repl-bsd  # vet
+test: \
+  test-rewrite-core \
+  test-aot-runtime \
+  test-aot-codegen \
+  test-glj \
+  test-repl-wasm \
+  test-repl-bsd  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
+
+test-rewrite-core: $(CLOJURE)
+	HOME="$(LOCAL-HOME)" CLJ="$(CLOJURE)" \
+	  scripts/rewrite-core/run.sh \
+	  scripts/rewrite-core/test/non-core.clj | \
+	  cmp - scripts/rewrite-core/test/non-core.glj
 
 TEST-COMPARE-LOAD := $(shell \
 	processors=$$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2); \

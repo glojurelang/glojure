@@ -5,6 +5,18 @@
 
 (def zloc (z/of-string (slurp (first *command-line-args*))))
 
+(defn source-namespace [zloc]
+  (loop [zloc zloc]
+    (if (z/end? zloc)
+      nil
+      (let [form (when (z/sexpr-able? zloc) (z/sexpr zloc))]
+        (if (and (list? form) (= 'ns (first form)))
+          (second form)
+          (recur (z/next zloc)))))))
+
+(def core-source?
+  (= 'clojure.core (source-namespace zloc)))
+
 ;; remove until we're at the end of all forms
 (defn skip-n [zloc n]
   ;; apply z/right n times
@@ -509,8 +521,9 @@
 
 (def replacements
   (concat
-    (map (fn [[name form]] (definition-replace name form))
-         portable-core-definitions)
+    (when core-source?
+      (map (fn [[name form]] (definition-replace name form))
+           portable-core-definitions))
     ;; Simple mappings from data structures
     (create-simple-replacements namespace-mappings)
     (create-simple-replacements type-mappings)
