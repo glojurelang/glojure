@@ -12,7 +12,6 @@ import (
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/values", LoadNS)
@@ -67,6 +66,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -149,18 +151,18 @@ func LoadNS() {
 			return &z
 		})())
 		var_codegen_DOT_test_DOT_values_big_DASH_decimal = ns.InternWithValue(tmp0, tmp1, true)
-		var_codegen_DOT_test_DOT_values_big_DASH_decimal.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_values_big_DASH_decimal.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))
-		})
+		}, false)
 	}
 	// big-decimal-type
 	{
 		tmp0 := sym_big_DASH_decimal_DASH_type
 		tmp1 := reflect.TypeOf((*lang.BigDecimal)(nil))
 		var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
-		var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(4), kw_column, int(6), kw_end_DASH_line, int(4), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))
-		})
+		}, false)
 	}
 	// -main
 	{
@@ -170,17 +172,11 @@ func LoadNS() {
 			tmp2 := checkDerefVar(var_codegen_DOT_test_DOT_values_big_DASH_decimal)
 			tmp3 := checkDerefVar(var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type)
 			tmp4 := lang.NewVector(tmp2, tmp3)
-			tmp5 := lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(7), kw_column, int(3), kw_end_DASH_line, int(7), kw_end_DASH_column, int(32))
-			tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp6
+			return tmp4
 		})
 		aotDirectFn0 = tmp1
 		var_codegen_DOT_test_DOT_values__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_values__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_values__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_values__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
 			tmp2 := lang.NewBigDecimalFromBigFloat((func() *big5.Float {
 				var z big5.Float
 				b, _ := hex4.DecodeString("010a0000004000000004a000000000000000")
@@ -190,7 +186,7 @@ func LoadNS() {
 				return &z
 			})())
 			tmp3 := reflect.TypeOf((*lang.BigDecimal)(nil))
-			return lang.NewMap(kw_expected_DASH_output, lang.NewVector(tmp2, tmp3), kw_file, "codegen/test/values.glj", kw_line, int(6), kw_column, int(7), kw_end_DASH_line, int(6), kw_end_DASH_column, int(56), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))
-		})
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/values.glj", kw_line, int(6), kw_column, int(7), kw_end_DASH_line, int(6), kw_end_DASH_column, int(56), kw_expected_DASH_output, lang.NewVector(tmp2, tmp3), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))
+		}, false)
 	}
 }

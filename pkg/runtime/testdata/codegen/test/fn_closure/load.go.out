@@ -7,18 +7,72 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc0
-var aotRootVersion1 *lang.VarRootVersion
 var aotDirectFn2 lang.FnFunc1
-var aotRootVersion2 *lang.VarRootVersion
 var aotDirectFn3 lang.FnFunc0
-var aotRootVersion3 *lang.VarRootVersion
 var aotDirectFn4 lang.FnFunc0
-var aotRootVersion4 *lang.VarRootVersion
+
+func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
+	if vr.IsBound() {
+		return aotLinkBoundFn1(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc1]
+	return func(p0 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0)
+		}
+		if !vr.IsBound() {
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+		fn := aotLinkBoundFn1(vr)
+		linked.Store(&fn)
+		return fn(p0)
+	}
+}
+
+func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn1(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn1); ok {
+		return fixed.Invoke1
+	}
+	return func(p0 any) any { return lang.Apply1(fn, p0) }
+}
+
+func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
+	if vr.IsBound() {
+		return aotLinkBoundFn2(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc2]
+	return func(p0 any, p1 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1)
+		}
+		if !vr.IsBound() {
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+		fn := aotLinkBoundFn2(vr)
+		linked.Store(&fn)
+		return fn(p0, p1)
+	}
+}
+
+func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn2(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn2); ok {
+		return fixed.Invoke2
+	}
+	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/fn_closure", LoadNS)
@@ -49,7 +103,6 @@ func LoadNS() {
 	sym_clojure_DOT_core := lang.NewSymbolUnchecked("clojure.core")
 	sym_closed := lang.NewSymbolUnchecked("closed")
 	sym_codegen_DOT_test_DOT_fn_DASH_closure := lang.NewSymbolUnchecked("codegen.test.fn-closure")
-	sym_deref := lang.NewSymbolUnchecked("deref")
 	sym_gen_DASH_closure := lang.NewSymbolUnchecked("gen-closure")
 	sym_get_DASH_atom := lang.NewSymbolUnchecked("get-atom")
 	sym_inc := lang.NewSymbolUnchecked("inc")
@@ -64,8 +117,6 @@ func LoadNS() {
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
-	// var clojure.core/deref
-	var_clojure_DOT_core_deref := lang.InternVarName(sym_clojure_DOT_core, sym_deref)
 	// var clojure.core/inc
 	var_clojure_DOT_core_inc := lang.InternVarName(sym_clojure_DOT_core, sym_inc)
 	// var clojure.core/swap!
@@ -80,6 +131,7 @@ func LoadNS() {
 	var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom := lang.InternVarName(sym_codegen_DOT_test_DOT_fn_DASH_closure, sym_get_DASH_atom)
 	// var codegen.test.fn-closure/inc-atom
 	var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom := lang.InternVarName(sym_codegen_DOT_test_DOT_fn_DASH_closure, sym_inc_DASH_atom)
+	aotExternalFn1 := aotLinkFn2(var_clojure_DOT_core_swap_BANG_)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -89,6 +141,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -160,13 +215,31 @@ func LoadNS() {
 		})
 	}
 	var closed0 any
+	var closed1 any
 	{
 		closed0 = int64(42)
 	}
-	var closed1 any
 	{
 		tmp0 := lang.NewAtom(int64(0))
 		closed1 = tmp0
+	}
+	// -main
+	{
+		tmp0 := sym__DASH_main
+		var tmp1 lang.FnFunc0
+		tmp1 = lang.FnFunc0(func() any {
+			tmp2 := aotDirectFn4()
+			_ = tmp2
+			tmp3 := aotDirectFn1()
+			tmp4 := aotDirectFn3()
+			tmp5 := lang.NewVector(tmp3, tmp4)
+			return tmp5
+		})
+		aotDirectFn0 = tmp1
+		var_codegen_DOT_test_DOT_fn_DASH_closure__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		var_codegen_DOT_test_DOT_fn_DASH_closure__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/fn_closure.glj", kw_line, int(13), kw_column, int(7), kw_end_DASH_line, int(13), kw_end_DASH_column, int(38), kw_expected_DASH_output, lang.NewVector(int64(42), int64(1)), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))
+		}, false)
 	}
 	// closed
 	{
@@ -177,10 +250,9 @@ func LoadNS() {
 		})
 		aotDirectFn1 = tmp1
 		var_codegen_DOT_test_DOT_fn_DASH_closure_closed = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_codegen_DOT_test_DOT_fn_DASH_closure_closed.RootVersion()
-		var_codegen_DOT_test_DOT_fn_DASH_closure_closed.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_fn_DASH_closure_closed.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(5), kw_column, int(6), kw_end_DASH_line, int(5), kw_end_DASH_column, int(11), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))
-		})
+		}, false)
 	}
 	// gen-closure
 	{
@@ -197,96 +269,37 @@ func LoadNS() {
 		})
 		aotDirectFn2 = tmp1
 		var_codegen_DOT_test_DOT_fn_DASH_closure_gen_DASH_closure = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion2 = var_codegen_DOT_test_DOT_fn_DASH_closure_gen_DASH_closure.RootVersion()
-		var_codegen_DOT_test_DOT_fn_DASH_closure_gen_DASH_closure.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_fn_DASH_closure_gen_DASH_closure.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_the_DASH_result)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))
-		})
-	}
-	// -main
-	{
-		tmp0 := sym__DASH_main
-		var tmp1 lang.FnFunc0
-		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom.RootVersion() == aotRootVersion4 && !var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom.IsMacro()
-			var tmp3 any
-			if !tmp2 {
-				tmp3 = checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom)
-			}
-			var tmp4 any
-			if tmp2 {
-				tmp4 = aotDirectFn4()
-			} else {
-				tmp4 = lang.Apply0(tmp3)
-			}
-			_ = tmp4
-			tmp5 := var_codegen_DOT_test_DOT_fn_DASH_closure_closed.RootVersion() == aotRootVersion1 && !var_codegen_DOT_test_DOT_fn_DASH_closure_closed.IsMacro()
-			var tmp6 any
-			if !tmp5 {
-				tmp6 = checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_closure_closed)
-			}
-			var tmp7 any
-			if tmp5 {
-				tmp7 = aotDirectFn1()
-			} else {
-				tmp7 = lang.Apply0(tmp6)
-			}
-			tmp8 := var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom.RootVersion() == aotRootVersion3 && !var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom.IsMacro()
-			var tmp9 any
-			if !tmp8 {
-				tmp9 = checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom)
-			}
-			var tmp10 any
-			if tmp8 {
-				tmp10 = aotDirectFn3()
-			} else {
-				tmp10 = lang.Apply0(tmp9)
-			}
-			tmp11 := lang.NewVector(tmp7, tmp10)
-			tmp12 := lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(15), kw_column, int(3), kw_end_DASH_line, int(16), kw_end_DASH_column, int(14))
-			tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp13
-		})
-		aotDirectFn0 = tmp1
-		var_codegen_DOT_test_DOT_fn_DASH_closure__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_fn_DASH_closure__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_fn_DASH_closure__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, lang.NewVector(int64(42), int64(1)), kw_file, "codegen/test/fn_closure.glj", kw_line, int(13), kw_column, int(7), kw_end_DASH_line, int(13), kw_end_DASH_column, int(38), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))
-		})
+		}, false)
 	}
 	// get-atom
 	{
 		tmp0 := sym_get_DASH_atom
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := checkDerefVar(var_clojure_DOT_core_deref)
-			tmp3 := lang.Apply1(tmp2, closed1)
-			return tmp3
+			tmp2 := lang.DerefValue(closed1)
+			return tmp2
 		})
 		aotDirectFn3 = tmp1
 		var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion3 = var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom.RootVersion()
-		var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(10), kw_column, int(9), kw_end_DASH_line, int(10), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))
-		})
+		}, false)
 	}
 	// inc-atom
 	{
 		tmp0 := sym_inc_DASH_atom
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := checkDerefVar(var_clojure_DOT_core_swap_BANG_)
-			tmp3 := checkDerefVar(var_clojure_DOT_core_inc)
-			tmp4 := lang.Apply2(tmp2, closed1, tmp3)
-			return tmp4
+			tmp2 := checkDerefVar(var_clojure_DOT_core_inc)
+			tmp3 := aotExternalFn1(closed1, tmp2)
+			return tmp3
 		})
 		aotDirectFn4 = tmp1
 		var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion4 = var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom.RootVersion()
-		var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(8), kw_column, int(9), kw_end_DASH_line, int(8), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))
-		})
+		}, false)
 	}
 }

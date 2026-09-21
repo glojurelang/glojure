@@ -8,10 +8,39 @@ import (
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
 	regexp4 "regexp"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc1
-var aotRootVersion0 *lang.VarRootVersion
+
+func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
+	if vr.IsBound() {
+		return aotLinkBoundFn2(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc2]
+	return func(p0 any, p1 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1)
+		}
+		if !vr.IsBound() {
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+		fn := aotLinkBoundFn2(vr)
+		linked.Store(&fn)
+		return fn(p0, p1)
+	}
+}
+
+func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn2(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn2); ok {
+		return fixed.Invoke2
+	}
+	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/regex_literal", LoadNS)
@@ -72,6 +101,7 @@ func LoadNS() {
 	var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_quotes := lang.InternVarName(sym_codegen_DOT_test_DOT_regex_DASH_literal, sym_pattern_DASH_with_DASH_quotes)
 	// var codegen.test.regex-literal/test-match
 	var_codegen_DOT_test_DOT_regex_DASH_literal_test_DASH_match := lang.InternVarName(sym_codegen_DOT_test_DOT_regex_DASH_literal, sym_test_DASH_match)
+	aotExternalFn0 := aotLinkFn2(var_clojure_DOT_core_re_DASH_matches)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -81,6 +111,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -155,49 +188,49 @@ func LoadNS() {
 	{
 		tmp0 := sym_pattern_DASH_complex
 		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_complex = ns.InternWithValue(tmp0, regexp4.MustCompile("^(?:foo|bar)\\s*=\\s*(['\\\"]?)(.+?)$"), true)
-		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_complex.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_complex.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/regex_literal.glj", kw_line, int(10), kw_column, int(6), kw_end_DASH_line, int(10), kw_end_DASH_column, int(20), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_regex_DASH_literal))
-		})
+		}, false)
 	}
 	// pattern-function
 	{
 		tmp0 := sym_pattern_DASH_function
 		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_function = ns.InternWithValue(tmp0, regexp4.MustCompile("[0-9]+"), true)
-		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_function.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_function.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/regex_literal.glj", kw_line, int(13), kw_column, int(6), kw_end_DASH_line, int(13), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_regex_DASH_literal))
-		})
+		}, false)
 	}
 	// pattern-literal
 	{
 		tmp0 := sym_pattern_DASH_literal
 		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_literal = ns.InternWithValue(tmp0, regexp4.MustCompile("[a-z]+"), true)
-		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_literal.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_literal.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/regex_literal.glj", kw_line, int(4), kw_column, int(6), kw_end_DASH_line, int(4), kw_end_DASH_column, int(20), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_regex_DASH_literal))
-		})
+		}, false)
 	}
 	// pattern-with-backslash
 	{
 		tmp0 := sym_pattern_DASH_with_DASH_backslash
 		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_backslash = ns.InternWithValue(tmp0, regexp4.MustCompile("\\\\d+"), true)
-		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_backslash.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_backslash.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/regex_literal.glj", kw_line, int(7), kw_column, int(6), kw_end_DASH_line, int(7), kw_end_DASH_column, int(27), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_regex_DASH_literal))
-		})
+		}, false)
 	}
 	// pattern-with-newline
 	{
 		tmp0 := sym_pattern_DASH_with_DASH_newline
 		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_newline = ns.InternWithValue(tmp0, regexp4.MustCompile("line1\\nline2"), true)
-		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_newline.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_newline.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/regex_literal.glj", kw_line, int(9), kw_column, int(6), kw_end_DASH_line, int(9), kw_end_DASH_column, int(25), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_regex_DASH_literal))
-		})
+		}, false)
 	}
 	// pattern-with-quotes
 	{
 		tmp0 := sym_pattern_DASH_with_DASH_quotes
 		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_quotes = ns.InternWithValue(tmp0, regexp4.MustCompile("\\\"quoted\\\""), true)
-		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_quotes.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_with_DASH_quotes.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/regex_literal.glj", kw_line, int(8), kw_column, int(6), kw_end_DASH_line, int(8), kw_end_DASH_column, int(24), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_regex_DASH_literal))
-		})
+		}, false)
 	}
 	// test-match
 	{
@@ -209,29 +242,26 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "and__0__auto__"
-				tmp4 := checkDerefVar(var_clojure_DOT_core_re_DASH_matches)
-				tmp5 := checkDerefVar(var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_literal)
-				tmp6 := lang.Apply2(tmp4, tmp5, "hello")
-				var v7 any = tmp6
-				_ = v7
-				var tmp8 any
-				if lang.IsTruthy(v7) {
-					tmp9 := checkDerefVar(var_clojure_DOT_core_re_DASH_matches)
-					tmp10 := checkDerefVar(var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_function)
-					tmp11 := lang.Apply2(tmp9, tmp10, "12345")
-					tmp8 = tmp11
+				tmp4 := checkDerefVar(var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_literal)
+				tmp5 := aotExternalFn0(tmp4, "hello")
+				var v6 any = tmp5
+				_ = v6
+				var tmp7 any
+				if lang.IsTruthy(v6) {
+					tmp8 := checkDerefVar(var_codegen_DOT_test_DOT_regex_DASH_literal_pattern_DASH_function)
+					tmp9 := aotExternalFn0(tmp8, "12345")
+					tmp7 = tmp9
 				} else {
-					tmp8 = v7
+					tmp7 = v6
 				}
-				tmp3 = tmp8
+				tmp3 = tmp7
 			} // end let
 			return tmp3
 		})
 		aotDirectFn0 = tmp1
 		var_codegen_DOT_test_DOT_regex_DASH_literal_test_DASH_match = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_regex_DASH_literal_test_DASH_match.RootVersion()
-		var_codegen_DOT_test_DOT_regex_DASH_literal_test_DASH_match.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_regex_DASH_literal_test_DASH_match.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/regex_literal.glj", kw_line, int(16), kw_column, int(7), kw_end_DASH_line, int(16), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_regex_DASH_literal))
-		})
+		}, false)
 	}
 }

@@ -17,20 +17,6 @@ import (
 
 var indent = 0
 
-// javaClassMethods maps Java-style static method calls
-// (e.g. clojure.lang.PersistentTreeMap/create) to Go implementations.
-var javaClassMethods = map[string]interface{}{
-	"clojure.lang.PersistentTreeMap/create": lang.FnFunc(func(args ...any) any {
-		if len(args) == 2 {
-			return lang.CreatePersistentTreeMapWithComparator(args[0].(lang.IFn), args[1])
-		}
-		return lang.CreatePersistentTreeMap(args[0])
-	}),
-	"clojure.lang.MapEntry/create": lang.FnFunc(func(args ...any) any {
-		return lang.NewMapEntry(args[0], args[1])
-	}),
-}
-
 var (
 	Debug = false
 
@@ -434,25 +420,10 @@ func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
 		}
 	}
 
-	// Check if it's a Go package reference
-	v, ok := pkgmap.Get(hostFormNode.Class + "." + field.Name())
-	if ok {
+	// Go package export or JVM static member (short or fully-qualified
+	// class name). Shared with AOT code so both paths agree.
+	if v, ok := pkgmap.LookupHostMember(hostFormNode.Class, field.Name()); ok {
 		return v, nil
-	}
-
-	// Fully-qualified java.lang.X form: strip the prefix and re-check.
-	// In standard Clojure, java.lang.* classes are auto-imported, so
-	// java.lang.Math/abs and Math/abs name the same thing.
-	if bare, ok2 := strings.CutPrefix(hostFormNode.Class, "java.lang."); ok2 {
-		if v, ok := pkgmap.Get(bare + "." + field.Name()); ok {
-			return v, nil
-		}
-	}
-
-	// Java class compatibility mappings
-	classMethod := hostFormNode.Class + "/" + field.Name()
-	if fn, ok := javaClassMethods[classMethod]; ok {
-		return fn, nil
 	}
 
 	panic("EvalASTMaybeHostForm: " + hostFormNode.Class + "/" + field.Name())

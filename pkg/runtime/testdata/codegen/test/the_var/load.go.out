@@ -10,7 +10,6 @@ import (
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/the_var", LoadNS)
@@ -62,6 +61,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -153,17 +155,16 @@ func LoadNS() {
 		})
 		aotDirectFn0 = tmp1
 		var_codegen_DOT_test_DOT_the_DASH_var__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_the_DASH_var__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_the_DASH_var__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, int64(42), kw_file, "codegen/test/the_var.glj", kw_line, int(5), kw_column, int(7), kw_end_DASH_line, int(5), kw_end_DASH_column, int(34), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_the_DASH_var))
-		})
+		var_codegen_DOT_test_DOT_the_DASH_var__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/the_var.glj", kw_line, int(5), kw_column, int(7), kw_end_DASH_line, int(5), kw_end_DASH_column, int(34), kw_expected_DASH_output, int64(42), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_the_DASH_var))
+		}, false)
 	}
 	// foo
 	{
 		tmp0 := sym_foo
 		var_codegen_DOT_test_DOT_the_DASH_var_foo = ns.InternWithValue(tmp0, int64(42), true)
-		var_codegen_DOT_test_DOT_the_DASH_var_foo.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_the_DASH_var_foo.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/the_var.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_the_DASH_var))
-		})
+		}, false)
 	}
 }

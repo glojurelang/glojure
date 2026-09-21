@@ -7,36 +7,68 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc1
-var aotRootVersion1 *lang.VarRootVersion
 var aotDirectFn2 lang.FnFunc1
-var aotRootVersion2 *lang.VarRootVersion
 var aotDirectFn3 lang.FnFunc1
-var aotRootVersion3 *lang.VarRootVersion
 var aotDirectFn4 lang.FnFunc1
-var aotRootVersion4 *lang.VarRootVersion
 var aotDirectFn5 lang.FnFunc1
-var aotRootVersion5 *lang.VarRootVersion
 var aotDirectFn6 lang.FnFunc1
-var aotRootVersion6 *lang.VarRootVersion
 var aotDirectFn7 lang.FnFunc1
-var aotRootVersion7 *lang.VarRootVersion
 var aotDirectFn8 lang.FnFunc1
-var aotRootVersion8 *lang.VarRootVersion
 var aotDirectFn9 lang.FnFunc1
-var aotRootVersion9 *lang.VarRootVersion
 var aotDirectFn10 lang.FnFunc1
-var aotRootVersion10 *lang.VarRootVersion
 var aotDirectFn11 lang.FnFunc1
-var aotRootVersion11 *lang.VarRootVersion
 var aotDirectFn12 lang.FnFunc1
-var aotRootVersion12 *lang.VarRootVersion
 var aotDirectFn13 lang.FnFunc1
-var aotRootVersion13 *lang.VarRootVersion
+
+var aotKeywordMapShape0 = lang.NewKeywordMapShape("int-tests", "compact-tests", "sparse-tests", "sparse-tests-2", "keyword-tests", "string-tests", "symbol-tests", "mixed-tests", "collision-tests", "default-tests", "no-default-tests", "char-tests", "vector-list-tests")
+
+type aotKeywordMapStorage0 struct {
+	lang.Map
+	values [13]any
+}
+
+func aotKeywordMapNew0(v0 any, v1 any, v2 any, v3 any, v4 any, v5 any, v6 any, v7 any, v8 any, v9 any, v10 any, v11 any, v12 any) lang.IPersistentMap {
+	storage := &aotKeywordMapStorage0{}
+	storage.values = [13]any{v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape0,
+		storage.values[:],
+	)
+}
+func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
+	if vr.IsBound() {
+		return aotLinkBoundFn2(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc2]
+	return func(p0 any, p1 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1)
+		}
+		if !vr.IsBound() {
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+		fn := aotLinkBoundFn2(vr)
+		linked.Store(&fn)
+		return fn(p0, p1)
+	}
+}
+
+func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn2(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn2); ok {
+		return fixed.Invoke2
+	}
+	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/case_comprehensive", LoadNS)
@@ -153,6 +185,7 @@ func LoadNS() {
 	kw_unknown := lang.NewKeyword("unknown")
 	kw_vector_DASH_list_DASH_tests := lang.NewKeyword("vector-list-tests")
 	kw_zero := lang.NewKeyword("zero")
+	builtin_any := lang.Builtins["any"]
 	// var clojure.core/str
 	var_clojure_DOT_core_str := lang.InternVarName(sym_clojure_DOT_core, sym_str)
 	// var codegen.test.case-comprehensive/-main
@@ -183,6 +216,7 @@ func LoadNS() {
 	var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case := lang.InternVarName(sym_codegen_DOT_test_DOT_case_DASH_comprehensive, sym_test_DASH_symbol_DASH_case)
 	// var codegen.test.case-comprehensive/test-vector-list-case
 	var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case := lang.InternVarName(sym_codegen_DOT_test_DOT_case_DASH_comprehensive, sym_test_DASH_vector_DASH_list_DASH_case)
+	aotExternalFn0 := aotLinkFn2(var_clojure_DOT_core_str)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -192,6 +226,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -262,6 +299,75 @@ func LoadNS() {
 			"throw-if",
 		})
 	}
+	// -main
+	{
+		tmp0 := sym__DASH_main
+		var tmp1 lang.FnFunc0
+		tmp1 = lang.FnFunc0(func() any {
+			tmp2 := aotDirectFn5(int64(1))
+			tmp3 := aotDirectFn5(int64(10))
+			tmp4 := aotDirectFn5(int64(999))
+			tmp5 := lang.NewVector(tmp2, tmp3, tmp4)
+			tmp6 := aotDirectFn3(int64(0))
+			tmp7 := aotDirectFn3(int64(5))
+			tmp8 := aotDirectFn3(int64(10))
+			tmp9 := lang.NewVector(tmp6, tmp7, tmp8)
+			tmp10 := aotDirectFn9(int64(1))
+			tmp11 := aotDirectFn9(int64(1000))
+			tmp12 := aotDirectFn9(int64(999))
+			tmp13 := lang.NewVector(tmp10, tmp11, tmp12)
+			tmp14 := aotDirectFn10(int64(5))
+			tmp15 := aotDirectFn10(int64(17))
+			tmp16 := aotDirectFn10(int64(33))
+			tmp17 := aotDirectFn10(int64(129))
+			tmp18 := aotDirectFn10(int64(1000))
+			tmp19 := lang.NewVector(tmp14, tmp15, tmp16, tmp17, tmp18)
+			tmp20 := aotDirectFn6(kw_foo)
+			tmp21 := aotDirectFn6(kw_bar)
+			tmp22 := aotDirectFn6(kw_qux)
+			tmp23 := lang.NewVector(tmp20, tmp21, tmp22)
+			tmp24 := aotDirectFn11("hello")
+			tmp25 := aotDirectFn11("goodbye")
+			tmp26 := aotDirectFn11("unknown")
+			tmp27 := lang.NewVector(tmp24, tmp25, tmp26)
+			tmp28 := aotDirectFn12(sym_foo)
+			tmp29 := aotDirectFn12(sym_bar)
+			tmp30 := aotDirectFn12(sym_qux)
+			tmp31 := lang.NewVector(tmp28, tmp29, tmp30)
+			tmp32 := aotDirectFn7(int64(1))
+			tmp33 := aotDirectFn7("one")
+			tmp34 := aotDirectFn7(kw_one)
+			tmp35 := aotDirectFn7(sym_one)
+			tmp36 := aotDirectFn7(float64(2))
+			tmp37 := lang.NewVector(tmp32, tmp33, tmp34, tmp35, tmp36)
+			tmp38 := aotDirectFn2(false)
+			tmp39 := aotDirectFn2(nil)
+			tmp40 := aotDirectFn2(true)
+			tmp41 := aotDirectFn2("other")
+			tmp42 := lang.NewVector(tmp38, tmp39, tmp40, tmp41)
+			tmp43 := aotDirectFn4(kw_specific)
+			tmp44 := aotDirectFn4(kw_other)
+			tmp45 := lang.NewVector(tmp43, tmp44)
+			tmp46 := aotDirectFn8(int64(1))
+			tmp47 := aotDirectFn8(int64(3))
+			tmp48 := lang.NewVector(tmp46, tmp47)
+			tmp49 := aotDirectFn1(lang.NewChar(97))
+			tmp50 := aotDirectFn1(lang.NewChar(32))
+			tmp51 := aotDirectFn1(lang.NewChar(122))
+			tmp52 := lang.NewVector(tmp49, tmp50, tmp51)
+			tmp53 := aotDirectFn13(lang.NewList(int64(1), int64(2)))
+			tmp54 := aotDirectFn13(lang.NewList(int64(3), int64(4), int64(5)))
+			tmp55 := aotDirectFn13(lang.NewList(int64(6), int64(7)))
+			tmp56 := lang.NewVector(tmp53, tmp54, tmp55)
+			tmp57 := aotKeywordMapNew0(tmp5, tmp9, tmp13, tmp19, tmp23, tmp27, tmp31, tmp37, tmp42, tmp45, tmp48, tmp52, tmp56)
+			return tmp57
+		})
+		aotDirectFn0 = tmp1
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(117), kw_column, int(7), kw_end_DASH_line, int(131), kw_end_DASH_column, int(7), kw_expected_DASH_output, lang.NewMapUniqueKeys(kw_int_DASH_tests, lang.NewVector(kw_one, kw_ten, kw_default), kw_compact_DASH_tests, lang.NewVector(kw_zero, kw_five, kw_not_DASH_found), kw_sparse_DASH_tests, lang.NewVector(kw_one, kw_thousand, kw_not_DASH_found), kw_sparse_DASH_tests_DASH_2, lang.NewVector(kw_five, kw_seventeen, kw_thirty_DASH_three, kw_one_DASH_twenty_DASH_nine, kw_not_DASH_found), kw_keyword_DASH_tests, lang.NewVector(kw_got_DASH_foo, kw_got_DASH_bar, kw_default), kw_string_DASH_tests, lang.NewVector(kw_greeting, kw_farewell, kw_unknown), kw_symbol_DASH_tests, lang.NewVector(kw_got_DASH_foo, kw_got_DASH_bar, kw_default), kw_mixed_DASH_tests, lang.NewVector(kw_number_DASH_one, kw_string_DASH_one, kw_keyword_DASH_one, kw_symbol_DASH_one, kw_default), kw_collision_DASH_tests, lang.NewVector(kw_boolean_DASH_false, kw_nil_DASH_value, kw_boolean_DASH_true, kw_default), kw_default_DASH_tests, lang.NewVector(kw_found_DASH_specific, kw_default), kw_no_DASH_default_DASH_tests, lang.NewVector(kw_one, kw_no_DASH_match_DASH_error), kw_char_DASH_tests, lang.NewVector(kw_letter_DASH_a, kw_space_DASH_char, kw_other_DASH_char), kw_vector_DASH_list_DASH_tests, lang.NewVector(kw_one_DASH_two, kw_three_DASH_four_DASH_five, kw_other)), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
+		}, false)
+	}
 	// test-char-case
 	{
 		tmp0 := sym_test_DASH_char_DASH_case
@@ -271,7 +377,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__381"
+				// let binding "G__349"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -315,10 +421,9 @@ func LoadNS() {
 		})
 		aotDirectFn1 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(102), kw_column, int(7), kw_end_DASH_line, int(102), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-collision-case
 	{
@@ -329,7 +434,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__378"
+				// let binding "G__346"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -366,10 +471,9 @@ func LoadNS() {
 		})
 		aotDirectFn2 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion2 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(79), kw_column, int(7), kw_end_DASH_line, int(79), kw_end_DASH_column, int(25), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-compact-case
 	{
@@ -380,7 +484,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__371"
+				// let binding "G__339"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -427,10 +531,9 @@ func LoadNS() {
 		})
 		aotDirectFn3 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion3 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(14), kw_column, int(7), kw_end_DASH_line, int(14), kw_end_DASH_column, int(23), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-default-case
 	{
@@ -441,7 +544,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__379"
+				// let binding "G__347"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -464,10 +567,9 @@ func LoadNS() {
 		})
 		aotDirectFn4 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion4 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(87), kw_column, int(7), kw_end_DASH_line, int(87), kw_end_DASH_column, int(23), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-int-case
 	{
@@ -478,7 +580,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__370"
+				// let binding "G__338"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -522,10 +624,9 @@ func LoadNS() {
 		})
 		aotDirectFn5 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion5 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(4), kw_column, int(7), kw_end_DASH_line, int(4), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-keyword-case
 	{
@@ -536,7 +637,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__374"
+				// let binding "G__342"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -573,10 +674,9 @@ func LoadNS() {
 		})
 		aotDirectFn6 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion6 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(45), kw_column, int(7), kw_end_DASH_line, int(45), kw_end_DASH_column, int(23), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-mixed-case
 	{
@@ -587,7 +687,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__377"
+				// let binding "G__345"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -638,10 +738,74 @@ func LoadNS() {
 		})
 		aotDirectFn7 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion7 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(70), kw_column, int(7), kw_end_DASH_line, int(70), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
+		}, false)
+	}
+	// test-no-default
+	{
+		tmp0 := sym_test_DASH_no_DASH_default
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			var tmp3 any
+			func() {
+				defer func() {
+					if r := recover(); r != nil {
+						if lang.CatchMatches(r, builtin_any) {
+							v4 := r
+							_ = v4
+							tmp3 = kw_no_DASH_match_DASH_error
+						} else {
+							panic(r)
+						}
+					}
+				}()
+				var tmp4 any
+				{ // let
+					// let binding "G__348"
+					var v5 any = v2
+					_ = v5
+					// case
+					var tmp6 any
+					var tmp7 int64
+					switch v := v5.(type) {
+					case int64:
+						tmp7 = v
+					case int:
+						tmp7 = int64(v)
+					case int32:
+						tmp7 = int64(v)
+					case int16:
+						tmp7 = int64(v)
+					case int8:
+						tmp7 = int64(v)
+					default:
+						tmp7 = -1 // won't match any case
+					}
+					// case entry 0 (key=1, collision=false)
+					if tmp7 == 1 {
+						tmp6 = kw_one
+						// case entry 1 (key=2, collision=false)
+					} else if tmp7 == 2 {
+						tmp6 = kw_two
+					} else {
+						tmp8 := aotExternalFn0("No matching clause: ", v5)
+						tmp9 := lang.Apply1(lang.NewIllegalArgumentError, tmp8)
+						panic(tmp9)
+					}
+					tmp4 = tmp6
+				} // end let
+				tmp3 = tmp4
+			}()
+			return tmp3
 		})
+		aotDirectFn8 = tmp1
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default = ns.InternWithValue(tmp0, tmp1, true)
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(93), kw_column, int(7), kw_end_DASH_line, int(93), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
+		}, false)
 	}
 	// test-sparse-case
 	{
@@ -652,7 +816,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__372"
+				// let binding "G__340"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -710,10 +874,9 @@ func LoadNS() {
 		})
 		aotDirectFn9 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion9 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(26), kw_column, int(7), kw_end_DASH_line, int(26), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-sparse-case-2
 	{
@@ -724,7 +887,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__373"
+				// let binding "G__341"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -765,10 +928,9 @@ func LoadNS() {
 		})
 		aotDirectFn10 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2 = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion10 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(36), kw_column, int(7), kw_end_DASH_line, int(36), kw_end_DASH_column, int(24), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-string-case
 	{
@@ -779,7 +941,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__375"
+				// let binding "G__343"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -823,10 +985,9 @@ func LoadNS() {
 		})
 		aotDirectFn11 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion11 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-symbol-case
 	{
@@ -837,7 +998,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__376"
+				// let binding "G__344"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -874,10 +1035,9 @@ func LoadNS() {
 		})
 		aotDirectFn12 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion12 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(62), kw_column, int(7), kw_end_DASH_line, int(62), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 	// test-vector-list-case
 	{
@@ -888,7 +1048,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__382"
+				// let binding "G__350"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -918,636 +1078,8 @@ func LoadNS() {
 		})
 		aotDirectFn13 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion13 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(111), kw_column, int(7), kw_end_DASH_line, int(111), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
-	}
-	// -main
-	{
-		tmp0 := sym__DASH_main
-		var tmp1 lang.FnFunc0
-		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case.RootVersion() == aotRootVersion13 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case.IsMacro()
-			var tmp3 any
-			if !tmp2 {
-				tmp3 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case)
-			}
-			var tmp4 any
-			if tmp2 {
-				tmp4 = aotDirectFn13(lang.NewList(int64(1), int64(2)))
-			} else {
-				tmp4 = lang.Apply1(tmp3, lang.NewList(int64(1), int64(2)))
-			}
-			tmp5 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case.RootVersion() == aotRootVersion13 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case.IsMacro()
-			var tmp6 any
-			if !tmp5 {
-				tmp6 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case)
-			}
-			var tmp7 any
-			if tmp5 {
-				tmp7 = aotDirectFn13(lang.NewList(int64(3), int64(4), int64(5)))
-			} else {
-				tmp7 = lang.Apply1(tmp6, lang.NewList(int64(3), int64(4), int64(5)))
-			}
-			tmp8 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case.RootVersion() == aotRootVersion13 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case.IsMacro()
-			var tmp9 any
-			if !tmp8 {
-				tmp9 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_vector_DASH_list_DASH_case)
-			}
-			var tmp10 any
-			if tmp8 {
-				tmp10 = aotDirectFn13(lang.NewList(int64(6), int64(7)))
-			} else {
-				tmp10 = lang.Apply1(tmp9, lang.NewList(int64(6), int64(7)))
-			}
-			tmp11 := lang.NewVector(tmp4, tmp7, tmp10)
-			tmp12 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(147), kw_column, int(23), kw_end_DASH_line, int(149), kw_end_DASH_column, int(54))
-			tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp14 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case.RootVersion() == aotRootVersion4 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case.IsMacro()
-			var tmp15 any
-			if !tmp14 {
-				tmp15 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case)
-			}
-			var tmp16 any
-			if tmp14 {
-				tmp16 = aotDirectFn4(kw_specific)
-			} else {
-				tmp16 = lang.Apply1(tmp15, kw_specific)
-			}
-			tmp17 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case.RootVersion() == aotRootVersion4 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case.IsMacro()
-			var tmp18 any
-			if !tmp17 {
-				tmp18 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_default_DASH_case)
-			}
-			var tmp19 any
-			if tmp17 {
-				tmp19 = aotDirectFn4(kw_other)
-			} else {
-				tmp19 = lang.Apply1(tmp18, kw_other)
-			}
-			tmp20 := lang.NewVector(tmp16, tmp19)
-			tmp21 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(144), kw_column, int(19), kw_end_DASH_line, int(144), kw_end_DASH_column, int(76))
-			tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp23 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case.RootVersion() == aotRootVersion5 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case.IsMacro()
-			var tmp24 any
-			if !tmp23 {
-				tmp24 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case)
-			}
-			var tmp25 any
-			if tmp23 {
-				tmp25 = aotDirectFn5(int64(1))
-			} else {
-				tmp25 = lang.Apply1(tmp24, int64(1))
-			}
-			tmp26 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case.RootVersion() == aotRootVersion5 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case.IsMacro()
-			var tmp27 any
-			if !tmp26 {
-				tmp27 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case)
-			}
-			var tmp28 any
-			if tmp26 {
-				tmp28 = aotDirectFn5(int64(10))
-			} else {
-				tmp28 = lang.Apply1(tmp27, int64(10))
-			}
-			tmp29 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case.RootVersion() == aotRootVersion5 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case.IsMacro()
-			var tmp30 any
-			if !tmp29 {
-				tmp30 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_int_DASH_case)
-			}
-			var tmp31 any
-			if tmp29 {
-				tmp31 = aotDirectFn5(int64(999))
-			} else {
-				tmp31 = lang.Apply1(tmp30, int64(999))
-			}
-			tmp32 := lang.NewVector(tmp25, tmp28, tmp31)
-			tmp33 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(132), kw_column, int(15), kw_end_DASH_line, int(132), kw_end_DASH_column, int(72))
-			tmp34, err := lang.WithMeta(tmp32, tmp33.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp35 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case.RootVersion() == aotRootVersion11 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case.IsMacro()
-			var tmp36 any
-			if !tmp35 {
-				tmp36 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case)
-			}
-			var tmp37 any
-			if tmp35 {
-				tmp37 = aotDirectFn11("hello")
-			} else {
-				tmp37 = lang.Apply1(tmp36, "hello")
-			}
-			tmp38 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case.RootVersion() == aotRootVersion11 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case.IsMacro()
-			var tmp39 any
-			if !tmp38 {
-				tmp39 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case)
-			}
-			var tmp40 any
-			if tmp38 {
-				tmp40 = aotDirectFn11("goodbye")
-			} else {
-				tmp40 = lang.Apply1(tmp39, "goodbye")
-			}
-			tmp41 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case.RootVersion() == aotRootVersion11 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case.IsMacro()
-			var tmp42 any
-			if !tmp41 {
-				tmp42 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_string_DASH_case)
-			}
-			var tmp43 any
-			if tmp41 {
-				tmp43 = aotDirectFn11("unknown")
-			} else {
-				tmp43 = lang.Apply1(tmp42, "unknown")
-			}
-			tmp44 := lang.NewVector(tmp37, tmp40, tmp43)
-			tmp45 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(138), kw_column, int(18), kw_end_DASH_line, int(138), kw_end_DASH_column, int(103))
-			tmp46, err := lang.WithMeta(tmp44, tmp45.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp47 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.RootVersion() == aotRootVersion7 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.IsMacro()
-			var tmp48 any
-			if !tmp47 {
-				tmp48 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case)
-			}
-			var tmp49 any
-			if tmp47 {
-				tmp49 = aotDirectFn7(int64(1))
-			} else {
-				tmp49 = lang.Apply1(tmp48, int64(1))
-			}
-			tmp50 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.RootVersion() == aotRootVersion7 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.IsMacro()
-			var tmp51 any
-			if !tmp50 {
-				tmp51 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case)
-			}
-			var tmp52 any
-			if tmp50 {
-				tmp52 = aotDirectFn7("one")
-			} else {
-				tmp52 = lang.Apply1(tmp51, "one")
-			}
-			tmp53 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.RootVersion() == aotRootVersion7 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.IsMacro()
-			var tmp54 any
-			if !tmp53 {
-				tmp54 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case)
-			}
-			var tmp55 any
-			if tmp53 {
-				tmp55 = aotDirectFn7(kw_one)
-			} else {
-				tmp55 = lang.Apply1(tmp54, kw_one)
-			}
-			tmp56 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.RootVersion() == aotRootVersion7 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.IsMacro()
-			var tmp57 any
-			if !tmp56 {
-				tmp57 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case)
-			}
-			var tmp58 any
-			if tmp56 {
-				tmp58 = aotDirectFn7(sym_one)
-			} else {
-				tmp58 = lang.Apply1(tmp57, sym_one)
-			}
-			tmp59 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.RootVersion() == aotRootVersion7 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case.IsMacro()
-			var tmp60 any
-			if !tmp59 {
-				tmp60 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_mixed_DASH_case)
-			}
-			var tmp61 any
-			if tmp59 {
-				tmp61 = aotDirectFn7(float64(2))
-			} else {
-				tmp61 = lang.Apply1(tmp60, float64(2))
-			}
-			tmp62 := lang.NewVector(tmp49, tmp52, tmp55, tmp58, tmp61)
-			tmp63 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(140), kw_column, int(17), kw_end_DASH_line, int(141), kw_end_DASH_column, int(62))
-			tmp64, err := lang.WithMeta(tmp62, tmp63.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp65 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case.RootVersion() == aotRootVersion12 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case.IsMacro()
-			var tmp66 any
-			if !tmp65 {
-				tmp66 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case)
-			}
-			var tmp67 any
-			if tmp65 {
-				tmp67 = aotDirectFn12(sym_foo)
-			} else {
-				tmp67 = lang.Apply1(tmp66, sym_foo)
-			}
-			tmp68 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case.RootVersion() == aotRootVersion12 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case.IsMacro()
-			var tmp69 any
-			if !tmp68 {
-				tmp69 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case)
-			}
-			var tmp70 any
-			if tmp68 {
-				tmp70 = aotDirectFn12(sym_bar)
-			} else {
-				tmp70 = lang.Apply1(tmp69, sym_bar)
-			}
-			tmp71 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case.RootVersion() == aotRootVersion12 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case.IsMacro()
-			var tmp72 any
-			if !tmp71 {
-				tmp72 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_symbol_DASH_case)
-			}
-			var tmp73 any
-			if tmp71 {
-				tmp73 = aotDirectFn12(sym_qux)
-			} else {
-				tmp73 = lang.Apply1(tmp72, sym_qux)
-			}
-			tmp74 := lang.NewVector(tmp67, tmp70, tmp73)
-			tmp75 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(139), kw_column, int(18), kw_end_DASH_line, int(139), kw_end_DASH_column, int(90))
-			tmp76, err := lang.WithMeta(tmp74, tmp75.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp77 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case.RootVersion() == aotRootVersion9 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case.IsMacro()
-			var tmp78 any
-			if !tmp77 {
-				tmp78 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case)
-			}
-			var tmp79 any
-			if tmp77 {
-				tmp79 = aotDirectFn9(int64(1))
-			} else {
-				tmp79 = lang.Apply1(tmp78, int64(1))
-			}
-			tmp80 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case.RootVersion() == aotRootVersion9 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case.IsMacro()
-			var tmp81 any
-			if !tmp80 {
-				tmp81 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case)
-			}
-			var tmp82 any
-			if tmp80 {
-				tmp82 = aotDirectFn9(int64(1000))
-			} else {
-				tmp82 = lang.Apply1(tmp81, int64(1000))
-			}
-			tmp83 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case.RootVersion() == aotRootVersion9 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case.IsMacro()
-			var tmp84 any
-			if !tmp83 {
-				tmp84 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case)
-			}
-			var tmp85 any
-			if tmp83 {
-				tmp85 = aotDirectFn9(int64(999))
-			} else {
-				tmp85 = lang.Apply1(tmp84, int64(999))
-			}
-			tmp86 := lang.NewVector(tmp79, tmp82, tmp85)
-			tmp87 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(134), kw_column, int(18), kw_end_DASH_line, int(134), kw_end_DASH_column, int(86))
-			tmp88, err := lang.WithMeta(tmp86, tmp87.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp89 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case.RootVersion() == aotRootVersion6 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case.IsMacro()
-			var tmp90 any
-			if !tmp89 {
-				tmp90 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case)
-			}
-			var tmp91 any
-			if tmp89 {
-				tmp91 = aotDirectFn6(kw_foo)
-			} else {
-				tmp91 = lang.Apply1(tmp90, kw_foo)
-			}
-			tmp92 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case.RootVersion() == aotRootVersion6 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case.IsMacro()
-			var tmp93 any
-			if !tmp92 {
-				tmp93 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case)
-			}
-			var tmp94 any
-			if tmp92 {
-				tmp94 = aotDirectFn6(kw_bar)
-			} else {
-				tmp94 = lang.Apply1(tmp93, kw_bar)
-			}
-			tmp95 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case.RootVersion() == aotRootVersion6 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case.IsMacro()
-			var tmp96 any
-			if !tmp95 {
-				tmp96 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_keyword_DASH_case)
-			}
-			var tmp97 any
-			if tmp95 {
-				tmp97 = aotDirectFn6(kw_qux)
-			} else {
-				tmp97 = lang.Apply1(tmp96, kw_qux)
-			}
-			tmp98 := lang.NewVector(tmp91, tmp94, tmp97)
-			tmp99 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(137), kw_column, int(19), kw_end_DASH_line, int(137), kw_end_DASH_column, int(94))
-			tmp100, err := lang.WithMeta(tmp98, tmp99.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp101 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case.RootVersion() == aotRootVersion1 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case.IsMacro()
-			var tmp102 any
-			if !tmp101 {
-				tmp102 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case)
-			}
-			var tmp103 any
-			if tmp101 {
-				tmp103 = aotDirectFn1(lang.NewChar(97))
-			} else {
-				tmp103 = lang.Apply1(tmp102, lang.NewChar(97))
-			}
-			tmp104 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case.RootVersion() == aotRootVersion1 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case.IsMacro()
-			var tmp105 any
-			if !tmp104 {
-				tmp105 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case)
-			}
-			var tmp106 any
-			if tmp104 {
-				tmp106 = aotDirectFn1(lang.NewChar(32))
-			} else {
-				tmp106 = lang.Apply1(tmp105, lang.NewChar(32))
-			}
-			tmp107 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case.RootVersion() == aotRootVersion1 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case.IsMacro()
-			var tmp108 any
-			if !tmp107 {
-				tmp108 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_char_DASH_case)
-			}
-			var tmp109 any
-			if tmp107 {
-				tmp109 = aotDirectFn1(lang.NewChar(122))
-			} else {
-				tmp109 = lang.Apply1(tmp108, lang.NewChar(122))
-			}
-			tmp110 := lang.NewVector(tmp103, tmp106, tmp109)
-			tmp111 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(146), kw_column, int(16), kw_end_DASH_line, int(146), kw_end_DASH_column, int(80))
-			tmp112, err := lang.WithMeta(tmp110, tmp111.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp113 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.RootVersion() == aotRootVersion10 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.IsMacro()
-			var tmp114 any
-			if !tmp113 {
-				tmp114 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2)
-			}
-			var tmp115 any
-			if tmp113 {
-				tmp115 = aotDirectFn10(int64(5))
-			} else {
-				tmp115 = lang.Apply1(tmp114, int64(5))
-			}
-			tmp116 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.RootVersion() == aotRootVersion10 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.IsMacro()
-			var tmp117 any
-			if !tmp116 {
-				tmp117 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2)
-			}
-			var tmp118 any
-			if tmp116 {
-				tmp118 = aotDirectFn10(int64(17))
-			} else {
-				tmp118 = lang.Apply1(tmp117, int64(17))
-			}
-			tmp119 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.RootVersion() == aotRootVersion10 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.IsMacro()
-			var tmp120 any
-			if !tmp119 {
-				tmp120 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2)
-			}
-			var tmp121 any
-			if tmp119 {
-				tmp121 = aotDirectFn10(int64(33))
-			} else {
-				tmp121 = lang.Apply1(tmp120, int64(33))
-			}
-			tmp122 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.RootVersion() == aotRootVersion10 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.IsMacro()
-			var tmp123 any
-			if !tmp122 {
-				tmp123 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2)
-			}
-			var tmp124 any
-			if tmp122 {
-				tmp124 = aotDirectFn10(int64(129))
-			} else {
-				tmp124 = lang.Apply1(tmp123, int64(129))
-			}
-			tmp125 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.RootVersion() == aotRootVersion10 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2.IsMacro()
-			var tmp126 any
-			if !tmp125 {
-				tmp126 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_sparse_DASH_case_DASH_2)
-			}
-			var tmp127 any
-			if tmp125 {
-				tmp127 = aotDirectFn10(int64(1000))
-			} else {
-				tmp127 = lang.Apply1(tmp126, int64(1000))
-			}
-			tmp128 := lang.NewVector(tmp115, tmp118, tmp121, tmp124, tmp127)
-			tmp129 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(135), kw_column, int(20), kw_end_DASH_line, int(136), kw_end_DASH_column, int(95))
-			tmp130, err := lang.WithMeta(tmp128, tmp129.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp131 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default.RootVersion() == aotRootVersion8 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default.IsMacro()
-			var tmp132 any
-			if !tmp131 {
-				tmp132 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default)
-			}
-			var tmp133 any
-			if tmp131 {
-				tmp133 = aotDirectFn8(int64(1))
-			} else {
-				tmp133 = lang.Apply1(tmp132, int64(1))
-			}
-			tmp134 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default.RootVersion() == aotRootVersion8 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default.IsMacro()
-			var tmp135 any
-			if !tmp134 {
-				tmp135 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default)
-			}
-			var tmp136 any
-			if tmp134 {
-				tmp136 = aotDirectFn8(int64(3))
-			} else {
-				tmp136 = lang.Apply1(tmp135, int64(3))
-			}
-			tmp137 := lang.NewVector(tmp133, tmp136)
-			tmp138 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(145), kw_column, int(22), kw_end_DASH_line, int(145), kw_end_DASH_column, int(62))
-			tmp139, err := lang.WithMeta(tmp137, tmp138.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp140 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.RootVersion() == aotRootVersion2 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.IsMacro()
-			var tmp141 any
-			if !tmp140 {
-				tmp141 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case)
-			}
-			var tmp142 any
-			if tmp140 {
-				tmp142 = aotDirectFn2(false)
-			} else {
-				tmp142 = lang.Apply1(tmp141, false)
-			}
-			tmp143 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.RootVersion() == aotRootVersion2 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.IsMacro()
-			var tmp144 any
-			if !tmp143 {
-				tmp144 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case)
-			}
-			var tmp145 any
-			if tmp143 {
-				tmp145 = aotDirectFn2(nil)
-			} else {
-				tmp145 = lang.Apply1(tmp144, nil)
-			}
-			tmp146 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.RootVersion() == aotRootVersion2 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.IsMacro()
-			var tmp147 any
-			if !tmp146 {
-				tmp147 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case)
-			}
-			var tmp148 any
-			if tmp146 {
-				tmp148 = aotDirectFn2(true)
-			} else {
-				tmp148 = lang.Apply1(tmp147, true)
-			}
-			tmp149 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.RootVersion() == aotRootVersion2 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case.IsMacro()
-			var tmp150 any
-			if !tmp149 {
-				tmp150 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_collision_DASH_case)
-			}
-			var tmp151 any
-			if tmp149 {
-				tmp151 = aotDirectFn2("other")
-			} else {
-				tmp151 = lang.Apply1(tmp150, "other")
-			}
-			tmp152 := lang.NewVector(tmp142, tmp145, tmp148, tmp151)
-			tmp153 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(142), kw_column, int(21), kw_end_DASH_line, int(143), kw_end_DASH_column, int(78))
-			tmp154, err := lang.WithMeta(tmp152, tmp153.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp155 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case.RootVersion() == aotRootVersion3 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case.IsMacro()
-			var tmp156 any
-			if !tmp155 {
-				tmp156 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case)
-			}
-			var tmp157 any
-			if tmp155 {
-				tmp157 = aotDirectFn3(int64(0))
-			} else {
-				tmp157 = lang.Apply1(tmp156, int64(0))
-			}
-			tmp158 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case.RootVersion() == aotRootVersion3 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case.IsMacro()
-			var tmp159 any
-			if !tmp158 {
-				tmp159 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case)
-			}
-			var tmp160 any
-			if tmp158 {
-				tmp160 = aotDirectFn3(int64(5))
-			} else {
-				tmp160 = lang.Apply1(tmp159, int64(5))
-			}
-			tmp161 := var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case.RootVersion() == aotRootVersion3 && !var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case.IsMacro()
-			var tmp162 any
-			if !tmp161 {
-				tmp162 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_compact_DASH_case)
-			}
-			var tmp163 any
-			if tmp161 {
-				tmp163 = aotDirectFn3(int64(10))
-			} else {
-				tmp163 = lang.Apply1(tmp162, int64(10))
-			}
-			tmp164 := lang.NewVector(tmp157, tmp160, tmp163)
-			tmp165 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(133), kw_column, int(19), kw_end_DASH_line, int(133), kw_end_DASH_column, int(86))
-			tmp166, err := lang.WithMeta(tmp164, tmp165.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp167 := lang.NewMap(kw_vector_DASH_list_DASH_tests, tmp13, kw_default_DASH_tests, tmp22, kw_int_DASH_tests, tmp34, kw_string_DASH_tests, tmp46, kw_mixed_DASH_tests, tmp64, kw_symbol_DASH_tests, tmp76, kw_sparse_DASH_tests, tmp88, kw_keyword_DASH_tests, tmp100, kw_char_DASH_tests, tmp112, kw_sparse_DASH_tests_DASH_2, tmp130, kw_no_DASH_default_DASH_tests, tmp139, kw_collision_DASH_tests, tmp154, kw_compact_DASH_tests, tmp166)
-			tmp168 := lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(132), kw_column, int(3), kw_end_DASH_line, int(149), kw_end_DASH_column, int(55))
-			tmp169, err := lang.WithMeta(tmp167, tmp168.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp169
-		})
-		aotDirectFn0 = tmp1
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_case_DASH_comprehensive__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, lang.NewMap(kw_vector_DASH_list_DASH_tests, lang.NewVector(kw_one_DASH_two, kw_three_DASH_four_DASH_five, kw_other), kw_default_DASH_tests, lang.NewVector(kw_found_DASH_specific, kw_default), kw_int_DASH_tests, lang.NewVector(kw_one, kw_ten, kw_default), kw_string_DASH_tests, lang.NewVector(kw_greeting, kw_farewell, kw_unknown), kw_mixed_DASH_tests, lang.NewVector(kw_number_DASH_one, kw_string_DASH_one, kw_keyword_DASH_one, kw_symbol_DASH_one, kw_default), kw_symbol_DASH_tests, lang.NewVector(kw_got_DASH_foo, kw_got_DASH_bar, kw_default), kw_sparse_DASH_tests, lang.NewVector(kw_one, kw_thousand, kw_not_DASH_found), kw_keyword_DASH_tests, lang.NewVector(kw_got_DASH_foo, kw_got_DASH_bar, kw_default), kw_char_DASH_tests, lang.NewVector(kw_letter_DASH_a, kw_space_DASH_char, kw_other_DASH_char), kw_sparse_DASH_tests_DASH_2, lang.NewVector(kw_five, kw_seventeen, kw_thirty_DASH_three, kw_one_DASH_twenty_DASH_nine, kw_not_DASH_found), kw_no_DASH_default_DASH_tests, lang.NewVector(kw_one, kw_no_DASH_match_DASH_error), kw_collision_DASH_tests, lang.NewVector(kw_boolean_DASH_false, kw_nil_DASH_value, kw_boolean_DASH_true, kw_default), kw_compact_DASH_tests, lang.NewVector(kw_zero, kw_five, kw_not_DASH_found)), kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(117), kw_column, int(7), kw_end_DASH_line, int(131), kw_end_DASH_column, int(7), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
-	}
-	// test-no-default
-	{
-		tmp0 := sym_test_DASH_no_DASH_default
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			func() {
-				defer func() {
-					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v4 := r
-							_ = v4
-							tmp3 = kw_no_DASH_match_DASH_error
-						} else {
-							panic(r)
-						}
-					}
-				}()
-				var tmp4 any
-				{ // let
-					// let binding "G__380"
-					var v5 any = v2
-					_ = v5
-					// case
-					var tmp6 any
-					var tmp7 int64
-					switch v := v5.(type) {
-					case int64:
-						tmp7 = v
-					case int:
-						tmp7 = int64(v)
-					case int32:
-						tmp7 = int64(v)
-					case int16:
-						tmp7 = int64(v)
-					case int8:
-						tmp7 = int64(v)
-					default:
-						tmp7 = -1 // won't match any case
-					}
-					// case entry 0 (key=1, collision=false)
-					if tmp7 == 1 {
-						tmp6 = kw_one
-						// case entry 1 (key=2, collision=false)
-					} else if tmp7 == 2 {
-						tmp6 = kw_two
-					} else {
-						tmp8 := checkDerefVar(var_clojure_DOT_core_str)
-						tmp9 := lang.Apply2(tmp8, "No matching clause: ", v5)
-						tmp10 := lang.Apply1(lang.NewIllegalArgumentError, tmp9)
-						panic(tmp10)
-					}
-					tmp4 = tmp6
-				} // end let
-				tmp3 = tmp4
-			}()
-			return tmp3
-		})
-		aotDirectFn8 = tmp1
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion8 = var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_comprehensive_test_DASH_no_DASH_default.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "codegen/test/case_comprehensive.glj", kw_line, int(93), kw_column, int(7), kw_end_DASH_line, int(93), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_comprehensive))
-		})
+		}, false)
 	}
 }

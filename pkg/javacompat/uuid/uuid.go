@@ -130,6 +130,13 @@ func toByteSlice(x any) ([]byte, bool) {
 	switch v := x.(type) {
 	case []byte:
 		return v, true
+	case []int8:
+		// (.getBytes s) returns a JVM-style signed byte array.
+		out := make([]byte, len(v))
+		for i, e := range v {
+			out[i] = byte(e)
+		}
+		return out, true
 	case string:
 		return []byte(v), true
 	case []any:

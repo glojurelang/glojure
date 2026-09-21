@@ -7,10 +7,58 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
+
+var aotKeywordMapShape0 = lang.NewKeywordMapShape("foo")
+
+type aotKeywordMapStorage0 struct {
+	lang.Map
+	values [1]any
+}
+
+func aotKeywordMapNew0(v0 any) lang.IPersistentMap {
+	storage := &aotKeywordMapStorage0{}
+	storage.values = [1]any{v0}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		aotKeywordMapShape0,
+		storage.values[:],
+	)
+}
+
+var aotKeywordSite0 lang.KeywordSite
+
+func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
+	if vr.IsBound() {
+		return aotLinkBoundFn1(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc1]
+	return func(p0 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0)
+		}
+		if !vr.IsBound() {
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+		fn := aotLinkBoundFn1(vr)
+		linked.Store(&fn)
+		return fn(p0)
+	}
+}
+
+func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn1(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn1); ok {
+		return fixed.Invoke1
+	}
+	return func(p0 any) any { return lang.Apply1(fn, p0) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/with_meta", LoadNS)
@@ -55,6 +103,7 @@ func LoadNS() {
 	var_clojure_DOT_core_meta := lang.InternVarName(sym_clojure_DOT_core, sym_meta)
 	// var codegen.test.with-meta/-main
 	var_codegen_DOT_test_DOT_with_DASH_meta__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_with_DASH_meta, sym__DASH_main)
+	aotExternalFn0 := aotLinkFn1(var_clojure_DOT_core_meta)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -64,6 +113,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -139,27 +191,20 @@ func LoadNS() {
 		tmp0 := sym__DASH_main
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := checkDerefVar(var_clojure_DOT_core_meta)
-			tmp3 := lang.NewVector()
-			tmp4 := lang.NewMap(kw_foo, kw_bar, kw_file, "codegen/test/with_meta.glj", kw_line, int(4), kw_column, int(15), kw_end_DASH_line, int(4), kw_end_DASH_column, int(28))
-			tmp5 := lang.NewMap(kw_file, "codegen/test/with_meta.glj", kw_line, int(4), kw_column, int(16), kw_end_DASH_line, int(4), kw_end_DASH_column, int(26))
-			tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
+			tmp2 := lang.NewVector()
+			tmp3 := aotKeywordMapNew0(kw_bar)
+			tmp4, err := lang.WithMeta(tmp2, tmp3.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
-			tmp7, err := lang.WithMeta(tmp3, tmp6.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp8 := lang.Apply1(tmp2, tmp7)
-			tmp9 := lang.Apply1(kw_foo, tmp8)
-			return tmp9
+			tmp5 := aotExternalFn0(tmp4)
+			tmp6 := aotKeywordSite0.Get(kw_foo, tmp5, nil)
+			return tmp6
 		})
 		aotDirectFn0 = tmp1
 		var_codegen_DOT_test_DOT_with_DASH_meta__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_with_DASH_meta__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_with_DASH_meta__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, kw_bar, kw_file, "codegen/test/with_meta.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(36), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_with_DASH_meta))
-		})
+		var_codegen_DOT_test_DOT_with_DASH_meta__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/with_meta.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(36), kw_expected_DASH_output, kw_bar, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_with_DASH_meta))
+		}, false)
 	}
 }

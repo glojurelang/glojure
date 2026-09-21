@@ -702,7 +702,7 @@ func LoadNS() {
 				var tmp13 any
 				tmp14 := lang.IsInstance[lang.IMapEntry](v4)
 				if tmp14 {
-					tmp15, ok := pkgmap4.Get("clojure.lang.MapEntry.create")
+					tmp15, ok := pkgmap4.LookupHostMember("clojure.lang.MapEntry", "create")
 					if !ok {
 						panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.MapEntry.create"))
 					}

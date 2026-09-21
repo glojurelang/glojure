@@ -55,6 +55,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -129,8 +132,8 @@ func LoadNS() {
 	{
 		tmp0 := sym_const_DASH_number
 		var_codegen_DOT_test_DOT_const_DASH_number_const_DASH_number = ns.InternWithValue(tmp0, int64(42), true)
-		var_codegen_DOT_test_DOT_const_DASH_number_const_DASH_number.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_const_DASH_number_const_DASH_number.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/const_number.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(17), kw_doc, "A constant number.", kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_const_DASH_number))
-		})
+		}, false)
 	}
 }

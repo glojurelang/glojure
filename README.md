@@ -321,7 +321,8 @@ runtime.ReadEval(`
 Glojure ships with interop with many standard library packages
 out-of-the-box.  Go package names are munged to avoid ambiguity with
 the use of `/` to refer to namespaced symbols; instances of `/` in
-package names are replaced with `:`. Here's a simple example:
+package names are replaced with `:`. See [doc/interop.md](doc/interop.md)
+for how Go and JVM host symbols are told apart. Here's a simple example:
 
 ```clojure
 user=> (println (fmt.Sprintf "A couple of HTTP methods: %v" [net:http.MethodGet net:http.MethodPost]))

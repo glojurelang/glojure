@@ -107,6 +107,11 @@ func register(jvmName, goName string, v any) {
 }
 
 func init() {
+	// java.util.regex.Pattern has no public constructor, but user code
+	// writes (Pattern. "re"); treat it as Pattern/compile.
+	lang.RegisterHostConstructor("java.util.regex.Pattern",
+		lang.FnFunc(func(args ...any) any { return Compile(args...) }))
+
 	register("CASE_INSENSITIVE", "CASE_INSENSITIVE", int32(CASE_INSENSITIVE))
 	register("MULTILINE", "MULTILINE", int32(MULTILINE))
 	register("LITERAL", "LITERAL", int32(LITERAL))

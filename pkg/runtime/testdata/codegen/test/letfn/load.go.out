@@ -10,7 +10,6 @@ import (
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/letfn", LoadNS)
@@ -59,6 +58,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -170,9 +172,8 @@ func LoadNS() {
 		})
 		aotDirectFn0 = tmp1
 		var_codegen_DOT_test_DOT_letfn__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_letfn__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_letfn__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, int64(55), kw_file, "codegen/test/letfn.glj", kw_line, int(4), kw_column, int(3), kw_end_DASH_line, int(5), kw_end_DASH_column, int(7), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_letfn))
-		})
+		var_codegen_DOT_test_DOT_letfn__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/letfn.glj", kw_line, int(4), kw_column, int(3), kw_end_DASH_line, int(5), kw_end_DASH_column, int(7), kw_expected_DASH_output, int64(55), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_letfn))
+		}, false)
 	}
 }

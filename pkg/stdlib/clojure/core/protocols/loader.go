@@ -26,7 +26,7 @@ type aotKeywordMapStorage0 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew0(v0 any) *lang.Map {
+func aotKeywordMapNew0(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage0{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -43,7 +43,7 @@ type aotKeywordMapStorage1 struct {
 	values [3]any
 }
 
-func aotKeywordMapNew1(v0 any, v1 any, v2 any) *lang.Map {
+func aotKeywordMapNew1(v0 any, v1 any, v2 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage1{}
 	storage.values = [3]any{v0, v1, v2}
 	return lang.InitStaticKeywordMap(
@@ -60,7 +60,7 @@ type aotKeywordMapStorage2 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew2(v0 any) *lang.Map {
+func aotKeywordMapNew2(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage2{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -77,7 +77,7 @@ type aotKeywordMapStorage3 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew3(v0 any) *lang.Map {
+func aotKeywordMapNew3(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage3{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -94,7 +94,7 @@ type aotKeywordMapStorage4 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew4(v0 any) *lang.Map {
+func aotKeywordMapNew4(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage4{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -111,7 +111,7 @@ type aotKeywordMapStorage5 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew5(v0 any) *lang.Map {
+func aotKeywordMapNew5(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage5{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(

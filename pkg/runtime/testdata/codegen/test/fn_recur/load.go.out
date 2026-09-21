@@ -7,12 +7,40 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc1
-var aotRootVersion1 *lang.VarRootVersion
+
+func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
+	if vr.IsBound() {
+		return aotLinkBoundFn2(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc2]
+	return func(p0 any, p1 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1)
+		}
+		if !vr.IsBound() {
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+		fn := aotLinkBoundFn2(vr)
+		linked.Store(&fn)
+		return fn(p0, p1)
+	}
+}
+
+func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn2(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn2); ok {
+		return fixed.Invoke2
+	}
+	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/fn_recur", LoadNS)
@@ -40,7 +68,6 @@ func checkArityGTE(args []any, min int) {
 // LoadNS initializes the namespace "codegen.test.fn-recur"
 func LoadNS() {
 	sym__DASH_main := lang.NewSymbolUnchecked("-main")
-	sym__EQ_ := lang.NewSymbolUnchecked("=")
 	sym_clojure_DOT_core := lang.NewSymbolUnchecked("clojure.core")
 	sym_codegen_DOT_test_DOT_fn_DASH_recur := lang.NewSymbolUnchecked("codegen.test.fn-recur")
 	sym_fib := lang.NewSymbolUnchecked("fib")
@@ -54,8 +81,6 @@ func LoadNS() {
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
-	// var clojure.core/=
-	var_clojure_DOT_core__EQ_ := lang.InternVarName(sym_clojure_DOT_core, sym__EQ_)
 	// var codegen.test.fn-recur/-main
 	var_codegen_DOT_test_DOT_fn_DASH_recur__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_fn_DASH_recur, sym__DASH_main)
 	// var codegen.test.fn-recur/fib
@@ -69,6 +94,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -144,25 +172,14 @@ func LoadNS() {
 		tmp0 := sym__DASH_main
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := var_codegen_DOT_test_DOT_fn_DASH_recur_fib.RootVersion() == aotRootVersion1 && !var_codegen_DOT_test_DOT_fn_DASH_recur_fib.IsMacro()
-			var tmp3 any
-			if !tmp2 {
-				tmp3 = checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_recur_fib)
-			}
-			var tmp4 any
-			if tmp2 {
-				tmp4 = aotDirectFn1(int64(10))
-			} else {
-				tmp4 = lang.Apply1(tmp3, int64(10))
-			}
-			return tmp4
+			tmp2 := aotDirectFn1(int64(10))
+			return tmp2
 		})
 		aotDirectFn0 = tmp1
 		var_codegen_DOT_test_DOT_fn_DASH_recur__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_fn_DASH_recur__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_fn_DASH_recur__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, int64(55), kw_file, "codegen/test/fn_recur.glj", kw_line, int(12), kw_column, int(7), kw_end_DASH_line, int(12), kw_end_DASH_column, int(34), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_recur))
-		})
+		var_codegen_DOT_test_DOT_fn_DASH_recur__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/fn_recur.glj", kw_line, int(12), kw_column, int(7), kw_end_DASH_line, int(12), kw_end_DASH_column, int(34), kw_expected_DASH_output, int64(55), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_recur))
+		}, false)
 	}
 	// fib
 	{
@@ -184,22 +201,21 @@ func LoadNS() {
 						_ = v7
 						v8 := p2
 						_ = v8
-					recur_loop_1640:
+					recur_loop_1617:
 						var tmp9 any
-						tmp10 := checkDerefVar(var_clojure_DOT_core__EQ_)
-						tmp11 := lang.Apply2(tmp10, v8, v2)
-						if lang.IsTruthy(tmp11) {
+						tmp10 := lang.Equals(v8, v2)
+						if tmp10 {
 							tmp9 = v6
 						} else {
-							var tmp12 any = v7
-							tmp14 := lang.Numbers.Add(v6, v7)
-							var tmp13 any = tmp14
-							tmp16 := lang.Numbers.Inc(v8)
-							var tmp15 any = tmp16
-							v6 = tmp12
-							v7 = tmp13
-							v8 = tmp15
-							goto recur_loop_1640
+							var tmp11 any = v7
+							tmp13 := lang.Numbers.Add(v6, v7)
+							var tmp12 any = tmp13
+							tmp15 := lang.Numbers.Inc(v8)
+							var tmp14 any = tmp15
+							v6 = tmp11
+							v7 = tmp12
+							v8 = tmp14
+							goto recur_loop_1617
 						}
 						return tmp9
 					})
@@ -215,9 +231,8 @@ func LoadNS() {
 		})
 		aotDirectFn1 = tmp1
 		var_codegen_DOT_test_DOT_fn_DASH_recur_fib = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_codegen_DOT_test_DOT_fn_DASH_recur_fib.RootVersion()
-		var_codegen_DOT_test_DOT_fn_DASH_recur_fib.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "codegen/test/fn_recur.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(9), kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Calculates the nth Fibonacci number using iteration with recur.", kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_recur))
-		})
+		var_codegen_DOT_test_DOT_fn_DASH_recur_fib.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/fn_recur.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(9), kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Calculates the nth Fibonacci number using iteration with recur.", kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_recur))
+		}, false)
 	}
 }

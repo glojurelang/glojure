@@ -7,22 +7,45 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc0
-var aotRootVersion1 *lang.VarRootVersion
 var aotDirectFn2 lang.FnFunc0
-var aotRootVersion2 *lang.VarRootVersion
 var aotDirectFn3 lang.FnFunc0
-var aotRootVersion3 *lang.VarRootVersion
 var aotDirectFn4 lang.FnFunc0
-var aotRootVersion4 *lang.VarRootVersion
 var aotDirectFn5 lang.FnFunc0
-var aotRootVersion5 *lang.VarRootVersion
 var aotDirectFn6 lang.FnFunc0
-var aotRootVersion6 *lang.VarRootVersion
+
+func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
+	if vr.IsBound() {
+		return aotLinkBoundFn2(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc2]
+	return func(p0 any, p1 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1)
+		}
+		if !vr.IsBound() {
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+		fn := aotLinkBoundFn2(vr)
+		linked.Store(&fn)
+		return fn(p0, p1)
+	}
+}
+
+func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn2(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn2); ok {
+		return fixed.Invoke2
+	}
+	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/try_basic", LoadNS)
@@ -50,7 +73,6 @@ func checkArityGTE(args []any, min int) {
 // LoadNS initializes the namespace "codegen.test.try-basic"
 func LoadNS() {
 	sym__DASH_main := lang.NewSymbolUnchecked("-main")
-	sym__EQ_ := lang.NewSymbolUnchecked("=")
 	sym_basic_DASH_try := lang.NewSymbolUnchecked("basic-try")
 	sym_clojure_DOT_core := lang.NewSymbolUnchecked("clojure.core")
 	sym_codegen_DOT_test_DOT_try_DASH_basic := lang.NewSymbolUnchecked("codegen.test.try-basic")
@@ -67,8 +89,7 @@ func LoadNS() {
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
-	// var clojure.core/=
-	var_clojure_DOT_core__EQ_ := lang.InternVarName(sym_clojure_DOT_core, sym__EQ_)
+	builtin_any := lang.Builtins["any"]
 	// var codegen.test.try-basic/-main
 	var_codegen_DOT_test_DOT_try_DASH_basic__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_try_DASH_basic, sym__DASH_main)
 	// var codegen.test.try-basic/basic-try
@@ -92,6 +113,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -162,6 +186,67 @@ func LoadNS() {
 			"throw-if",
 		})
 	}
+	// -main
+	{
+		tmp0 := sym__DASH_main
+		var tmp1 lang.FnFunc0
+		tmp1 = lang.FnFunc0(func() any {
+			var tmp2 any
+			tmp3 := aotDirectFn1()
+			tmp4 := lang.Equals(tmp3, "success")
+			if tmp4 {
+			} else {
+				panic("basic-try failed")
+			}
+			_ = tmp2
+			var tmp5 any
+			tmp6 := aotDirectFn6()
+			tmp7 := lang.Equals(tmp6, "caught exception")
+			if tmp7 {
+			} else {
+				panic("try-with-throw failed")
+			}
+			_ = tmp5
+			var tmp8 any
+			tmp9 := aotDirectFn5()
+			tmp10 := lang.Equals(tmp9, "just body")
+			if tmp10 {
+			} else {
+				panic("try-no-catch failed")
+			}
+			_ = tmp8
+			var tmp11 any
+			tmp12 := aotDirectFn4()
+			tmp13 := lang.Equals(tmp12, "body")
+			if tmp13 {
+			} else {
+				panic("try-finally-only failed")
+			}
+			_ = tmp11
+			var tmp14 any
+			tmp15 := aotDirectFn3()
+			tmp16 := lang.Equals(tmp15, "caught")
+			if tmp16 {
+			} else {
+				panic("try-catch-finally failed")
+			}
+			_ = tmp14
+			var tmp17 any
+			tmp18 := aotDirectFn2()
+			tmp19 := lang.Equals(tmp18, "inner caught")
+			if tmp19 {
+			} else {
+				panic("nested-try failed")
+			}
+			_ = tmp17
+			return "all tests passed"
+		})
+		aotDirectFn0 = tmp1
+		var_codegen_DOT_test_DOT_try_DASH_basic__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		var_codegen_DOT_test_DOT_try_DASH_basic__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/try_basic.glj", kw_line, int(43), kw_column, int(7), kw_end_DASH_line, int(43), kw_end_DASH_column, int(50), kw_expected_DASH_output, "all tests passed", kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))
+		}, false)
+	}
 	// basic-try
 	{
 		tmp0 := sym_basic_DASH_try
@@ -171,7 +256,7 @@ func LoadNS() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
+						if lang.CatchMatches(r, builtin_any) {
 							v3 := r
 							_ = v3
 							tmp2 = "caught"
@@ -186,10 +271,9 @@ func LoadNS() {
 		})
 		aotDirectFn1 = tmp1
 		var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try.RootVersion()
-		var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))
-		})
+		}, false)
 	}
 	// nested-try
 	{
@@ -200,7 +284,7 @@ func LoadNS() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
+						if lang.CatchMatches(r, builtin_any) {
 							v3 := r
 							_ = v3
 							tmp2 = "outer caught"
@@ -213,7 +297,7 @@ func LoadNS() {
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
-							if lang.CatchMatches(r, lang.Builtins["any"]) {
+							if lang.CatchMatches(r, builtin_any) {
 								v4 := r
 								_ = v4
 								tmp3 = "inner caught"
@@ -230,10 +314,9 @@ func LoadNS() {
 		})
 		aotDirectFn2 = tmp1
 		var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion2 = var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try.RootVersion()
-		var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(34), kw_column, int(7), kw_end_DASH_line, int(34), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))
-		})
+		}, false)
 	}
 	// try-catch-finally
 	{
@@ -246,7 +329,7 @@ func LoadNS() {
 				}()
 				defer func() {
 					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
+						if lang.CatchMatches(r, builtin_any) {
 							v3 := r
 							_ = v3
 							tmp2 = "caught"
@@ -261,10 +344,9 @@ func LoadNS() {
 		})
 		aotDirectFn3 = tmp1
 		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion3 = var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally.RootVersion()
-		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(26), kw_column, int(7), kw_end_DASH_line, int(26), kw_end_DASH_column, int(23), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))
-		})
+		}, false)
 	}
 	// try-finally-only
 	{
@@ -281,10 +363,9 @@ func LoadNS() {
 		})
 		aotDirectFn4 = tmp1
 		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion4 = var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only.RootVersion()
-		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(20), kw_column, int(7), kw_end_DASH_line, int(20), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))
-		})
+		}, false)
 	}
 	// try-no-catch
 	{
@@ -299,10 +380,9 @@ func LoadNS() {
 		})
 		aotDirectFn5 = tmp1
 		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion5 = var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch.RootVersion()
-		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(16), kw_column, int(7), kw_end_DASH_line, int(16), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))
-		})
+		}, false)
 	}
 	// try-with-throw
 	{
@@ -313,7 +393,7 @@ func LoadNS() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
+						if lang.CatchMatches(r, builtin_any) {
 							v3 := r
 							_ = v3
 							tmp2 = "caught exception"
@@ -329,137 +409,8 @@ func LoadNS() {
 		})
 		aotDirectFn6 = tmp1
 		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion6 = var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw.RootVersion()
-		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(9), kw_column, int(7), kw_end_DASH_line, int(9), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))
-		})
-	}
-	// -main
-	{
-		tmp0 := sym__DASH_main
-		var tmp1 lang.FnFunc0
-		tmp1 = lang.FnFunc0(func() any {
-			var tmp2 any
-			tmp3 := checkDerefVar(var_clojure_DOT_core__EQ_)
-			tmp4 := var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try.RootVersion() == aotRootVersion1 && !var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try.IsMacro()
-			var tmp5 any
-			if !tmp4 {
-				tmp5 = checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try)
-			}
-			var tmp6 any
-			if tmp4 {
-				tmp6 = aotDirectFn1()
-			} else {
-				tmp6 = lang.Apply0(tmp5)
-			}
-			tmp7 := lang.Apply2(tmp3, tmp6, "success")
-			if lang.IsTruthy(tmp7) {
-			} else {
-				panic("basic-try failed")
-			}
-			_ = tmp2
-			var tmp8 any
-			tmp9 := checkDerefVar(var_clojure_DOT_core__EQ_)
-			tmp10 := var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw.RootVersion() == aotRootVersion6 && !var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw.IsMacro()
-			var tmp11 any
-			if !tmp10 {
-				tmp11 = checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw)
-			}
-			var tmp12 any
-			if tmp10 {
-				tmp12 = aotDirectFn6()
-			} else {
-				tmp12 = lang.Apply0(tmp11)
-			}
-			tmp13 := lang.Apply2(tmp9, tmp12, "caught exception")
-			if lang.IsTruthy(tmp13) {
-			} else {
-				panic("try-with-throw failed")
-			}
-			_ = tmp8
-			var tmp14 any
-			tmp15 := checkDerefVar(var_clojure_DOT_core__EQ_)
-			tmp16 := var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch.RootVersion() == aotRootVersion5 && !var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch.IsMacro()
-			var tmp17 any
-			if !tmp16 {
-				tmp17 = checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch)
-			}
-			var tmp18 any
-			if tmp16 {
-				tmp18 = aotDirectFn5()
-			} else {
-				tmp18 = lang.Apply0(tmp17)
-			}
-			tmp19 := lang.Apply2(tmp15, tmp18, "just body")
-			if lang.IsTruthy(tmp19) {
-			} else {
-				panic("try-no-catch failed")
-			}
-			_ = tmp14
-			var tmp20 any
-			tmp21 := checkDerefVar(var_clojure_DOT_core__EQ_)
-			tmp22 := var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only.RootVersion() == aotRootVersion4 && !var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only.IsMacro()
-			var tmp23 any
-			if !tmp22 {
-				tmp23 = checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only)
-			}
-			var tmp24 any
-			if tmp22 {
-				tmp24 = aotDirectFn4()
-			} else {
-				tmp24 = lang.Apply0(tmp23)
-			}
-			tmp25 := lang.Apply2(tmp21, tmp24, "body")
-			if lang.IsTruthy(tmp25) {
-			} else {
-				panic("try-finally-only failed")
-			}
-			_ = tmp20
-			var tmp26 any
-			tmp27 := checkDerefVar(var_clojure_DOT_core__EQ_)
-			tmp28 := var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally.RootVersion() == aotRootVersion3 && !var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally.IsMacro()
-			var tmp29 any
-			if !tmp28 {
-				tmp29 = checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally)
-			}
-			var tmp30 any
-			if tmp28 {
-				tmp30 = aotDirectFn3()
-			} else {
-				tmp30 = lang.Apply0(tmp29)
-			}
-			tmp31 := lang.Apply2(tmp27, tmp30, "caught")
-			if lang.IsTruthy(tmp31) {
-			} else {
-				panic("try-catch-finally failed")
-			}
-			_ = tmp26
-			var tmp32 any
-			tmp33 := checkDerefVar(var_clojure_DOT_core__EQ_)
-			tmp34 := var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try.RootVersion() == aotRootVersion2 && !var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try.IsMacro()
-			var tmp35 any
-			if !tmp34 {
-				tmp35 = checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try)
-			}
-			var tmp36 any
-			if tmp34 {
-				tmp36 = aotDirectFn2()
-			} else {
-				tmp36 = lang.Apply0(tmp35)
-			}
-			tmp37 := lang.Apply2(tmp33, tmp36, "inner caught")
-			if lang.IsTruthy(tmp37) {
-			} else {
-				panic("nested-try failed")
-			}
-			_ = tmp32
-			return "all tests passed"
-		})
-		aotDirectFn0 = tmp1
-		var_codegen_DOT_test_DOT_try_DASH_basic__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_try_DASH_basic__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_try_DASH_basic__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, "all tests passed", kw_file, "codegen/test/try_basic.glj", kw_line, int(43), kw_column, int(7), kw_end_DASH_line, int(43), kw_end_DASH_column, int(50), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))
-		})
+		}, false)
 	}
 }

@@ -146,3 +146,10 @@ var readablePrintMethod = FnFunc(func(args ...any) any {
 	value.PrintReadable(writer)
 	return nil
 })
+
+// UnresolvedHostClass is emitted by AOT code for a JVM class name that
+// no bridge registers. Evaluating it panics with the same message the
+// evaluator produces for an unknown class.
+func UnresolvedHostClass(name string) any {
+	panic(NewIllegalArgumentError("unable to resolve class: " + name))
+}

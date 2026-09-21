@@ -7,14 +7,41 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc1
-var aotRootVersion1 *lang.VarRootVersion
 var aotDirectFn2 lang.FnFunc1
-var aotRootVersion2 *lang.VarRootVersion
+
+func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
+	if vr.IsBound() {
+		return aotLinkBoundFn2(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc2]
+	return func(p0 any, p1 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1)
+		}
+		if !vr.IsBound() {
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+		fn := aotLinkBoundFn2(vr)
+		linked.Store(&fn)
+		return fn(p0, p1)
+	}
+}
+
+func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn2(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn2); ok {
+		return fixed.Invoke2
+	}
+	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/case_switch", LoadNS)
@@ -62,6 +89,7 @@ func LoadNS() {
 	kw_other := lang.NewKeyword("other")
 	kw_three := lang.NewKeyword("three")
 	kw_two := lang.NewKeyword("two")
+	builtin_any := lang.Builtins["any"]
 	// var clojure.core/str
 	var_clojure_DOT_core_str := lang.InternVarName(sym_clojure_DOT_core, sym_str)
 	// var codegen.test.case-switch/-main
@@ -70,6 +98,7 @@ func LoadNS() {
 	var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test := lang.InternVarName(sym_codegen_DOT_test_DOT_case_DASH_switch, sym_case_DASH_test)
 	// var codegen.test.case-switch/case-test-throw
 	var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test_DASH_throw := lang.InternVarName(sym_codegen_DOT_test_DOT_case_DASH_switch, sym_case_DASH_test_DASH_throw)
+	aotExternalFn0 := aotLinkFn2(var_clojure_DOT_core_str)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -79,6 +108,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -149,6 +181,23 @@ func LoadNS() {
 			"throw-if",
 		})
 	}
+	// -main
+	{
+		tmp0 := sym__DASH_main
+		var tmp1 lang.FnFunc0
+		tmp1 = lang.FnFunc0(func() any {
+			tmp2 := aotDirectFn1(int64(2))
+			tmp3 := aotDirectFn1(int64(42))
+			tmp4 := aotDirectFn2(int64(42))
+			tmp5 := lang.NewVector(tmp2, tmp3, tmp4)
+			return tmp5
+		})
+		aotDirectFn0 = tmp1
+		var_codegen_DOT_test_DOT_case_DASH_switch__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		var_codegen_DOT_test_DOT_case_DASH_switch__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/case_switch.glj", kw_line, int(17), kw_column, int(7), kw_end_DASH_line, int(17), kw_end_DASH_column, int(53), kw_expected_DASH_output, lang.NewVector(kw_two, kw_other, kw_caught), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_switch))
+		}, false)
+	}
 	// case-test
 	{
 		tmp0 := sym_case_DASH_test
@@ -158,7 +207,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__383"
+				// let binding "G__351"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -196,63 +245,9 @@ func LoadNS() {
 		})
 		aotDirectFn1 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_switch.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_switch))
-		})
-	}
-	// -main
-	{
-		tmp0 := sym__DASH_main
-		var tmp1 lang.FnFunc0
-		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test.RootVersion() == aotRootVersion1 && !var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test.IsMacro()
-			var tmp3 any
-			if !tmp2 {
-				tmp3 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test)
-			}
-			var tmp4 any
-			if tmp2 {
-				tmp4 = aotDirectFn1(int64(2))
-			} else {
-				tmp4 = lang.Apply1(tmp3, int64(2))
-			}
-			tmp5 := var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test.RootVersion() == aotRootVersion1 && !var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test.IsMacro()
-			var tmp6 any
-			if !tmp5 {
-				tmp6 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test)
-			}
-			var tmp7 any
-			if tmp5 {
-				tmp7 = aotDirectFn1(int64(42))
-			} else {
-				tmp7 = lang.Apply1(tmp6, int64(42))
-			}
-			tmp8 := var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test_DASH_throw.RootVersion() == aotRootVersion2 && !var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test_DASH_throw.IsMacro()
-			var tmp9 any
-			if !tmp8 {
-				tmp9 = checkDerefVar(var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test_DASH_throw)
-			}
-			var tmp10 any
-			if tmp8 {
-				tmp10 = aotDirectFn2(int64(42))
-			} else {
-				tmp10 = lang.Apply1(tmp9, int64(42))
-			}
-			tmp11 := lang.NewVector(tmp4, tmp7, tmp10)
-			tmp12 := lang.NewMap(kw_file, "codegen/test/case_switch.glj", kw_line, int(18), kw_column, int(3), kw_end_DASH_line, int(18), kw_end_DASH_column, int(53))
-			tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp13
-		})
-		aotDirectFn0 = tmp1
-		var_codegen_DOT_test_DOT_case_DASH_switch__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_case_DASH_switch__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_switch__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, lang.NewVector(kw_two, kw_other, kw_caught), kw_file, "codegen/test/case_switch.glj", kw_line, int(17), kw_column, int(7), kw_end_DASH_line, int(17), kw_end_DASH_column, int(53), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_switch))
-		})
+		}, false)
 	}
 	// case-test-throw
 	{
@@ -265,7 +260,7 @@ func LoadNS() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
+						if lang.CatchMatches(r, builtin_any) {
 							v4 := r
 							_ = v4
 							tmp3 = kw_caught
@@ -276,7 +271,7 @@ func LoadNS() {
 				}()
 				var tmp4 any
 				{ // let
-					// let binding "G__384"
+					// let binding "G__352"
 					var v5 any = v2
 					_ = v5
 					// case
@@ -300,10 +295,9 @@ func LoadNS() {
 					if tmp7 == 1 {
 						tmp6 = kw_nope
 					} else {
-						tmp8 := checkDerefVar(var_clojure_DOT_core_str)
-						tmp9 := lang.Apply2(tmp8, "No matching clause: ", v5)
-						tmp10 := lang.Apply1(lang.NewIllegalArgumentError, tmp9)
-						panic(tmp10)
+						tmp8 := aotExternalFn0("No matching clause: ", v5)
+						tmp9 := lang.Apply1(lang.NewIllegalArgumentError, tmp8)
+						panic(tmp9)
 					}
 					tmp4 = tmp6
 				} // end let
@@ -313,9 +307,8 @@ func LoadNS() {
 		})
 		aotDirectFn2 = tmp1
 		var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test_DASH_throw = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion2 = var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test_DASH_throw.RootVersion()
-		var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test_DASH_throw.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_case_DASH_switch_case_DASH_test_DASH_throw.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/case_switch.glj", kw_line, int(10), kw_column, int(7), kw_end_DASH_line, int(10), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_case_DASH_switch))
-		})
+		}, false)
 	}
 }

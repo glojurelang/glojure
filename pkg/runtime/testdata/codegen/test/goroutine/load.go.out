@@ -7,12 +7,69 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc2
-var aotRootVersion1 *lang.VarRootVersion
+
+func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
+	if vr.IsBound() {
+		return aotLinkBoundFn1(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc1]
+	return func(p0 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0)
+		}
+		if !vr.IsBound() {
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+		fn := aotLinkBoundFn1(vr)
+		linked.Store(&fn)
+		return fn(p0)
+	}
+}
+
+func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn1(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn1); ok {
+		return fixed.Invoke1
+	}
+	return func(p0 any) any { return lang.Apply1(fn, p0) }
+}
+
+func aotLinkFn3(vr *lang.Var) lang.FnFunc3 {
+	if vr.IsBound() {
+		return aotLinkBoundFn3(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc3]
+	return func(p0 any, p1 any, p2 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1, p2)
+		}
+		if !vr.IsBound() {
+			return lang.Apply3(checkDerefVar(vr), p0, p1, p2)
+		}
+		fn := aotLinkBoundFn3(vr)
+		linked.Store(&fn)
+		return fn(p0, p1, p2)
+	}
+}
+
+func aotLinkBoundFn3(vr *lang.Var) lang.FnFunc3 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn3(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn3); ok {
+		return fixed.Invoke3
+	}
+	return func(p0 any, p1 any, p2 any) any { return lang.Apply3(fn, p0, p1, p2) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/goroutine", LoadNS)
@@ -43,8 +100,6 @@ func LoadNS() {
 	sym_ch := lang.NewSymbolUnchecked("ch")
 	sym_clojure_DOT_core := lang.NewSymbolUnchecked("clojure.core")
 	sym_codegen_DOT_test_DOT_goroutine := lang.NewSymbolUnchecked("codegen.test.goroutine")
-	sym_not := lang.NewSymbolUnchecked("not")
-	sym_nth := lang.NewSymbolUnchecked("nth")
 	sym_send_DASH_on_DASH_chan := lang.NewSymbolUnchecked("send-on-chan")
 	sym_val := lang.NewSymbolUnchecked("val")
 	kw_arglists := lang.NewKeyword("arglists")
@@ -55,10 +110,9 @@ func LoadNS() {
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
-	// var clojure.core/not
-	var_clojure_DOT_core_not := lang.InternVarName(sym_clojure_DOT_core, sym_not)
-	// var clojure.core/nth
-	var_clojure_DOT_core_nth := lang.InternVarName(sym_clojure_DOT_core, sym_nth)
+	builtin_chan_DASH_of := lang.Builtins["chan-of"]
+	builtin_int64 := lang.Builtins["int64"]
+	builtin_make := lang.Builtins["make"]
 	// var codegen.test.goroutine/-main
 	var_codegen_DOT_test_DOT_goroutine__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_goroutine, sym__DASH_main)
 	// var codegen.test.goroutine/send-on-chan
@@ -72,6 +126,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -172,10 +229,9 @@ func LoadNS() {
 		})
 		aotDirectFn1 = tmp1
 		var_codegen_DOT_test_DOT_goroutine_send_DASH_on_DASH_chan = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_codegen_DOT_test_DOT_goroutine_send_DASH_on_DASH_chan.RootVersion()
-		var_codegen_DOT_test_DOT_goroutine_send_DASH_on_DASH_chan.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_goroutine_send_DASH_on_DASH_chan.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/goroutine.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_ch, sym_val)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_goroutine))
-		})
+		}, false)
 	}
 	// -main
 	{
@@ -185,8 +241,8 @@ func LoadNS() {
 			var tmp2 any
 			{ // let
 				// let binding "ch"
-				tmp3 := lang.Apply1(lang.Builtins["chan-of"], lang.Builtins["int64"])
-				tmp4 := lang.Apply1(lang.Builtins["make"], tmp3)
+				tmp3 := lang.Apply1(builtin_chan_DASH_of, builtin_int64)
+				tmp4 := lang.Apply1(builtin_make, tmp3)
 				var v5 any = tmp4
 				_ = v5
 				// let binding "chVal"
@@ -197,7 +253,7 @@ func LoadNS() {
 				go lang.Apply(tmp8, []any{v5, int64(42)})
 				var tmp9 any
 				{ // let
-					// let binding "vec__385"
+					// let binding "vec__353"
 					tmp10, ok := lang.FieldOrMethod(v7, "Recv")
 					if !ok {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "Recv")))
@@ -212,36 +268,33 @@ func LoadNS() {
 					var v12 any = tmp11
 					_ = v12
 					// let binding "recvResult"
-					tmp13 := checkDerefVar(var_clojure_DOT_core_nth)
-					tmp14 := lang.Apply3(tmp13, v12, int64(0), nil)
-					var v15 any = tmp14
-					_ = v15
+					tmp13 := runtime.RT.NthDefault(v12, lang.IntCast(int64(0)), nil)
+					var v14 any = tmp13
+					_ = v14
 					// let binding "ok"
-					tmp16 := checkDerefVar(var_clojure_DOT_core_nth)
-					tmp17 := lang.Apply3(tmp16, v12, int64(1), nil)
-					var v18 any = tmp17
-					_ = v18
-					var tmp19 any
-					tmp20 := checkDerefVar(var_clojure_DOT_core_not)
-					tmp21 := lang.Apply1(tmp20, v18)
-					if lang.IsTruthy(tmp21) {
-						tmp22 := lang.Apply1(fmt.Errorf, "Channel closed")
-						panic(tmp22)
+					tmp15 := runtime.RT.NthDefault(v12, lang.IntCast(int64(1)), nil)
+					var v16 any = tmp15
+					_ = v16
+					var tmp17 any
+					tmp18 := !lang.IsTruthy(v16)
+					if tmp18 {
+						tmp19 := lang.Apply1(fmt.Errorf, "Channel closed")
+						panic(tmp19)
 					} else {
 					}
-					_ = tmp19
-					tmp23, ok := lang.FieldOrMethod(v15, "Interface")
+					_ = tmp17
+					tmp20, ok := lang.FieldOrMethod(v14, "Interface")
 					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v15, "Interface")))
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v14, "Interface")))
 					}
-					var tmp24 any
-					switch reflect.TypeOf(tmp23).Kind() {
+					var tmp21 any
+					switch reflect.TypeOf(tmp20).Kind() {
 					case reflect.Func:
-						tmp24 = lang.Apply(tmp23, nil)
+						tmp21 = lang.Apply(tmp20, nil)
 					default:
-						tmp24 = tmp23
+						tmp21 = tmp20
 					}
-					tmp9 = tmp24
+					tmp9 = tmp21
 				} // end let
 				tmp2 = tmp9
 			} // end let
@@ -249,9 +302,8 @@ func LoadNS() {
 		})
 		aotDirectFn0 = tmp1
 		var_codegen_DOT_test_DOT_goroutine__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_goroutine__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_goroutine__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, int64(42), kw_file, "codegen/test/goroutine.glj", kw_line, int(8), kw_column, int(7), kw_end_DASH_line, int(8), kw_end_DASH_column, int(34), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_goroutine))
-		})
+		var_codegen_DOT_test_DOT_goroutine__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/goroutine.glj", kw_line, int(8), kw_column, int(7), kw_end_DASH_line, int(8), kw_end_DASH_column, int(34), kw_expected_DASH_output, int64(42), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_goroutine))
+		}, false)
 	}
 }

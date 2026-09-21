@@ -8,10 +8,39 @@ import (
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
 	strings4 "strings"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
+
+func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
+	if vr.IsBound() {
+		return aotLinkBoundFn1(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc1]
+	return func(p0 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0)
+		}
+		if !vr.IsBound() {
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+		fn := aotLinkBoundFn1(vr)
+		linked.Store(&fn)
+		return fn(p0)
+	}
+}
+
+func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn1(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn1); ok {
+		return fixed.Invoke1
+	}
+	return func(p0 any) any { return lang.Apply1(fn, p0) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/maybe_class", LoadNS)
@@ -54,6 +83,7 @@ func LoadNS() {
 	var_clojure_DOT_core_vec := lang.InternVarName(sym_clojure_DOT_core, sym_vec)
 	// var codegen.test.maybe-class/-main
 	var_codegen_DOT_test_DOT_maybe_DASH_class__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_maybe_DASH_class, sym__DASH_main)
+	aotExternalFn0 := aotLinkFn1(var_clojure_DOT_core_vec)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -63,6 +93,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -138,16 +171,14 @@ func LoadNS() {
 		tmp0 := sym__DASH_main
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := checkDerefVar(var_clojure_DOT_core_vec)
-			tmp3 := lang.Apply2(strings4.Split, "1,2,3", ",")
-			tmp4 := lang.Apply1(tmp2, tmp3)
-			return tmp4
+			tmp2 := lang.Apply2(strings4.Split, "1,2,3", ",")
+			tmp3 := aotExternalFn0(tmp2)
+			return tmp3
 		})
 		aotDirectFn0 = tmp1
 		var_codegen_DOT_test_DOT_maybe_DASH_class__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_maybe_DASH_class__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_maybe_DASH_class__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, lang.NewVector("1", "2", "3"), kw_file, "codegen/test/maybe_class.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(45), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_maybe_DASH_class))
-		})
+		var_codegen_DOT_test_DOT_maybe_DASH_class__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/maybe_class.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(45), kw_expected_DASH_output, lang.NewVector("1", "2", "3"), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_maybe_DASH_class))
+		}, false)
 	}
 }

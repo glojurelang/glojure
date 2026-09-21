@@ -920,7 +920,7 @@ type aotKeywordMapStorage0 struct {
 	values [4]any
 }
 
-func aotKeywordMapNew0(v0 any, v1 any, v2 any, v3 any) *lang.Map {
+func aotKeywordMapNew0(v0 any, v1 any, v2 any, v3 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage0{}
 	storage.values = [4]any{v0, v1, v2, v3}
 	return lang.InitStaticKeywordMap(
@@ -937,7 +937,7 @@ type aotKeywordMapStorage1 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew1(v0 any) *lang.Map {
+func aotKeywordMapNew1(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage1{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -954,7 +954,7 @@ type aotKeywordMapStorage2 struct {
 	values [3]any
 }
 
-func aotKeywordMapNew2(v0 any, v1 any, v2 any) *lang.Map {
+func aotKeywordMapNew2(v0 any, v1 any, v2 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage2{}
 	storage.values = [3]any{v0, v1, v2}
 	return lang.InitStaticKeywordMap(
@@ -971,7 +971,7 @@ type aotKeywordMapStorage3 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew3(v0 any) *lang.Map {
+func aotKeywordMapNew3(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage3{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -988,7 +988,7 @@ type aotKeywordMapStorage4 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew4(v0 any) *lang.Map {
+func aotKeywordMapNew4(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage4{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1005,7 +1005,7 @@ type aotKeywordMapStorage5 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew5(v0 any) *lang.Map {
+func aotKeywordMapNew5(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage5{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1022,7 +1022,7 @@ type aotKeywordMapStorage6 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew6(v0 any) *lang.Map {
+func aotKeywordMapNew6(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage6{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1039,7 +1039,7 @@ type aotKeywordMapStorage7 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew7(v0 any) *lang.Map {
+func aotKeywordMapNew7(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage7{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1056,7 +1056,7 @@ type aotKeywordMapStorage8 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew8(v0 any) *lang.Map {
+func aotKeywordMapNew8(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage8{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1073,7 +1073,7 @@ type aotKeywordMapStorage9 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew9(v0 any) *lang.Map {
+func aotKeywordMapNew9(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage9{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1090,7 +1090,7 @@ type aotKeywordMapStorage10 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew10(v0 any) *lang.Map {
+func aotKeywordMapNew10(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage10{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1107,7 +1107,7 @@ type aotKeywordMapStorage11 struct {
 	values [2]any
 }
 
-func aotKeywordMapNew11(v0 any, v1 any) *lang.Map {
+func aotKeywordMapNew11(v0 any, v1 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage11{}
 	storage.values = [2]any{v0, v1}
 	return lang.InitStaticKeywordMap(
@@ -1124,7 +1124,7 @@ type aotKeywordMapStorage12 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew12(v0 any) *lang.Map {
+func aotKeywordMapNew12(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage12{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1142,7 +1142,7 @@ type aotKeywordMapStorage13 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew13(v0 any) *lang.Map {
+func aotKeywordMapNew13(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage13{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1167,7 +1167,7 @@ type aotKeywordMapStorage14 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew14(v0 any) *lang.Map {
+func aotKeywordMapNew14(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage14{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1184,7 +1184,7 @@ type aotKeywordMapStorage15 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew15(v0 any) *lang.Map {
+func aotKeywordMapNew15(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage15{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1201,7 +1201,7 @@ type aotKeywordMapStorage16 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew16(v0 any) *lang.Map {
+func aotKeywordMapNew16(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage16{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1220,7 +1220,7 @@ type aotKeywordMapStorage17 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew17(v0 any) *lang.Map {
+func aotKeywordMapNew17(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage17{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -1237,7 +1237,7 @@ type aotKeywordMapStorage18 struct {
 	values [2]any
 }
 
-func aotKeywordMapNew18(v0 any, v1 any) *lang.Map {
+func aotKeywordMapNew18(v0 any, v1 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage18{}
 	storage.values = [2]any{v0, v1}
 	return lang.InitStaticKeywordMap(
@@ -1260,7 +1260,7 @@ type aotKeywordMapStorage19 struct {
 	values [3]any
 }
 
-func aotKeywordMapNew19(v0 any, v1 any, v2 any) *lang.Map {
+func aotKeywordMapNew19(v0 any, v1 any, v2 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage19{}
 	storage.values = [3]any{v0, v1, v2}
 	return lang.InitStaticKeywordMap(
@@ -1289,7 +1289,7 @@ type aotKeywordMapStorage20 struct {
 	values [3]any
 }
 
-func aotKeywordMapNew20(v0 any, v1 any, v2 any) *lang.Map {
+func aotKeywordMapNew20(v0 any, v1 any, v2 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage20{}
 	storage.values = [3]any{v0, v1, v2}
 	return lang.InitStaticKeywordMap(
@@ -1307,7 +1307,7 @@ type aotKeywordMapStorage21 struct {
 	values [1]any
 }
 
-func aotKeywordMapNew21(v0 any) *lang.Map {
+func aotKeywordMapNew21(v0 any) lang.IPersistentMap {
 	storage := &aotKeywordMapStorage21{}
 	storage.values = [1]any{v0}
 	return lang.InitStaticKeywordMap(
@@ -5613,7 +5613,7 @@ func LoadNS() {
 			_ = v2
 			tmp3 := aotDirectFn369.Invoke1("WARNING: add-classpath is deprecated")
 			_ = tmp3
-			tmp4, ok := pkgmap5.Get("clojure.lang.RT.addURL")
+			tmp4, ok := pkgmap5.LookupHostMember("clojure.lang.RT", "addURL")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.addURL"))
 			}
@@ -5984,7 +5984,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			tmp5, ok := pkgmap5.LookupHostMember("clojure.core", "Array")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
 			}
@@ -6036,7 +6036,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			tmp5, ok := pkgmap5.LookupHostMember("clojure.core", "Array")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
 			}
@@ -6088,7 +6088,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			tmp5, ok := pkgmap5.LookupHostMember("clojure.core", "Array")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
 			}
@@ -6140,7 +6140,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			tmp5, ok := pkgmap5.LookupHostMember("clojure.core", "Array")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
 			}
@@ -6192,7 +6192,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			tmp5, ok := pkgmap5.LookupHostMember("clojure.core", "Array")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
 			}
@@ -6244,7 +6244,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			tmp5, ok := pkgmap5.LookupHostMember("clojure.core", "Array")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
 			}
@@ -6296,7 +6296,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			tmp5, ok := pkgmap5.LookupHostMember("clojure.core", "Array")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
 			}
@@ -6348,7 +6348,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			tmp5, ok := pkgmap5.LookupHostMember("clojure.core", "Array")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
 			}
@@ -7503,7 +7503,7 @@ func LoadNS() {
 				default:
 					tmp7 = tmp6
 				}
-				tmp8, ok := pkgmap5.Get("Byte.TYPE")
+				tmp8, ok := pkgmap5.LookupHostMember("Byte", "TYPE")
 				if !ok {
 					panic(lang.NewIllegalArgumentError("unable to resolve host form: Byte.TYPE"))
 				}
@@ -9938,7 +9938,7 @@ func LoadNS() {
 						if lang.IsTruthy(tmp10) {
 							tmp9 = v2
 						} else {
-							tmp11, ok := pkgmap5.Get("Math.ceil")
+							tmp11, ok := pkgmap5.LookupHostMember("Math", "ceil")
 							if !ok {
 								panic(lang.NewIllegalArgumentError("unable to resolve host form: Math.ceil"))
 							}
@@ -10367,7 +10367,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3, ok := pkgmap5.Get("clojure.lang.EnumerationSeq.create")
+			tmp3, ok := pkgmap5.LookupHostMember("clojure.lang.EnumerationSeq", "create")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.EnumerationSeq.create"))
 			}
@@ -12180,7 +12180,7 @@ func LoadNS() {
 				var tmp5 any
 				tmp6 := aotDirectFn506(v2)
 				if lang.IsTruthy(tmp6) {
-					tmp7, ok := pkgmap5.Get("clojure.lang.Keyword.find")
+					tmp7, ok := pkgmap5.LookupHostMember("clojure.lang.Keyword", "find")
 					if !ok {
 						panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Keyword.find"))
 					}
@@ -12190,7 +12190,7 @@ func LoadNS() {
 					var tmp9 any
 					tmp10 := aotDirectFn495(v2)
 					if lang.IsTruthy(tmp10) {
-						tmp11, ok := pkgmap5.Get("clojure.lang.Keyword.find")
+						tmp11, ok := pkgmap5.LookupHostMember("clojure.lang.Keyword", "find")
 						if !ok {
 							panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Keyword.find"))
 						}
@@ -12209,7 +12209,7 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4, ok := pkgmap5.Get("clojure.lang.Keyword.find")
+			tmp4, ok := pkgmap5.LookupHostMember("clojure.lang.Keyword", "find")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Keyword.find"))
 			}
@@ -13130,7 +13130,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3, ok := pkgmap5.Get("clojure.lang.Murmur3.hashOrdered")
+			tmp3, ok := pkgmap5.LookupHostMember("clojure.lang.Murmur3", "hashOrdered")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Murmur3.hashOrdered"))
 			}
@@ -13178,7 +13178,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3, ok := pkgmap5.Get("clojure.lang.Murmur3.hashUnordered")
+			tmp3, ok := pkgmap5.LookupHostMember("clojure.lang.Murmur3", "hashUnordered")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Murmur3.hashUnordered"))
 			}
@@ -14114,7 +14114,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3, ok := pkgmap5.Get("clojure.lang.RT.chunkIteratorSeq")
+			tmp3, ok := pkgmap5.LookupHostMember("clojure.lang.RT", "chunkIteratorSeq")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.chunkIteratorSeq"))
 			}
@@ -17839,7 +17839,7 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4, ok := pkgmap5.Get("clojure.lang.Murmur3.mixCollHash")
+			tmp4, ok := pkgmap5.LookupHostMember("clojure.lang.Murmur3", "mixCollHash")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Murmur3.mixCollHash"))
 			}
@@ -19202,7 +19202,7 @@ func LoadNS() {
 					if lang.IsTruthy(tmp9) {
 						tmp8 = v3
 					} else {
-						tmp10, ok := pkgmap5.Get("Math.ceil")
+						tmp10, ok := pkgmap5.LookupHostMember("Math", "ceil")
 						if !ok {
 							panic(lang.NewIllegalArgumentError("unable to resolve host form: Math.ceil"))
 						}
@@ -19290,7 +19290,7 @@ func LoadNS() {
 						if lang.IsTruthy(tmp10) {
 							tmp9 = v3
 						} else {
-							tmp11, ok := pkgmap5.Get("Math.ceil")
+							tmp11, ok := pkgmap5.LookupHostMember("Math", "ceil")
 							if !ok {
 								panic(lang.NewIllegalArgumentError("unable to resolve host form: Math.ceil"))
 							}
@@ -23689,7 +23689,7 @@ func LoadNS() {
 		tmp0 := sym_release_DASH_pending_DASH_sends
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
-			tmp2, ok := pkgmap5.Get("clojure.lang.Agent.releasePendingSends")
+			tmp2, ok := pkgmap5.LookupHostMember("clojure.lang.Agent", "releasePendingSends")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Agent.releasePendingSends"))
 			}
@@ -24780,15 +24780,15 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "or__0__auto__"
-				tmp5, ok := pkgmap5.Get("clojure.lang.RT.chunkIteratorSeq")
+				tmp5, ok := pkgmap5.LookupHostMember("clojure.lang.RT", "chunkIteratorSeq")
 				if !ok {
 					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.chunkIteratorSeq"))
 				}
-				tmp6, ok := pkgmap5.Get("clojure.lang.TransformerIterator.create")
+				tmp6, ok := pkgmap5.LookupHostMember("clojure.lang.TransformerIterator", "create")
 				if !ok {
 					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.TransformerIterator.create"))
 				}
-				tmp7, ok := pkgmap5.Get("clojure.lang.RT.iter")
+				tmp7, ok := pkgmap5.LookupHostMember("clojure.lang.RT", "iter")
 				if !ok {
 					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.iter"))
 				}
@@ -24823,11 +24823,11 @@ func LoadNS() {
 				var tmp5 any
 				{ // let
 					// let binding "or__0__auto__"
-					tmp6, ok := pkgmap5.Get("clojure.lang.RT.chunkIteratorSeq")
+					tmp6, ok := pkgmap5.LookupHostMember("clojure.lang.RT", "chunkIteratorSeq")
 					if !ok {
 						panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.chunkIteratorSeq"))
 					}
-					tmp7, ok := pkgmap5.Get("clojure.lang.TransformerIterator.createMulti")
+					tmp7, ok := pkgmap5.LookupHostMember("clojure.lang.TransformerIterator", "createMulti")
 					if !ok {
 						panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.TransformerIterator.createMulti"))
 					}
@@ -24835,7 +24835,7 @@ func LoadNS() {
 					tmp8 = lang.FnFunc1(func(p0 any) any {
 						v9 := p0
 						_ = v9
-						tmp10, ok := pkgmap5.Get("clojure.lang.RT.iter")
+						tmp10, ok := pkgmap5.LookupHostMember("clojure.lang.RT", "iter")
 						if !ok {
 							panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.iter"))
 						}
@@ -26605,7 +26605,7 @@ func LoadNS() {
 				var tmp5 any
 				{ // let
 					// let binding "w"
-					tmp6, ok := pkgmap5.Get("gio.writer")
+					tmp6, ok := pkgmap5.LookupHostMember("gio", "writer")
 					if !ok {
 						panic(lang.NewIllegalArgumentError("unable to resolve host form: gio.writer"))
 					}
@@ -26890,7 +26890,7 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4, ok := pkgmap5.Get("clojure.core.protocols.iterator-reduce!")
+			tmp4, ok := pkgmap5.LookupHostMember("clojure.core.protocols", "iterator-reduce!")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.protocols.iterator-reduce!"))
 			}
@@ -26915,7 +26915,7 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, ok := pkgmap5.Get("clojure.core.protocols.iterator-reduce!")
+			tmp5, ok := pkgmap5.LookupHostMember("clojure.core.protocols", "iterator-reduce!")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.protocols.iterator-reduce!"))
 			}
@@ -27431,7 +27431,7 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4, ok := pkgmap5.Get("clojure.lang.TaggedLiteral.create")
+			tmp4, ok := pkgmap5.LookupHostMember("clojure.lang.TaggedLiteral", "create")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.TaggedLiteral.create"))
 			}
@@ -43197,7 +43197,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3, ok := pkgmap5.Get("Double.isInfinite")
+			tmp3, ok := pkgmap5.LookupHostMember("Double", "isInfinite")
 			if !ok {
 				panic(lang.NewIllegalArgumentError("unable to resolve host form: Double.isInfinite"))
 			}
@@ -46804,7 +46804,7 @@ func LoadNS() {
 				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_send_DASH_via)
-				tmp6, ok := pkgmap5.Get("clojure.lang.Agent.pooledExecutor")
+				tmp6, ok := pkgmap5.LookupHostMember("clojure.lang.Agent", "pooledExecutor")
 				if !ok {
 					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Agent.pooledExecutor"))
 				}
@@ -46837,7 +46837,7 @@ func LoadNS() {
 				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_send_DASH_via)
-				tmp6, ok := pkgmap5.Get("clojure.lang.Agent.soloExecutor")
+				tmp6, ok := pkgmap5.LookupHostMember("clojure.lang.Agent", "soloExecutor")
 				if !ok {
 					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Agent.soloExecutor"))
 				}

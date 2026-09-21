@@ -7,10 +7,97 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	atomic "sync/atomic"
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
+
+func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
+	if vr.IsBound() {
+		return aotLinkBoundFn1(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc1]
+	return func(p0 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0)
+		}
+		if !vr.IsBound() {
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+		fn := aotLinkBoundFn1(vr)
+		linked.Store(&fn)
+		return fn(p0)
+	}
+}
+
+func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn1(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn1); ok {
+		return fixed.Invoke1
+	}
+	return func(p0 any) any { return lang.Apply1(fn, p0) }
+}
+
+func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
+	if vr.IsBound() {
+		return aotLinkBoundFn2(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc2]
+	return func(p0 any, p1 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1)
+		}
+		if !vr.IsBound() {
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+		fn := aotLinkBoundFn2(vr)
+		linked.Store(&fn)
+		return fn(p0, p1)
+	}
+}
+
+func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn2(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn2); ok {
+		return fixed.Invoke2
+	}
+	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
+}
+
+func aotLinkFn4(vr *lang.Var) lang.FnFunc4 {
+	if vr.IsBound() {
+		return aotLinkBoundFn4(vr)
+	}
+	var linked atomic.Pointer[lang.FnFunc4]
+	return func(p0 any, p1 any, p2 any, p3 any) any {
+		if fn := linked.Load(); fn != nil {
+			return (*fn)(p0, p1, p2, p3)
+		}
+		if !vr.IsBound() {
+			return lang.Apply4(checkDerefVar(vr), p0, p1, p2, p3)
+		}
+		fn := aotLinkBoundFn4(vr)
+		linked.Store(&fn)
+		return fn(p0, p1, p2, p3)
+	}
+}
+
+func aotLinkBoundFn4(vr *lang.Var) lang.FnFunc4 {
+	fn := checkDerefVar(vr)
+	if direct, ok := lang.DirectFn4(fn); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn4); ok {
+		return fixed.Invoke4
+	}
+	return func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(fn, p0, p1, p2, p3) }
+}
 
 func init() {
 	runtime.RegisterNSLoader("codegen/test/multifn", LoadNS)
@@ -62,6 +149,9 @@ func LoadNS() {
 	var_codegen_DOT_test_DOT_multifn__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_multifn, sym__DASH_main)
 	// var codegen.test.multifn/add
 	var_codegen_DOT_test_DOT_multifn_add := lang.InternVarName(sym_codegen_DOT_test_DOT_multifn, sym_add)
+	aotExternalFn0 := aotLinkFn1(var_clojure_DOT_core_type)
+	aotExternalFn1 := aotLinkFn2(var_clojure_DOT_core_str)
+	aotExternalFn2 := aotLinkFn4(var_clojure_DOT_core_str)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -71,6 +161,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -141,6 +234,59 @@ func LoadNS() {
 			"throw-if",
 		})
 	}
+	// add
+	{
+		tmp0 := sym_add
+		var tmp2 lang.FnFunc2
+		tmp2 = lang.FnFunc2(func(p0, p1 any) any {
+			v3 := p0
+			_ = v3
+			v4 := p1
+			_ = v4
+			tmp5 := aotExternalFn0(v3)
+			return tmp5
+		})
+		// MultiFn add
+		tmp1 := lang.NewMultiFn("add", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
+		tmp3 := reflect.TypeOf(int64(0))
+		var tmp4 lang.FnFunc2
+		tmp4 = lang.FnFunc2(func(p0, p1 any) any {
+			v5 := p0
+			_ = v5
+			v6 := p1
+			_ = v6
+			tmp7 := lang.Numbers.Add(v5, v6)
+			tmp8 := aotExternalFn1("int64: ", tmp7)
+			return tmp8
+		})
+		tmp1.AddMethod(tmp3, tmp4)
+		tmp5 := reflect.TypeOf(float64(0))
+		var tmp6 lang.FnFunc2
+		tmp6 = lang.FnFunc2(func(p0, p1 any) any {
+			v7 := p0
+			_ = v7
+			v8 := p1
+			_ = v8
+			tmp9 := lang.Numbers.Add(v7, v8)
+			tmp10 := aotExternalFn1("float64: ", tmp9)
+			return tmp10
+		})
+		tmp1.AddMethod(tmp5, tmp6)
+		var tmp7 lang.FnFunc2
+		tmp7 = lang.FnFunc2(func(p0, p1 any) any {
+			v8 := p0
+			_ = v8
+			v9 := p1
+			_ = v9
+			tmp10 := aotExternalFn2("default: ", v8, " ", v9)
+			return tmp10
+		})
+		tmp1.AddMethod(kw_default, tmp7)
+		var_codegen_DOT_test_DOT_multifn_add = ns.InternWithValue(tmp0, tmp1, true)
+		var_codegen_DOT_test_DOT_multifn_add.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "codegen/test/multifn.glj", kw_line, int(3), kw_column, int(11), kw_end_DASH_line, int(3), kw_end_DASH_column, int(13), kw_doc, "a multimethod for addition", kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_multifn))
+		}, false)
+	}
 	// -main
 	{
 		tmp0 := sym__DASH_main
@@ -153,71 +299,13 @@ func LoadNS() {
 			tmp6 := lang.Apply2(tmp5, float64(3.5), float64(4.5))
 			tmp7 := checkDerefVar(var_codegen_DOT_test_DOT_multifn_add)
 			tmp8 := lang.Apply2(tmp7, "3", "4")
-			tmp9 := lang.Apply(tmp2, []any{tmp4, " ", tmp6, " ", tmp8})
+			tmp9 := lang.Apply5(tmp2, tmp4, " ", tmp6, " ", tmp8)
 			return tmp9
 		})
 		aotDirectFn0 = tmp1
 		var_codegen_DOT_test_DOT_multifn__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_multifn__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_multifn__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, "int64: 7 float64: 8.0 default: 3 4", kw_file, "codegen/test/multifn.glj", kw_line, int(8), kw_column, int(7), kw_end_DASH_line, int(8), kw_end_DASH_column, int(68), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_multifn))
-		})
-	}
-	// add
-	{
-		tmp0 := sym_add
-		var tmp2 lang.FnFunc2
-		tmp2 = lang.FnFunc2(func(p0, p1 any) any {
-			v3 := p0
-			_ = v3
-			v4 := p1
-			_ = v4
-			tmp5 := checkDerefVar(var_clojure_DOT_core_type)
-			tmp6 := lang.Apply1(tmp5, v3)
-			return tmp6
-		})
-		// MultiFn add
-		tmp1 := lang.NewMultiFn("add", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp3 := reflect.TypeOf(int64(0))
-		var tmp4 lang.FnFunc2
-		tmp4 = lang.FnFunc2(func(p0, p1 any) any {
-			v5 := p0
-			_ = v5
-			v6 := p1
-			_ = v6
-			tmp7 := checkDerefVar(var_clojure_DOT_core_str)
-			tmp8 := lang.Numbers.Add(v5, v6)
-			tmp9 := lang.Apply2(tmp7, "int64: ", tmp8)
-			return tmp9
-		})
-		tmp1.AddMethod(tmp3, tmp4)
-		tmp5 := reflect.TypeOf(float64(0))
-		var tmp6 lang.FnFunc2
-		tmp6 = lang.FnFunc2(func(p0, p1 any) any {
-			v7 := p0
-			_ = v7
-			v8 := p1
-			_ = v8
-			tmp9 := checkDerefVar(var_clojure_DOT_core_str)
-			tmp10 := lang.Numbers.Add(v7, v8)
-			tmp11 := lang.Apply2(tmp9, "float64: ", tmp10)
-			return tmp11
-		})
-		tmp1.AddMethod(tmp5, tmp6)
-		var tmp7 lang.FnFunc2
-		tmp7 = lang.FnFunc2(func(p0, p1 any) any {
-			v8 := p0
-			_ = v8
-			v9 := p1
-			_ = v9
-			tmp10 := checkDerefVar(var_clojure_DOT_core_str)
-			tmp11 := lang.Apply4(tmp10, "default: ", v8, " ", v9)
-			return tmp11
-		})
-		tmp1.AddMethod(kw_default, tmp7)
-		var_codegen_DOT_test_DOT_multifn_add = ns.InternWithValue(tmp0, tmp1, true)
-		var_codegen_DOT_test_DOT_multifn_add.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "codegen/test/multifn.glj", kw_line, int(3), kw_column, int(11), kw_end_DASH_line, int(3), kw_end_DASH_column, int(13), kw_doc, "a multimethod for addition", kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_multifn))
-		})
+		var_codegen_DOT_test_DOT_multifn__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/multifn.glj", kw_line, int(8), kw_column, int(7), kw_end_DASH_line, int(8), kw_end_DASH_column, int(68), kw_expected_DASH_output, "int64: 7 float64: 8.0 default: 3 4", kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_multifn))
+		}, false)
 	}
 }

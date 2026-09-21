@@ -162,6 +162,12 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 				}
 			}
 
+			// Host symbol shape rule (see doc/interop.md): Go symbols are
+			// pkg.Exported with ":" for path separators and never carry a
+			// "/", so a namespaced symbol here is a JVM Class/member form
+			// (or a go/ builtin). A bare dotted symbol is a class path; the
+			// evaluator and codegen decide between a Go package and a JVM
+			// class by the first dotted segment.
 			maybeClass := form.Namespace()
 			if maybeClass != "" {
 				if maybeClass == "go" {

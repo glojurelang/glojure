@@ -10,9 +10,7 @@ import (
 )
 
 var aotDirectFn0 lang.FnFunc0
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc0
-var aotRootVersion1 *lang.VarRootVersion
 var aotInt64Fn0 func() (int64, bool)
 var aotInt64Fn1 func() (int64, bool)
 
@@ -66,6 +64,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -136,6 +137,33 @@ func LoadNS() {
 			"throw-if",
 		})
 	}
+	// -main
+	{
+		tmp0 := sym__DASH_main
+		var tmp1 lang.FnFunc0
+		var tmp2 func() (int64, bool)
+		tmp2 = func() (int64, bool) {
+			tmp3 := aotInt64Fn1
+			tmp4, tmp5 := tmp3()
+			if !tmp5 {
+				return 0, false
+			}
+			return tmp4, true
+		}
+		aotInt64Fn0 = tmp2
+		tmp1 = lang.FnFunc0(func() any {
+			if tmp6, tmp7 := tmp2(); tmp7 {
+				return tmp6
+			}
+			tmp8 := aotDirectFn1()
+			return tmp8
+		})
+		aotDirectFn0 = tmp1
+		var_codegen_DOT_test_DOT_loop_DASH_simple__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		var_codegen_DOT_test_DOT_loop_DASH_simple__DASH_main.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "codegen/test/loop_simple.glj", kw_line, int(9), kw_column, int(7), kw_end_DASH_line, int(10), kw_end_DASH_column, int(7), kw_expected_DASH_output, int64(10), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_loop_DASH_simple))
+		}, false)
+	}
 	// simple-loop
 	{
 		tmp0 := sym_simple_DASH_loop
@@ -188,49 +216,8 @@ func LoadNS() {
 		})
 		aotDirectFn1 = tmp1
 		var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop.RootVersion()
-		var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop.SetMetaLazy(func() lang.IPersistentMap {
+		var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "codegen/test/loop_simple.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_loop_DASH_simple))
-		})
-	}
-	// -main
-	{
-		tmp0 := sym__DASH_main
-		var tmp1 lang.FnFunc0
-		var tmp2 func() (int64, bool)
-		tmp2 = func() (int64, bool) {
-			if var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop.RootVersion() != aotRootVersion1 {
-				return 0, false
-			}
-			tmp3, tmp4 := aotInt64Fn1()
-			if !tmp4 {
-				return 0, false
-			}
-			return tmp3, true
-		}
-		aotInt64Fn0 = tmp2
-		tmp1 = lang.FnFunc0(func() any {
-			if tmp5, tmp6 := tmp2(); tmp6 {
-				return tmp5
-			}
-			tmp7 := var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop.RootVersion() == aotRootVersion1 && !var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop.IsMacro()
-			var tmp8 any
-			if !tmp7 {
-				tmp8 = checkDerefVar(var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop)
-			}
-			var tmp9 any
-			if tmp7 {
-				tmp9 = aotDirectFn1()
-			} else {
-				tmp9 = lang.Apply0(tmp8)
-			}
-			return tmp9
-		})
-		aotDirectFn0 = tmp1
-		var_codegen_DOT_test_DOT_loop_DASH_simple__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_codegen_DOT_test_DOT_loop_DASH_simple__DASH_main.RootVersion()
-		var_codegen_DOT_test_DOT_loop_DASH_simple__DASH_main.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_expected_DASH_output, int64(10), kw_file, "codegen/test/loop_simple.glj", kw_line, int(9), kw_column, int(7), kw_end_DASH_line, int(10), kw_end_DASH_column, int(7), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_loop_DASH_simple))
-		})
+		}, false)
 	}
 }

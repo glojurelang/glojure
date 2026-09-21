@@ -16,6 +16,13 @@ func CatchMatches(r, expect any) bool {
 		return false
 	}
 
+	// java.lang.Throwable is the root of every JVM exception, so a catch
+	// clause naming it catches any panic value, as the evaluator does.
+	if class, isClass := expect.(*Class); isClass &&
+		class.JavaName == "java.lang.Throwable" {
+		return true
+	}
+
 	expectType, ok := ReflectType(expect)
 	if !ok {
 		return false

@@ -1031,9 +1031,23 @@ func (g *Generator) generateFloatLiteral(value float64, bits int) string {
 // identity (and its FQ Java name) for symbols seeded by the host-class
 // import path (Math, Integer, java.lang.Integer, ...).
 func (g *Generator) generateClassValue(c *lang.Class) string {
-	typeExpr := g.generateTypeValue(c.Type)
+	types := c.Types()
+	if len(types) <= 1 {
+		typeExpr := g.generateTypeValue(c.Type)
+		resultId := g.allocateTempVar()
+		g.writef("%s := lang.NewClass(%s, %#v)\n", resultId, typeExpr, c.JavaName)
+		return resultId
+	}
+	// A class backed by several Go types (Number, Integer, Pattern) must
+	// keep its whole type set so instance? and catch behave as in the
+	// evaluator.
+	typeExprs := make([]string, len(types))
+	for i, t := range types {
+		typeExprs[i] = g.generateTypeValue(t)
+	}
 	resultId := g.allocateTempVar()
-	g.writef("%s := lang.NewClass(%s, %#v)\n", resultId, typeExpr, c.JavaName)
+	g.writef("%s := lang.NewClassWithTypes(%#v, %s)\n",
+		resultId, c.JavaName, strings.Join(typeExprs, ", "))
 	return resultId
 }
 
@@ -2295,6 +2309,11 @@ func staticInstanceType(invoke *ast.InvokeNode) (reflect.Type, bool) {
 
 func unwrappedReflectType(value any) (reflect.Type, bool) {
 	if class, ok := value.(*lang.Class); ok {
+		// Only a single-type class reduces to a static Go type check;
+		// Number and friends keep the runtime class-aware check.
+		if len(class.Types()) > 1 {
+			return nil, false
+		}
 		return class.Type, class.Type != nil
 	}
 	typ, ok := value.(reflect.Type)
@@ -2971,7 +2990,7 @@ type %s struct {
 	lang.Map
 	values [%d]any
 }
-func %s(%s) *lang.Map {
+func %s(%s) lang.IPersistentMap {
 	storage := &%s{}
 	storage.values = [%d]any{%s}
 	return lang.InitStaticKeywordMap(
@@ -3044,7 +3063,31 @@ func (g *Generator) generateMaybeClass(node *ast.Node) string {
 		}
 	}
 
+	if isJVMClassPath(pkg) {
+		fmt.Println("Warning: unable to resolve JVM class:", pkg)
+		return fmt.Sprintf("lang.UnresolvedHostClass(%q)", pkg)
+	}
+
 	return g.generateGoExportedName(pkg)
+}
+
+// isJVMClassPath reports whether a dotted symbol names a JVM class
+// (java.util.ArrayList, clojure.lang.RT) rather than a Go package export.
+// Go package paths are munged with ":" for "/" and never start with a
+// JVM root package, so the two shapes cannot collide.
+func isJVMClassPath(name string) bool {
+	if strings.ContainsRune(name, ':') {
+		return false
+	}
+	root, _, ok := strings.Cut(name, ".")
+	if !ok {
+		return false
+	}
+	switch root {
+	case "java", "javax", "clojure", "sun", "jdk":
+		return true
+	}
+	return false
 }
 
 func (g *Generator) generateGoExportedName(pkg string) string {
@@ -3451,7 +3494,8 @@ func (g *Generator) generateMaybeHostForm(node *ast.Node) string {
 	export := maybeHostNode.Class + "." + maybeHostNode.Field.Name()
 	resultID := g.allocateTempVar()
 	alias := g.addImportWithAlias("github.com/glojurelang/glojure/pkg/pkgmap")
-	g.writef("%s, ok := %s.Get(%q)\n", resultID, alias, export)
+	g.writef("%s, ok := %s.LookupHostMember(%q, %q)\n",
+		resultID, alias, maybeHostNode.Class, maybeHostNode.Field.Name())
 	g.writef("if !ok {\n")
 	g.writef("  panic(lang.NewIllegalArgumentError(%q))\n", "unable to resolve host form: "+export)
 	g.writef("}\n")
@@ -3602,7 +3646,31 @@ func (g *Generator) generateNew(node *ast.Node) string {
 		return resultId
 	case *ast.MaybeClassNode:
 		resultId := g.allocateTempVar()
-		className := g.generateGoExportedName(sub.Class.(*lang.Symbol).FullName())
+		fullName := sub.Class.(*lang.Symbol).FullName()
+		if isJVMClassPath(fullName) {
+			// A registered host class (java.util.UUID) constructs through
+			// lang.NewHostInstance; an unknown one panics at runtime with a
+			// clear message instead of turning into a Go import.
+			classExpr := fmt.Sprintf("lang.UnresolvedHostClass(%q)", fullName)
+			if v, ok := pkgmap.Get(fullName); ok {
+				classExpr = g.generateValue(v)
+			} else {
+				fmt.Println("Warning: unable to resolve JVM class for new:", fullName)
+			}
+			args := make([]string, len(newNode.Args))
+			for i, arg := range newNode.Args {
+				args[i] = g.generateASTNode(arg)
+			}
+			g.writef("%s := lang.NewHostInstance(%s%s)\n", resultId, classExpr,
+				func() string {
+					if len(args) == 0 {
+						return ""
+					}
+					return ", " + strings.Join(args, ", ")
+				}())
+			return resultId
+		}
+		className := g.generateGoExportedName(fullName)
 		if className == "nil" {
 			fmt.Printf("Failed to resolve class for new, generating nil: %v\n", sub.Class)
 			return "nil"

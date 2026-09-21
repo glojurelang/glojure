@@ -55,6 +55,9 @@ func LoadNS() {
 	{ // refer vars from clojure.core
 		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
 		ns.ReferAllSnapshot(srcNS, []string{
+			"*loaded-libs*",
+			"*loading-verbosely*",
+			"*pending-paths*",
 			"-protocols",
 			">0?",
 			">1?",
@@ -129,8 +132,8 @@ func LoadNS() {
 	{
 		tmp0 := sym_const_DASH_string
 		var_codegen_DOT_test_DOT_const_DASH_string_const_DASH_string = ns.InternWithValue(tmp0, "Hello, World!", true)
-		var_codegen_DOT_test_DOT_const_DASH_string_const_DASH_string.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_hello, true, kw_file, "codegen/test/const_string.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(25), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_const_DASH_string))
-		})
+		var_codegen_DOT_test_DOT_const_DASH_string_const_DASH_string.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "codegen/test/const_string.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(25), kw_hello, true, kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_const_DASH_string))
+		}, false)
 	}
 }

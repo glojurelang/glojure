@@ -29,7 +29,7 @@ func TestCodegen(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		if strings.HasSuffix(path, ".glj") {
+		if isSourceFile(path) {
 			testFiles = append(testFiles, path)
 		}
 		return nil
@@ -42,14 +42,14 @@ func TestCodegen(t *testing.T) {
 	sort.Strings(testFiles)
 
 	for i, testFile := range testFiles {
-		baseName := strings.TrimSuffix(filepath.Base(testFile), ".glj")
+		baseName := trimSourceExt(filepath.Base(testFile))
 		testName := fmt.Sprintf("%02d_%s", i+1, baseName)
 		t.Run(testName, func(t *testing.T) {
 			// Parse test file to get namespace name
 			nsName := getNamespaceFromFile(t, testFile)
 			if nsName == "" {
 				// If no namespace declaration, use the filename as namespace
-				nsName = strings.TrimSuffix(filepath.Base(testFile), ".glj")
+				nsName = trimSourceExt(filepath.Base(testFile))
 				nsName = strings.ReplaceAll(nsName, "_", "-")
 				nsName = strings.ReplaceAll(nsName, ".", "-")
 			}
@@ -61,7 +61,7 @@ func TestCodegen(t *testing.T) {
 
 			ns := lang.FindNamespace(lang.NewSymbol(nsName))
 
-			outputDir := strings.TrimSuffix(testFile, ".glj")
+			outputDir := trimSourceExt(testFile)
 			if err := os.MkdirAll(outputDir, 0755); err != nil {
 				t.Fatalf("failed to create output directory: %v", err)
 			}
@@ -236,4 +236,26 @@ func testMainFunction(t *testing.T, ns *lang.Namespace) {
 	if !lang.Equals(result, expectedOutput) {
 		t.Errorf("-main returned %v, expected %v", result, expectedOutput)
 	}
+}
+
+// sourceExts lists the extensions of codegen test fixtures. Fixtures that
+// use only Clojure syntax may be .clj; Glojure-specific ones are .glj.
+var sourceExts = []string{".glj", ".clj"}
+
+func isSourceFile(path string) bool {
+	for _, ext := range sourceExts {
+		if strings.HasSuffix(path, ext) {
+			return true
+		}
+	}
+	return false
+}
+
+func trimSourceExt(path string) string {
+	for _, ext := range sourceExts {
+		if strings.HasSuffix(path, ext) {
+			return strings.TrimSuffix(path, ext)
+		}
+	}
+	return path
 }

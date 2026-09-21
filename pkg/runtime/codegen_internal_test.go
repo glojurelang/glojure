@@ -742,7 +742,7 @@ func TestGenerateLateBoundHostForm(t *testing.T) {
 	}
 	if got := output.String(); !strings.Contains(
 		got,
-		`Get("clojure.lang.MapEntry.create")`,
+		`LookupHostMember("clojure.lang.MapEntry", "create")`,
 	) {
 		t.Fatalf("generated host lookup = %q", got)
 	}

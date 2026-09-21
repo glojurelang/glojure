@@ -71,6 +71,13 @@ func register(jvmName, goName string, v any) {
 }
 
 func init() {
+	lang.RegisterHostConstructor("java.lang.Character", lang.FnFunc(func(args ...any) any {
+		if len(args) != 1 {
+			panic(fmt.Sprintf("Character constructor: wrong number of args (%d)", len(args)))
+		}
+		return ValueOf(args[0])
+	}))
+
 	register("MIN_VALUE", "MIN_VALUE", MIN_VALUE)
 	register("MAX_VALUE", "MAX_VALUE", MAX_VALUE)
 	register("MIN_RADIX", "MIN_RADIX", int32(MIN_RADIX))

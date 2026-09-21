@@ -235,3 +235,38 @@ func PkgEntries(pkg string) []string {
 	}
 	return names
 }
+
+// HostClassShortName maps a fully-qualified JVM class name such as
+// "java.util.regex.Pattern" to the short name its bridge registered
+// ("Pattern"). Classes without a registered package default to
+// java.lang, so "java.lang.Math" maps to "Math" as well. Returns false
+// when the name has no package part or the package does not match.
+func HostClassShortName(fqName string) (string, bool) {
+	i := strings.LastIndexByte(fqName, '.')
+	if i <= 0 || i == len(fqName)-1 {
+		return "", false
+	}
+	javaPkg, short := fqName[:i], fqName[i+1:]
+	if HostClassPackage(short) != javaPkg {
+		return "", false
+	}
+	return short, true
+}
+
+// LookupHostMember resolves a static member reference `Class/member`
+// written in JVM style. It is the single resolver shared by the
+// evaluator and by AOT-generated code, so both paths agree. The class
+// may be a short host class name ("Math"), a fully-qualified JVM name
+// ("java.lang.Math", "java.util.regex.Pattern"), or a munged Go package
+// path ("github.com:foo:bar").
+func LookupHostMember(class, member string) (interface{}, bool) {
+	if v, ok := Get(class + "." + member); ok {
+		return v, true
+	}
+	if short, ok := HostClassShortName(class); ok {
+		if v, ok := Get(short + "." + member); ok {
+			return v, true
+		}
+	}
+	return nil, false
+}

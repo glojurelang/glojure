@@ -47,9 +47,10 @@ func TestGeneratedGo(t *testing.T) {
 		t.Run(pkgName, func(t *testing.T) {
 			t.Parallel()
 
-			// Read the corresponding .glj file to check for -main metadata
-			gljFile := strings.TrimSuffix(outFile, "/load.go.out") + ".glj"
-			nsName, hasMain := getNamespaceMetadata(t, gljFile)
+			// Read the corresponding source file (.glj or .clj) to check
+			// for -main metadata
+			srcFile := sourceFileFor(outFile)
+			nsName, hasMain := getNamespaceMetadata(t, srcFile)
 
 			if !hasMain {
 				t.Skip("No -main function with expected metadata")
@@ -152,13 +153,13 @@ replace github.com/glojurelang/glojure => %s
 	}
 }
 
-// getNamespaceMetadata reads a .glj file and extracts namespace and checks for -main
+// getNamespaceMetadata reads a fixture source file and extracts namespace and checks for -main
 func getNamespaceMetadata(t *testing.T, gljFile string) (nsName string, hasMain bool) {
 	t.Helper()
 
 	content, err := ioutil.ReadFile(gljFile)
 	if err != nil {
-		t.Logf("Could not read .glj file %s: %v", gljFile, err)
+		t.Logf("Could not read source file %s: %v", gljFile, err)
 		return "", false
 	}
 
@@ -298,4 +299,16 @@ func generateMainFile(pkgName, nsName string) string {
 		panic(fmt.Sprintf("Failed to generate main.go: %v", err))
 	}
 	return buf.String()
+}
+
+// sourceFileFor returns the fixture source next to a load.go.out, trying
+// the .glj extension and then .clj.
+func sourceFileFor(outFile string) string {
+	base := strings.TrimSuffix(outFile, "/load.go.out")
+	for _, ext := range []string{".glj", ".clj"} {
+		if _, err := os.Stat(base + ext); err == nil {
+			return base + ext
+		}
+	}
+	return base + ".glj"
 }

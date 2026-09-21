@@ -76,6 +76,13 @@ func register(jvmName, goName string, v any) {
 }
 
 func init() {
+	lang.RegisterHostConstructor("java.lang.Double", lang.FnFunc(func(args ...any) any {
+		if len(args) != 1 {
+			panic(fmt.Sprintf("Double constructor: wrong number of args (%d)", len(args)))
+		}
+		return ValueOf(args[0])
+	}))
+
 	register("MIN_VALUE", "MIN_VALUE", MIN_VALUE)
 	register("MAX_VALUE", "MAX_VALUE", MAX_VALUE)
 	register("MIN_NORMAL", "MIN_NORMAL", MIN_NORMAL)

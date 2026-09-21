@@ -71,7 +71,7 @@ endif
 endif
 
 TEST-GLJ-DIR := test/glojure
-TEST-GLJ-FILES := $(shell find $(TEST-GLJ-DIR) -name '*.glj' | sort)
+TEST-GLJ-FILES := $(shell find $(TEST-GLJ-DIR) -name '*.glj' -o -name '*.clj' | sort)
 TEST-GLJ-TARGETS := $(addsuffix .test,$(TEST-GLJ-FILES))
 TEST-SUITE-REPO := https://github.com/glojurelang/clojure-test-suite.git
 TEST-SUITE-BRANCH := glojure
@@ -149,6 +149,14 @@ force:
 all: $(ALL-TARGETS)
 
 stdlib-targets: $(STDLIB-TARGETS)
+
+rewrite-delta:
+	@for name in $(STDLIB-NAMES); do \
+	  orig=$(STDLIB-ORIGINALS-DIR)/$$name; \
+	  gen=pkg/stdlib/clojure/$${name%.clj}.glj; \
+	  n=$$(diff $$orig $$gen | grep -c '^[<>]'); \
+	  printf '%6d  %s\n' $$n $$name; \
+	done
 
 stdlib-present:
 	@for file in $(STDLIB-TARGETS); do \
