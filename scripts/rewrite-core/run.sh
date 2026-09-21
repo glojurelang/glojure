@@ -7,10 +7,13 @@ set -euo pipefail
 # implemented in this script. Number tags are removed, as go doesn't
 # have boxed numbers. We also truncate core.glj at deftype.
 
+# rewrite.clj runs under babashka, which bundles rewrite-clj, its only
+# dependency. Set BB to point at a specific bb binary.
+
 # discard file after defype for now
 
 cd scripts/rewrite-core
-"${CLJ:-clj}" -M ./rewrite.clj "../../$1" | \
+"${BB:-bb}" ./rewrite.clj "../../$1" | \
     sed 's/\^Number //g' | \
     sed 's/:tag Number//g' | \
     sed 's/[[:space:]]*$//'

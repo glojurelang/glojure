@@ -5,14 +5,11 @@ $(shell [ -d '$M' ] || git clone -q $R '$M')
 include $M/init.mk
 
 GO-VERSION ?= 1.24.0
-CLOJURE-CLI-VERSION ?= 1.12.4.1602
 CLOJURE-STDLIB-SOURCE-VERSION ?= 1.12.4
-CLOJURE-VERSION ?= $(CLOJURE-CLI-VERSION)
 
 include $M/go.mk
 include $M/perl.mk
-CLOJURE-DEPS += $(PERL)
-include $M/clojure.mk
+include $M/babashka.mk
 include $M/gh.mk
 include $M/clean.mk
 include $M/yamlscript.mk
@@ -196,11 +193,11 @@ pkg/stdlib/clojure/%.glj: \
 	  scripts/rewrite-core/run.sh \
 	  scripts/rewrite-core/rewrite.clj \
 	  $(if $(force),force) \
-	  | $(CLOJURE)
+	  | $(BB)
 	@echo "Rewriting $< to $@"
 	@mkdir -p $(dir $@)
 	tmp=$@.tmp; \
-	  HOME="$(LOCAL-HOME)" CLJ="$(CLOJURE)" scripts/rewrite-core/run.sh $< > $$tmp && \
+	  BB="$(BB)" scripts/rewrite-core/run.sh $< > $$tmp && \
 	  mv $$tmp $@
 
 bin/%/glj: generate \
@@ -234,9 +231,8 @@ test: \
   test-repl-bsd  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
 
-test-rewrite-core: $(CLOJURE)
-	HOME="$(LOCAL-HOME)" CLJ="$(CLOJURE)" \
-	  scripts/rewrite-core/run.sh \
+test-rewrite-core: $(BB)
+	BB="$(BB)" scripts/rewrite-core/run.sh \
 	  scripts/rewrite-core/test/non-core.clj | \
 	  cmp - scripts/rewrite-core/test/non-core.glj
 

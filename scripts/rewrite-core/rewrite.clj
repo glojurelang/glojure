@@ -1209,7 +1209,7 @@
       (fn visit [zloc] (z/replace zloc new-node))])
 
 
-   (sexpr-replace '(System/getProperty "line.separator") '"\\n")
+   (sexpr-replace '(System/getProperty "line.separator") '"\n")
    (sexpr-replace 'clojure.lang.ISeq 'github.com:glojurelang:glojure:pkg:lang.ISeq)
    (sexpr-replace 'clojure.lang.IEditableCollection 'github.com:glojurelang:glojure:pkg:lang.IEditableCollection)
    (sexpr-replace 'clojure.core/import* 'github.com:glojurelang:glojure:pkg:lang.Import)
