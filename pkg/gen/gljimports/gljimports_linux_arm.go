@@ -1012,6 +1012,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.UncheckedIntCast", github_com_glojurelang_glojure_pkg_lang.UncheckedIntCast)
 	_register("github.com/glojurelang/glojure/pkg/lang.UncheckedLongCast", github_com_glojurelang_glojure_pkg_lang.UncheckedLongCast)
 	_register("github.com/glojurelang/glojure/pkg/lang.UncheckedShortCast", github_com_glojurelang_glojure_pkg_lang.UncheckedShortCast)
+	_register("github.com/glojurelang/glojure/pkg/lang.UnresolvedHostClass", github_com_glojurelang_glojure_pkg_lang.UnresolvedHostClass)
 	_register("github.com/glojurelang/glojure/pkg/lang.UnsupportedOperationError", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.UnsupportedOperationError)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.*UnsupportedOperationError", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.UnsupportedOperationError)(nil)))
 	_register("github.com/glojurelang/glojure/pkg/lang.VReset", github_com_glojurelang_glojure_pkg_lang.VReset)
