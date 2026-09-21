@@ -46073,7 +46073,7 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "n"
-				tmp5 := lang.Apply0(runtime13.NumCPU)
+				tmp5 := runtime13.NumCPU()
 				tmp6 := lang.Numbers.Add(int64(2), tmp5)
 				var v7 any = tmp6
 				_ = v7
