@@ -348,6 +348,7 @@ The following standard library packages are included by default:
 - `path/filepath`
 - `reflect`
 - `regexp`
+- `runtime`
 - `runtime/debug`
 - `sort`
 - `strconv`

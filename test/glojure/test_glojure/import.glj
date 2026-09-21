@@ -6,5 +6,10 @@
 (deftest Import
   (is (= "bar" (TrimPrefix "foobar" "foo"))))
 
-(run-tests)
+(deftest RuntimeConstants
+  (is (string? runtime.GOOS))
+  (is (string? runtime.GOARCH))
+  (is (seq runtime.GOOS))
+  (is (seq runtime.GOARCH)))
 
+(run-tests)

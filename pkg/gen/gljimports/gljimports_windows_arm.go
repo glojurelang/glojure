@@ -30,6 +30,7 @@ import (
 	path_filepath "path/filepath"
 	reflect "reflect"
 	regexp "regexp"
+	runtime "runtime"
 	runtime_debug "runtime/debug"
 	sort "sort"
 	strconv "strconv"
@@ -1908,6 +1909,69 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("regexp.QuoteMeta", regexp.QuoteMeta)
 	_register("regexp.Regexp", reflect.TypeOf((*regexp.Regexp)(nil)).Elem())
 	_register("regexp.*Regexp", reflect.TypeOf((*regexp.Regexp)(nil)))
+
+	// package runtime
+	////////////////////////////////////////
+	_register("runtime.BlockProfile", runtime.BlockProfile)
+	_register("runtime.BlockProfileRecord", reflect.TypeOf((*runtime.BlockProfileRecord)(nil)).Elem())
+	_register("runtime.*BlockProfileRecord", reflect.TypeOf((*runtime.BlockProfileRecord)(nil)))
+	_register("runtime.Breakpoint", runtime.Breakpoint)
+	_register("runtime.CPUProfile", runtime.CPUProfile)
+	_register("runtime.Caller", runtime.Caller)
+	_register("runtime.Callers", runtime.Callers)
+	_register("runtime.CallersFrames", runtime.CallersFrames)
+	_register("runtime.Cleanup", reflect.TypeOf((*runtime.Cleanup)(nil)).Elem())
+	_register("runtime.*Cleanup", reflect.TypeOf((*runtime.Cleanup)(nil)))
+	_register("runtime.Compiler", runtime.Compiler)
+	_register("runtime.Error", reflect.TypeOf((*runtime.Error)(nil)).Elem())
+	_register("runtime.Frame", reflect.TypeOf((*runtime.Frame)(nil)).Elem())
+	_register("runtime.*Frame", reflect.TypeOf((*runtime.Frame)(nil)))
+	_register("runtime.Frames", reflect.TypeOf((*runtime.Frames)(nil)).Elem())
+	_register("runtime.*Frames", reflect.TypeOf((*runtime.Frames)(nil)))
+	_register("runtime.Func", reflect.TypeOf((*runtime.Func)(nil)).Elem())
+	_register("runtime.*Func", reflect.TypeOf((*runtime.Func)(nil)))
+	_register("runtime.FuncForPC", runtime.FuncForPC)
+	_register("runtime.GC", runtime.GC)
+	_register("runtime.GOARCH", runtime.GOARCH)
+	_register("runtime.GOMAXPROCS", runtime.GOMAXPROCS)
+	_register("runtime.GOOS", runtime.GOOS)
+	_register("runtime.GOROOT", runtime.GOROOT)
+	_register("runtime.Goexit", runtime.Goexit)
+	_register("runtime.GoroutineProfile", runtime.GoroutineProfile)
+	_register("runtime.Gosched", runtime.Gosched)
+	_register("runtime.KeepAlive", runtime.KeepAlive)
+	_register("runtime.LockOSThread", runtime.LockOSThread)
+	_register("runtime.MemProfile", runtime.MemProfile)
+	_register("runtime.MemProfileRate", runtime.MemProfileRate)
+	_register("runtime.MemProfileRecord", reflect.TypeOf((*runtime.MemProfileRecord)(nil)).Elem())
+	_register("runtime.*MemProfileRecord", reflect.TypeOf((*runtime.MemProfileRecord)(nil)))
+	_register("runtime.MemStats", reflect.TypeOf((*runtime.MemStats)(nil)).Elem())
+	_register("runtime.*MemStats", reflect.TypeOf((*runtime.MemStats)(nil)))
+	_register("runtime.MutexProfile", runtime.MutexProfile)
+	_register("runtime.NumCPU", runtime.NumCPU)
+	_register("runtime.NumCgoCall", runtime.NumCgoCall)
+	_register("runtime.NumGoroutine", runtime.NumGoroutine)
+	_register("runtime.PanicNilError", reflect.TypeOf((*runtime.PanicNilError)(nil)).Elem())
+	_register("runtime.*PanicNilError", reflect.TypeOf((*runtime.PanicNilError)(nil)))
+	_register("runtime.Pinner", reflect.TypeOf((*runtime.Pinner)(nil)).Elem())
+	_register("runtime.*Pinner", reflect.TypeOf((*runtime.Pinner)(nil)))
+	_register("runtime.ReadMemStats", runtime.ReadMemStats)
+	_register("runtime.ReadTrace", runtime.ReadTrace)
+	_register("runtime.SetBlockProfileRate", runtime.SetBlockProfileRate)
+	_register("runtime.SetCPUProfileRate", runtime.SetCPUProfileRate)
+	_register("runtime.SetCgoTraceback", runtime.SetCgoTraceback)
+	_register("runtime.SetFinalizer", runtime.SetFinalizer)
+	_register("runtime.SetMutexProfileFraction", runtime.SetMutexProfileFraction)
+	_register("runtime.Stack", runtime.Stack)
+	_register("runtime.StackRecord", reflect.TypeOf((*runtime.StackRecord)(nil)).Elem())
+	_register("runtime.*StackRecord", reflect.TypeOf((*runtime.StackRecord)(nil)))
+	_register("runtime.StartTrace", runtime.StartTrace)
+	_register("runtime.StopTrace", runtime.StopTrace)
+	_register("runtime.ThreadCreateProfile", runtime.ThreadCreateProfile)
+	_register("runtime.TypeAssertionError", reflect.TypeOf((*runtime.TypeAssertionError)(nil)).Elem())
+	_register("runtime.*TypeAssertionError", reflect.TypeOf((*runtime.TypeAssertionError)(nil)))
+	_register("runtime.UnlockOSThread", runtime.UnlockOSThread)
+	_register("runtime.Version", runtime.Version)
 
 	// package runtime/debug
 	////////////////////////////////////////

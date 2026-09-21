@@ -29,6 +29,7 @@ var defaultPackages = []string{
 	"path/filepath",
 	"reflect",
 	"regexp",
+	"runtime",
 	"runtime/debug",
 	"sort",
 	"strconv",

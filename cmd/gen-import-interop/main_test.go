@@ -25,6 +25,7 @@ func TestDefaultPackagesMatchSupportedPackageMap(t *testing.T) {
 		"path/filepath",
 		"reflect",
 		"regexp",
+		"runtime",
 		"runtime/debug",
 		"sort",
 		"strconv",
@@ -34,7 +35,12 @@ func TestDefaultPackagesMatchSupportedPackageMap(t *testing.T) {
 		"time",
 		"unicode",
 		"github.com/glojurelang/glojure/pkg/lang",
+		"github.com/glojurelang/glojure/pkg/nrepl",
+		"github.com/glojurelang/glojure/pkg/httpserver",
+		"github.com/glojurelang/glojure/pkg/podclient",
+		"github.com/glojurelang/glojure/pkg/repl",
 		"github.com/glojurelang/glojure/pkg/runtime",
+		"github.com/glojurelang/glojure/pkg/srepl",
 	}
 	if !slices.Equal(defaultPackages, want) {
 		t.Fatalf("default packages = %v, want %v", defaultPackages, want)
