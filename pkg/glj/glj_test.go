@@ -17,6 +17,25 @@ func TestGLJ(t *testing.T) {
 	}
 }
 
+func TestEvalSomeBindingsPreserveNonNilValues(t *testing.T) {
+	eval := Var("clojure.core", "eval")
+	for _, macro := range []string{"if-some", "when-some"} {
+		for _, value := range []string{"nil", "false", "0", `"value"`} {
+			t.Run(macro+"/"+value, func(t *testing.T) {
+				form := "(" + macro + " [v " + value + "] [v])"
+				got := eval.Invoke(Read(form))
+				var want any
+				if value != "nil" {
+					want = Read("[" + value + "]")
+				}
+				if !lang.Equals(got, want) {
+					t.Fatalf("eval %s = %v, want %v", form, got, want)
+				}
+			})
+		}
+	}
+}
+
 func TestCoreSlurpLazilyLoadsIONamespace(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "input.txt")
 	if err := os.WriteFile(path, []byte("lazy io"), 0o600); err != nil {

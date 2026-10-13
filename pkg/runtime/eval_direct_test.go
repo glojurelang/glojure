@@ -10,6 +10,7 @@ import (
 
 func TestResolveHostIncludesCoreNamespaceIntrinsics(t *testing.T) {
 	intrinsics := map[string]interface{}{
+		identicalHostExport:          lang.Identical,
 		findNamespaceHostExport:      lang.FindNamespace,
 		pushThreadBindingsHostExport: lang.PushThreadBindings,
 		popThreadBindingsHostExport:  lang.PopThreadBindings,

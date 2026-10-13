@@ -12,6 +12,7 @@ import (
 // independent of the large, optional Go export registry.
 const (
 	numbersHostExport            = "github.com:glojurelang:glojure:pkg:lang.Numbers"
+	identicalHostExport          = "github.com:glojurelang:glojure:pkg:lang.Identical"
 	findNamespaceHostExport      = "github.com:glojurelang:glojure:pkg:lang.FindNamespace"
 	pushThreadBindingsHostExport = "github.com:glojurelang:glojure:pkg:lang.PushThreadBindings"
 	popThreadBindingsHostExport  = "github.com:glojurelang:glojure:pkg:lang.PopThreadBindings"
@@ -22,6 +23,8 @@ func resolveHost(sym *lang.Symbol) (interface{}, bool) {
 	switch sym.String() {
 	case numbersHostExport:
 		return lang.Numbers, true
+	case identicalHostExport:
+		return lang.Identical, true
 	case findNamespaceHostExport:
 		return lang.FindNamespace, true
 	case pushThreadBindingsHostExport:
