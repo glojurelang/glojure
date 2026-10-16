@@ -21,7 +21,7 @@ func SortSlice(slice []any, comp any) {
 	// Use sort.SliceStable for stable sorting (maintains relative order of equal elements)
 	sort.SliceStable(slice, func(i, j int) bool {
 		// Call the comparator function with the two elements
-		result := compFn.Invoke(slice[i], slice[j])
+		result := Apply2(compFn, slice[i], slice[j])
 
 		// Handle both boolean and numeric comparators
 		// Boolean comparator: returns true if i < j

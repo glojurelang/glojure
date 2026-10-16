@@ -1020,6 +1020,7 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	}
 	installFixedArityCoreFunction(core, "mapv", 2, lang.FnFunc2(nativeMapv))
 	installFixedArityCoreFunction(core, "filter", 2, lang.FnFunc2(nativeFilterSeq))
+	installFixedArityCoreFunction(core, "distinct", 1, lang.FnFunc1(nativeDistinctSeq))
 	installFixedArityCoreFunction(core, "take", 2, lang.FnFunc2(nativeTakeSeq))
 	if mod := core.FindInternedVar(lang.NewSymbol("mod")); mod != nil {
 		mod.BindRoot(lang.FnFunc2(nativeMod))
@@ -1028,7 +1029,7 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 
 func recordOptimizableCoreRoots(core *lang.Namespace) {
 	recordDefaultCoreRoots(core,
-		"*", "+", "assoc", "atom", "cons", "conj", "count", "dec", "deref",
+		"*", "+", "=", "rem", "quot", "assoc", "atom", "cons", "conj", "count", "dec", "deref",
 		"empty?", "even?", "filter", "first", "get", "identity", "inc", "map",
 		"neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
 		"reduce", "reset!", "seq", "swap!", "take", "zero?",
@@ -1159,6 +1160,36 @@ func nativeMapSeq(fn, coll interface{}) interface{} {
 func nativeMapcatSeq(fn, coll any) any {
 	return lang.NewLazySeq(func() any {
 		return nativeConcatSeq(nil, nativeMapSeq(fn, coll))
+	})
+}
+
+func nativeDistinctSeq(coll any) any {
+	return nativeDistinctStep(coll, make(map[uint32][]any))
+}
+
+func nativeDistinctStep(coll any, seen map[uint32][]any) lang.ISeq {
+	return lang.NewLazySeq(func() any {
+		for seq := lang.Seq(coll); seq != nil; seq = seq.Next() {
+			value := seq.First()
+			hash := lang.HashEq(value)
+			bucket := seen[hash]
+			duplicate := false
+			for _, previous := range bucket {
+				if lang.Equiv(value, previous) {
+					duplicate = true
+					break
+				}
+			}
+			if duplicate {
+				continue
+			}
+			rest := seq.More()
+			seen[hash] = append(bucket, value)
+			// Only the next unrealized tail can extend this private set.
+			// LazySeq publishes that tail after this insertion completes.
+			return lang.NewCons(value, nativeDistinctStep(rest, seen))
+		}
+		return nil
 	})
 }
 

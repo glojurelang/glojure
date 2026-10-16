@@ -3,16 +3,21 @@ package lang
 import (
 	"fmt"
 	"reflect"
+	"sync/atomic"
 )
+
+// Keep retained suffix views bounded to one ordinary sequence chunk.
+const sliceSeqTailCacheLimit = 32
 
 type (
 	// SliceSeq is an implementation of ISeq for slices.
 	SliceSeq struct {
 		meta         IPersistentMap
-		hash, hasheq uint32
+		hash, hasheq atomic.Uint32
 
-		v reflect.Value
-		i int
+		v    reflect.Value
+		i    int
+		next atomic.Pointer[SliceSeq]
 	}
 )
 
@@ -46,9 +51,11 @@ func (s *SliceSeq) WithMeta(meta IPersistentMap) any {
 		return s
 	}
 
-	cpy := *s
-	cpy.meta = meta
-	return &cpy
+	copy := &SliceSeq{meta: meta, v: s.v, i: s.i}
+	copy.hash.Store(s.hash.Load())
+	copy.hasheq.Store(s.hasheq.Load())
+	copy.next.Store(s.next.Load())
+	return copy
 }
 
 func (s *SliceSeq) First() any {
@@ -60,10 +67,20 @@ func (s *SliceSeq) Next() ISeq {
 	if nxt >= s.v.Len() {
 		return nil
 	}
-	return &SliceSeq{
+	cache := s.v.Len()-nxt <= sliceSeqTailCacheLimit
+	if cache {
+		if next := s.next.Load(); next != nil {
+			return next
+		}
+	}
+	next := &SliceSeq{
 		v: s.v,
 		i: nxt,
 	}
+	if !cache || s.next.CompareAndSwap(nil, next) {
+		return next
+	}
+	return s.next.Load()
 }
 
 func (s *SliceSeq) More() ISeq {
@@ -93,11 +110,23 @@ func (s *SliceSeq) Equiv(o any) bool {
 }
 
 func (s *SliceSeq) Hash() uint32 {
-	return aseqHash(&s.hash, s)
+	if hash := s.hash.Load(); hash != 0 {
+		return hash
+	}
+	var hash uint32
+	aseqHash(&hash, s)
+	s.hash.CompareAndSwap(0, hash)
+	return hash
 }
 
 func (s *SliceSeq) HashEq() uint32 {
-	return aseqHashEq(&s.hasheq, s)
+	if hash := s.hasheq.Load(); hash != 0 {
+		return hash
+	}
+	var hash uint32
+	aseqHashEq(&hash, s)
+	s.hasheq.CompareAndSwap(0, hash)
+	return hash
 }
 
 func (s *SliceSeq) Seq() ISeq {

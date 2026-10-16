@@ -1,6 +1,9 @@
 package lang
 
-import "testing"
+import (
+	"sync"
+	"testing"
+)
 
 func TestSliceSeqIsCounted(t *testing.T) {
 	for _, value := range []any{[]any{1, 2, 3}, []int{1, 2, 3}, [3]int{1, 2, 3}} {
@@ -36,4 +39,51 @@ func TestCountStopsAtCountedTail(t *testing.T) {
 	}); allocations != 0 {
 		t.Fatalf("counted tail allocated %v objects", allocations)
 	}
+}
+
+func TestSliceSeqShortTailDoesNotAllocateRepeatedly(t *testing.T) {
+	values := []int64{1, 2, 3}
+	seq := NewSliceSeq(values)
+	tail := seq.Next()
+	if allocations := testing.AllocsPerRun(1000, func() { seq.Next() }); allocations != 0 {
+		t.Fatalf("repeated Next allocated %v objects", allocations)
+	}
+	values[1] = 42
+	if tail.First() != int64(42) || seq.Next().First() != int64(42) {
+		t.Fatal("cached suffix lost its backing array view")
+	}
+	large := NewSliceSeq(make([]int, 1000)).(*SliceSeq)
+	large.Next()
+	if large.next.Load() != nil {
+		t.Fatal("large array retained an unbounded suffix chain")
+	}
+}
+
+func TestSliceSeqConcurrentTailsAndHashes(t *testing.T) {
+	seq := NewSliceSeq([]any{int64(1), int64(2), int64(3)})
+	want := NewList(int64(2), int64(3))
+	wantHash, wantHashEq := Hash(want), HashEq(want)
+	meta := NewMap(NewKeyword("test"), true)
+	var workers sync.WaitGroup
+	start := make(chan struct{})
+	for i := 0; i < 16; i++ {
+		workers.Add(1)
+		go func() {
+			defer workers.Done()
+			<-start
+			tail := seq.Next().(*SliceSeq)
+			if tail.First() != int64(2) || tail.Count() != 2 {
+				t.Error("incorrect cached suffix")
+			}
+			if tail.Hash() != wantHash || tail.HashEq() != wantHashEq {
+				t.Error("incorrect suffix hash")
+			}
+			tagged := tail.WithMeta(meta).(*SliceSeq)
+			if tagged.Meta() != meta || tagged.Hash() != wantHash || tagged.HashEq() != wantHashEq {
+				t.Error("metadata copy lost suffix content or hashes")
+			}
+		}()
+	}
+	close(start)
+	workers.Wait()
 }

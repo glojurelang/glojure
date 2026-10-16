@@ -14,7 +14,6 @@ type Fn struct {
 
 	astNode *ast.Node
 	env     lang.Environment
-	frames  *sync.Pool
 
 	methodsByArity map[int]*ast.Node
 	variadicMethod *ast.Node
@@ -24,6 +23,8 @@ type Fn struct {
 	singleArity    int
 	singleRecurs   bool
 	singleEval     evalFn
+	singleGuard    *unaryFalseGuard
+	singleNilGuard *nilCountGuard
 	singleParam0   *lang.Symbol
 	singleParam1   *lang.Symbol
 	singleParam2   *lang.Symbol
@@ -49,20 +50,18 @@ type evalFrame struct {
 	args [8]interface{}
 }
 
+var functionFrames = sync.Pool{
+	New: func() interface{} { return &fnFrame{} },
+}
+
 var (
 	_ lang.IObj = (*Fn)(nil)
 )
 
 func NewFn(astNode *ast.Node, env lang.Environment) *Fn {
-	pool := &sync.Pool{
-		New: func() interface{} {
-			return &fnFrame{}
-		},
-	}
 	fn := &Fn{
 		astNode:        astNode,
 		env:            env,
-		frames:         pool,
 		methodsByArity: make(map[int]*ast.Node),
 		methodRecurs:   make(map[*ast.Node]bool),
 		methodEvals:    make(map[*ast.Node]evalFn),
@@ -85,9 +84,21 @@ func NewFn(astNode *ast.Node, env lang.Environment) *Fn {
 		fn.singleRecurs = fn.methodRecurs[fn.singleMethod]
 		fn.singleEval = fn.methodEvals[fn.singleMethod]
 		methodNode := fn.singleMethod.Sub.(*ast.FnMethodNode)
+		if !methodNode.IsVariadic && methodNode.FixedArity <= 3 {
+			if _, ok := env.(*environment); ok {
+				fn.singleNilGuard = compileNilCountGuard(
+					methodNode.Body, methodNode.Params,
+				)
+			}
+		}
 		if !methodNode.IsVariadic && methodNode.FixedArity == 1 {
 			fn.singleArity = 1
 			fn.singleParam0 = methodNode.Params[0].Sub.(*ast.BindingNode).Name
+			if base, ok := env.(*environment); ok {
+				fn.singleGuard = compileUnaryFalseGuard(
+					methodNode.Body, fn.singleParam0, base,
+				)
+			}
 			if fnNode.Local != nil {
 				fn.singleLocal = fnNode.Local.Sub.(*ast.BindingNode).Name
 			}
@@ -145,6 +156,12 @@ func (fn *Fn) Invoke0() interface{} {
 
 func (fn *Fn) Invoke1(a0 interface{}) interface{} {
 	if fn.singleArity == 1 && fn.singleEval != nil && !fn.singleRecurs {
+		if guard := fn.singleGuard; guard != nil && guard.reject(a0) {
+			return guard.otherwise
+		}
+		if guard := fn.singleNilGuard; guard != nil && guard.reject(a0, nil, nil) {
+			return guard.otherwise
+		}
 		return fn.invokeSingle1(a0)
 	}
 	args := [1]interface{}{a0}
@@ -153,6 +170,9 @@ func (fn *Fn) Invoke1(a0 interface{}) interface{} {
 
 func (fn *Fn) Invoke2(a0, a1 interface{}) interface{} {
 	if fn.singleArity == 2 && fn.singleEval != nil && !fn.singleRecurs {
+		if guard := fn.singleNilGuard; guard != nil && guard.reject(a0, a1, nil) {
+			return guard.otherwise
+		}
 		return fn.invokeSingle2(a0, a1)
 	}
 	args := [2]interface{}{a0, a1}
@@ -161,6 +181,9 @@ func (fn *Fn) Invoke2(a0, a1 interface{}) interface{} {
 
 func (fn *Fn) Invoke3(a0, a1, a2 interface{}) interface{} {
 	if fn.singleArity == 3 && fn.singleEval != nil && !fn.singleRecurs {
+		if guard := fn.singleNilGuard; guard != nil && guard.reject(a0, a1, a2) {
+			return guard.otherwise
+		}
 		return fn.invokeSingle3(a0, a1, a2)
 	}
 	args := [3]interface{}{a0, a1, a2}
@@ -237,7 +260,7 @@ func (fn *Fn) acquireFrame() *fnFrame {
 	if !ok {
 		panic(fmt.Errorf("unsupported function environment %T", fn.env))
 	}
-	frame := fn.frames.Get().(*fnFrame)
+	frame := functionFrames.Get().(*fnFrame)
 	frame.captured = false
 	frame.env = *baseEnv
 	frame.env.scope = &frame.scope
@@ -245,17 +268,19 @@ func (fn *Fn) acquireFrame() *fnFrame {
 	frame.env.evalFrame = &frame.eval
 	frame.env.recurTarget = nil
 	frame.env.recurErr = nil
-	frame.scope.reset(baseEnv.scope)
+	frame.scope.parent = baseEnv.scope
 	return frame
 }
 
 func (fn *Fn) releaseFrame(frame *fnFrame) {
-	frame.scope.parent = nil
-	frame.env.scope = nil
-	frame.env.fnFrame = nil
-	frame.env.evalFrame = nil
+	frame.scope.reset(nil)
+	frame.env = environment{}
+	clear(frame.args[:])
 	clear(frame.eval.args[:])
-	fn.frames.Put(frame)
+	clear(frame.recurErr.Args)
+	frame.recurErr.Args = frame.recurErr.Args[:0]
+	frame.recurErr.Target = nil
+	functionFrames.Put(frame)
 }
 
 func (fn *Fn) invoke(args []interface{}) interface{} {
@@ -288,17 +313,7 @@ func (fn *Fn) invokeMethod(
 	bindingRestValue interface{},
 ) interface{} {
 	fnNode := fn.astNode.Sub.(*ast.FnNode)
-	baseEnv, ok := fn.env.(*environment)
-	if !ok {
-		panic(fmt.Errorf("unsupported function environment %T", fn.env))
-	}
-	frame := fn.frames.Get().(*fnFrame)
-	frame.captured = false
-	frame.env = *baseEnv
-	frame.env.scope = &frame.scope
-	frame.env.fnFrame = frame
-	frame.env.evalFrame = &frame.eval
-	frame.scope.reset(baseEnv.scope)
+	frame := fn.acquireFrame()
 	fnEnv := &frame.env
 	defer func() {
 		if !frame.captured {

@@ -118,6 +118,26 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 		}
 		return func(*environment) (interface{}, error) { return vr.Get(), nil }
 
+	case ast.OpFn, ast.OpLoop:
+		return c.compileScopedAST(n)
+
+	case ast.OpVector:
+		items := c.compileArgs(n.Sub.(*ast.VectorNode).Items)
+		if items == nil {
+			return nil
+		}
+		return func(env *environment) (interface{}, error) {
+			values := make([]interface{}, len(items))
+			for i, item := range items {
+				value, err := item(env)
+				if err != nil {
+					return nil, err
+				}
+				values[i] = value
+			}
+			return lang.NewVector(values...), nil
+		}
+
 	case ast.OpIf:
 		ifNode := n.Sub.(*ast.IfNode)
 		test := c.compile(ifNode.Test)
@@ -516,8 +536,8 @@ func compileNumberCall(call *ast.HostCallNode, args []evalFn) evalFn {
 			if err != nil {
 				return nil, err
 			}
-			ai, aok := a.(int64)
-			bi, bok := b.(int64)
+			ai, aok := evalInt64Value(a)
+			bi, bok := evalInt64Value(b)
 			if aok && bok {
 				switch name {
 				case "add":
@@ -552,6 +572,19 @@ func compileNumberCall(call *ast.HostCallNode, args []evalFn) evalFn {
 		}
 	}
 	return nil
+}
+
+// Host collection counts are Go ints. They use the same signed integer
+// operations as Clojure longs without going through generic numeric dispatch.
+func evalInt64Value(value interface{}) (int64, bool) {
+	switch value := value.(type) {
+	case int64:
+		return value, true
+	case int:
+		return int64(value), true
+	default:
+		return 0, false
+	}
 }
 
 func (c threadedEvalCompiler) compileArgs(nodes []*ast.Node) []evalFn {
