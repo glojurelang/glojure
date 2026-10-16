@@ -71,3 +71,28 @@ func TestClassEqualsUnderlyingReflectType(t *testing.T) {
 		t.Fatal("Class wrapper and its underlying reflect.Type were not equal")
 	}
 }
+
+func TestHasTypeGoAssignability(t *testing.T) {
+	type namedInt int64
+	type otherInt int64
+	type namedSlice []int
+	for _, tc := range []struct {
+		target reflect.Type
+		value  any
+	}{
+		{reflect.TypeOf(namedInt(0)), namedInt(1)},
+		{reflect.TypeOf(namedInt(0)), otherInt(1)},
+		{reflect.TypeOf(namedInt(0)), int64(1)},
+		{reflect.TypeOf([]int{}), namedSlice{1}},
+		{reflect.TypeOf(namedSlice{}), []int{1}},
+		{reflect.TypeOf((*ISeq)(nil)).Elem(), NewList(int64(1))},
+		{reflect.TypeOf((*ISeq)(nil)).Elem(), int64(1)},
+		{reflect.TypeOf((*Symbol)(nil)), (*Symbol)(nil)},
+	} {
+		want := reflect.TypeOf(tc.value).AssignableTo(tc.target)
+		if got := HasType(tc.target, tc.value); got != want {
+			t.Errorf("HasType(%v, %T) = %v, want %v",
+				tc.target, tc.value, got, want)
+		}
+	}
+}

@@ -39,11 +39,6 @@ func HasType(target any, v interface{}) bool {
 	if vType == t {
 		return true
 	}
-	// Two distinct named non-interface types are never assignable, so
-	// the common predicate miss skips the reflect assignability walk.
-	if t.Kind() != reflect.Interface && t.Name() != "" && vType.Name() != "" {
-		return false
-	}
 	return vType.AssignableTo(t)
 }
 

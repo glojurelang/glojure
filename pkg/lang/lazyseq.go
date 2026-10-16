@@ -2,6 +2,7 @@ package lang
 
 import (
 	"sync"
+	"sync/atomic"
 )
 
 type LazySeq struct {
@@ -12,8 +13,8 @@ type LazySeq struct {
 	sv  interface{}
 	seq ISeq
 
-	realizeMtx sync.RWMutex
-	seqMtx     sync.Mutex
+	mu       sync.Mutex
+	seqReady atomic.Bool
 }
 
 func NewLazySeq(fn func() interface{}) ISeq {
@@ -21,10 +22,12 @@ func NewLazySeq(fn func() interface{}) ISeq {
 }
 
 func newLazySeqWithMeta(meta IPersistentMap, seq ISeq) ISeq {
-	return &LazySeq{
+	s := &LazySeq{
 		meta: meta,
 		seq:  seq,
 	}
+	s.seqReady.Store(true)
+	return s
 }
 
 var (
@@ -91,15 +94,24 @@ func (s *LazySeq) Equiv(o interface{}) bool {
 }
 
 func (s *LazySeq) IsRealized() bool {
-	s.realizeMtx.RLock()
-	defer s.realizeMtx.RUnlock()
+	if s.seqReady.Load() {
+		return true
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	return IsNil(s.fn)
 }
 
 func (s *LazySeq) realize() interface{} {
-	s.realizeMtx.Lock()
-	defer s.realizeMtx.Unlock()
+	if s.seqReady.Load() {
+		return s.seq
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.realizeLocked()
+}
 
+func (s *LazySeq) realizeLocked() interface{} {
 	if s.fn != nil {
 		s.sv = s.fn()
 		s.fn = nil
@@ -111,12 +123,21 @@ func (s *LazySeq) realize() interface{} {
 }
 
 func (s *LazySeq) Seq() ISeq {
-	s.seqMtx.Lock()
-	defer s.seqMtx.Unlock()
+	// Publish both nonempty and empty results once. Readers can then skip
+	// locking while the immutable sequence remains safely visible.
+	if s.seqReady.Load() {
+		return s.seq
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.seqReady.Load() {
+		return s.seq
+	}
 
-	s.realize()
+	s.realizeLocked()
 
 	if IsNil(s.sv) {
+		s.seqReady.Store(true)
 		return s.seq
 	}
 	ls := s.sv
@@ -129,6 +150,7 @@ func (s *LazySeq) Seq() ISeq {
 		ls = lseq.realize()
 	}
 	s.seq = Seq(ls)
+	s.seqReady.Store(true)
 	return s.seq
 }
 

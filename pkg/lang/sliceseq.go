@@ -18,6 +18,7 @@ type (
 
 var (
 	_ ASeq        = (*SliceSeq)(nil)
+	_ Counted     = (*SliceSeq)(nil)
 	_ IReduce     = (*SliceSeq)(nil)
 	_ IReduceInit = (*SliceSeq)(nil)
 )
@@ -76,6 +77,8 @@ func (s *SliceSeq) Cons(o any) Conser {
 func (s *SliceSeq) Count() int {
 	return s.v.Len() - s.i
 }
+
+func (s *SliceSeq) xxx_counted() {}
 
 func (s *SliceSeq) Empty() IPersistentCollection {
 	return aseqEmpty()

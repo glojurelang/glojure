@@ -511,6 +511,9 @@ func Count(coll any) int {
 	seq := Seq(coll)
 	count := 0
 	for ; seq != nil; seq = seq.Next() {
+		if counted, ok := seq.(Counted); ok {
+			return count + counted.Count()
+		}
 		count++
 	}
 	return count

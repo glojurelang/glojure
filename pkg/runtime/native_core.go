@@ -1007,6 +1007,17 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 		}
 	}
 	installFixedArityCoreFunction(core, "map", 2, lang.FnFunc2(nativeMapSeq))
+	if mapcat := core.FindInternedVar(lang.NewSymbol("mapcat")); mapcat != nil {
+		if fallback, ok := mapcat.Get().(lang.IFn); ok {
+			installFixedArityCoreFunction(core, "mapcat", 2,
+				lang.FnFunc2(func(fn, coll any) any {
+					if !lang.CanApply(fn) || !lang.CanSeq(coll) {
+						return lang.Apply2(fallback, fn, coll)
+					}
+					return nativeMapcatSeq(fn, coll)
+				}))
+		}
+	}
 	installFixedArityCoreFunction(core, "mapv", 2, lang.FnFunc2(nativeMapv))
 	installFixedArityCoreFunction(core, "filter", 2, lang.FnFunc2(nativeFilterSeq))
 	installFixedArityCoreFunction(core, "take", 2, lang.FnFunc2(nativeTakeSeq))
@@ -1142,6 +1153,40 @@ func nativeMapSeq(fn, coll interface{}) interface{} {
 			lang.Apply1(fn, seq.First()),
 			nativeMapSeq(fn, seq.More()),
 		)
+	})
+}
+
+func nativeMapcatSeq(fn, coll any) any {
+	return lang.NewLazySeq(func() any {
+		return nativeConcatSeq(nil, nativeMapSeq(fn, coll))
+	})
+}
+
+// nativeConcatSeq skips empty input collections within one realization instead
+// of allocating a lazy thunk and concat wrapper for every empty collection.
+func nativeConcatSeq(current, remaining any) lang.ISeq {
+	return lang.NewLazySeq(func() any {
+		for {
+			if seq := lang.Seq(current); seq != nil {
+				if chunked, ok := seq.(lang.IChunkedSeq); ok {
+					chunk := chunked.ChunkedFirst()
+					if chunk.Count() == 0 {
+						current = chunked.ChunkedMore()
+						continue
+					}
+					return lang.NewChunkedCons(chunk,
+						nativeConcatSeq(chunked.ChunkedMore(), remaining))
+				}
+				return lang.NewCons(seq.First(),
+					nativeConcatSeq(seq.More(), remaining))
+			}
+			seq := lang.Seq(remaining)
+			if seq == nil {
+				return nil
+			}
+			current = seq.First()
+			remaining = seq.More()
+		}
 	})
 }
 

@@ -78,7 +78,11 @@ func ToSlice(x any) []any {
 
 	// Handle ISeq
 	if s, ok := x.(ISeq); ok {
-		res := make([]interface{}, 0, Count(x))
+		capacity := 0
+		if counted, ok := s.(Counted); ok {
+			capacity = counted.Count()
+		}
+		res := make([]interface{}, 0, capacity)
 		for s := Seq(s); s != nil; s = s.Next() {
 			res = append(res, s.First())
 		}
