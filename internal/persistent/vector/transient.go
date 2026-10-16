@@ -95,6 +95,7 @@ type Transient struct {
 	tail   []interface{}
 
 	persistent atomic.Bool
+	owned      map[node]struct{}
 }
 
 // NewTransient returns a new transient vector.
@@ -194,12 +195,30 @@ func (t *Transient) Assoc(i int, val interface{}) *Transient {
 		t.tail[i&chunkMask] = val
 		return t
 	}
+	t.root = t.editableNode(t.root)
 	n := t.root
 	for shift := t.height * chunkBits; shift > 0; shift -= chunkBits {
-		n = n[(i>>shift)&chunkMask].(node)
+		index := (i >> shift) & chunkMask
+		child := t.editableNode(n[index].(node))
+		n[index] = child
+		n = child
 	}
 	n[i&chunkMask] = val
 	return t
+}
+
+// A transient may share tree nodes with its persistent input. Copy each path
+// on its first edit, then reuse the nodes owned by this transient thereafter.
+func (t *Transient) editableNode(n node) node {
+	if _, ok := t.owned[n]; ok {
+		return n
+	}
+	if t.owned == nil {
+		t.owned = make(map[node]struct{})
+	}
+	result := clone(n)
+	t.owned[result] = struct{}{}
+	return result
 }
 
 func (t *Transient) tailoff() uint {

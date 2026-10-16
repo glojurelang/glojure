@@ -1025,14 +1025,15 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	if mod := core.FindInternedVar(lang.NewSymbol("mod")); mod != nil {
 		mod.BindRoot(lang.FnFunc2(nativeMod))
 	}
+	installNativeCoreTypePredicates(core)
 }
 
 func recordOptimizableCoreRoots(core *lang.Namespace) {
 	recordDefaultCoreRoots(core,
-		"*", "+", "=", "rem", "quot", "assoc", "atom", "cons", "conj", "count", "dec", "deref",
+		"*", "+", "=", "assoc", "atom", "cons", "conj", "count", "dec", "deref",
 		"empty?", "even?", "filter", "first", "get", "identity", "inc", "map",
 		"neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
-		"reduce", "reset!", "seq", "swap!", "take", "zero?",
+		"quot", "reduce", "rem", "reset!", "rest", "seq", "swap!", "take", "zero?",
 	)
 }
 
@@ -1196,27 +1197,50 @@ func nativeDistinctStep(coll any, seen map[uint32][]any) lang.ISeq {
 // nativeConcatSeq skips empty input collections within one realization instead
 // of allocating a lazy thunk and concat wrapper for every empty collection.
 func nativeConcatSeq(current, remaining any) lang.ISeq {
+	return nativeConcatCursor(concatCursor{current: current, remaining: remaining})
+}
+
+type concatCursor struct {
+	current, remaining any
+	chunk              lang.IChunk
+	index              int
+}
+
+func nativeConcatCursor(cursor concatCursor) lang.ISeq {
 	return lang.NewLazySeq(func() any {
 		for {
-			if seq := lang.Seq(current); seq != nil {
+			if seq := lang.Seq(cursor.current); seq != nil {
 				if chunked, ok := seq.(lang.IChunkedSeq); ok {
 					chunk := chunked.ChunkedFirst()
 					if chunk.Count() == 0 {
-						current = chunked.ChunkedMore()
+						cursor.current = chunked.ChunkedMore()
 						continue
 					}
-					return lang.NewChunkedCons(chunk,
-						nativeConcatSeq(chunked.ChunkedMore(), remaining))
+					cursor.current = chunked.ChunkedMore()
+					return lang.NewChunkedCons(chunk, nativeConcatCursor(cursor))
 				}
-				return lang.NewCons(seq.First(),
-					nativeConcatSeq(seq.More(), remaining))
+				first := seq.First()
+				cursor.current = seq.More()
+				return lang.NewCons(first, nativeConcatCursor(cursor))
 			}
-			seq := lang.Seq(remaining)
+			if cursor.chunk != nil && cursor.index < cursor.chunk.Count() {
+				cursor.current = cursor.chunk.Nth(cursor.index)
+				cursor.index++
+				continue
+			}
+			cursor.chunk = nil
+			cursor.index = 0
+			seq := lang.Seq(cursor.remaining)
 			if seq == nil {
 				return nil
 			}
-			current = seq.First()
-			remaining = seq.More()
+			if chunked, ok := seq.(lang.IChunkedSeq); ok {
+				cursor.chunk = chunked.ChunkedFirst()
+				cursor.remaining = chunked.ChunkedMore()
+				continue
+			}
+			cursor.current = seq.First()
+			cursor.remaining = seq.More()
 		}
 	})
 }

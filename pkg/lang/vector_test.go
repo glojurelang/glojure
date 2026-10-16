@@ -328,3 +328,65 @@ func TestVectorIndexOf(t *testing.T) {
 		t.Fatalf("missing IndexOf = %d, want -1", got)
 	}
 }
+
+func TestVectorAssocUnchangedValuesAvoidTreeCopies(t *testing.T) {
+	values := make([]any, 2500)
+	for i := range values {
+		values[i] = false
+	}
+	vector := NewVector(values...)
+	for _, index := range []int{0, 31, 32, 1023, 1024, 2499} {
+		var result IPersistentVector
+		if allocations := testing.AllocsPerRun(100, func() {
+			result = vector.AssocN(index, false)
+		}); allocations > 1 {
+			t.Fatalf("unchanged association at %d allocated %v objects", index, allocations)
+		}
+		if !Equals(result, vector) {
+			t.Fatal("unchanged association changed vector contents")
+		}
+	}
+	for _, value := range []any{nil, int(42), int64(42), "value", Char('x'), NewKeyword("value"), NewMap()} {
+		vector := NewVector(value)
+		if result := vector.AssocN(0, value); !Identical(result.Nth(0), value) {
+			t.Fatalf("identical %T replacement changed the stored value", value)
+		}
+	}
+}
+
+func TestVectorAssocRetainsReplacementIdentity(t *testing.T) {
+	original, replacement := NewVector(int64(1)), NewVector(int64(1))
+	vector := NewVector(original)
+	updated := vector.AssocN(0, replacement)
+	if updated.Nth(0) != replacement || vector.Nth(0) != original {
+		t.Fatal("association lost object identity or changed the original vector")
+	}
+	makeClosure := func(value int) func() any { return func() any { return value } }
+	vector = NewVector(makeClosure(1))
+	updated = vector.AssocN(0, makeClosure(2))
+	if Apply0(updated.Nth(0)) != 2 || Apply0(vector.Nth(0)) != 1 {
+		t.Fatal("association confused closures with the same code pointer")
+	}
+	appended := NewVector(false).AssocN(1, false)
+	if appended.Count() != 2 {
+		t.Fatal("association at the end did not append")
+	}
+}
+
+func TestUnchangedVectorAssocPreservesPersistentSnapshots(t *testing.T) {
+	values := make([]any, 2500)
+	for i := range values {
+		values[i] = false
+	}
+	original := NewVector(values...)
+	shared := original.AssocN(1000, false).(*Vector)
+	editable := shared.AsTransient().(ITransientVector)
+	editable.AssocN(1000, true)
+	editable.AssocN(2000, true)
+	result := editable.Persistent().(IPersistentVector)
+	for _, index := range []int{1000, 2000} {
+		if original.Nth(index) != false || shared.Nth(index) != false || result.Nth(index) != true {
+			t.Fatalf("transient update at %d changed a persistent snapshot", index)
+		}
+	}
+}

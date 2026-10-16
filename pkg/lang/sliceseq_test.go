@@ -5,6 +5,29 @@ import (
 	"testing"
 )
 
+func TestSliceSeqNativeAndHostBackingViews(t *testing.T) {
+	values := []any{int64(1), int64(2), int64(3)}
+	seq := NewSliceSeq(values)
+	tail := seq.Next()
+	values[1] = int64(42)
+	if tail.First() != int64(42) || seq.Next().First() != int64(42) {
+		t.Fatal("native slice suffix lost its backing view")
+	}
+	for _, input := range []any{
+		[]any{int64(1), int64(2), int64(3)},
+		[]int64{1, 2, 3}, [3]int64{1, 2, 3},
+	} {
+		seq := NewSliceSeq(input).(*SliceSeq)
+		add := FnFunc2(func(a, b any) any { return a.(int64) + b.(int64) })
+		if got := seq.Reduce(add); got != int64(6) {
+			t.Fatalf("Reduce(%T) = %v, want 6", input, got)
+		}
+		if got := seq.ReduceInit(add, int64(10)); got != int64(16) {
+			t.Fatalf("ReduceInit(%T) = %v, want 16", input, got)
+		}
+	}
+}
+
 func TestSliceSeqIsCounted(t *testing.T) {
 	for _, value := range []any{[]any{1, 2, 3}, []int{1, 2, 3}, [3]int{1, 2, 3}} {
 		seq := NewSliceSeq(value)

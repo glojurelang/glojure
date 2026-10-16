@@ -15,7 +15,9 @@ type (
 		meta         IPersistentMap
 		hash, hasheq atomic.Uint32
 
-		v    reflect.Value
+		// Ordinary language slices need no reflection. Other host slices and
+		// arrays retain a reflect.Value view of their backing storage.
+		v    any
 		i    int
 		next atomic.Pointer[SliceSeq]
 	}
@@ -29,6 +31,12 @@ var (
 )
 
 func NewSliceSeq(x any) ISeq {
+	if values, ok := x.([]any); ok {
+		if len(values) == 0 {
+			return nil
+		}
+		return &SliceSeq{v: x}
+	}
 	reflectVal := reflect.ValueOf(x)
 	switch reflectVal.Kind() {
 	case reflect.Array, reflect.Slice:
@@ -41,6 +49,14 @@ func NewSliceSeq(x any) ISeq {
 }
 
 func (s *SliceSeq) xxx_sequential() {}
+
+// HasValue distinguishes a constructed nonempty sequence from its zero value.
+// Interpreter call guards use it before bypassing general panic recovery.
+func (s *SliceSeq) HasValue() bool {
+	// All constructors reject empty inputs and Next checks its bound before
+	// creating a suffix. Only the exported zero value lacks backing storage.
+	return s != nil && s.v != nil
+}
 
 func (s *SliceSeq) Meta() IPersistentMap {
 	return s.meta
@@ -59,15 +75,30 @@ func (s *SliceSeq) WithMeta(meta IPersistentMap) any {
 }
 
 func (s *SliceSeq) First() any {
-	return s.v.Index(s.i).Interface()
+	return s.at(s.i)
+}
+
+func (s *SliceSeq) at(i int) any {
+	if values, ok := s.v.([]any); ok {
+		return values[i]
+	}
+	return s.v.(reflect.Value).Index(i).Interface()
+}
+
+func (s *SliceSeq) length() int {
+	if values, ok := s.v.([]any); ok {
+		return len(values)
+	}
+	return s.v.(reflect.Value).Len()
 }
 
 func (s *SliceSeq) Next() ISeq {
 	nxt := s.i + 1
-	if nxt >= s.v.Len() {
+	length := s.length()
+	if nxt >= length {
 		return nil
 	}
-	cache := s.v.Len()-nxt <= sliceSeqTailCacheLimit
+	cache := length-nxt <= sliceSeqTailCacheLimit
 	if cache {
 		if next := s.next.Load(); next != nil {
 			return next
@@ -92,7 +123,7 @@ func (s *SliceSeq) Cons(o any) Conser {
 }
 
 func (s *SliceSeq) Count() int {
-	return s.v.Len() - s.i
+	return s.length() - s.i
 }
 
 func (s *SliceSeq) xxx_counted() {}
@@ -138,13 +169,13 @@ func (s *SliceSeq) String() string {
 }
 
 func (s *SliceSeq) Reduce(f IFn) any {
-	if s.v.IsZero() || s.v.IsNil() {
+	if s.v == nil {
 		return nil
 	}
 
-	ret := s.v.Index(s.i).Interface()
-	for x := s.i + 1; x < s.v.Len(); x++ {
-		ret = f.Invoke(ret, s.v.Index(x).Interface())
+	ret := s.First()
+	for x := s.i + 1; x < s.length(); x++ {
+		ret = f.Invoke(ret, s.at(x))
 		if IsReduced(ret) {
 			return ret.(IDeref).Deref()
 		}
@@ -153,13 +184,13 @@ func (s *SliceSeq) Reduce(f IFn) any {
 }
 
 func (s *SliceSeq) ReduceInit(f IFn, start any) any {
-	if s.v.IsZero() || s.v.IsNil() {
+	if s.v == nil {
 		return start
 	}
 
-	ret := f.Invoke(start, s.v.Index(s.i).Interface())
-	for x := s.i + 1; x < s.v.Len(); x++ {
-		ret = f.Invoke(ret, s.v.Index(x).Interface())
+	ret := f.Invoke(start, s.First())
+	for x := s.i + 1; x < s.length(); x++ {
+		ret = f.Invoke(ret, s.at(x))
 		if IsReduced(ret) {
 			return ret.(IDeref).Deref()
 		}

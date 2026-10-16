@@ -54,3 +54,24 @@ medians, speed ratios, binary hashes, and the input hash.
 Keep toolchain versions and build options fixed and avoid concurrent builds or
 tests while measuring.
 Confirm gains in a second batch before accepting a performance milestone.
+
+## Training a generated CLI
+
+`profile_cli.py` adds a temporary Go benchmark to an existing Gloat-generated
+CLI module, runs its `main` repeatedly on the supplied source files, and removes
+the benchmark afterwards.
+Use a development module that replaces Glojure with the checkout being tested.
+The CLI must return normally from `main` for the selected inputs.
+
+```bash
+make shell CMD='python3 benchmark/interpreter/profile_cli.py \
+  /path/to/generated-cli /path/to/weird-numbers.ys \
+  --output /path/to/default.pgo'
+```
+
+Training disables existing PGO and uses `-trimpath`.
+The adjacent JSON file records the Go version, command, input hashes, and profile
+hash for the training run.
+Use `go build -pgo=/path/to/default.pgo` to build a candidate with the profile.
+Measure that build separately from source-only improvements, and keep the Go
+version, runtime environment, and remaining flags fixed.

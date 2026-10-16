@@ -91,3 +91,24 @@ func TestNativeMapcatPreservesOutputChunks(t *testing.T) {
 		t.Fatalf("chunked result = %v, want %v", got, want)
 	}
 }
+
+func TestNativeMapcatFinishesOutputBeforeMappingNextChunk(t *testing.T) {
+	calls := 0
+	fn := lang.FnFunc1(func(n any) any {
+		calls++
+		if n == int64(31) {
+			return lang.NewLongRange(0, 50, 1)
+		}
+		return nil
+	})
+	result := lang.Seq(nativeMapcatSeq(fn, lang.NewLongRange(0, 100, 1)))
+	for i := int64(0); i < 50; i++ {
+		if result == nil || result.First() != i || calls != 32 {
+			t.Fatalf("element %d: result %v, mapping calls %d", i, result, calls)
+		}
+		result = result.Next()
+	}
+	if result != nil || calls != 100 {
+		t.Fatalf("end: result %v, mapping calls %d", result, calls)
+	}
+}

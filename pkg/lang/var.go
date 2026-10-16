@@ -303,6 +303,12 @@ func (v *Var) IsMacro() bool {
 	if cached := v.isMacroCached.Load(); cached != 0 {
 		return cached == 2
 	}
+	return v.isMacroUncached()
+}
+
+// Keep metadata realization out of the cached check so hot call guards can
+// inline IsMacro without forcing ordinary function metadata to be realized.
+func (v *Var) isMacroUncached() bool {
 	meta := v.Meta()
 	isMacro := meta.EntryAt(KWMacro)
 	result := isMacro != nil && isMacro.Val() == true

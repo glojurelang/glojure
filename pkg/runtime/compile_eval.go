@@ -212,6 +212,20 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 		if body == nil {
 			return nil
 		}
+		if len(inits) == 0 {
+			return body
+		}
+		if len(inits) == 1 {
+			init, slot := inits[0], slots[0]
+			return func(env *environment) (interface{}, error) {
+				value, err := init(env)
+				if err != nil {
+					return nil, err
+				}
+				env.evalFrame.args[slot] = value
+				return body(env)
+			}
+		}
 		return func(env *environment) (interface{}, error) {
 			for i, init := range inits {
 				value, err := init(env)
@@ -236,7 +250,7 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 			if c.typedLoop {
 				return c.compileNumericRegion(hostCall, numeric)
 			}
-			return numeric
+			return c.compilePositiveCount(hostCall, numeric)
 		}
 		return compileResolvedCall(hostCall.ResolvedMethod, args)
 
@@ -244,6 +258,9 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 		invoke := n.Sub.(*ast.InvokeNode)
 		if pipeline := c.compileReducePipeline(n, invoke); pipeline != nil {
 			return pipeline
+		}
+		if core := c.compileCoreInvoke(n, invoke); core != nil {
+			return core
 		}
 		fn := c.compile(invoke.Fn)
 		args := c.compileArgs(invoke.Args)

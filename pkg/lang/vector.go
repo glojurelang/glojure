@@ -118,11 +118,34 @@ func (v *Vector) AssocN(i int, val any) IPersistentVector {
 	if i < 0 || i > v.Count() {
 		panic(NewIndexOutOfBoundsError())
 	}
+	if i < v.Count() {
+		previous, _ := v.vec.Index(i)
+		if sameVectorValue(previous, val) {
+			return &Vector{attrs: newVectorAttrs(v.Meta()), vec: v.vec}
+		}
+	}
 	result, ok := v.vec.AssocValue(i, val)
 	if !ok {
 		panic(NewIndexOutOfBoundsError())
 	}
 	return &Vector{attrs: newVectorAttrs(v.Meta()), vec: result}
+}
+
+// Only identity-preserving replacements can reuse the vector. Equality alone
+// would discard a distinct replacement object, and function code pointers do
+// not distinguish closures with different captured values.
+func sameVectorValue(previous, replacement any) bool {
+	switch value := previous.(type) {
+	case int:
+		other, ok := replacement.(int)
+		return ok && value == other
+	case nil, bool, int64, string, Char, Keyword,
+		*Map, *Vector, *List, *EmptyList, *PersistentHashMap, *Symbol,
+		*Var, *LazySeq, *Cons, *Atom, *MetaFn, *MultiArityFn, *Volatile:
+		return Identical(previous, replacement)
+	default:
+		return false
+	}
 }
 
 // ReplaceLast returns a persistent vector whose final value is val.
