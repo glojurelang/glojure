@@ -1,0 +1,45 @@
+;; Numeric Clojure equivalent of YAMLScript's Rosetta Code weird-numbers
+;; sample. Keep its sieve, divisor search, and subset search unchanged.
+(declare sieve divisors abundant semiperfect)
+
+(defn weird-numbers [limit]
+  (let [weird (sieve limit)]
+    (vec (filter #(nth weird %) (range 2 limit 2)))))
+
+(defn sieve [limit]
+  (let [weirds (into [] (repeat limit true))]
+    (loop [i 2 weirds weirds]
+      (if (< i limit)
+        (recur (+ i 2)
+          (or
+            (when (get weirds i)
+              (let [divs (divisors i)]
+                (if (abundant i divs)
+                  (when (semiperfect i divs)
+                    (loop [j i weirds weirds]
+                      (if (< j limit)
+                        (recur (+ j i) (assoc weirds j false))
+                        weirds)))
+                  (assoc weirds i false))))
+            weirds))
+        weirds))))
+
+(defn divisors [number]
+  (let [divs (mapcat
+               (fn [n]
+                 (when (= 0 (rem number n))
+                   [n (/ number n)]))
+               (range 1 (sqrt number)))]
+    (rest (sort > (distinct divs)))))
+
+(defn abundant [n divs]
+  (> (reduce + 0 (filter identity divs)) n))
+
+(defn semiperfect [n divs]
+  (when (> (count divs) 0)
+    (let [[div & divs] divs]
+      (if (< n div)
+        (semiperfect n divs)
+        (or (= n div)
+            (semiperfect (- n div) divs)
+            (semiperfect n divs))))))

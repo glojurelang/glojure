@@ -41,6 +41,46 @@ func TestApplySeqRetainsGoFunctionFallback(t *testing.T) {
 	}
 }
 
+func TestApply1LazySeqConstructor(t *testing.T) {
+	type namedThunk func() any
+	for _, name := range []string{"generated", "plain", "named", "nil"} {
+		t.Run(name, func(t *testing.T) {
+			calls := 0
+			body := func() any {
+				calls++
+				return NewList(int64(42))
+			}
+			var thunk any
+			switch name {
+			case "generated":
+				thunk = FnFunc0(body)
+			case "plain":
+				thunk = body
+			case "named":
+				thunk = namedThunk(body)
+			}
+			seq := Apply1(NewLazySeq, thunk).(ISeq)
+			if calls != 0 {
+				t.Fatal("constructor realized its body")
+			}
+			if name == "nil" {
+				if Seq(seq) != nil {
+					t.Fatal("nil body produced a nonempty sequence")
+				}
+				return
+			}
+			for i := 0; i < 2; i++ {
+				if got := seq.First(); got != int64(42) {
+					t.Fatalf("first = %v, want 42", got)
+				}
+			}
+			if calls != 1 {
+				t.Fatalf("body called %d times, want 1", calls)
+			}
+		})
+	}
+}
+
 func TestApply2PreservesNilForTypedInterfaceParameter(t *testing.T) {
 	if got := Apply2(Conj, nil, int64(3)); !Equals(got, NewList(int64(3))) {
 		t.Fatalf("Apply2(Conj, nil, 3) = %v, want (3)", got)

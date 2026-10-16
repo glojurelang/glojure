@@ -22,3 +22,35 @@ interpreter workloads that are closest to Glojure. Keeping them in-process
 removes executable startup noise while profiling and validating changes.
 `BenchmarkLoadLetGoMapFilter` separately exercises the cold source path used
 by short-lived CLI programs.
+
+## Weird numbers and CLI comparisons
+
+The weird numbers fixture is the numeric Clojure equivalent of YAMLScript's
+Rosetta Code sample.
+It preserves the sieve, divisor search, and recursive subset search.
+The execution benchmark loads its definitions before timing; the load benchmark
+measures source evaluation separately.
+
+Run with the project's Makes-provided Go:
+
+```bash
+make shell CMD='go test ./benchmark/interpreter -run TestWeirdNumbers'
+make shell CMD='go test ./benchmark/interpreter -run "^$" \
+  -bench WeirdNumbers -benchmem -cpuprofile .cache/weird.cpu \
+  -memprofile .cache/weird.mem'
+```
+
+For complete YAMLScript CLI measurements, preserve a reference binary and use:
+
+```bash
+python3 benchmark/interpreter/compare_cli.py \
+  /path/to/reference-ys /path/to/candidate-ys /path/to/graalvm-ys \
+  /path/to/weird-numbers.ys --output /path/to/results.json
+```
+
+The runner performs two warmups and eleven timed invocations per binary,
+rotates execution order, verifies identical output, and records elapsed times,
+medians, speed ratios, binary hashes, and the input hash.
+Keep toolchain versions and build options fixed and avoid concurrent builds or
+tests while measuring.
+Confirm gains in a second batch before accepting a performance milestone.

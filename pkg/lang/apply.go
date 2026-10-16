@@ -149,6 +149,19 @@ func Apply1(fn interface{}, a0 any) any {
 		return f(a0)
 	case func(any) float64:
 		return f(a0)
+	case func(func() any) ISeq:
+		// Generated lazy-seq bodies use FnFunc0, which is assignable to
+		// the constructor's unnamed function parameter without reflection.
+		switch thunk := a0.(type) {
+		case FnFunc0:
+			return f(thunk)
+		case func() any:
+			return f(thunk)
+		case nil:
+			return f(nil)
+		default:
+			return Apply(fn, []any{a0})
+		}
 	case func(string) string:
 		return f(a0.(string))
 	case func(string) *regexp.Regexp:
