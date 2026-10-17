@@ -3,6 +3,7 @@ package lang
 import (
 	"math"
 	"reflect"
+	"sync/atomic"
 
 	"github.com/glojurelang/glojure/internal/murmur3"
 )
@@ -271,9 +272,8 @@ func (l *List) WithMeta(meta IPersistentMap) any {
 		return l
 	}
 
-	cpy := *l
-	cpy.meta = meta
-	return &cpy
+	return &List{meta: meta, item: l.item, next: l.next, size: l.size,
+		hash: atomic.LoadUint32(&l.hash), hashEq: atomic.LoadUint32(&l.hashEq)}
 }
 
 func (l *List) Peek() any {
@@ -322,9 +322,21 @@ func listEquiv(a, b *List) bool {
 }
 
 func (l *List) Hash() uint32 {
-	return aseqHash(&l.hash, l)
+	if hash := atomic.LoadUint32(&l.hash); hash != 0 {
+		return hash
+	}
+	var hash uint32
+	aseqHash(&hash, l)
+	atomic.StoreUint32(&l.hash, hash)
+	return hash
 }
 
 func (l *List) HashEq() uint32 {
-	return aseqHashEq(&l.hashEq, l)
+	if hash := atomic.LoadUint32(&l.hashEq); hash != 0 {
+		return hash
+	}
+	var hash uint32
+	aseqHashEq(&hash, l)
+	atomic.StoreUint32(&l.hashEq, hash)
+	return hash
 }

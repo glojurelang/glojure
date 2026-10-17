@@ -6,8 +6,7 @@ import (
 )
 
 type LazySeq struct {
-	meta         IPersistentMap
-	hash, hasheq uint32
+	attrs atomic.Pointer[seqAttributes]
 
 	fn    func() interface{}
 	value any
@@ -34,8 +33,10 @@ func NewLazySeq(fn func() interface{}) ISeq {
 
 func newLazySeqWithMeta(meta IPersistentMap, seq ISeq) ISeq {
 	s := &LazySeq{
-		meta:  meta,
 		value: seq,
+	}
+	if meta != nil {
+		s.attrs.Store(&seqAttributes{meta: meta})
 	}
 	s.seqReady.Store(true)
 	return s
@@ -192,11 +193,11 @@ func (s *LazySeq) ReduceInit(f IFn, init interface{}) interface{} {
 }
 
 func (s *LazySeq) Meta() IPersistentMap {
-	return s.meta
+	return sequenceMeta(&s.attrs)
 }
 
 func (s *LazySeq) WithMeta(meta IPersistentMap) interface{} {
-	if s.meta == meta {
+	if s.Meta() == meta {
 		return s
 	}
 
@@ -204,11 +205,11 @@ func (s *LazySeq) WithMeta(meta IPersistentMap) interface{} {
 }
 
 func (s *LazySeq) Hash() uint32 {
-	return aseqHash(&s.hash, s)
+	return sequenceHash(&s.attrs, s, false)
 }
 
 func (s *LazySeq) HashEq() uint32 {
-	return aseqHashEq(&s.hasheq, s)
+	return sequenceHash(&s.attrs, s, true)
 }
 
 func (s *LazySeq) String() string {

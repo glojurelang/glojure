@@ -960,6 +960,10 @@ func applyUpdateInFunction(applyFn, fn, current interface{}, args []interface{})
 }
 
 func installNativeCoreFunctions(core *lang.Namespace) {
+	installNativeVectorMetadata(core)
+	if arrayMap := core.FindInternedVar(lang.NewSymbol("array-map")); arrayMap != nil {
+		arrayMap.BindRoot(nativeArrayMap{})
+	}
 	if add := core.FindInternedVar(lang.NewSymbol("+")); add != nil {
 		add.BindRoot(nativeCoreAdd{})
 	}
@@ -1022,6 +1026,7 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 			})
 		}
 	}
+	installFixedArityCoreFunction(core, "concat", 2, lang.FnFunc2(func(a, b any) any { return nativeConcatPair(a, b) }))
 	installFixedArityCoreFunction(core, "map", 2, lang.FnFunc2(nativeMapSeq))
 	if mapcat := core.FindInternedVar(lang.NewSymbol("mapcat")); mapcat != nil {
 		if fallback, ok := mapcat.Get().(lang.IFn); ok {
@@ -1057,15 +1062,16 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	if mod := core.FindInternedVar(lang.NewSymbol("mod")); mod != nil {
 		mod.BindRoot(lang.FnFunc2(nativeMod))
 	}
+	installNativePredicateScans(core)
 	installNativeCoreTypePredicates(core)
 }
 
 func recordOptimizableCoreRoots(core *lang.Namespace) {
 	recordDefaultCoreRoots(core,
-		"*", "+", "=", "assoc", "atom", "cons", "conj", "count", "dec", "deref",
-		"dissoc", "empty?", "even?", "filter", "first", "get", "identity", "inc", "map",
-		"mapcat", "neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range", "re-matches",
-		"quot", "reduce", "rem", "reset!", "rest", "seq", "swap!", "take", "vec", "zero?",
+		"*", "+", "=", "apply", "array-map", "assoc", "atom", "concat", "cons", "conj", "count", "dec", "deref",
+		"dissoc", "empty?", "even?", "every?", "filter", "first", "get", "identity", "inc", "into", "get-in", "map", "mapv",
+		"mapcat", "meta", "mod", "distinct", "not-any?", "not-every?", "neg?", "next", "nth", "odd?", "partial", "partition", "peek", "pop", "pos?", "range", "re-matches",
+		"quot", "reduce", "rem", "reset!", "rest", "seq", "some", "str", "swap!", "update-in", "take", "vec", "with-meta", "zero?",
 	)
 }
 

@@ -36,12 +36,14 @@ func (s *vectorSeq) More() ISeq {
 func (s *vectorSeq) Cons(value any) Conser { return NewCons(value, s) }
 
 func (s *vectorSeq) WithMeta(meta IPersistentMap) any {
-	if meta == s.meta {
+	if meta == s.Meta() {
 		return s
 	}
-	copy := *s
-	copy.meta = meta
-	return &copy
+	result := &vectorSeq{apvSeq: apvSeq{v: s.v, i: s.i}}
+	if meta != nil {
+		result.attrs.Store(&seqAttributes{meta: meta})
+	}
+	return result
 }
 
 func (s *vectorSeq) chunkEnd() int { return min(s.i+32-s.i%32, s.v.Count()) }

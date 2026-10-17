@@ -679,11 +679,19 @@ func (m *Map) Seq() ISeq {
 }
 
 func (m *Map) KVReduce(f IFn, init any) any {
-	for entries := m.Seq(); entries != nil; entries = entries.Next() {
-		entry := entries.First().(IMapEntry)
-		init = f.Invoke(init, entry.Key(), entry.Val())
-		if IsReduced(init) {
-			return init.(IDeref).Deref()
+	if m.keywordShape != nil {
+		for i, key := range m.keywordShape.keys {
+			init = Apply3(f, init, key, m.keywordValueAt(i))
+			if IsReduced(init) {
+				return init.(IDeref).Deref()
+			}
+		}
+	} else {
+		for i := 0; i < len(m.keyVals); i += 2 {
+			init = Apply3(f, init, m.keyVals[i], m.keyVals[i+1])
+			if IsReduced(init) {
+				return init.(IDeref).Deref()
+			}
 		}
 	}
 	return init
@@ -801,7 +809,7 @@ func (m *Map) HashEq() uint32 {
 
 func (m *Map) Reduce(f IFn) any {
 	if m.Count() == 0 {
-		return f.Invoke()
+		return Apply0(f)
 	}
 	var res any
 	first := true
@@ -811,7 +819,7 @@ func (m *Map) Reduce(f IFn) any {
 			first = false
 			continue
 		}
-		res = f.Invoke(res, seq.First())
+		res = Apply2(f, res, seq.First())
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}
@@ -822,7 +830,7 @@ func (m *Map) Reduce(f IFn) any {
 func (m *Map) ReduceInit(f IFn, init any) any {
 	res := init
 	for seq := Seq(m); seq != nil; seq = seq.Next() {
-		res = f.Invoke(res, seq.First())
+		res = Apply2(f, res, seq.First())
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}
@@ -1065,7 +1073,7 @@ func (s *MapSeq) Reduce(f IFn) any {
 	if s.shape != nil {
 		acc := s.First()
 		for i := s.index + 1; i < len(s.shaped.keyVals); i++ {
-			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.shaped.keywordValueAt(i)))
+			acc = Apply2(f, acc, NewMapEntry(s.shape.keys[i], s.shaped.keywordValueAt(i)))
 			if IsReduced(acc) {
 				return acc.(IDeref).Deref()
 			}
@@ -1073,11 +1081,11 @@ func (s *MapSeq) Reduce(f IFn) any {
 		return acc
 	}
 	if len(s.keyVals) == 0 {
-		return f.Invoke()
+		return Apply0(f)
 	}
 	acc := s.First()
 	for i := 2; i < len(s.keyVals); i += 2 {
-		acc = f.Invoke(acc, NewMapEntry(s.keyVals[i], s.keyVals[i+1]))
+		acc = Apply2(f, acc, NewMapEntry(s.keyVals[i], s.keyVals[i+1]))
 		if IsReduced(acc) {
 			return acc.(IDeref).Deref()
 		}
@@ -1089,7 +1097,7 @@ func (s *MapSeq) ReduceInit(f IFn, init any) any {
 	if s.shape != nil {
 		acc := init
 		for i := s.index; i < len(s.shaped.keyVals); i++ {
-			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.shaped.keywordValueAt(i)))
+			acc = Apply2(f, acc, NewMapEntry(s.shape.keys[i], s.shaped.keywordValueAt(i)))
 			if IsReduced(acc) {
 				return acc.(IDeref).Deref()
 			}
@@ -1098,7 +1106,7 @@ func (s *MapSeq) ReduceInit(f IFn, init any) any {
 	}
 	acc := init
 	for i := 0; i < len(s.keyVals); i += 2 {
-		acc = f.Invoke(acc, NewMapEntry(s.keyVals[i], s.keyVals[i+1]))
+		acc = Apply2(f, acc, NewMapEntry(s.keyVals[i], s.keyVals[i+1]))
 		if IsReduced(acc) {
 			return acc.(IDeref).Deref()
 		}
@@ -1207,13 +1215,13 @@ func (s *MapKeySeq) Reduce(f IFn) any {
 			first = false
 			continue
 		}
-		res = f.Invoke(res, seq.First())
+		res = Apply2(f, res, seq.First())
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}
 	}
 	if count == 0 {
-		return f.Invoke()
+		return Apply0(f)
 	}
 	return res
 }
@@ -1221,7 +1229,7 @@ func (s *MapKeySeq) Reduce(f IFn) any {
 func (s *MapKeySeq) ReduceInit(f IFn, init any) any {
 	res := init
 	for seq := Seq(s); seq != nil; seq = seq.Next() {
-		res = f.Invoke(res, seq.First())
+		res = Apply2(f, res, seq.First())
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}
@@ -1316,13 +1324,13 @@ func (s *MapValSeq) Reduce(f IFn) any {
 			first = false
 			continue
 		}
-		res = f.Invoke(res, seq.First())
+		res = Apply2(f, res, seq.First())
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}
 	}
 	if count == 0 {
-		return f.Invoke()
+		return Apply0(f)
 	}
 	return res
 }
@@ -1330,7 +1338,7 @@ func (s *MapValSeq) Reduce(f IFn) any {
 func (s *MapValSeq) ReduceInit(f IFn, init any) any {
 	res := init
 	for seq := Seq(s); seq != nil; seq = seq.Next() {
-		res = f.Invoke(res, seq.First())
+		res = Apply2(f, res, seq.First())
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}

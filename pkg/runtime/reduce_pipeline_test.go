@@ -65,14 +65,8 @@ func TestReducePipelineTakeStopsNonRangeSource(t *testing.T) {
 }
 
 func TestDefaultCoreVarGuardTracksRedefinition(t *testing.T) {
-	defaultCoreRoots.Lock()
-	original := defaultCoreRoots.byVar
-	defaultCoreRoots.Unlock()
-	defer func() {
-		defaultCoreRoots.Lock()
-		defaultCoreRoots.byVar = original
-		defaultCoreRoots.Unlock()
-	}()
+	original := defaultCoreRoots.Load()
+	defer defaultCoreRoots.Store(original)
 
 	core := lang.FindOrCreateNamespace(lang.NewSymbol("core-root-guard-test"))
 	vr := core.InternWithValue(

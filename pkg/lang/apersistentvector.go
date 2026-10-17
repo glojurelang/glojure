@@ -3,6 +3,7 @@ package lang
 import (
 	"fmt"
 	"reflect"
+	"sync/atomic"
 
 	"github.com/glojurelang/glojure/internal/murmur3"
 )
@@ -17,8 +18,7 @@ type (
 	}
 
 	apvSeq struct {
-		meta         IPersistentMap
-		hash, hasheq uint32
+		attrs atomic.Pointer[seqAttributes]
 
 		v IPersistentVector
 		i int
@@ -288,15 +288,17 @@ func (s *apvSeq) Cons(o any) Conser {
 }
 
 func (s *apvSeq) WithMeta(meta IPersistentMap) any {
-	if meta == s.meta {
+	if meta == s.Meta() {
 		return s
 	}
-	return newAPVSeq(s.v, s.i).WithMeta(meta)
+	result := newAPVSeq(s.v, s.i)
+	if meta != nil {
+		result.attrs.Store(&seqAttributes{meta: meta})
+	}
+	return result
 }
 
-func (s *apvSeq) Meta() IPersistentMap {
-	return s.meta
-}
+func (s *apvSeq) Meta() IPersistentMap { return sequenceMeta(&s.attrs) }
 
 func (s *apvSeq) Reduce(f IFn) any {
 	ret := s.v.Nth(s.i)
@@ -337,11 +339,11 @@ func (s *apvSeq) Equiv(o any) bool {
 }
 
 func (s *apvSeq) Hash() uint32 {
-	return aseqHash(&s.hash, s)
+	return sequenceHash(&s.attrs, s, false)
 }
 
 func (s *apvSeq) HashEq() uint32 {
-	return aseqHashEq(&s.hasheq, s)
+	return sequenceHash(&s.attrs, s, true)
 }
 
 func (s *apvSeq) More() ISeq {

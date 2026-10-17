@@ -227,7 +227,7 @@ func (m *PersistentHashMap) valAtKeyword(key Keyword, notFound any) any {
 
 func (m *PersistentHashMap) Reduce(f IFn) any {
 	if m.Count() == 0 {
-		return f.Invoke()
+		return Apply0(f)
 	}
 	var res any
 	first := true
@@ -237,7 +237,7 @@ func (m *PersistentHashMap) Reduce(f IFn) any {
 			first = false
 			continue
 		}
-		res = f.Invoke(res, seq.First())
+		res = Apply2(f, res, seq.First())
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}
@@ -248,7 +248,7 @@ func (m *PersistentHashMap) Reduce(f IFn) any {
 func (m *PersistentHashMap) ReduceInit(f IFn, init any) any {
 	res := init
 	for seq := Seq(m); seq != nil; seq = seq.Next() {
-		res = f.Invoke(res, seq.First())
+		res = Apply2(f, res, seq.First())
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}

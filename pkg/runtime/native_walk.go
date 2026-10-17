@@ -78,10 +78,10 @@ func (p *treeWalker) Invoke1(form any) any {
 		walked = vector
 	case *lang.Map:
 		var result lang.IPersistentCollection = value.Empty()
-		for seq := value.Seq(); seq != nil; seq = seq.Next() {
-			result = result.Cons(p.Invoke1(seq.First())).(lang.IPersistentCollection)
-		}
-		walked = result
+		walked = value.KVReduce(lang.FnFunc3(func(acc, key, val any) any {
+			entry := p.Invoke1(lang.NewMapEntry(key, val))
+			return acc.(lang.IPersistentCollection).Cons(entry)
+		}), result)
 	case *lang.MapEntry:
 		key := p.Invoke1(value.Key())
 		val := p.Invoke1(value.Val())

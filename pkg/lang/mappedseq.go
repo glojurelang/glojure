@@ -55,9 +55,13 @@ func (s *mappedSeq) realize() {
 	source := Seq(s.source)
 	state := mappedReady
 	var value any
-	if source != nil {
+	for source != nil {
 		if chunked, ok := source.(IChunkedSeq); ok {
 			input := chunked.ChunkedFirst()
+			if input.Count() == 0 {
+				source = Seq(chunked.ChunkedMore())
+				continue
+			}
 			values := make([]any, input.Count())
 			for i := range values {
 				values[i] = Apply1(s.fn, input.Nth(i))
@@ -73,6 +77,7 @@ func (s *mappedSeq) realize() {
 		// that rest or its mapper. Publish both together under one lock.
 		s.tail = &mappedSeq{fn: s.fn, source: source.More()}
 		state |= mappedNonempty
+		break
 	}
 	s.value = value
 	s.fn, s.source = nil, nil

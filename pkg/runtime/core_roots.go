@@ -1,15 +1,18 @@
 package runtime
 
 import (
-	"sync"
+	"sync/atomic"
 
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
-var defaultCoreRoots struct {
-	sync.RWMutex
+type coreRootTable struct {
 	byVar map[*lang.Var]*lang.VarRootVersion
 }
+
+// Each table is immutable after publication, so call guards only need a
+// pointer load when bootstrap or a test installs a replacement table.
+var defaultCoreRoots atomic.Pointer[coreRootTable]
 
 func recordDefaultCoreRoots(core *lang.Namespace, names ...string) {
 	roots := make(map[*lang.Var]*lang.VarRootVersion, len(names))
@@ -19,18 +22,18 @@ func recordDefaultCoreRoots(core *lang.Namespace, names ...string) {
 			roots[vr] = vr.RootVersion()
 		}
 	}
-	defaultCoreRoots.Lock()
-	defaultCoreRoots.byVar = roots
-	defaultCoreRoots.Unlock()
+	defaultCoreRoots.Store(&coreRootTable{byVar: roots})
 }
 
 // IsDefaultCoreVar reports whether vr still has the standard root installed
 // during runtime initialization. Generated optimizations use this guard before
 // replacing higher-order core operations whose Vars remain redefinable.
 func IsDefaultCoreVar(vr *lang.Var) bool {
-	defaultCoreRoots.RLock()
-	version := defaultCoreRoots.byVar[vr]
-	defaultCoreRoots.RUnlock()
+	table := defaultCoreRoots.Load()
+	if table == nil {
+		return false
+	}
+	version := table.byVar[vr]
 	return version != nil && vr.RootVersion() == version &&
 		!vr.IsMacro() && !vr.IsDynamic()
 }

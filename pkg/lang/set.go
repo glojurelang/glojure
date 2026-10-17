@@ -2,6 +2,7 @@ package lang
 
 import (
 	"fmt"
+	"sync/atomic"
 )
 
 // Set represents a map of glojure values.
@@ -154,11 +155,23 @@ func (s *Set) Equiv(o any) bool {
 }
 
 func (s *Set) Hash() uint32 {
-	return apersistentsetHash(&s.hash, s)
+	if hash := atomic.LoadUint32(&s.hash); hash != 0 {
+		return hash
+	}
+	var hash uint32
+	apersistentsetHash(&hash, s)
+	atomic.StoreUint32(&s.hash, hash)
+	return hash
 }
 
 func (s *Set) HashEq() uint32 {
-	return apersistentsetHashEq(&s.hasheq, s)
+	if hash := atomic.LoadUint32(&s.hasheq); hash != 0 {
+		return hash
+	}
+	var hash uint32
+	apersistentsetHashEq(&hash, s)
+	atomic.StoreUint32(&s.hasheq, hash)
+	return hash
 }
 
 func (s *Set) Meta() IPersistentMap {
@@ -170,7 +183,7 @@ func (s *Set) WithMeta(meta IPersistentMap) any {
 		return s
 	}
 
-	cpy := *s
+	cpy := copySetValue(s)
 	cpy.meta = meta
 	return &cpy
 }
@@ -178,7 +191,7 @@ func (s *Set) WithMeta(meta IPersistentMap) any {
 func (s *Set) ReduceInit(f IFn, init any) any {
 	ret := init
 	for seq := s.Seq(); seq != nil; seq = seq.Next() {
-		ret = f.Invoke(ret, seq.First())
+		ret = Apply2(f, ret, seq.First())
 		if IsReduced(ret) {
 			return ret.(*Reduced).Deref()
 		}
@@ -189,11 +202,11 @@ func (s *Set) ReduceInit(f IFn, init any) any {
 func (s *Set) Reduce(f IFn) any {
 	seq := s.Seq()
 	if seq == nil {
-		return f.Invoke()
+		return Apply0(f)
 	}
 	ret := seq.First()
 	for seq = seq.Next(); seq != nil; seq = seq.Next() {
-		ret = f.Invoke(ret, seq.First())
+		ret = Apply2(f, ret, seq.First())
 		if IsReduced(ret) {
 			return ret.(*Reduced).Deref()
 		}
@@ -274,7 +287,7 @@ func (s *SortedSet) Cons(v any) Conser {
 		return s
 	}
 	inner := s.Set.Cons(v).(*Set)
-	return &SortedSet{Set: *inner, comparator: s.comparator}
+	return &SortedSet{Set: copySetValue(inner), comparator: s.comparator}
 }
 
 func (s *SortedSet) Disjoin(v any) IPersistentSet {
@@ -282,20 +295,18 @@ func (s *SortedSet) Disjoin(v any) IPersistentSet {
 		return s
 	}
 	inner := s.Set.Disjoin(v).(*Set)
-	return &SortedSet{Set: *inner, comparator: s.comparator}
+	return &SortedSet{Set: copySetValue(inner), comparator: s.comparator}
 }
 
 func (s *SortedSet) Empty() IPersistentCollection {
-	return &SortedSet{Set: *emptySet, comparator: s.comparator}
+	return &SortedSet{Set: copySetValue(emptySet), comparator: s.comparator}
 }
 
 func (s *SortedSet) WithMeta(meta IPersistentMap) any {
 	if meta == s.meta {
 		return s
 	}
-	cpy := *s
-	cpy.meta = meta
-	return &cpy
+	return &SortedSet{Set: *s.Set.WithMeta(meta).(*Set), comparator: s.comparator}
 }
 
 // RSeq satisfies the Reversible interface.
@@ -328,7 +339,7 @@ func (s *SortedSet) EntryKey(entry any) any {
 func (s *SortedSet) ReduceInit(f IFn, init any) any {
 	ret := init
 	for seq := s.Seq(); seq != nil; seq = seq.Next() {
-		ret = f.Invoke(ret, seq.First())
+		ret = Apply2(f, ret, seq.First())
 		if IsReduced(ret) {
 			return ret.(*Reduced).Deref()
 		}
@@ -339,14 +350,19 @@ func (s *SortedSet) ReduceInit(f IFn, init any) any {
 func (s *SortedSet) Reduce(f IFn) any {
 	seq := s.Seq()
 	if seq == nil {
-		return f.Invoke()
+		return Apply0(f)
 	}
 	ret := seq.First()
 	for seq = seq.Next(); seq != nil; seq = seq.Next() {
-		ret = f.Invoke(ret, seq.First())
+		ret = Apply2(f, ret, seq.First())
 		if IsReduced(ret) {
 			return ret.(*Reduced).Deref()
 		}
 	}
 	return ret
+}
+
+func copySetValue(s *Set) Set {
+	return Set{meta: s.meta, hashMap: s.hashMap,
+		hash: atomic.LoadUint32(&s.hash), hasheq: atomic.LoadUint32(&s.hasheq)}
 }

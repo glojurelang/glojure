@@ -1,8 +1,9 @@
 package lang
 
+import "sync/atomic"
+
 type Cons struct {
-	meta         IPersistentMap
-	hash, hasheq uint32
+	attrs atomic.Pointer[seqAttributes]
 
 	first any
 	more  ISeq
@@ -63,15 +64,19 @@ func (c *Cons) More() ISeq {
 }
 
 func (c *Cons) Meta() IPersistentMap {
-	return c.meta
+	return sequenceMeta(&c.attrs)
 }
 
 func (c *Cons) WithMeta(meta IPersistentMap) any {
-	if meta == c.meta {
+	if meta == c.Meta() {
 		return c
 	}
 
-	return &Cons{first: c.first, more: c.more, meta: meta}
+	result := &Cons{first: c.first, more: c.more}
+	if meta != nil {
+		result.attrs.Store(&seqAttributes{meta: meta})
+	}
+	return result
 }
 
 func (c *Cons) Cons(o any) Conser {
@@ -95,11 +100,11 @@ func (c *Cons) Equiv(o any) bool {
 }
 
 func (c *Cons) Hash() uint32 {
-	return aseqHash(&c.hash, c)
+	return sequenceHash(&c.attrs, c, false)
 }
 
 func (c *Cons) HashEq() uint32 {
-	return aseqHashEq(&c.hasheq, c)
+	return sequenceHash(&c.attrs, c, true)
 }
 
 func (c *Cons) String() string {

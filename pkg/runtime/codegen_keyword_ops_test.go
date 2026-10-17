@@ -26,6 +26,13 @@ func TestCompiledKeywordOperationsPreserveOrderAndRedefinition(t *testing.T) {
         (defn full-match [s] (re-matches #"a|ab" s))
         (defn collect [f xs] (vec (map f xs)))
  (defn entries [m] (vec (mapcat seq m)))
+ (defn literal-vector [] [:a 0 :b])
+ (defn literal-set [] #{:a :b})
+ (defn quoted-literal [] [#{'a 'b} '(:x :y) {:nested [:a :b]}])
+ (defn partition-folds [xs]
+  [(reduce (fn [acc group] (conj acc group)) [] (partition 2 xs))
+   (some (fn [[a b]] (when (= a 3) b)) (partition 2 xs))
+   (every? (fn [group] (= 2 (count group))) (partition 2 xs))])
         (defn check []
           (let [events (atom [])
                 result (dissoc
@@ -56,7 +63,17 @@ func TestCompiledKeywordOperationsPreserveOrderAndRedefinition(t *testing.T) {
              (with-redefs [clojure.core/seq (fn [x] [:changed])]
                (entries {:a 1}))
              (with-redefs [clojure.core/mapcat (fn [f xs] [:changed])]
-               (entries {:a 1}))]))`)
+               (entries {:a 1}))
+             (let [path (literal-vector)
+                   members (literal-set)]
+               [(identical? path (literal-vector))
+                (identical? members (literal-set))
+                (conj path :c) (literal-vector)
+                (contains? (conj members :c) :c) (count (literal-set))])
+             [(some identity [nil false 0 1]) (every? identity [1 0])
+              (not-any? identity [nil false]) (not-every? identity [1 false])]
+             (identical? (quoted-literal) (quoted-literal))
+             (partition-folds [1 2 3 4 5])]))`)
 	for _, direct := range []bool{false, true} {
 		t.Run(fmt.Sprintf("direct-link=%v", direct), func(t *testing.T) {
 			runCompiledLiteralOperations(t, ns, direct)
@@ -69,6 +86,9 @@ func runCompiledLiteralOperations(t *testing.T, ns *lang.Namespace, direct bool)
 	var output bytes.Buffer
 	if err := newGenerator(&output, direct).Generate(ns); err != nil {
 		t.Fatal(err)
+	}
+	if !strings.Contains(output.String(), "runtime.FoldPartition(") {
+		t.Fatal("compiler did not fuse a consumed partition")
 	}
 	if !strings.Contains(output.String(), "runtime.VectorMapcatSeq(") {
 		t.Fatal("compiler did not fuse vec of mapcat seq")
@@ -113,9 +133,9 @@ func main() {
 	if err != nil {
 		t.Fatalf("compiled keyword operations: %v\n%s", err, result)
 	}
-	want := `[:found :default :default {:c 3} [:map :a :b] :redefined "ab" ["ab" "a" "b"] nil "" :redefined [2 3 4] [:changed] :changed [[1 2] [:fn :source 1 2]] [:a 1] [:changed] [:changed]]`
+	want := `[:found :default :default {:c 3} [:map :a :b] :redefined "ab" ["ab" "a" "b"] nil "" :redefined [2 3 4] [:changed] :changed [[1 2] [:fn :source 1 2]] [:a 1] [:changed] [:changed] [true true [:a 0 :b :c] [:a 0 :b] true 2] [0 true true true] true [[(1 2) (3 4)] 4 true]]`
 	if direct {
-		want = `[:found :default :default {:c 3} [:map :a :b] {} "ab" ["ab" "a" "b"] nil "" "ab" [2 3 4] [2 3] [2 3] [[1 2] [:fn :source 1 2]] [:a 1] [:changed] [:a 1]]`
+		want = `[:found :default :default {:c 3} [:map :a :b] {} "ab" ["ab" "a" "b"] nil "" "ab" [2 3 4] [2 3] [2 3] [[1 2] [:fn :source 1 2]] [:a 1] [:changed] [:a 1] [true true [:a 0 :b :c] [:a 0 :b] true 2] [0 true true true] true [[(1 2) (3 4)] 4 true]]`
 	}
 	if got := strings.TrimSpace(string(result)); got != want {
 		t.Fatalf("compiled operations = %s, want %s", got, want)

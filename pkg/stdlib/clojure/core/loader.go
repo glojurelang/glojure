@@ -2465,6 +2465,7 @@ func LoadNS() {
 	sym_short_DASH_array := lang.NewSymbolUnchecked("short-array")
 	sym_shortCast := lang.NewSymbolUnchecked("shortCast")
 	sym_shorts := lang.NewSymbolUnchecked("shorts")
+	sym_shuffle := lang.NewSymbolUnchecked("shuffle")
 	sym_shutdown_DASH_agents := lang.NewSymbolUnchecked("shutdown-agents")
 	sym_sigs := lang.NewSymbolUnchecked("sigs")
 	sym_simple_DASH_ident_QMARK_ := lang.NewSymbolUnchecked("simple-ident?")
@@ -3716,6 +3717,8 @@ func LoadNS() {
 	var_clojure_DOT_core_prn := lang.InternVarName(sym_clojure_DOT_core, sym_prn)
 	// var clojure.core/prn-str
 	var_clojure_DOT_core_prn_DASH_str := lang.InternVarName(sym_clojure_DOT_core, sym_prn_DASH_str)
+	// var clojure.core/promise
+	var_clojure_DOT_core_promise := lang.InternVarName(sym_clojure_DOT_core, sym_promise)
 	// var clojure.core/protocol?
 	var_clojure_DOT_core_protocol_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_protocol_QMARK_)
 	// var clojure.core/push-thread-bindings
@@ -3906,6 +3909,8 @@ func LoadNS() {
 	var_clojure_DOT_core_short_DASH_array := lang.InternVarName(sym_clojure_DOT_core, sym_short_DASH_array)
 	// var clojure.core/shorts
 	var_clojure_DOT_core_shorts := lang.InternVarName(sym_clojure_DOT_core, sym_shorts)
+	// var clojure.core/shuffle
+	var_clojure_DOT_core_shuffle := lang.InternVarName(sym_clojure_DOT_core, sym_shuffle)
 	// var clojure.core/shutdown-agents
 	var_clojure_DOT_core_shutdown_DASH_agents := lang.InternVarName(sym_clojure_DOT_core, sym_shutdown_DASH_agents)
 	// var clojure.core/sigs
@@ -4200,9 +4205,34 @@ func LoadNS() {
 	var closed25 any
 	var closed26 any
 	var closed27 any
+	var closed28 any
+	var closed29 any
 	var closed3 any
+	var closed30 any
+	var closed31 any
+	var closed32 any
+	var closed33 any
+	var closed34 any
+	var closed35 any
+	var closed36 any
+	var closed37 any
+	var closed38 any
+	var closed39 any
 	var closed4 any
+	var closed40 any
+	var closed41 any
+	var closed42 any
+	var closed43 any
+	var closed44 any
+	var closed45 any
+	var closed46 any
+	var closed47 any
+	var closed48 any
+	var closed49 any
 	var closed5 any
+	var closed50 any
+	var closed51 any
+	var closed52 any
 	var closed6 any
 	var closed7 any
 	var closed8 any
@@ -4515,25 +4545,79 @@ func LoadNS() {
 		closed18 = sym_divide
 	}
 	{
-		closed19 = sym_and
+		closed19 = lang.NewVector()
 	}
 	{
 		closed2 = sym_multiplyP
 	}
 	{
-		closed20 = sym_andNot
+		closed20 = sym_and
 	}
 	{
-		closed21 = sym_or
+		closed21 = sym_andNot
 	}
 	{
-		closed22 = sym_xor
+		closed22 = sym_or
 	}
 	{
-		closed23 = sym_max
+		closed23 = sym_xor
 	}
 	{
-		closed24 = sym_min
+		closed24 = lang.NewMap()
+	}
+	{
+		closed25 = lang.NewList(sym_SetMacro)
+	}
+	{
+		closed26 = aotKeywordMapNew14(sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
+	}
+	{
+		closed27 = lang.NewSet()
+	}
+	{
+		closed28 = lang.NewSet()
+	}
+	{
+		closed29 = lang.NewSet(sym__AMP_)
+	}
+	{
+		closed3 = sym_UncheckedAdd
+	}
+	{
+		closed30 = aotKeywordMapNew14(sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq)
+	}
+	{
+		closed31 = lang.NewSet()
+	}
+	{
+		closed32 = lang.NewSet()
+	}
+	{
+		closed33 = aotKeywordMapNew14(sym_clojure_DOT_lang_DOT_IChunk)
+	}
+	{
+		closed34 = lang.NewSet()
+	}
+	{
+		closed35 = lang.NewList(kw_exclude, kw_only, kw_rename, kw_refer)
+	}
+	{
+		closed36 = lang.NewSet(kw_use, kw_refer, kw_verbose, kw_require, kw_reload_DASH_all, kw_reload, kw_as_DASH_alias, kw_as)
+	}
+	{
+		closed37 = aotKeywordMapNew20(lang.NewMap(), lang.NewMap(), lang.NewMap())
+	}
+	{
+		closed38 = sym_max
+	}
+	{
+		closed39 = lang.NewSet()
+	}
+	{
+		closed4 = sym_add
+	}
+	{
+		closed40 = sym_min
 	}
 	{
 		var tmp0 lang.FnFunc1
@@ -4548,7 +4632,7 @@ func LoadNS() {
 			}
 			return tmp2
 		})
-		closed25 = tmp0
+		closed41 = tmp0
 	}
 	{
 		var tmp0 lang.FnFunc2
@@ -4600,7 +4684,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		closed26 = tmp0
+		closed42 = tmp0
 	}
 	{
 		var tmp0 lang.FnFunc2
@@ -4633,16 +4717,37 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		closed27 = tmp0
+		closed43 = tmp0
 	}
 	{
-		closed3 = sym_UncheckedAdd
+		closed44 = lang.NewSet()
 	}
 	{
-		closed4 = sym_add
+		closed45 = lang.NewVector(int64(0), int64(0))
+	}
+	{
+		closed46 = lang.NewSet()
+	}
+	{
+		closed47 = lang.NewVector(int64(0), int64(0))
+	}
+	{
+		closed48 = lang.NewSet()
+	}
+	{
+		closed49 = lang.NewSet()
 	}
 	{
 		closed5 = sym_addP
+	}
+	{
+		closed50 = lang.NewSet()
+	}
+	{
+		closed51 = aotKeywordMapNew14(sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Volatile)
+	}
+	{
+		closed52 = lang.NewList(sym__DOT__DOT_, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_Var, sym_create, sym_setDynamic)
 	}
 	{
 		closed6 = sym_unchecked_minus
@@ -4741,277 +4846,6 @@ func LoadNS() {
 		var_clojure_DOT_core_StackTraceElement_DASH__GT_vec = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_StackTraceElement_DASH__GT_vec.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core_print.glj", kw_line, int(436), kw_column, int(7), kw_end_DASH_line, int(436), kw_end_DASH_column, int(28), kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a StackTraceElement: [class method file line]", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
-		}, false)
-	}
-	// Throwable->map
-	{
-		tmp0 := sym_Throwable_DASH__GT_map
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			{ // let
-				// let binding "base"
-				var tmp4 lang.FnFunc1
-				tmp4 = lang.FnFunc1(func(p0 any) any {
-					v5 := p0
-					_ = v5
-					tmp6 := aotDirectFn100(v5)
-					tmp7, ok := lang.FieldOrMethod(tmp6, "Name")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp6, "Name")))
-					}
-					var tmp8 any
-					switch reflect.TypeOf(tmp7).Kind() {
-					case reflect.Func:
-						tmp8 = lang.Apply(tmp7, nil)
-					default:
-						tmp8 = tmp7
-					}
-					tmp9 := aotDirectFn505Arity1(tmp8)
-					tmp10 := aotKeywordMapNew7(tmp9)
-					var tmp11 any
-					{ // let
-						// let binding "temp__0__auto__"
-						tmp12, ok := lang.FieldOrMethod(v5, "getLocalizedMessage")
-						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v5, "getLocalizedMessage")))
-						}
-						var tmp13 any
-						switch reflect.TypeOf(tmp12).Kind() {
-						case reflect.Func:
-							tmp13 = lang.Apply(tmp12, nil)
-						default:
-							tmp13 = tmp12
-						}
-						var v14 any = tmp13
-						_ = v14
-						var tmp15 any
-						if lang.IsTruthy(v14) {
-							var tmp16 any
-							{ // let
-								// let binding "msg"
-								var v17 any = v14
-								_ = v17
-								tmp18 := aotKeywordMapNew8(v17)
-								tmp16 = tmp18
-							} // end let
-							tmp15 = tmp16
-						} else {
-						}
-						tmp11 = tmp15
-					} // end let
-					var tmp12 any
-					{ // let
-						// let binding "temp__0__auto__"
-						tmp13 := aotDirectFn169(v5)
-						var v14 any = tmp13
-						_ = v14
-						var tmp15 any
-						if lang.IsTruthy(v14) {
-							var tmp16 any
-							{ // let
-								// let binding "ed"
-								var v17 any = v14
-								_ = v17
-								tmp18 := aotKeywordMapNew9(v17)
-								tmp16 = tmp18
-							} // end let
-							tmp15 = tmp16
-						} else {
-						}
-						tmp12 = tmp15
-					} // end let
-					var tmp13 any
-					{ // let
-						// let binding "st"
-						tmp14, ok := lang.FieldOrMethod(v5, "getStackTrace")
-						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v5, "getStackTrace")))
-						}
-						var tmp15 any
-						switch reflect.TypeOf(tmp14).Kind() {
-						case reflect.Func:
-							tmp15 = lang.Apply(tmp14, nil)
-						default:
-							tmp15 = tmp14
-						}
-						var v16 any = tmp15
-						_ = v16
-						var tmp17 any
-						tmp18 := runtime.RT.Alength(v16)
-						tmp19 := lang.Numbers.IsPos(tmp18)
-						if lang.IsTruthy(tmp19) {
-							tmp20 := aotDirectFn26Arity2(v16, int64(0))
-							tmp21 := aotDirectFn16(tmp20)
-							tmp22 := aotKeywordMapNew10(tmp21)
-							tmp17 = tmp22
-						} else {
-						}
-						tmp13 = tmp17
-					} // end let
-					tmp14 := aotDirectFn282.Invoke4(tmp10, tmp11, tmp12, tmp13)
-					return tmp14
-				})
-				var v5 any = tmp4
-				_ = v5
-				// let binding "via"
-				var tmp6 any
-				{ // let
-					// let binding "via"
-					tmp7 := lang.NewVector()
-					var v8 any = tmp7
-					_ = v8
-					// let binding "t"
-					var v9 any = v2
-					_ = v9
-					for {
-						var tmp10 any
-						if lang.IsTruthy(v9) {
-							tmp12 := aotDirectFn113Arity2(v8, v9)
-							var tmp11 any = tmp12
-							tmp14, ok := lang.FieldOrMethod(v9, "getCause")
-							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v9, "getCause")))
-							}
-							var tmp15 any
-							switch reflect.TypeOf(tmp14).Kind() {
-							case reflect.Func:
-								tmp15 = lang.Apply(tmp14, nil)
-							default:
-								tmp15 = tmp14
-							}
-							var tmp13 any = tmp15
-							v8 = tmp11
-							v9 = tmp13
-							continue
-						} else {
-							tmp10 = v8
-						}
-						tmp6 = tmp10
-						break
-					}
-				} // end let
-				var v7 any = tmp6
-				_ = v7
-				// let binding "root"
-				tmp8 := aotDirectFn341(v7)
-				var v9 any = tmp8
-				_ = v9
-				tmp10 := aotDirectFn271Arity2(v5, v7)
-				tmp11 := aotDirectFn562(tmp10)
-				tmp12 := checkDerefVar(var_clojure_DOT_core_StackTraceElement_DASH__GT_vec)
-				var tmp13 any
-				{ // let
-					// let binding "or__0__auto__"
-					var v14 any = v9
-					_ = v14
-					var tmp15 any
-					if lang.IsTruthy(v14) {
-						tmp15 = v14
-					} else {
-						tmp15 = v2
-					}
-					tmp13 = tmp15
-				} // end let
-				tmp14, ok := lang.FieldOrMethod(tmp13, "getStackTrace")
-				if !ok {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp13, "getStackTrace")))
-				}
-				var tmp15 any
-				switch reflect.TypeOf(tmp14).Kind() {
-				case reflect.Func:
-					tmp15 = lang.Apply(tmp14, nil)
-				default:
-					tmp15 = tmp14
-				}
-				tmp16 := aotDirectFn271Arity2(tmp12, tmp15)
-				tmp17 := aotDirectFn562(tmp16)
-				tmp18 := aotKeywordMapNew11(tmp11, tmp17)
-				var tmp19 any
-				{ // let
-					// let binding "temp__0__auto__"
-					tmp20, ok := lang.FieldOrMethod(v9, "getLocalizedMessage")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v9, "getLocalizedMessage")))
-					}
-					var tmp21 any
-					switch reflect.TypeOf(tmp20).Kind() {
-					case reflect.Func:
-						tmp21 = lang.Apply(tmp20, nil)
-					default:
-						tmp21 = tmp20
-					}
-					var v22 any = tmp21
-					_ = v22
-					var tmp23 any
-					if lang.IsTruthy(v22) {
-						var tmp24 any
-						{ // let
-							// let binding "root-msg"
-							var v25 any = v22
-							_ = v25
-							tmp26 := aotKeywordMapNew12(v25)
-							tmp24 = tmp26
-						} // end let
-						tmp23 = tmp24
-					} else {
-					}
-					tmp19 = tmp23
-				} // end let
-				var tmp20 any
-				{ // let
-					// let binding "temp__0__auto__"
-					tmp21 := aotDirectFn169(v9)
-					var v22 any = tmp21
-					_ = v22
-					var tmp23 any
-					if lang.IsTruthy(v22) {
-						var tmp24 any
-						{ // let
-							// let binding "data"
-							var v25 any = v22
-							_ = v25
-							tmp26 := aotKeywordMapNew9(v25)
-							tmp24 = tmp26
-						} // end let
-						tmp23 = tmp24
-					} else {
-					}
-					tmp20 = tmp23
-				} // end let
-				var tmp21 any
-				{ // let
-					// let binding "temp__0__auto__"
-					tmp22 := aotDirectFn169(v2)
-					tmp23 := aotKeywordSite0.Get(kw_clojure_DOT_error_SLASH_phase, tmp22, nil)
-					var v24 any = tmp23
-					_ = v24
-					var tmp25 any
-					if lang.IsTruthy(v24) {
-						var tmp26 any
-						{ // let
-							// let binding "phase"
-							var v27 any = v24
-							_ = v27
-							tmp28 := aotKeywordMapNew13(v27)
-							tmp26 = tmp28
-						} // end let
-						tmp25 = tmp26
-					} else {
-					}
-					tmp21 = tmp25
-				} // end let
-				tmp22 := aotDirectFn282.Invoke4(tmp18, tmp19, tmp20, tmp21)
-				tmp3 = tmp22
-			} // end let
-			return tmp3
-		})
-		aotDirectFn17 = tmp1
-		var_clojure_DOT_core_Throwable_DASH__GT_map = ns.InternWithValue(tmp0, tmp1, true)
-		var_clojure_DOT_core_Throwable_DASH__GT_map.SetMetaLazyMacro(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core_print.glj", kw_line, int(442), kw_column, int(7), kw_end_DASH_line, int(442), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a Throwable with keys:\n    :cause - root cause message\n    :phase - error phase\n    :via - cause chain, with cause keys:\n             :type - exception class symbol\n             :message - exception message\n             :data - ex-data\n             :at - top stack element\n    :trace - root cause stack elements", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		}, false)
 	}
 	// -protocols
@@ -7442,29 +7276,28 @@ func LoadNS() {
 				var tmp4 any
 				{ // let
 					// let binding "ret"
-					tmp5 := lang.NewVector()
-					var v6 any = tmp5
-					_ = v6
+					var v5 any = closed19
+					_ = v5
 					// let binding "s"
-					var v7 any = v3
-					_ = v7
+					var v6 any = v3
+					_ = v6
 					for {
-						var tmp8 any
-						tmp9 := aotDirectFn299(v7)
-						if lang.IsTruthy(tmp9) {
-							tmp11 := aotDirectFn183(v7)
-							tmp12 := aotDirectFn113Arity2(v6, tmp11)
-							var tmp10 any = tmp12
-							tmp14 := aotDirectFn299(v7)
-							var tmp13 any = tmp14
-							v6 = tmp10
-							v7 = tmp13
+						var tmp7 any
+						tmp8 := aotDirectFn299(v6)
+						if lang.IsTruthy(tmp8) {
+							tmp10 := aotDirectFn183(v6)
+							tmp11 := aotDirectFn113Arity2(v5, tmp10)
+							var tmp9 any = tmp11
+							tmp13 := aotDirectFn299(v6)
+							var tmp12 any = tmp13
+							v5 = tmp9
+							v6 = tmp12
 							continue
 						} else {
-							tmp15 := aotDirectFn447(v6)
-							tmp8 = tmp15
+							tmp14 := aotDirectFn447(v5)
+							tmp7 = tmp14
 						}
-						tmp4 = tmp8
+						tmp4 = tmp7
 						break
 					}
 				} // end let
@@ -8202,8 +8035,7 @@ func LoadNS() {
 		{ // function conj
 			var v2 lang.ArityFn
 			aotDirectFn113Arity0 = lang.FnFunc0(func() any {
-				tmp3 := lang.NewVector()
-				return tmp3
+				return closed19
 			})
 			aotDirectFn113Arity1 = lang.FnFunc1(func(p0 any) any {
 				v3 := p0
@@ -8266,9 +8098,8 @@ func LoadNS() {
 		tmp0 := sym_conj_BANG_
 		var tmp1 lang.ArityFn
 		aotDirectFn114Arity0 = lang.FnFunc0(func() any {
-			tmp2 := lang.NewVector()
-			tmp3 := aotDirectFn521(tmp2)
-			return tmp3
+			tmp2 := aotDirectFn521(closed19)
+			return tmp2
 		})
 		aotDirectFn114Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -9040,14 +8871,13 @@ func LoadNS() {
 						v32 := p1
 						_ = v32
 						tmp33 := checkDerefVar(var_clojure_DOT_core_conj)
-						tmp34 := lang.NewSet()
-						tmp35 := runtime.RT.Get(v29, v32, tmp34)
-						tmp36 := lang.Apply1(v29, v28)
-						tmp37 := aotDirectFn115(v28, tmp36)
-						tmp38 := aotDirectFn404Arity3(tmp33, tmp35, tmp37)
-						var tmp39 any = v31
-						tmp39 = lang.Assoc(tmp39, v32, tmp38)
-						return tmp39
+						tmp34 := runtime.RT.Get(v29, v32, closed27)
+						tmp35 := lang.Apply1(v29, v28)
+						tmp36 := aotDirectFn115(v28, tmp35)
+						tmp37 := aotDirectFn404Arity3(tmp33, tmp34, tmp36)
+						var tmp38 any = v31
+						tmp38 = lang.Assoc(tmp38, v32, tmp37)
+						return tmp38
 					})
 					tmp31 := lang.Apply1(v27, v26)
 					tmp32 := aotDirectFn115(v26, tmp31)
@@ -9085,27 +8915,26 @@ func LoadNS() {
 						}
 						_ = tmp35
 						tmp40 := aotKeywordSite14.Get(kw_parents, v2, nil)
-						tmp41 := lang.NewSet()
-						tmp42 := runtime.RT.Get(v19, v3, tmp41)
-						tmp43 := aotDirectFn113Arity2(tmp42, v4)
-						var tmp44 any = tmp40
-						tmp44 = lang.Assoc(tmp44, v3, tmp43)
-						tmp45 := aotKeywordSite15.Get(kw_ancestors, v2, nil)
-						tmp46 := lang.Apply5(v25, tmp45, v3, v21, v4, v23)
-						tmp47 := aotKeywordSite16.Get(kw_descendants, v2, nil)
-						tmp48 := lang.Apply5(v25, tmp47, v4, v23, v3, v21)
-						tmp49 := aotKeywordMapNew19(tmp44, tmp46, tmp48)
-						tmp27 = tmp49
+						tmp41 := runtime.RT.Get(v19, v3, closed28)
+						tmp42 := aotDirectFn113Arity2(tmp41, v4)
+						var tmp43 any = tmp40
+						tmp43 = lang.Assoc(tmp43, v3, tmp42)
+						tmp44 := aotKeywordSite15.Get(kw_ancestors, v2, nil)
+						tmp45 := lang.Apply5(v25, tmp44, v3, v21, v4, v23)
+						tmp46 := aotKeywordSite16.Get(kw_descendants, v2, nil)
+						tmp47 := lang.Apply5(v25, tmp46, v4, v23, v3, v21)
+						tmp48 := aotKeywordMapNew19(tmp43, tmp45, tmp47)
+						tmp27 = tmp48
 					}
-					var v50 any = tmp27
-					_ = v50
-					var tmp51 any
-					if lang.IsTruthy(v50) {
-						tmp51 = v50
+					var v49 any = tmp27
+					_ = v49
+					var tmp50 any
+					if lang.IsTruthy(v49) {
+						tmp50 = v49
 					} else {
-						tmp51 = v2
+						tmp50 = v2
 					}
-					tmp26 = tmp51
+					tmp26 = tmp50
 				} // end let
 				tmp17 = tmp26
 			} // end let
@@ -9419,48 +9248,47 @@ func LoadNS() {
 				var tmp4 any
 				{ // let
 					// let binding "seen"
-					tmp5 := lang.NewSet()
-					tmp6 := aotDirectFn565(tmp5)
-					var v7 any = tmp6
-					_ = v7
-					var tmp8 lang.ArityFn
-					tmp8 = lang.NewArityFn(
+					tmp5 := aotDirectFn565(closed31)
+					var v6 any = tmp5
+					_ = v6
+					var tmp7 lang.ArityFn
+					tmp7 = lang.NewArityFn(
 						lang.FnFunc0(func() any {
-							tmp9 := lang.Apply0(v3)
-							return tmp9
+							tmp8 := lang.Apply0(v3)
+							return tmp8
 						}),
 						lang.FnFunc1(func(p0 any) any {
-							v9 := p0
-							_ = v9
-							tmp10 := lang.Apply1(v3, v9)
-							return tmp10
+							v8 := p0
+							_ = v8
+							tmp9 := lang.Apply1(v3, v8)
+							return tmp9
 						}),
 						lang.FnFunc2(func(p0, p1 any) any {
-							v9 := p0
+							v8 := p0
+							_ = v8
+							v9 := p1
 							_ = v9
-							v10 := p1
-							_ = v10
-							var tmp11 any
-							tmp12 := aotDirectFn132Arity1(v7)
-							tmp13 := aotDirectFn117(tmp12, v10)
-							if lang.IsTruthy(tmp13) {
-								tmp11 = v9
+							var tmp10 any
+							tmp11 := aotDirectFn132Arity1(v6)
+							tmp12 := aotDirectFn117(tmp11, v9)
+							if lang.IsTruthy(tmp12) {
+								tmp10 = v8
 							} else {
-								tmp14 := v7.(interface{ Deref() any }).Deref()
-								tmp15 := aotDirectFn113Arity2(tmp14, v10)
-								tmp16 := v7.(interface{ Reset(any) any }).Reset(tmp15)
-								_ = tmp16
-								tmp17 := lang.Apply2(v3, v9, v10)
-								tmp11 = tmp17
+								tmp13 := v6.(interface{ Deref() any }).Deref()
+								tmp14 := aotDirectFn113Arity2(tmp13, v9)
+								tmp15 := v6.(interface{ Reset(any) any }).Reset(tmp14)
+								_ = tmp15
+								tmp16 := lang.Apply2(v3, v8, v9)
+								tmp10 = tmp16
 							}
-							return tmp11
+							return tmp10
 						}),
 						nil,
 						nil,
 						nil,
 						0,
 					)
-					tmp4 = tmp8
+					tmp4 = tmp7
 				} // end let
 				return tmp4
 			})
@@ -9552,9 +9380,8 @@ func LoadNS() {
 				}
 				var v5 any = tmp4
 				_ = v5
-				tmp6 := lang.NewSet()
-				tmp7 := lang.Apply2(v5, v2, tmp6)
-				tmp3 = tmp7
+				tmp6 := lang.Apply2(v5, v2, closed32)
+				tmp3 = tmp6
 			} // end let
 			return tmp3
 		})
@@ -12059,46 +11886,45 @@ func LoadNS() {
 			var tmp5 any
 			{ // let
 				// let binding "ret"
-				tmp6 := lang.NewMap()
-				var v7 any = tmp6
-				_ = v7
+				var v6 any = closed24
+				_ = v6
 				// let binding "es"
-				tmp8 := aotDirectFn447(v4)
-				var v9 any = tmp8
-				_ = v9
+				tmp7 := aotDirectFn447(v4)
+				var v8 any = tmp7
+				_ = v8
 				for {
-					var tmp10 any
-					if lang.IsTruthy(v9) {
-						var tmp11 any
-						tmp12 := aotDirectFn183(v9)
-						tmp13 := lang.Apply1(v2, tmp12)
-						tmp14 := lang.Apply1(v3, tmp13)
-						if lang.IsTruthy(tmp14) {
-							tmp16 := aotDirectFn183(v9)
-							tmp17 := aotDirectFn244(tmp16)
-							tmp18 := aotDirectFn183(v9)
-							tmp19 := aotDirectFn556(tmp18)
-							var tmp20 any = v7
-							tmp20 = lang.Assoc(tmp20, tmp17, tmp19)
-							var tmp15 any = tmp20
-							tmp22 := aotDirectFn299(v9)
-							var tmp21 any = tmp22
-							v7 = tmp15
-							v9 = tmp21
+					var tmp9 any
+					if lang.IsTruthy(v8) {
+						var tmp10 any
+						tmp11 := aotDirectFn183(v8)
+						tmp12 := lang.Apply1(v2, tmp11)
+						tmp13 := lang.Apply1(v3, tmp12)
+						if lang.IsTruthy(tmp13) {
+							tmp15 := aotDirectFn183(v8)
+							tmp16 := aotDirectFn244(tmp15)
+							tmp17 := aotDirectFn183(v8)
+							tmp18 := aotDirectFn556(tmp17)
+							var tmp19 any = v6
+							tmp19 = lang.Assoc(tmp19, tmp16, tmp18)
+							var tmp14 any = tmp19
+							tmp21 := aotDirectFn299(v8)
+							var tmp20 any = tmp21
+							v6 = tmp14
+							v8 = tmp20
 							continue
 						} else {
-							var tmp23 any = v7
-							tmp25 := aotDirectFn299(v9)
-							var tmp24 any = tmp25
-							v7 = tmp23
-							v9 = tmp24
+							var tmp22 any = v6
+							tmp24 := aotDirectFn299(v8)
+							var tmp23 any = tmp24
+							v6 = tmp22
+							v8 = tmp23
 							continue
 						}
-						tmp10 = tmp11
+						tmp9 = tmp10
 					} else {
-						tmp10 = v7
+						tmp9 = v6
 					}
-					tmp5 = tmp10
+					tmp5 = tmp9
 					break
 				}
 			} // end let
@@ -12135,11 +11961,10 @@ func LoadNS() {
 				}
 				return tmp7
 			})
-			tmp5 := lang.NewVector()
-			tmp6 := aotDirectFn521(tmp5)
-			tmp7 := aotDirectFn402Arity3(tmp4, tmp6, v3)
-			tmp8 := aotDirectFn342(tmp7)
-			return tmp8
+			tmp5 := aotDirectFn521(closed19)
+			tmp6 := aotDirectFn402Arity3(tmp4, tmp5, v3)
+			tmp7 := aotDirectFn342(tmp6)
+			return tmp7
 		})
 		aotDirectFn178 = tmp1
 		var_clojure_DOT_core_filterv = ns.InternWithValue(tmp0, tmp1, true)
@@ -12705,11 +12530,10 @@ func LoadNS() {
 				tmp8 := aotDirectFn48Arity3(v4, v5, tmp7)
 				return tmp8
 			})
-			tmp4 := lang.NewMap()
-			tmp5 := aotDirectFn521(tmp4)
-			tmp6 := aotDirectFn402Arity3(tmp3, tmp5, v2)
-			tmp7 := aotDirectFn342(tmp6)
-			return tmp7
+			tmp4 := aotDirectFn521(closed24)
+			tmp5 := aotDirectFn402Arity3(tmp3, tmp4, v2)
+			tmp6 := aotDirectFn342(tmp5)
+			return tmp6
 		})
 		aotDirectFn196 = tmp1
 		var_clojure_DOT_core_frequencies = ns.InternWithValue(tmp0, tmp1, true)
@@ -12957,19 +12781,17 @@ func LoadNS() {
 					tmp8 := lang.Apply1(v2, v6)
 					var v9 any = tmp8
 					_ = v9
-					tmp10 := lang.NewVector()
-					tmp11 := runtime.RT.Get(v5, v9, tmp10)
-					tmp12 := aotDirectFn113Arity2(tmp11, v6)
-					tmp13 := aotDirectFn48Arity3(v5, v9, tmp12)
-					tmp7 = tmp13
+					tmp10 := runtime.RT.Get(v5, v9, closed19)
+					tmp11 := aotDirectFn113Arity2(tmp10, v6)
+					tmp12 := aotDirectFn48Arity3(v5, v9, tmp11)
+					tmp7 = tmp12
 				} // end let
 				return tmp7
 			})
-			tmp5 := lang.NewMap()
-			tmp6 := aotDirectFn521(tmp5)
-			tmp7 := aotDirectFn402Arity3(tmp4, tmp6, v3)
-			tmp8 := aotDirectFn342(tmp7)
-			return tmp8
+			tmp5 := aotDirectFn521(closed24)
+			tmp6 := aotDirectFn402Arity3(tmp4, tmp5, v3)
+			tmp7 := aotDirectFn342(tmp6)
+			return tmp7
 		})
 		aotDirectFn208 = tmp1
 		var_clojure_DOT_core_group_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
@@ -13100,8 +12922,7 @@ func LoadNS() {
 		tmp0 := sym_hash_DASH_map
 		var tmp1 lang.ArityFn
 		aotDirectFn211Arity0 = lang.FnFunc0(func() any {
-			tmp2 := lang.NewMap()
-			return tmp2
+			return closed24
 		})
 		tmp1 = lang.NewArityFn(
 			aotDirectFn211Arity0,
@@ -13148,8 +12969,7 @@ func LoadNS() {
 		tmp0 := sym_hash_DASH_set
 		var tmp1 lang.ArityFn
 		aotDirectFn213Arity0 = lang.FnFunc0(func() any {
-			tmp2 := lang.NewSet()
-			return tmp2
+			return closed34
 		})
 		tmp1 = lang.NewArityFn(
 			aotDirectFn213Arity0,
@@ -13691,8 +13511,7 @@ func LoadNS() {
 		tmp0 := sym_into
 		var tmp1 lang.ArityFn
 		aotDirectFn233Arity0 = lang.FnFunc0(func() any {
-			tmp2 := lang.NewVector()
-			return tmp2
+			return closed19
 		})
 		aotDirectFn233Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -14351,9 +14170,8 @@ func LoadNS() {
 								tmp14 := aotDirectFn113Arity2(v11, tmp13)
 								return tmp14
 							})
-							tmp11 := lang.NewVector()
-							tmp12 := aotDirectFn404Arity3(tmp10, tmp11, v8)
-							return tmp12
+							tmp11 := aotDirectFn404Arity3(tmp10, closed19, v8)
+							return tmp11
 						}),
 						lang.FnFunc1(func(p0 any) any {
 							v10 := p0
@@ -14368,9 +14186,8 @@ func LoadNS() {
 								tmp15 := aotDirectFn113Arity2(v12, tmp14)
 								return tmp15
 							})
-							tmp12 := lang.NewVector()
-							tmp13 := aotDirectFn404Arity3(tmp11, tmp12, v8)
-							return tmp13
+							tmp12 := aotDirectFn404Arity3(tmp11, closed19, v8)
+							return tmp12
 						}),
 						lang.FnFunc2(func(p0, p1 any) any {
 							v10 := p0
@@ -14387,9 +14204,8 @@ func LoadNS() {
 								tmp16 := aotDirectFn113Arity2(v13, tmp15)
 								return tmp16
 							})
-							tmp13 := lang.NewVector()
-							tmp14 := aotDirectFn404Arity3(tmp12, tmp13, v8)
-							return tmp14
+							tmp13 := aotDirectFn404Arity3(tmp12, closed19, v8)
+							return tmp13
 						}),
 						lang.FnFunc3(func(p0, p1, p2 any) any {
 							v10 := p0
@@ -14408,9 +14224,8 @@ func LoadNS() {
 								tmp17 := aotDirectFn113Arity2(v14, tmp16)
 								return tmp17
 							})
-							tmp14 := lang.NewVector()
-							tmp15 := aotDirectFn404Arity3(tmp13, tmp14, v8)
-							return tmp15
+							tmp14 := aotDirectFn404Arity3(tmp13, closed19, v8)
+							return tmp14
 						}),
 						nil,
 						lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
@@ -14432,9 +14247,8 @@ func LoadNS() {
 								tmp18 := aotDirectFn113Arity2(v15, tmp17)
 								return tmp18
 							})
-							tmp15 := lang.NewVector()
-							tmp16 := aotDirectFn404Arity3(tmp14, tmp15, v8)
-							return tmp16
+							tmp15 := aotDirectFn404Arity3(tmp14, closed19, v8)
+							return tmp15
 						}),
 						3,
 					)
@@ -15135,132 +14949,131 @@ func LoadNS() {
 					var v22 any = v15
 					_ = v22
 					// let binding "kvs"
-					tmp23 := lang.NewVector()
-					var v24 any = tmp23
-					_ = v24
-					var tmp25 any
+					var v23 any = closed19
+					_ = v23
+					var tmp24 any
 					{ // let
 						// let binding "ns"
-						var v26 any = v6
-						_ = v26
+						var v25 any = v6
+						_ = v25
 						// let binding "G__539"
-						var v27 any = v8
-						_ = v27
+						var v26 any = v8
+						_ = v26
 						// let binding "kvs"
-						var v28 any = v24
-						_ = v28
+						var v27 any = v23
+						_ = v27
 						for {
-							var tmp29 any
+							var tmp28 any
 							{ // let
 								// let binding "ns"
+								var v29 any = v25
+								_ = v29
+								// let binding "vec__546"
 								var v30 any = v26
 								_ = v30
-								// let binding "vec__546"
-								var v31 any = v27
-								_ = v31
 								// let binding "seq__547"
-								tmp32 := aotDirectFn447(v31)
-								var v33 any = tmp32
-								_ = v33
+								tmp31 := aotDirectFn447(v30)
+								var v32 any = tmp31
+								_ = v32
 								// let binding "first__548"
-								tmp34 := aotDirectFn183(v33)
-								var v35 any = tmp34
-								_ = v35
+								tmp33 := aotDirectFn183(v32)
+								var v34 any = tmp33
+								_ = v34
 								// let binding "seq__547"
-								tmp36 := aotDirectFn299(v33)
-								var v37 any = tmp36
-								_ = v37
+								tmp35 := aotDirectFn299(v32)
+								var v36 any = tmp35
+								_ = v36
 								// let binding "vec__549"
-								var v38 any = v35
-								_ = v38
+								var v37 any = v34
+								_ = v37
 								// let binding "k"
-								tmp39 := aotDirectFn319Arity3(v38, int64(0), nil)
-								var v40 any = tmp39
-								_ = v40
+								tmp38 := aotDirectFn319Arity3(v37, int64(0), nil)
+								var v39 any = tmp38
+								_ = v39
 								// let binding "v"
-								tmp41 := aotDirectFn319Arity3(v38, int64(1), nil)
-								var v42 any = tmp41
-								_ = v42
+								tmp40 := aotDirectFn319Arity3(v37, int64(1), nil)
+								var v41 any = tmp40
+								_ = v41
 								// let binding "entry"
-								var v43 any = v38
-								_ = v43
+								var v42 any = v37
+								_ = v42
 								// let binding "entries"
-								var v44 any = v37
-								_ = v44
+								var v43 any = v36
+								_ = v43
 								// let binding "kvs"
-								var v45 any = v28
-								_ = v45
-								var tmp46 any
-								if lang.IsTruthy(v43) {
-									var tmp47 any
-									tmp48 := aotDirectFn376(v40)
-									if lang.IsTruthy(tmp48) {
-										var tmp49 any
-										if lang.IsTruthy(v30) {
-											var tmp50 any
-											tmp51 := aotDirectFn293(v40)
-											tmp52 := aotDirectFn9Arity2(v30, tmp51)
-											if lang.IsTruthy(tmp52) {
-												var tmp53 any = v30
-												var tmp54 any = v44
-												tmp56 := aotDirectFn496(v40)
-												tmp57 := lang.NewVector(tmp56, v42)
-												tmp58 := aotDirectFn113Arity2(v45, tmp57)
-												var tmp55 any = tmp58
+								var v44 any = v27
+								_ = v44
+								var tmp45 any
+								if lang.IsTruthy(v42) {
+									var tmp46 any
+									tmp47 := aotDirectFn376(v39)
+									if lang.IsTruthy(tmp47) {
+										var tmp48 any
+										if lang.IsTruthy(v29) {
+											var tmp49 any
+											tmp50 := aotDirectFn293(v39)
+											tmp51 := aotDirectFn9Arity2(v29, tmp50)
+											if lang.IsTruthy(tmp51) {
+												var tmp52 any = v29
+												var tmp53 any = v43
+												tmp55 := aotDirectFn496(v39)
+												tmp56 := lang.NewVector(tmp55, v41)
+												tmp57 := aotDirectFn113Arity2(v44, tmp56)
+												var tmp54 any = tmp57
+												v25 = tmp52
 												v26 = tmp53
 												v27 = tmp54
-												v28 = tmp55
 												continue
 											} else {
 											}
-											tmp49 = tmp50
+											tmp48 = tmp49
 										} else {
-											var tmp59 any
+											var tmp58 any
 											{ // let
 												// let binding "temp__0__auto__"
-												tmp60 := aotDirectFn293(v40)
-												var v61 any = tmp60
-												_ = v61
-												var tmp62 any
-												if lang.IsTruthy(v61) {
-													var tmp63 any
+												tmp59 := aotDirectFn293(v39)
+												var v60 any = tmp59
+												_ = v60
+												var tmp61 any
+												if lang.IsTruthy(v60) {
+													var tmp62 any
 													{ // let
 														// let binding "new-ns"
-														var v64 any = v61
-														_ = v64
-														var tmp65 any = v64
-														var tmp66 any = v44
-														tmp68 := aotDirectFn496(v40)
-														tmp69 := lang.NewVector(tmp68, v42)
-														tmp70 := aotDirectFn113Arity2(v45, tmp69)
-														var tmp67 any = tmp70
+														var v63 any = v60
+														_ = v63
+														var tmp64 any = v63
+														var tmp65 any = v43
+														tmp67 := aotDirectFn496(v39)
+														tmp68 := lang.NewVector(tmp67, v41)
+														tmp69 := aotDirectFn113Arity2(v44, tmp68)
+														var tmp66 any = tmp69
+														v25 = tmp64
 														v26 = tmp65
 														v27 = tmp66
-														v28 = tmp67
 														continue
 													} // end let
-													tmp62 = tmp63
+													tmp61 = tmp62
 												} else {
 												}
-												tmp59 = tmp62
+												tmp58 = tmp61
 											} // end let
-											tmp49 = tmp59
+											tmp48 = tmp58
 										}
-										tmp47 = tmp49
+										tmp46 = tmp48
 									} else {
 									}
-									tmp46 = tmp47
+									tmp45 = tmp46
 								} else {
-									tmp60 := lang.NewVector(v30, v45)
-									tmp46 = tmp60
+									tmp59 := lang.NewVector(v29, v44)
+									tmp45 = tmp59
 								}
-								tmp29 = tmp46
+								tmp28 = tmp45
 							} // end let
-							tmp25 = tmp29
+							tmp24 = tmp28
 							break
 						}
 					} // end let
-					tmp5 = tmp25
+					tmp5 = tmp24
 				} // end let
 				tmp3 = tmp5
 			} else {
@@ -15916,10 +15729,9 @@ func LoadNS() {
 				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp7 := lang.NewVector()
-				tmp8 := aotDirectFn252Arity3(sym_fn_STAR_, tmp7, v5)
-				tmp9 := lang.Apply3(tmp6, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_WithMonitor, v4, tmp8)
-				return tmp9
+				tmp7 := aotDirectFn252Arity3(sym_fn_STAR_, closed19, v5)
+				tmp8 := lang.Apply3(tmp6, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_WithMonitor, v4, tmp7)
+				return tmp8
 			}),
 			3,
 		)
@@ -16162,11 +15974,7 @@ func LoadNS() {
 		tmp0 := sym_make_DASH_hierarchy
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := lang.NewMap()
-			tmp3 := lang.NewMap()
-			tmp4 := lang.NewMap()
-			tmp5 := aotKeywordMapNew20(tmp2, tmp3, tmp4)
-			return tmp5
+			return closed37
 		})
 		aotDirectFn270 = tmp1
 		var_clojure_DOT_core_make_DASH_hierarchy = ns.InternWithValue(tmp0, tmp1, true)
@@ -16463,9 +16271,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed23
+							tmp6 = closed38
 						} else {
-							tmp6 = closed23
+							tmp6 = closed38
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -16498,9 +16306,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed23
+							tmp7 = closed38
 						} else {
-							tmp7 = closed23
+							tmp7 = closed38
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -16539,9 +16347,9 @@ func LoadNS() {
 						var tmp8 any
 						tmp9 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp9) {
-							tmp8 = closed23
+							tmp8 = closed38
 						} else {
-							tmp8 = closed23
+							tmp8 = closed38
 						}
 						var v10 any = tmp8
 						_ = v10
@@ -17039,59 +16847,58 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "mem"
-				tmp4 := lang.NewMap()
-				tmp5 := aotDirectFn51Arity1(tmp4)
-				var v6 any = tmp5
-				_ = v6
-				var tmp7 lang.ArityFn
-				tmp7 = lang.NewArityFn(
+				tmp4 := aotDirectFn51Arity1(closed24)
+				var v5 any = tmp4
+				_ = v5
+				var tmp6 lang.ArityFn
+				tmp6 = lang.NewArityFn(
 					nil,
 					nil,
 					nil,
 					nil,
 					nil,
 					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
-						var v8 any = rest
-						_ = v8
-						var tmp9 any
+						var v7 any = rest
+						_ = v7
+						var tmp8 any
 						{ // let
 							// let binding "temp__0__auto__"
-							tmp10 := aotDirectFn132Arity1(v6)
-							tmp11 := aotDirectFn179(tmp10, v8)
-							var v12 any = tmp11
-							_ = v12
-							var tmp13 any
-							if lang.IsTruthy(v12) {
-								var tmp14 any
+							tmp9 := aotDirectFn132Arity1(v5)
+							tmp10 := aotDirectFn179(tmp9, v7)
+							var v11 any = tmp10
+							_ = v11
+							var tmp12 any
+							if lang.IsTruthy(v11) {
+								var tmp13 any
 								{ // let
 									// let binding "e"
-									var v15 any = v12
-									_ = v15
-									tmp16 := aotDirectFn556(v15)
-									tmp14 = tmp16
+									var v14 any = v11
+									_ = v14
+									tmp15 := aotDirectFn556(v14)
+									tmp13 = tmp15
 								} // end let
-								tmp13 = tmp14
+								tmp12 = tmp13
 							} else {
-								var tmp15 any
+								var tmp14 any
 								{ // let
 									// let binding "ret"
-									tmp16 := aotDirectFn35Arity2(v2, v8)
-									var v17 any = tmp16
-									_ = v17
-									tmp18 := checkDerefVar(var_clojure_DOT_core_assoc)
-									tmp19 := aotDirectFn503.Invoke4(v6, tmp18, v8, v17)
-									_ = tmp19
-									tmp15 = v17
+									tmp15 := aotDirectFn35Arity2(v2, v7)
+									var v16 any = tmp15
+									_ = v16
+									tmp17 := checkDerefVar(var_clojure_DOT_core_assoc)
+									tmp18 := aotDirectFn503.Invoke4(v5, tmp17, v7, v16)
+									_ = tmp18
+									tmp14 = v16
 								} // end let
-								tmp13 = tmp15
+								tmp12 = tmp14
 							}
-							tmp9 = tmp13
+							tmp8 = tmp12
 						} // end let
-						return tmp9
+						return tmp8
 					}),
 					0,
 				)
-				tmp3 = tmp7
+				tmp3 = tmp6
 			} // end let
 			return tmp3
 		})
@@ -17133,8 +16940,7 @@ func LoadNS() {
 							if lang.IsTruthy(v10) {
 								tmp11 = v10
 							} else {
-								tmp12 := lang.NewMap()
-								tmp11 = tmp12
+								tmp11 = closed24
 							}
 							tmp9 = tmp11
 						} // end let
@@ -17174,53 +16980,51 @@ func LoadNS() {
 				var tmp7 any
 				{ // let
 					// let binding "m"
-					tmp8 := lang.NewMap()
-					var v9 any = tmp8
-					_ = v9
+					var v8 any = closed24
+					_ = v8
 					// let binding "ks"
-					var v10 any = v4
-					_ = v10
+					var v9 any = v4
+					_ = v9
 					// let binding "vs"
-					var v11 any = v5
-					_ = v11
+					var v10 any = v5
+					_ = v10
 					for {
+						var tmp11 any
 						var tmp12 any
-						var tmp13 any
 						{ // let
 							// let binding "and__0__auto__"
-							var v14 any = v10
-							_ = v14
-							var tmp15 any
-							if lang.IsTruthy(v14) {
-								tmp15 = v11
+							var v13 any = v9
+							_ = v13
+							var tmp14 any
+							if lang.IsTruthy(v13) {
+								tmp14 = v10
 							} else {
-								tmp15 = v14
+								tmp14 = v13
 							}
-							tmp13 = tmp15
+							tmp12 = tmp14
 						} // end let
-						if lang.IsTruthy(tmp13) {
-							tmp15 := aotDirectFn183(v10)
-							tmp16 := lang.Hash(tmp15)
-							tmp17 := checkDerefVar(var_clojure_DOT_core_conj)
-							tmp18 := lang.NewVector()
-							tmp19 := aotDirectFn193Arity2(tmp17, tmp18)
-							tmp20 := aotDirectFn183(v10)
-							tmp21 := aotDirectFn183(v11)
-							tmp22 := lang.NewVector(tmp20, tmp21)
-							tmp23 := aotDirectFn549Arity4(v9, tmp16, tmp19, tmp22)
-							var tmp14 any = tmp23
+						if lang.IsTruthy(tmp12) {
+							tmp14 := aotDirectFn183(v9)
+							tmp15 := lang.Hash(tmp14)
+							tmp16 := checkDerefVar(var_clojure_DOT_core_conj)
+							tmp17 := aotDirectFn193Arity2(tmp16, closed19)
+							tmp18 := aotDirectFn183(v9)
+							tmp19 := aotDirectFn183(v10)
+							tmp20 := lang.NewVector(tmp18, tmp19)
+							tmp21 := aotDirectFn549Arity4(v8, tmp15, tmp17, tmp20)
+							var tmp13 any = tmp21
+							tmp23 := aotDirectFn299(v9)
+							var tmp22 any = tmp23
 							tmp25 := aotDirectFn299(v10)
 							var tmp24 any = tmp25
-							tmp27 := aotDirectFn299(v11)
-							var tmp26 any = tmp27
-							v9 = tmp14
+							v8 = tmp13
+							v9 = tmp22
 							v10 = tmp24
-							v11 = tmp26
 							continue
 						} else {
-							tmp12 = v9
+							tmp11 = v8
 						}
-						tmp7 = tmp12
+						tmp7 = tmp11
 						break
 					}
 				} // end let
@@ -17311,31 +17115,29 @@ func LoadNS() {
 					} // end let
 					return tmp14
 				})
-				tmp12 := lang.NewMap()
-				tmp13 := aotDirectFn404Arity3(tmp11, tmp12, v8)
-				var v14 any = tmp13
-				_ = v14
+				tmp12 := aotDirectFn404Arity3(tmp11, closed24, v8)
+				var v13 any = tmp12
+				_ = v13
 				// let binding "skip-check"
-				tmp15 := lang.NewSet()
-				tmp16 := checkDerefVar(var_clojure_DOT_core_first)
-				var tmp17 lang.FnFunc1
-				tmp17 = lang.FnFunc1(func(p0 any) any {
-					v18 := p0
-					_ = v18
-					tmp19 := aotDirectFn442(v18)
-					tmp20 := aotDirectFn118(tmp19)
-					tmp21 := lang.Numbers.Lt(int64(1), tmp20)
-					return tmp21
+				tmp14 := checkDerefVar(var_clojure_DOT_core_first)
+				var tmp15 lang.FnFunc1
+				tmp15 = lang.FnFunc1(func(p0 any) any {
+					v16 := p0
+					_ = v16
+					tmp17 := aotDirectFn442(v16)
+					tmp18 := aotDirectFn118(tmp17)
+					tmp19 := lang.Numbers.Lt(int64(1), tmp18)
+					return tmp19
 				})
-				tmp18 := aotDirectFn176Arity2(tmp17, v8)
-				tmp19 := aotDirectFn271Arity2(tmp16, tmp18)
-				tmp20 := aotDirectFn235(tmp15, tmp19)
-				var v21 any = tmp20
-				_ = v21
-				tmp22 := aotDirectFn245(v14)
-				tmp23 := aotDirectFn557(v14)
-				tmp24 := lang.NewVector(tmp22, tmp23, v21)
-				tmp6 = tmp24
+				tmp16 := aotDirectFn176Arity2(tmp15, v8)
+				tmp17 := aotDirectFn271Arity2(tmp14, tmp16)
+				tmp18 := aotDirectFn235(closed39, tmp17)
+				var v19 any = tmp18
+				_ = v19
+				tmp20 := aotDirectFn245(v13)
+				tmp21 := aotDirectFn557(v13)
+				tmp22 := lang.NewVector(tmp20, tmp21, v19)
+				tmp6 = tmp22
 			} // end let
 			return tmp6
 		})
@@ -17418,8 +17220,7 @@ func LoadNS() {
 								if lang.IsTruthy(v14) {
 									tmp15 = v14
 								} else {
-									tmp16 := lang.NewMap()
-									tmp15 = tmp16
+									tmp15 = closed24
 								}
 								tmp13 = tmp15
 							} // end let
@@ -17557,9 +17358,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed24
+							tmp6 = closed40
 						} else {
-							tmp6 = closed24
+							tmp6 = closed40
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -17592,9 +17393,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed24
+							tmp7 = closed40
 						} else {
-							tmp7 = closed24
+							tmp7 = closed40
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -17633,9 +17434,9 @@ func LoadNS() {
 						var tmp8 any
 						tmp9 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp9) {
-							tmp8 = closed24
+							tmp8 = closed40
 						} else {
-							tmp8 = closed24
+							tmp8 = closed40
 						}
 						var v10 any = tmp8
 						_ = v10
@@ -18418,15 +18219,15 @@ func LoadNS() {
 		tmp0 := sym_not_DASH_any_QMARK_
 		var tmp1 lang.ArityFn
 		aotDirectFn305Arity0 = lang.FnFunc0(func() any {
-			tmp2 := lang.Apply0(closed26)
-			tmp3 := lang.Apply1(closed25, tmp2)
+			tmp2 := lang.Apply0(closed42)
+			tmp3 := lang.Apply1(closed41, tmp2)
 			return tmp3
 		})
 		aotDirectFn305Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(closed26, v2)
-			tmp4 := lang.Apply1(closed25, tmp3)
+			tmp3 := lang.Apply1(closed42, v2)
+			tmp4 := lang.Apply1(closed41, tmp3)
 			return tmp4
 		})
 		aotDirectFn305Arity2 = lang.FnFunc2(func(p0, p1 any) any {
@@ -18434,8 +18235,8 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply2(closed26, v2, v3)
-			tmp5 := lang.Apply1(closed25, tmp4)
+			tmp4 := lang.Apply2(closed42, v2, v3)
+			tmp5 := lang.Apply1(closed41, tmp4)
 			return tmp5
 		})
 		aotDirectFn305Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
@@ -18445,8 +18246,8 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := lang.Apply3(closed26, v2, v3, v4)
-			tmp6 := lang.Apply1(closed25, tmp5)
+			tmp5 := lang.Apply3(closed42, v2, v3, v4)
+			tmp6 := lang.Apply1(closed41, tmp5)
 			return tmp6
 		})
 		tmp1 = lang.NewArityFn(
@@ -18464,8 +18265,8 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-				tmp6 := aotDirectFn35Arity5(closed26, v2, v3, v4, v5)
-				tmp7 := lang.Apply1(closed25, tmp6)
+				tmp6 := aotDirectFn35Arity5(closed42, v2, v3, v4, v5)
+				tmp7 := lang.Apply1(closed41, tmp6)
 				return tmp7
 			}),
 			3,
@@ -18503,15 +18304,15 @@ func LoadNS() {
 		tmp0 := sym_not_DASH_every_QMARK_
 		var tmp1 lang.ArityFn
 		aotDirectFn307Arity0 = lang.FnFunc0(func() any {
-			tmp2 := lang.Apply0(closed27)
-			tmp3 := lang.Apply1(closed25, tmp2)
+			tmp2 := lang.Apply0(closed43)
+			tmp3 := lang.Apply1(closed41, tmp2)
 			return tmp3
 		})
 		aotDirectFn307Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(closed27, v2)
-			tmp4 := lang.Apply1(closed25, tmp3)
+			tmp3 := lang.Apply1(closed43, v2)
+			tmp4 := lang.Apply1(closed41, tmp3)
 			return tmp4
 		})
 		aotDirectFn307Arity2 = lang.FnFunc2(func(p0, p1 any) any {
@@ -18519,8 +18320,8 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply2(closed27, v2, v3)
-			tmp5 := lang.Apply1(closed25, tmp4)
+			tmp4 := lang.Apply2(closed43, v2, v3)
+			tmp5 := lang.Apply1(closed41, tmp4)
 			return tmp5
 		})
 		aotDirectFn307Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
@@ -18530,8 +18331,8 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := lang.Apply3(closed27, v2, v3, v4)
-			tmp6 := lang.Apply1(closed25, tmp5)
+			tmp5 := lang.Apply3(closed43, v2, v3, v4)
+			tmp6 := lang.Apply1(closed41, tmp5)
 			return tmp6
 		})
 		tmp1 = lang.NewArityFn(
@@ -18549,8 +18350,8 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-				tmp6 := aotDirectFn35Arity5(closed27, v2, v3, v4, v5)
-				tmp7 := lang.Apply1(closed25, tmp6)
+				tmp6 := aotDirectFn35Arity5(closed43, v2, v3, v4, v5)
+				tmp7 := lang.Apply1(closed41, tmp6)
 				return tmp7
 			}),
 			3,
@@ -20690,22 +20491,21 @@ func LoadNS() {
 							var tmp12 any
 							{ // let
 								// let binding "p"
-								tmp13 := lang.NewVector()
-								tmp14 := aotDirectFn509Arity1(v2)
-								tmp15 := aotDirectFn233Arity3(tmp13, tmp14, v11)
-								var v16 any = tmp15
-								_ = v16
-								var tmp17 any
-								tmp18 := aotDirectFn118(v16)
-								tmp19 := aotDirectFn9Arity2(v2, tmp18)
-								if lang.IsTruthy(tmp19) {
-									tmp20 := aotDirectFn321(v11, v3)
-									tmp21 := aotDirectFn338Arity3(v2, v3, tmp20)
-									tmp22 := aotDirectFn115(v16, tmp21)
-									tmp17 = tmp22
+								tmp13 := aotDirectFn509Arity1(v2)
+								tmp14 := aotDirectFn233Arity3(closed19, tmp13, v11)
+								var v15 any = tmp14
+								_ = v15
+								var tmp16 any
+								tmp17 := aotDirectFn118(v15)
+								tmp18 := aotDirectFn9Arity2(v2, tmp17)
+								if lang.IsTruthy(tmp18) {
+									tmp19 := aotDirectFn321(v11, v3)
+									tmp20 := aotDirectFn338Arity3(v2, v3, tmp19)
+									tmp21 := aotDirectFn115(v15, tmp20)
+									tmp16 = tmp21
 								} else {
 								}
-								tmp12 = tmp17
+								tmp12 = tmp16
 							} // end let
 							tmp10 = tmp12
 						} // end let
@@ -20746,29 +20546,27 @@ func LoadNS() {
 							var tmp13 any
 							{ // let
 								// let binding "p"
-								tmp14 := lang.NewVector()
-								tmp15 := aotDirectFn509Arity1(v2)
-								tmp16 := aotDirectFn233Arity3(tmp14, tmp15, v12)
-								var v17 any = tmp16
-								_ = v17
-								var tmp18 any
-								tmp19 := aotDirectFn118(v17)
-								tmp20 := aotDirectFn9Arity2(v2, tmp19)
-								if lang.IsTruthy(tmp20) {
-									tmp21 := aotDirectFn321(v12, v3)
-									tmp22 := aotDirectFn338Arity4(v2, v3, v4, tmp21)
-									tmp23 := aotDirectFn115(v17, tmp22)
-									tmp18 = tmp23
+								tmp14 := aotDirectFn509Arity1(v2)
+								tmp15 := aotDirectFn233Arity3(closed19, tmp14, v12)
+								var v16 any = tmp15
+								_ = v16
+								var tmp17 any
+								tmp18 := aotDirectFn118(v16)
+								tmp19 := aotDirectFn9Arity2(v2, tmp18)
+								if lang.IsTruthy(tmp19) {
+									tmp20 := aotDirectFn321(v12, v3)
+									tmp21 := aotDirectFn338Arity4(v2, v3, v4, tmp20)
+									tmp22 := aotDirectFn115(v16, tmp21)
+									tmp17 = tmp22
 								} else {
-									tmp24 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp25 := lang.NewVector()
-									tmp26 := aotDirectFn509Arity1(v2)
-									tmp27 := aotDirectFn112Arity2(v17, v4)
-									tmp28 := aotDirectFn233Arity3(tmp25, tmp26, tmp27)
-									tmp29 := lang.Apply1(tmp24, tmp28)
-									tmp18 = tmp29
+									tmp23 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp24 := aotDirectFn509Arity1(v2)
+									tmp25 := aotDirectFn112Arity2(v16, v4)
+									tmp26 := aotDirectFn233Arity3(closed19, tmp24, tmp25)
+									tmp27 := lang.Apply1(tmp23, tmp26)
+									tmp17 = tmp27
 								}
-								tmp13 = tmp18
+								tmp13 = tmp17
 							} // end let
 							tmp11 = tmp13
 						} // end let
@@ -20840,15 +20638,14 @@ func LoadNS() {
 							var tmp12 any
 							{ // let
 								// let binding "seg"
-								tmp13 := lang.NewVector()
-								tmp14 := aotDirectFn509Arity1(v2)
-								tmp15 := aotDirectFn233Arity3(tmp13, tmp14, v4)
-								var v16 any = tmp15
-								_ = v16
-								tmp17 := aotDirectFn150Arity2(v3, v11)
-								tmp18 := aotDirectFn339Arity3(v2, v3, tmp17)
-								tmp19 := aotDirectFn115(v16, tmp18)
-								tmp12 = tmp19
+								tmp13 := aotDirectFn509Arity1(v2)
+								tmp14 := aotDirectFn233Arity3(closed19, tmp13, v4)
+								var v15 any = tmp14
+								_ = v15
+								tmp16 := aotDirectFn150Arity2(v3, v11)
+								tmp17 := aotDirectFn339Arity3(v2, v3, tmp16)
+								tmp18 := aotDirectFn115(v15, tmp17)
+								tmp12 = tmp18
 							} // end let
 							tmp10 = tmp12
 						} // end let
@@ -21149,143 +20946,140 @@ func LoadNS() {
 				var v8 any = tmp7
 				_ = v8
 				// let binding "hashes"
-				tmp9 := lang.NewSet()
-				tmp10 := aotDirectFn271Arity2(v8, v4)
-				tmp11 := aotDirectFn235(tmp9, tmp10)
-				var v12 any = tmp11
-				_ = v12
-				var tmp13 any
-				tmp14 := aotDirectFn118(v4)
-				tmp15 := aotDirectFn118(v12)
-				tmp16 := lang.Numbers.Equiv(tmp14, tmp15)
-				if lang.IsTruthy(tmp16) {
-					var tmp17 any
-					tmp18 := aotDirectFn184(v12)
-					if lang.IsTruthy(tmp18) {
-						tmp19 := checkDerefVar(var_clojure_DOT_core_identity)
-						tmp20 := aotDirectFn83(v8, tmp19, v4, v5)
-						tmp21 := lang.NewVector(int64(0), int64(0), tmp20, kw_compact)
-						tmp17 = tmp21
+				tmp9 := aotDirectFn271Arity2(v8, v4)
+				tmp10 := aotDirectFn235(closed44, tmp9)
+				var v11 any = tmp10
+				_ = v11
+				var tmp12 any
+				tmp13 := aotDirectFn118(v4)
+				tmp14 := aotDirectFn118(v11)
+				tmp15 := lang.Numbers.Equiv(tmp13, tmp14)
+				if lang.IsTruthy(tmp15) {
+					var tmp16 any
+					tmp17 := aotDirectFn184(v11)
+					if lang.IsTruthy(tmp17) {
+						tmp18 := checkDerefVar(var_clojure_DOT_core_identity)
+						tmp19 := aotDirectFn83(v8, tmp18, v4, v5)
+						tmp20 := lang.NewVector(int64(0), int64(0), tmp19, kw_compact)
+						tmp16 = tmp20
 					} else {
-						var tmp22 any
+						var tmp21 any
 						{ // let
 							// let binding "vec__485"
-							var tmp23 any
+							var tmp22 any
 							{ // let
 								// let binding "or__0__auto__"
-								tmp24 := aotDirectFn280(v12)
-								var v25 any = tmp24
-								_ = v25
-								var tmp26 any
-								if lang.IsTruthy(v25) {
-									tmp26 = v25
+								tmp23 := aotDirectFn280(v11)
+								var v24 any = tmp23
+								_ = v24
+								var tmp25 any
+								if lang.IsTruthy(v24) {
+									tmp25 = v24
 								} else {
-									tmp27 := lang.NewVector(int64(0), int64(0))
-									tmp26 = tmp27
+									tmp25 = closed45
 								}
-								tmp23 = tmp26
+								tmp22 = tmp25
 							} // end let
-							var v24 any = tmp23
-							_ = v24
+							var v23 any = tmp22
+							_ = v23
 							// let binding "shift"
-							tmp25 := aotDirectFn319Arity3(v24, int64(0), nil)
-							var v26 any = tmp25
-							_ = v26
+							tmp24 := aotDirectFn319Arity3(v23, int64(0), nil)
+							var v25 any = tmp24
+							_ = v25
 							// let binding "mask"
-							tmp27 := aotDirectFn319Arity3(v24, int64(1), nil)
-							var v28 any = tmp27
-							_ = v28
-							var tmp29 any
-							tmp30 := lang.Numbers.IsZero(v28)
-							if lang.IsTruthy(tmp30) {
-								tmp31 := checkDerefVar(var_clojure_DOT_core_identity)
-								tmp32 := aotDirectFn83(v8, tmp31, v4, v5)
-								tmp33 := lang.NewVector(int64(0), int64(0), tmp32, kw_sparse)
-								tmp29 = tmp33
+							tmp26 := aotDirectFn319Arity3(v23, int64(1), nil)
+							var v27 any = tmp26
+							_ = v27
+							var tmp28 any
+							tmp29 := lang.Numbers.IsZero(v27)
+							if lang.IsTruthy(tmp29) {
+								tmp30 := checkDerefVar(var_clojure_DOT_core_identity)
+								tmp31 := aotDirectFn83(v8, tmp30, v4, v5)
+								tmp32 := lang.NewVector(int64(0), int64(0), tmp31, kw_sparse)
+								tmp28 = tmp32
 							} else {
-								var tmp34 lang.FnFunc1
-								tmp34 = lang.FnFunc1(func(p0 any) any {
-									v35 := p0
-									_ = v35
-									tmp36 := lang.Apply1(v8, v35)
-									tmp37 := aotDirectFn463(v26, v28, tmp36)
-									return tmp37
+								var tmp33 lang.FnFunc1
+								tmp33 = lang.FnFunc1(func(p0 any) any {
+									v34 := p0
+									_ = v34
+									tmp35 := lang.Apply1(v8, v34)
+									tmp36 := aotDirectFn463(v25, v27, tmp35)
+									return tmp36
 								})
-								tmp35 := checkDerefVar(var_clojure_DOT_core_identity)
-								tmp36 := aotDirectFn83(tmp34, tmp35, v4, v5)
-								tmp37 := lang.NewVector(v26, v28, tmp36, kw_compact)
-								tmp29 = tmp37
+								tmp34 := checkDerefVar(var_clojure_DOT_core_identity)
+								tmp35 := aotDirectFn83(tmp33, tmp34, v4, v5)
+								tmp36 := lang.NewVector(v25, v27, tmp35, kw_compact)
+								tmp28 = tmp36
 							}
-							tmp22 = tmp29
+							tmp21 = tmp28
 						} // end let
-						tmp17 = tmp22
+						tmp16 = tmp21
 					}
-					tmp13 = tmp17
+					tmp12 = tmp16
 				} else {
-					var tmp23 any
+					var tmp22 any
 					{ // let
 						// let binding "vec__488"
-						tmp24 := aotDirectFn283(v2, v3, v4, v5)
-						var v25 any = tmp24
-						_ = v25
+						tmp23 := aotDirectFn283(v2, v3, v4, v5)
+						var v24 any = tmp23
+						_ = v24
 						// let binding "tests"
-						tmp26 := aotDirectFn319Arity3(v25, int64(0), nil)
-						var v27 any = tmp26
-						_ = v27
+						tmp25 := aotDirectFn319Arity3(v24, int64(0), nil)
+						var v26 any = tmp25
+						_ = v26
 						// let binding "thens"
-						tmp28 := aotDirectFn319Arity3(v25, int64(1), nil)
-						var v29 any = tmp28
-						_ = v29
+						tmp27 := aotDirectFn319Arity3(v24, int64(1), nil)
+						var v28 any = tmp27
+						_ = v28
 						// let binding "skip-check"
-						tmp30 := aotDirectFn319Arity3(v25, int64(2), nil)
-						var v31 any = tmp30
-						_ = v31
+						tmp29 := aotDirectFn319Arity3(v24, int64(2), nil)
+						var v30 any = tmp29
+						_ = v30
 						// let binding "vec__491"
-						tmp32 := aotDirectFn353(v2, v3, v27, v29)
-						var v33 any = tmp32
-						_ = v33
+						tmp31 := aotDirectFn353(v2, v3, v26, v28)
+						var v32 any = tmp31
+						_ = v32
 						// let binding "shift"
-						tmp34 := aotDirectFn319Arity3(v33, int64(0), nil)
-						var v35 any = tmp34
-						_ = v35
+						tmp33 := aotDirectFn319Arity3(v32, int64(0), nil)
+						var v34 any = tmp33
+						_ = v34
 						// let binding "mask"
-						tmp36 := aotDirectFn319Arity3(v33, int64(1), nil)
-						var v37 any = tmp36
-						_ = v37
+						tmp35 := aotDirectFn319Arity3(v32, int64(1), nil)
+						var v36 any = tmp35
+						_ = v36
 						// let binding "case-map"
-						tmp38 := aotDirectFn319Arity3(v33, int64(2), nil)
-						var v39 any = tmp38
-						_ = v39
+						tmp37 := aotDirectFn319Arity3(v32, int64(2), nil)
+						var v38 any = tmp37
+						_ = v38
 						// let binding "switch-type"
-						tmp40 := aotDirectFn319Arity3(v33, int64(3), nil)
-						var v41 any = tmp40
-						_ = v41
+						tmp39 := aotDirectFn319Arity3(v32, int64(3), nil)
+						var v40 any = tmp39
+						_ = v40
 						// let binding "skip-check"
-						var tmp42 any
-						tmp43 := lang.Numbers.IsZero(v37)
-						if lang.IsTruthy(tmp43) {
-							tmp42 = v31
+						var tmp41 any
+						tmp42 := lang.Numbers.IsZero(v36)
+						if lang.IsTruthy(tmp42) {
+							tmp41 = v30
 						} else {
-							tmp44 := lang.NewSet()
-							var tmp45 lang.FnFunc1
-							tmp45 = lang.FnFunc1(func(p0 any) any {
-								v46 := p0
-								_ = v46
-								tmp47 := aotDirectFn463(v35, v37, v46)
-								return tmp47
+							var tmp43 lang.FnFunc1
+							tmp43 = lang.FnFunc1(func(p0 any) any {
+								v44 := p0
+								_ = v44
+								tmp45 := aotDirectFn463(v34, v36, v44)
+								return tmp45
 							})
-							tmp46 := aotDirectFn271Arity2(tmp45, v31)
-							tmp47 := aotDirectFn235(tmp44, tmp46)
-							tmp42 = tmp47
+							tmp44 := aotDirectFn271Arity2(tmp43, v30)
+							tmp45 := aotDirectFn235(closed46, tmp44)
+							tmp41 = tmp45
 						}
-						var v48 any = tmp42
-						_ = v48
-						tmp49 := lang.NewVector(v35, v37, v39, v41, v48)
-						tmp23 = tmp49
+						var v46 any = tmp41
+						_ = v46
+						tmp47 := lang.NewVector(v34, v36, v38, v40, v46)
+						tmp22 = tmp47
 					} // end let
-					tmp13 = tmp23
+					tmp12 = tmp22
 				}
-				tmp6 = tmp13
+				tmp6 = tmp12
 			} // end let
 			return tmp6
 		})
@@ -22027,9 +21821,8 @@ func LoadNS() {
 					v8 := p0
 					_ = v8
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp10 := lang.NewVector()
-					tmp11 := lang.Apply3(tmp9, sym_clojure_DOT_core_SLASH_fn, tmp10, v8)
-					return tmp11
+					tmp10 := lang.Apply3(tmp9, sym_clojure_DOT_core_SLASH_fn, closed19, v8)
+					return tmp10
 				})
 				tmp8 := aotDirectFn271Arity2(tmp7, v4)
 				tmp9 := aotDirectFn112Arity2(tmp6, tmp8)
@@ -22530,28 +22323,27 @@ func LoadNS() {
 					var tmp9 any
 					{ // let
 						// let binding "ret"
-						tmp10 := lang.NewVector()
-						var v11 any = tmp10
-						_ = v11
+						var v10 any = closed19
+						_ = v10
 						// let binding "c"
-						var v12 any = int64(0)
-						_ = v12
+						var v11 any = int64(0)
+						_ = v11
 						for {
-							var tmp13 any
-							tmp14 := lang.Numbers.Lte(v12, v5)
-							if lang.IsTruthy(tmp14) {
-								tmp16 := v2.(interface{ GroupInt(int) any }).GroupInt(lang.IntCast(v12))
-								tmp17 := aotDirectFn113Arity2(v11, tmp16)
-								var tmp15 any = tmp17
-								tmp19 := lang.Numbers.Inc(v12)
-								var tmp18 any = tmp19
-								v11 = tmp15
-								v12 = tmp18
+							var tmp12 any
+							tmp13 := lang.Numbers.Lte(v11, v5)
+							if lang.IsTruthy(tmp13) {
+								tmp15 := v2.(interface{ GroupInt(int) any }).GroupInt(lang.IntCast(v11))
+								tmp16 := aotDirectFn113Arity2(v10, tmp15)
+								var tmp14 any = tmp16
+								tmp18 := lang.Numbers.Inc(v11)
+								var tmp17 any = tmp18
+								v10 = tmp14
+								v11 = tmp17
 								continue
 							} else {
-								tmp13 = v11
+								tmp12 = v10
 							}
-							tmp9 = tmp13
+							tmp9 = tmp12
 							break
 						}
 					} // end let
@@ -23347,8 +23139,7 @@ func LoadNS() {
 						if lang.IsTruthy(v14) {
 							tmp15 = v14
 						} else {
-							tmp16 := lang.NewMap()
-							tmp15 = tmp16
+							tmp15 = closed24
 						}
 						tmp12 = tmp15
 					} // end let
@@ -24526,44 +24317,43 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "ret"
-				tmp5 := lang.NewMap()
-				var v6 any = tmp5
-				_ = v6
+				var v5 any = closed24
+				_ = v5
 				// let binding "keys"
-				tmp7 := aotDirectFn447(v3)
-				var v8 any = tmp7
-				_ = v8
+				tmp6 := aotDirectFn447(v3)
+				var v7 any = tmp6
+				_ = v7
 				for {
-					var tmp9 any
-					if lang.IsTruthy(v8) {
-						var tmp10 any
+					var tmp8 any
+					if lang.IsTruthy(v7) {
+						var tmp9 any
 						{ // let
 							// let binding "entry"
-							tmp11 := aotDirectFn183(v8)
-							tmp12 := runtime.RT.Find(v2, tmp11)
-							var v13 any = tmp12
-							_ = v13
-							var tmp15 any
-							if lang.IsTruthy(v13) {
-								tmp16 := aotDirectFn113Arity2(v6, v13)
-								tmp15 = tmp16
+							tmp10 := aotDirectFn183(v7)
+							tmp11 := runtime.RT.Find(v2, tmp10)
+							var v12 any = tmp11
+							_ = v12
+							var tmp14 any
+							if lang.IsTruthy(v12) {
+								tmp15 := aotDirectFn113Arity2(v5, v12)
+								tmp14 = tmp15
 							} else {
-								tmp15 = v6
+								tmp14 = v5
 							}
-							var tmp14 any = tmp15
-							tmp18 := aotDirectFn299(v8)
-							var tmp17 any = tmp18
-							v6 = tmp14
-							v8 = tmp17
+							var tmp13 any = tmp14
+							tmp17 := aotDirectFn299(v7)
+							var tmp16 any = tmp17
+							v5 = tmp13
+							v7 = tmp16
 							continue
 						} // end let
-						tmp9 = tmp10
+						tmp8 = tmp9
 					} else {
-						tmp11 := aotDirectFn285(v2)
-						tmp12 := aotDirectFn569(v6, tmp11)
-						tmp9 = tmp12
+						tmp10 := aotDirectFn285(v2)
+						tmp11 := aotDirectFn569(v5, tmp10)
+						tmp8 = tmp11
 					}
-					tmp4 = tmp9
+					tmp4 = tmp8
 					break
 				}
 			} // end let
@@ -24899,18 +24689,16 @@ func LoadNS() {
 				tmp7 := lang.IsInstance[lang.IReduceInit](v2)
 				if lang.IsTruthy(tmp7) {
 					tmp8 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
-					tmp9 := lang.NewSet()
-					tmp10 := aotDirectFn521(tmp9)
-					tmp11 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](tmp8), tmp10)
-					tmp12 := aotDirectFn342(tmp11)
-					tmp6 = tmp12
+					tmp9 := aotDirectFn521(closed48)
+					tmp10 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](tmp8), tmp9)
+					tmp11 := aotDirectFn342(tmp10)
+					tmp6 = tmp11
 				} else {
-					tmp13 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
-					tmp14 := lang.NewSet()
-					tmp15 := aotDirectFn521(tmp14)
-					tmp16 := aotDirectFn404Arity3(tmp13, tmp15, v2)
-					tmp17 := aotDirectFn342(tmp16)
-					tmp6 = tmp17
+					tmp12 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
+					tmp13 := aotDirectFn521(closed49)
+					tmp14 := aotDirectFn404Arity3(tmp12, tmp13, v2)
+					tmp15 := aotDirectFn342(tmp14)
+					tmp6 = tmp15
 				}
 				tmp3 = tmp6
 			}
@@ -25325,13 +25113,12 @@ func LoadNS() {
 									tmp26 := aotDirectFn285(v16)
 									tmp24 = tmp26
 								} else {
-									tmp27 := lang.NewMap()
-									tmp24 = tmp27
+									tmp24 = closed24
 								}
-								tmp28 := aotDirectFn183(v18)
-								tmp29 := aotDirectFn113Arity2(tmp24, tmp28)
-								tmp30 := aotDirectFn569(v16, tmp29)
-								tmp22 = tmp30
+								tmp27 := aotDirectFn183(v18)
+								tmp28 := aotDirectFn113Arity2(tmp24, tmp27)
+								tmp29 := aotDirectFn569(v16, tmp28)
+								tmp22 = tmp29
 							} else {
 								tmp22 = v16
 							}
@@ -25424,30 +25211,29 @@ func LoadNS() {
 					var tmp13 any
 					{ // let
 						// let binding "ret"
-						tmp14 := lang.NewVector()
-						var v15 any = tmp14
-						_ = v15
+						var v14 any = closed19
+						_ = v14
 						// let binding "fdecls"
-						var v16 any = v2
-						_ = v16
+						var v15 any = v2
+						_ = v15
 						for {
-							var tmp17 any
-							if lang.IsTruthy(v16) {
-								tmp19 := aotDirectFn183(v16)
-								tmp20 := lang.Apply1(v7, tmp19)
-								tmp21 := lang.Apply1(v9, tmp20)
-								tmp22 := aotDirectFn113Arity2(v15, tmp21)
-								var tmp18 any = tmp22
-								tmp24 := aotDirectFn299(v16)
-								var tmp23 any = tmp24
-								v15 = tmp18
-								v16 = tmp23
+							var tmp16 any
+							if lang.IsTruthy(v15) {
+								tmp18 := aotDirectFn183(v15)
+								tmp19 := lang.Apply1(v7, tmp18)
+								tmp20 := lang.Apply1(v9, tmp19)
+								tmp21 := aotDirectFn113Arity2(v14, tmp20)
+								var tmp17 any = tmp21
+								tmp23 := aotDirectFn299(v15)
+								var tmp22 any = tmp23
+								v14 = tmp17
+								v15 = tmp22
 								continue
 							} else {
-								tmp25 := aotDirectFn447(v15)
-								tmp17 = tmp25
+								tmp24 := aotDirectFn447(v14)
+								tmp16 = tmp24
 							}
-							tmp13 = tmp17
+							tmp13 = tmp16
 							break
 						}
 					} // end let
@@ -26693,12 +26479,11 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := lang.NewVector()
-			tmp5 := aotDirectFn509Arity1(v2)
-			tmp6 := aotDirectFn233Arity3(tmp4, tmp5, v3)
-			tmp7 := aotDirectFn150Arity2(v2, v3)
-			tmp8 := lang.NewVector(tmp6, tmp7)
-			return tmp8
+			tmp4 := aotDirectFn509Arity1(v2)
+			tmp5 := aotDirectFn233Arity3(closed19, tmp4, v3)
+			tmp6 := aotDirectFn150Arity2(v2, v3)
+			tmp7 := lang.NewVector(tmp5, tmp6)
+			return tmp7
 		})
 		aotDirectFn488 = tmp1
 		var_clojure_DOT_core_splitv_DASH_at = ns.InternWithValue(tmp0, tmp1, true)
@@ -29277,63 +29062,62 @@ func LoadNS() {
 					tmp11 := aotDirectFn138Arity2(tmp10, v4)
 					tmp8 = tmp11
 				} else {
-					tmp12 := lang.NewSet()
-					tmp8 = tmp12
+					tmp8 = closed50
 				}
-				var v13 any = tmp8
-				_ = v13
+				var v12 any = tmp8
+				_ = v12
 				// let binding "newParents"
-				var tmp14 any
-				tmp15 := aotDirectFn306(v13)
-				if lang.IsTruthy(tmp15) {
-					var tmp16 any = v7
-					tmp16 = lang.Assoc(tmp16, v3, v13)
-					tmp14 = tmp16
+				var tmp13 any
+				tmp14 := aotDirectFn306(v12)
+				if lang.IsTruthy(tmp14) {
+					var tmp15 any = v7
+					tmp15 = lang.Assoc(tmp15, v3, v12)
+					tmp13 = tmp15
 				} else {
-					tmp17 := aotDirectFn140Arity2(v7, v3)
-					tmp14 = tmp17
+					tmp16 := aotDirectFn140Arity2(v7, v3)
+					tmp13 = tmp16
 				}
-				var v18 any = tmp14
-				_ = v18
+				var v17 any = tmp13
+				_ = v17
 				// let binding "deriv-seq"
-				var tmp19 lang.FnFunc1
-				tmp19 = lang.FnFunc1(func(p0 any) any {
-					v20 := p0
-					_ = v20
-					tmp21 := aotDirectFn244(v20)
-					tmp22 := aotDirectFn244(v20)
-					tmp23 := aotDirectFn556(v20)
-					tmp24 := aotDirectFn232Arity2(tmp22, tmp23)
-					tmp25 := aotDirectFn115(tmp21, tmp24)
-					return tmp25
+				var tmp18 lang.FnFunc1
+				tmp18 = lang.FnFunc1(func(p0 any) any {
+					v19 := p0
+					_ = v19
+					tmp20 := aotDirectFn244(v19)
+					tmp21 := aotDirectFn244(v19)
+					tmp22 := aotDirectFn556(v19)
+					tmp23 := aotDirectFn232Arity2(tmp21, tmp22)
+					tmp24 := aotDirectFn115(tmp20, tmp23)
+					return tmp24
 				})
-				tmp20 := aotDirectFn447(v18)
-				tmp21 := aotDirectFn271Arity2(tmp19, tmp20)
-				tmp22 := aotDirectFn185(tmp21)
-				var v23 any = tmp22
-				_ = v23
-				var tmp24 any
-				tmp25 := lang.Apply1(v7, v3)
-				tmp26 := aotDirectFn117(tmp25, v4)
-				if lang.IsTruthy(tmp26) {
-					var tmp27 lang.FnFunc2
-					tmp27 = lang.FnFunc2(func(p0, p1 any) any {
-						v28 := p0
+				tmp19 := aotDirectFn447(v17)
+				tmp20 := aotDirectFn271Arity2(tmp18, tmp19)
+				tmp21 := aotDirectFn185(tmp20)
+				var v22 any = tmp21
+				_ = v22
+				var tmp23 any
+				tmp24 := lang.Apply1(v7, v3)
+				tmp25 := aotDirectFn117(tmp24, v4)
+				if lang.IsTruthy(tmp25) {
+					var tmp26 lang.FnFunc2
+					tmp26 = lang.FnFunc2(func(p0, p1 any) any {
+						v27 := p0
+						_ = v27
+						v28 := p1
 						_ = v28
-						v29 := p1
-						_ = v29
-						tmp30 := checkDerefVar(var_clojure_DOT_core_derive)
-						tmp31 := aotDirectFn35Arity3(tmp30, v28, v29)
-						return tmp31
+						tmp29 := checkDerefVar(var_clojure_DOT_core_derive)
+						tmp30 := aotDirectFn35Arity3(tmp29, v27, v28)
+						return tmp30
 					})
-					tmp28 := aotDirectFn270()
-					tmp29 := aotDirectFn335Arity2(int64(2), v23)
-					tmp30 := aotDirectFn404Arity3(tmp27, tmp28, tmp29)
-					tmp24 = tmp30
+					tmp27 := aotDirectFn270()
+					tmp28 := aotDirectFn335Arity2(int64(2), v22)
+					tmp29 := aotDirectFn404Arity3(tmp26, tmp27, tmp28)
+					tmp23 = tmp29
 				} else {
-					tmp24 = v2
+					tmp23 = v2
 				}
-				tmp5 = tmp24
+				tmp5 = tmp23
 			} // end let
 			return tmp5
 		})
@@ -29659,15 +29443,14 @@ func LoadNS() {
 					tmp10 := aotDirectFn48Arity3(v6, tmp9, v8)
 					return tmp10
 				})
-				tmp6 := lang.NewMap()
-				tmp7 := aotDirectFn521(tmp6)
-				tmp8 := aotDirectFn403(tmp5, tmp7, v2)
-				tmp9 := aotDirectFn342(tmp8)
-				var v10 any = tmp9
-				_ = v10
-				tmp11 := aotDirectFn285(v2)
-				tmp12 := aotDirectFn569(v10, tmp11)
-				tmp4 = tmp12
+				tmp6 := aotDirectFn521(closed24)
+				tmp7 := aotDirectFn403(tmp5, tmp6, v2)
+				tmp8 := aotDirectFn342(tmp7)
+				var v9 any = tmp8
+				_ = v9
+				tmp10 := aotDirectFn285(v2)
+				tmp11 := aotDirectFn569(v9, tmp10)
+				tmp4 = tmp11
 			} // end let
 			return tmp4
 		})
@@ -29704,15 +29487,14 @@ func LoadNS() {
 				tmp7 := aotDirectFn521(v2)
 				tmp5 = tmp7
 			} else {
-				tmp8 := lang.NewMap()
-				tmp9 := aotDirectFn521(tmp8)
-				tmp5 = tmp9
+				tmp8 := aotDirectFn521(closed24)
+				tmp5 = tmp8
 			}
-			tmp10 := aotDirectFn403(tmp4, tmp5, v2)
-			tmp11 := aotDirectFn342(tmp10)
-			tmp12 := aotDirectFn285(v2)
-			tmp13 := aotDirectFn569(tmp11, tmp12)
-			return tmp13
+			tmp9 := aotDirectFn403(tmp4, tmp5, v2)
+			tmp10 := aotDirectFn342(tmp9)
+			tmp11 := aotDirectFn285(v2)
+			tmp12 := aotDirectFn569(tmp10, tmp11)
+			return tmp12
 		})
 		aotDirectFn552 = tmp1
 		var_clojure_DOT_core_update_DASH_vals = ns.InternWithValue(tmp0, tmp1, true)
@@ -29901,8 +29683,7 @@ func LoadNS() {
 		tmp0 := sym_vector
 		var tmp1 lang.ArityFn
 		aotDirectFn563Arity0 = lang.FnFunc0(func() any {
-			tmp2 := lang.NewVector()
-			return tmp2
+			return closed19
 		})
 		aotDirectFn563Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -30108,31 +29889,30 @@ func LoadNS() {
 				var tmp7 any
 				{ // let
 					// let binding "v"
-					tmp8 := aotKeywordMapNew14(sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Volatile)
-					tmp9 := aotDirectFn569(v4, tmp8)
-					var v10 any = tmp9
-					_ = v10
-					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym__DOT_reset)
-					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp14 := lang.Apply1(tmp13, v10)
+					tmp8 := aotDirectFn569(v4, closed51)
+					var v9 any = tmp8
+					_ = v9
+					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp11 := lang.Apply1(tmp10, sym__DOT_reset)
+					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp13 := lang.Apply1(tmp12, v9)
+					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp17 := lang.Apply1(tmp16, v5)
+					tmp16 := lang.Apply1(tmp15, v5)
+					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp20 := lang.Apply1(tmp19, sym__DOT_Deref)
-					tmp21 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp22 := lang.Apply1(tmp21, v10)
-					tmp23 := aotDirectFn112Arity2(tmp20, tmp22)
-					tmp24 := aotDirectFn447(tmp23)
-					tmp25 := lang.Apply1(tmp18, tmp24)
-					tmp26 := aotDirectFn112.Invoke3(tmp17, tmp25, v6)
-					tmp27 := aotDirectFn447(tmp26)
-					tmp28 := lang.Apply1(tmp15, tmp27)
-					tmp29 := aotDirectFn112.Invoke3(tmp12, tmp14, tmp28)
-					tmp30 := aotDirectFn447(tmp29)
-					tmp7 = tmp30
+					tmp19 := lang.Apply1(tmp18, sym__DOT_Deref)
+					tmp20 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp21 := lang.Apply1(tmp20, v9)
+					tmp22 := aotDirectFn112Arity2(tmp19, tmp21)
+					tmp23 := aotDirectFn447(tmp22)
+					tmp24 := lang.Apply1(tmp17, tmp23)
+					tmp25 := aotDirectFn112.Invoke3(tmp16, tmp24, v6)
+					tmp26 := aotDirectFn447(tmp25)
+					tmp27 := lang.Apply1(tmp14, tmp26)
+					tmp28 := aotDirectFn112.Invoke3(tmp11, tmp13, tmp27)
+					tmp29 := aotDirectFn447(tmp28)
+					tmp7 = tmp29
 				} // end let
 				return tmp7
 			}),
@@ -30826,7 +30606,7 @@ func LoadNS() {
 				tmp25 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp26 := checkDerefVar(var_clojure_DOT_core_vector)
 				tmp27 := aotDirectFn511Arity2(int64(2), v4)
-				tmp28 := aotDirectFn422Arity1(lang.NewList(sym__DOT__DOT_, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_Var, sym_create, sym_setDynamic))
+				tmp28 := aotDirectFn422Arity1(closed52)
 				tmp29 := aotDirectFn230Arity2(tmp27, tmp28)
 				tmp30 := aotDirectFn112Arity1(tmp29)
 				tmp31 := aotDirectFn447(tmp30)
@@ -31502,51 +31282,50 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "map"
-				tmp5 := lang.NewMap()
-				tmp6 := aotDirectFn521(tmp5)
-				var v7 any = tmp6
-				_ = v7
+				tmp5 := aotDirectFn521(closed24)
+				var v6 any = tmp5
+				_ = v6
 				// let binding "ks"
-				tmp8 := aotDirectFn447(v2)
-				var v9 any = tmp8
-				_ = v9
+				tmp7 := aotDirectFn447(v2)
+				var v8 any = tmp7
+				_ = v8
 				// let binding "vs"
-				tmp10 := aotDirectFn447(v3)
-				var v11 any = tmp10
-				_ = v11
+				tmp9 := aotDirectFn447(v3)
+				var v10 any = tmp9
+				_ = v10
 				for {
+					var tmp11 any
 					var tmp12 any
-					var tmp13 any
 					{ // let
 						// let binding "and__0__auto__"
-						var v14 any = v9
-						_ = v14
-						var tmp15 any
-						if lang.IsTruthy(v14) {
-							tmp15 = v11
+						var v13 any = v8
+						_ = v13
+						var tmp14 any
+						if lang.IsTruthy(v13) {
+							tmp14 = v10
 						} else {
-							tmp15 = v14
+							tmp14 = v13
 						}
-						tmp13 = tmp15
+						tmp12 = tmp14
 					} // end let
-					if lang.IsTruthy(tmp13) {
-						tmp15 := aotDirectFn183(v9)
-						tmp16 := aotDirectFn183(v11)
-						tmp17 := aotDirectFn48Arity3(v7, tmp15, tmp16)
-						var tmp14 any = tmp17
-						tmp19 := aotDirectFn299(v9)
-						var tmp18 any = tmp19
-						tmp21 := aotDirectFn299(v11)
-						var tmp20 any = tmp21
-						v7 = tmp14
-						v9 = tmp18
-						v11 = tmp20
+					if lang.IsTruthy(tmp12) {
+						tmp14 := aotDirectFn183(v8)
+						tmp15 := aotDirectFn183(v10)
+						tmp16 := aotDirectFn48Arity3(v6, tmp14, tmp15)
+						var tmp13 any = tmp16
+						tmp18 := aotDirectFn299(v8)
+						var tmp17 any = tmp18
+						tmp20 := aotDirectFn299(v10)
+						var tmp19 any = tmp20
+						v6 = tmp13
+						v8 = tmp17
+						v10 = tmp19
 						continue
 					} else {
-						tmp22 := aotDirectFn342(v7)
-						tmp12 = tmp22
+						tmp21 := aotDirectFn342(v6)
+						tmp11 = tmp21
 					}
-					tmp4 = tmp12
+					tmp4 = tmp11
 					break
 				}
 			} // end let
@@ -34895,38 +34674,37 @@ func LoadNS() {
 						var tmp26 any
 						{ // let
 							// let binding "ret"
-							tmp27 := lang.NewVector()
-							var v28 any = tmp27
-							_ = v28
+							var v27 any = closed19
+							_ = v27
 							// let binding "vvs"
-							tmp29 := aotDirectFn447(v25)
-							var v30 any = tmp29
-							_ = v30
+							tmp28 := aotDirectFn447(v25)
+							var v29 any = tmp28
+							_ = v29
 							for {
-								var tmp31 any
-								if lang.IsTruthy(v30) {
-									tmp33 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp34 := lang.Apply1(tmp33, sym_var)
-									tmp35 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp36 := aotDirectFn183(v30)
-									tmp37 := lang.Apply1(tmp35, tmp36)
-									tmp38 := aotDirectFn112Arity2(tmp34, tmp37)
-									tmp39 := aotDirectFn447(tmp38)
-									tmp40 := aotDirectFn113Arity2(v28, tmp39)
-									tmp41 := aotDirectFn442(v30)
-									tmp42 := aotDirectFn113Arity2(tmp40, tmp41)
-									var tmp32 any = tmp42
-									tmp44 := aotDirectFn299(v30)
-									tmp45 := aotDirectFn299(tmp44)
-									var tmp43 any = tmp45
-									v28 = tmp32
-									v30 = tmp43
+								var tmp30 any
+								if lang.IsTruthy(v29) {
+									tmp32 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp33 := lang.Apply1(tmp32, sym_var)
+									tmp34 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp35 := aotDirectFn183(v29)
+									tmp36 := lang.Apply1(tmp34, tmp35)
+									tmp37 := aotDirectFn112Arity2(tmp33, tmp36)
+									tmp38 := aotDirectFn447(tmp37)
+									tmp39 := aotDirectFn113Arity2(v27, tmp38)
+									tmp40 := aotDirectFn442(v29)
+									tmp41 := aotDirectFn113Arity2(tmp39, tmp40)
+									var tmp31 any = tmp41
+									tmp43 := aotDirectFn299(v29)
+									tmp44 := aotDirectFn299(tmp43)
+									var tmp42 any = tmp44
+									v27 = tmp31
+									v29 = tmp42
 									continue
 								} else {
-									tmp46 := aotDirectFn447(v28)
-									tmp31 = tmp46
+									tmp45 := aotDirectFn447(v27)
+									tmp30 = tmp45
 								}
-								tmp26 = tmp31
+								tmp26 = tmp30
 								break
 							}
 						} // end let
@@ -35033,9 +34811,9 @@ func LoadNS() {
 						var tmp5 any
 						tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp6) {
-							tmp5 = closed19
+							tmp5 = closed20
 						} else {
-							tmp5 = closed19
+							tmp5 = closed20
 						}
 						var v7 any = tmp5
 						_ = v7
@@ -35068,9 +34846,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed19
+							tmp6 = closed20
 						} else {
-							tmp6 = closed19
+							tmp6 = closed20
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -35109,9 +34887,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed19
+							tmp7 = closed20
 						} else {
-							tmp7 = closed19
+							tmp7 = closed20
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -35219,9 +34997,9 @@ func LoadNS() {
 						var tmp5 any
 						tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp6) {
-							tmp5 = closed20
+							tmp5 = closed21
 						} else {
-							tmp5 = closed20
+							tmp5 = closed21
 						}
 						var v7 any = tmp5
 						_ = v7
@@ -35254,9 +35032,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed20
+							tmp6 = closed21
 						} else {
-							tmp6 = closed20
+							tmp6 = closed21
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -35295,9 +35073,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed20
+							tmp7 = closed21
 						} else {
-							tmp7 = closed20
+							tmp7 = closed21
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -35446,9 +35224,9 @@ func LoadNS() {
 						var tmp5 any
 						tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp6) {
-							tmp5 = closed21
+							tmp5 = closed22
 						} else {
-							tmp5 = closed21
+							tmp5 = closed22
 						}
 						var v7 any = tmp5
 						_ = v7
@@ -35481,9 +35259,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed21
+							tmp6 = closed22
 						} else {
-							tmp6 = closed21
+							tmp6 = closed22
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -35522,9 +35300,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed21
+							tmp7 = closed22
 						} else {
-							tmp7 = closed21
+							tmp7 = closed22
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -35726,9 +35504,9 @@ func LoadNS() {
 						var tmp5 any
 						tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp6) {
-							tmp5 = closed22
+							tmp5 = closed23
 						} else {
-							tmp5 = closed22
+							tmp5 = closed23
 						}
 						var v7 any = tmp5
 						_ = v7
@@ -35761,9 +35539,9 @@ func LoadNS() {
 						var tmp6 any
 						tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp7) {
-							tmp6 = closed22
+							tmp6 = closed23
 						} else {
-							tmp6 = closed22
+							tmp6 = closed23
 						}
 						var v8 any = tmp6
 						_ = v8
@@ -35802,9 +35580,9 @@ func LoadNS() {
 						var tmp7 any
 						tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 						if lang.IsTruthy(tmp8) {
-							tmp7 = closed22
+							tmp7 = closed23
 						} else {
-							tmp7 = closed22
+							tmp7 = closed23
 						}
 						var v9 any = tmp7
 						_ = v9
@@ -36398,278 +36176,277 @@ func LoadNS() {
 								} // end let
 								return tmp64
 							})
-							tmp62 := lang.NewMap()
-							tmp63 := aotDirectFn404Arity3(tmp61, tmp62, v58)
-							var v64 any = tmp63
-							_ = v64
+							tmp62 := aotDirectFn404Arity3(tmp61, closed24, v58)
+							var v63 any = tmp62
+							_ = v63
 							// let binding "tests"
-							tmp65 := aotDirectFn245(v64)
-							var v66 any = tmp65
-							_ = v66
+							tmp64 := aotDirectFn245(v63)
+							var v65 any = tmp64
+							_ = v65
 							// let binding "thens"
-							tmp67 := aotDirectFn557(v64)
-							var v68 any = tmp67
-							_ = v68
+							tmp66 := aotDirectFn557(v63)
+							var v67 any = tmp66
+							_ = v67
 							// let binding "mode"
-							var tmp69 any
-							var tmp70 lang.FnFunc1
-							tmp70 = lang.FnFunc1(func(p0 any) any {
-								v71 := p0
-								_ = v71
-								var tmp72 any
+							var tmp68 any
+							var tmp69 lang.FnFunc1
+							tmp69 = lang.FnFunc1(func(p0 any) any {
+								v70 := p0
+								_ = v70
+								var tmp71 any
 								{ // let
 									// let binding "and__0__auto__"
-									tmp73 := aotDirectFn229(v71)
-									var v74 any = tmp73
-									_ = v74
-									var tmp75 any
-									if lang.IsTruthy(v74) {
-										tmp76 := aotDirectFn8.Invoke3(math4.MinInt, v71, math4.MaxInt)
-										tmp75 = tmp76
+									tmp72 := aotDirectFn229(v70)
+									var v73 any = tmp72
+									_ = v73
+									var tmp74 any
+									if lang.IsTruthy(v73) {
+										tmp75 := aotDirectFn8.Invoke3(math4.MinInt, v70, math4.MaxInt)
+										tmp74 = tmp75
 									} else {
-										tmp75 = v74
+										tmp74 = v73
 									}
-									tmp72 = tmp75
+									tmp71 = tmp74
 								} // end let
-								return tmp72
+								return tmp71
 							})
-							tmp71 := aotDirectFn167(tmp70, v66)
-							if lang.IsTruthy(tmp71) {
-								tmp69 = kw_ints
+							tmp70 := aotDirectFn167(tmp69, v65)
+							if lang.IsTruthy(tmp70) {
+								tmp68 = kw_ints
 							} else {
-								var tmp72 any
-								tmp73 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
-								tmp74 := aotDirectFn167(tmp73, v66)
-								if lang.IsTruthy(tmp74) {
-									tmp72 = kw_identity
+								var tmp71 any
+								tmp72 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
+								tmp73 := aotDirectFn167(tmp72, v65)
+								if lang.IsTruthy(tmp73) {
+									tmp71 = kw_identity
 								} else {
-									tmp72 = kw_hashes
+									tmp71 = kw_hashes
 								}
-								tmp69 = tmp72
+								tmp68 = tmp71
 							}
-							var v75 any = tmp69
-							_ = v75
-							var tmp76 any
+							var v74 any = tmp68
+							_ = v74
+							var tmp75 any
 							{ // let
 								// let binding "pred__498"
-								tmp77 := checkDerefVar(var_clojure_DOT_core__EQ_)
-								var v78 any = tmp77
-								_ = v78
+								tmp76 := checkDerefVar(var_clojure_DOT_core__EQ_)
+								var v77 any = tmp76
+								_ = v77
 								// let binding "expr__499"
-								var v79 any = v75
-								_ = v79
-								var tmp80 any
-								tmp81 := lang.Apply2(v78, kw_ints, v79)
-								if lang.IsTruthy(tmp81) {
-									var tmp82 any
+								var v78 any = v74
+								_ = v78
+								var tmp79 any
+								tmp80 := lang.Apply2(v77, kw_ints, v78)
+								if lang.IsTruthy(tmp80) {
+									var tmp81 any
 									{ // let
 										// let binding "vec__500"
-										tmp83 := aotDirectFn354(v66, v68)
-										var v84 any = tmp83
-										_ = v84
+										tmp82 := aotDirectFn354(v65, v67)
+										var v83 any = tmp82
+										_ = v83
 										// let binding "shift"
-										tmp85 := aotDirectFn319Arity3(v84, int64(0), nil)
-										var v86 any = tmp85
-										_ = v86
+										tmp84 := aotDirectFn319Arity3(v83, int64(0), nil)
+										var v85 any = tmp84
+										_ = v85
 										// let binding "mask"
-										tmp87 := aotDirectFn319Arity3(v84, int64(1), nil)
-										var v88 any = tmp87
-										_ = v88
+										tmp86 := aotDirectFn319Arity3(v83, int64(1), nil)
+										var v87 any = tmp86
+										_ = v87
 										// let binding "imap"
-										tmp89 := aotDirectFn319Arity3(v84, int64(2), nil)
-										var v90 any = tmp89
-										_ = v90
+										tmp88 := aotDirectFn319Arity3(v83, int64(2), nil)
+										var v89 any = tmp88
+										_ = v89
 										// let binding "switch-type"
-										tmp91 := aotDirectFn319Arity3(v84, int64(3), nil)
-										var v92 any = tmp91
-										_ = v92
-										tmp93 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp94 := lang.Apply1(tmp93, sym_clojure_DOT_core_SLASH_let)
-										tmp95 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp96 := checkDerefVar(var_clojure_DOT_core_vector)
-										tmp97 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp98 := lang.Apply1(tmp97, v11)
-										tmp99 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp100 := lang.Apply1(tmp99, v4)
-										tmp101 := aotDirectFn112Arity2(tmp98, tmp100)
-										tmp102 := aotDirectFn447(tmp101)
-										tmp103 := aotDirectFn35Arity2(tmp96, tmp102)
-										tmp104 := lang.Apply1(tmp95, tmp103)
+										tmp90 := aotDirectFn319Arity3(v83, int64(3), nil)
+										var v91 any = tmp90
+										_ = v91
+										tmp92 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp93 := lang.Apply1(tmp92, sym_clojure_DOT_core_SLASH_let)
+										tmp94 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp95 := checkDerefVar(var_clojure_DOT_core_vector)
+										tmp96 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp97 := lang.Apply1(tmp96, v11)
+										tmp98 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp99 := lang.Apply1(tmp98, v4)
+										tmp100 := aotDirectFn112Arity2(tmp97, tmp99)
+										tmp101 := aotDirectFn447(tmp100)
+										tmp102 := aotDirectFn35Arity2(tmp95, tmp101)
+										tmp103 := lang.Apply1(tmp94, tmp102)
+										tmp104 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp105 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp106 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp107 := lang.Apply1(tmp106, sym_case_STAR_)
-										tmp108 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp109 := lang.Apply1(tmp108, v11)
-										tmp110 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp111 := lang.Apply1(tmp110, v86)
-										tmp112 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp113 := lang.Apply1(tmp112, v88)
-										tmp114 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp115 := lang.Apply1(tmp114, v36)
-										tmp116 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp117 := lang.Apply1(tmp116, v90)
-										tmp118 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp119 := lang.Apply1(tmp118, v92)
-										tmp120 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp121 := lang.Apply1(tmp120, kw_int)
-										tmp122 := aotDirectFn112.Invoke8(tmp107, tmp109, tmp111, tmp113, tmp115, tmp117, tmp119, tmp121)
-										tmp123 := aotDirectFn447(tmp122)
-										tmp124 := lang.Apply1(tmp105, tmp123)
-										tmp125 := aotDirectFn112.Invoke3(tmp94, tmp104, tmp124)
-										tmp126 := aotDirectFn447(tmp125)
-										tmp82 = tmp126
+										tmp106 := lang.Apply1(tmp105, sym_case_STAR_)
+										tmp107 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp108 := lang.Apply1(tmp107, v11)
+										tmp109 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp110 := lang.Apply1(tmp109, v85)
+										tmp111 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp112 := lang.Apply1(tmp111, v87)
+										tmp113 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp114 := lang.Apply1(tmp113, v36)
+										tmp115 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp116 := lang.Apply1(tmp115, v89)
+										tmp117 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp118 := lang.Apply1(tmp117, v91)
+										tmp119 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp120 := lang.Apply1(tmp119, kw_int)
+										tmp121 := aotDirectFn112.Invoke8(tmp106, tmp108, tmp110, tmp112, tmp114, tmp116, tmp118, tmp120)
+										tmp122 := aotDirectFn447(tmp121)
+										tmp123 := lang.Apply1(tmp104, tmp122)
+										tmp124 := aotDirectFn112.Invoke3(tmp93, tmp103, tmp123)
+										tmp125 := aotDirectFn447(tmp124)
+										tmp81 = tmp125
 									} // end let
-									tmp80 = tmp82
+									tmp79 = tmp81
 								} else {
-									var tmp83 any
-									tmp84 := lang.Apply2(v78, kw_hashes, v79)
-									if lang.IsTruthy(tmp84) {
-										var tmp85 any
+									var tmp82 any
+									tmp83 := lang.Apply2(v77, kw_hashes, v78)
+									if lang.IsTruthy(tmp83) {
+										var tmp84 any
 										{ // let
 											// let binding "vec__503"
-											tmp86 := aotDirectFn353(v11, v36, v66, v68)
-											var v87 any = tmp86
-											_ = v87
+											tmp85 := aotDirectFn353(v11, v36, v65, v67)
+											var v86 any = tmp85
+											_ = v86
 											// let binding "shift"
-											tmp88 := aotDirectFn319Arity3(v87, int64(0), nil)
-											var v89 any = tmp88
-											_ = v89
+											tmp87 := aotDirectFn319Arity3(v86, int64(0), nil)
+											var v88 any = tmp87
+											_ = v88
 											// let binding "mask"
-											tmp90 := aotDirectFn319Arity3(v87, int64(1), nil)
-											var v91 any = tmp90
-											_ = v91
+											tmp89 := aotDirectFn319Arity3(v86, int64(1), nil)
+											var v90 any = tmp89
+											_ = v90
 											// let binding "imap"
-											tmp92 := aotDirectFn319Arity3(v87, int64(2), nil)
-											var v93 any = tmp92
-											_ = v93
+											tmp91 := aotDirectFn319Arity3(v86, int64(2), nil)
+											var v92 any = tmp91
+											_ = v92
 											// let binding "switch-type"
-											tmp94 := aotDirectFn319Arity3(v87, int64(3), nil)
-											var v95 any = tmp94
-											_ = v95
+											tmp93 := aotDirectFn319Arity3(v86, int64(3), nil)
+											var v94 any = tmp93
+											_ = v94
 											// let binding "skip-check"
-											tmp96 := aotDirectFn319Arity3(v87, int64(4), nil)
-											var v97 any = tmp96
-											_ = v97
-											tmp98 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp99 := lang.Apply1(tmp98, sym_clojure_DOT_core_SLASH_let)
-											tmp100 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp101 := checkDerefVar(var_clojure_DOT_core_vector)
-											tmp102 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp103 := lang.Apply1(tmp102, v11)
-											tmp104 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp105 := lang.Apply1(tmp104, v4)
-											tmp106 := aotDirectFn112Arity2(tmp103, tmp105)
-											tmp107 := aotDirectFn447(tmp106)
-											tmp108 := aotDirectFn35Arity2(tmp101, tmp107)
-											tmp109 := lang.Apply1(tmp100, tmp108)
+											tmp95 := aotDirectFn319Arity3(v86, int64(4), nil)
+											var v96 any = tmp95
+											_ = v96
+											tmp97 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp98 := lang.Apply1(tmp97, sym_clojure_DOT_core_SLASH_let)
+											tmp99 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp100 := checkDerefVar(var_clojure_DOT_core_vector)
+											tmp101 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp102 := lang.Apply1(tmp101, v11)
+											tmp103 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp104 := lang.Apply1(tmp103, v4)
+											tmp105 := aotDirectFn112Arity2(tmp102, tmp104)
+											tmp106 := aotDirectFn447(tmp105)
+											tmp107 := aotDirectFn35Arity2(tmp100, tmp106)
+											tmp108 := lang.Apply1(tmp99, tmp107)
+											tmp109 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp110 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp111 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp112 := lang.Apply1(tmp111, sym_case_STAR_)
-											tmp113 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp114 := lang.Apply1(tmp113, v11)
-											tmp115 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp116 := lang.Apply1(tmp115, v89)
-											tmp117 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp118 := lang.Apply1(tmp117, v91)
-											tmp119 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp120 := lang.Apply1(tmp119, v36)
-											tmp121 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp122 := lang.Apply1(tmp121, v93)
-											tmp123 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp124 := lang.Apply1(tmp123, v95)
-											tmp125 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp126 := lang.Apply1(tmp125, kw_hash_DASH_equiv)
-											tmp127 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp128 := lang.Apply1(tmp127, v97)
-											tmp129 := aotDirectFn112.Invoke9(tmp112, tmp114, tmp116, tmp118, tmp120, tmp122, tmp124, tmp126, tmp128)
-											tmp130 := aotDirectFn447(tmp129)
-											tmp131 := lang.Apply1(tmp110, tmp130)
-											tmp132 := aotDirectFn112.Invoke3(tmp99, tmp109, tmp131)
-											tmp133 := aotDirectFn447(tmp132)
-											tmp85 = tmp133
+											tmp111 := lang.Apply1(tmp110, sym_case_STAR_)
+											tmp112 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp113 := lang.Apply1(tmp112, v11)
+											tmp114 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp115 := lang.Apply1(tmp114, v88)
+											tmp116 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp117 := lang.Apply1(tmp116, v90)
+											tmp118 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp119 := lang.Apply1(tmp118, v36)
+											tmp120 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp121 := lang.Apply1(tmp120, v92)
+											tmp122 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp123 := lang.Apply1(tmp122, v94)
+											tmp124 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp125 := lang.Apply1(tmp124, kw_hash_DASH_equiv)
+											tmp126 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp127 := lang.Apply1(tmp126, v96)
+											tmp128 := aotDirectFn112.Invoke9(tmp111, tmp113, tmp115, tmp117, tmp119, tmp121, tmp123, tmp125, tmp127)
+											tmp129 := aotDirectFn447(tmp128)
+											tmp130 := lang.Apply1(tmp109, tmp129)
+											tmp131 := aotDirectFn112.Invoke3(tmp98, tmp108, tmp130)
+											tmp132 := aotDirectFn447(tmp131)
+											tmp84 = tmp132
 										} // end let
-										tmp83 = tmp85
+										tmp82 = tmp84
 									} else {
-										var tmp86 any
-										tmp87 := lang.Apply2(v78, kw_identity, v79)
-										if lang.IsTruthy(tmp87) {
-											var tmp88 any
+										var tmp85 any
+										tmp86 := lang.Apply2(v77, kw_identity, v78)
+										if lang.IsTruthy(tmp86) {
+											var tmp87 any
 											{ // let
 												// let binding "vec__506"
-												tmp89 := aotDirectFn353(v11, v36, v66, v68)
-												var v90 any = tmp89
-												_ = v90
+												tmp88 := aotDirectFn353(v11, v36, v65, v67)
+												var v89 any = tmp88
+												_ = v89
 												// let binding "shift"
-												tmp91 := aotDirectFn319Arity3(v90, int64(0), nil)
-												var v92 any = tmp91
-												_ = v92
+												tmp90 := aotDirectFn319Arity3(v89, int64(0), nil)
+												var v91 any = tmp90
+												_ = v91
 												// let binding "mask"
-												tmp93 := aotDirectFn319Arity3(v90, int64(1), nil)
-												var v94 any = tmp93
-												_ = v94
+												tmp92 := aotDirectFn319Arity3(v89, int64(1), nil)
+												var v93 any = tmp92
+												_ = v93
 												// let binding "imap"
-												tmp95 := aotDirectFn319Arity3(v90, int64(2), nil)
-												var v96 any = tmp95
-												_ = v96
+												tmp94 := aotDirectFn319Arity3(v89, int64(2), nil)
+												var v95 any = tmp94
+												_ = v95
 												// let binding "switch-type"
-												tmp97 := aotDirectFn319Arity3(v90, int64(3), nil)
-												var v98 any = tmp97
-												_ = v98
+												tmp96 := aotDirectFn319Arity3(v89, int64(3), nil)
+												var v97 any = tmp96
+												_ = v97
 												// let binding "skip-check"
-												tmp99 := aotDirectFn319Arity3(v90, int64(4), nil)
-												var v100 any = tmp99
-												_ = v100
-												tmp101 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp102 := lang.Apply1(tmp101, sym_clojure_DOT_core_SLASH_let)
-												tmp103 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp104 := checkDerefVar(var_clojure_DOT_core_vector)
-												tmp105 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp106 := lang.Apply1(tmp105, v11)
-												tmp107 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp108 := lang.Apply1(tmp107, v4)
-												tmp109 := aotDirectFn112Arity2(tmp106, tmp108)
-												tmp110 := aotDirectFn447(tmp109)
-												tmp111 := aotDirectFn35Arity2(tmp104, tmp110)
-												tmp112 := lang.Apply1(tmp103, tmp111)
+												tmp98 := aotDirectFn319Arity3(v89, int64(4), nil)
+												var v99 any = tmp98
+												_ = v99
+												tmp100 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp101 := lang.Apply1(tmp100, sym_clojure_DOT_core_SLASH_let)
+												tmp102 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp103 := checkDerefVar(var_clojure_DOT_core_vector)
+												tmp104 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp105 := lang.Apply1(tmp104, v11)
+												tmp106 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp107 := lang.Apply1(tmp106, v4)
+												tmp108 := aotDirectFn112Arity2(tmp105, tmp107)
+												tmp109 := aotDirectFn447(tmp108)
+												tmp110 := aotDirectFn35Arity2(tmp103, tmp109)
+												tmp111 := lang.Apply1(tmp102, tmp110)
+												tmp112 := checkDerefVar(var_clojure_DOT_core_list)
 												tmp113 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp114 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp115 := lang.Apply1(tmp114, sym_case_STAR_)
-												tmp116 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp117 := lang.Apply1(tmp116, v11)
-												tmp118 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp119 := lang.Apply1(tmp118, v92)
-												tmp120 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp121 := lang.Apply1(tmp120, v94)
-												tmp122 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp123 := lang.Apply1(tmp122, v36)
-												tmp124 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp125 := lang.Apply1(tmp124, v96)
-												tmp126 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp127 := lang.Apply1(tmp126, v98)
-												tmp128 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp129 := lang.Apply1(tmp128, kw_hash_DASH_identity)
-												tmp130 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp131 := lang.Apply1(tmp130, v100)
-												tmp132 := aotDirectFn112.Invoke9(tmp115, tmp117, tmp119, tmp121, tmp123, tmp125, tmp127, tmp129, tmp131)
-												tmp133 := aotDirectFn447(tmp132)
-												tmp134 := lang.Apply1(tmp113, tmp133)
-												tmp135 := aotDirectFn112.Invoke3(tmp102, tmp112, tmp134)
-												tmp136 := aotDirectFn447(tmp135)
-												tmp88 = tmp136
+												tmp114 := lang.Apply1(tmp113, sym_case_STAR_)
+												tmp115 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp116 := lang.Apply1(tmp115, v11)
+												tmp117 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp118 := lang.Apply1(tmp117, v91)
+												tmp119 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp120 := lang.Apply1(tmp119, v93)
+												tmp121 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp122 := lang.Apply1(tmp121, v36)
+												tmp123 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp124 := lang.Apply1(tmp123, v95)
+												tmp125 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp126 := lang.Apply1(tmp125, v97)
+												tmp127 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp128 := lang.Apply1(tmp127, kw_hash_DASH_identity)
+												tmp129 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp130 := lang.Apply1(tmp129, v99)
+												tmp131 := aotDirectFn112.Invoke9(tmp114, tmp116, tmp118, tmp120, tmp122, tmp124, tmp126, tmp128, tmp130)
+												tmp132 := aotDirectFn447(tmp131)
+												tmp133 := lang.Apply1(tmp112, tmp132)
+												tmp134 := aotDirectFn112.Invoke3(tmp101, tmp111, tmp133)
+												tmp135 := aotDirectFn447(tmp134)
+												tmp87 = tmp135
 											} // end let
-											tmp86 = tmp88
+											tmp85 = tmp87
 										} else {
-											tmp89 := aotDirectFn490.Invoke2("No matching clause: ", v79)
-											tmp90 := lang.Apply1(lang.NewIllegalArgumentError, tmp89)
-											panic(tmp90)
+											tmp88 := aotDirectFn490.Invoke2("No matching clause: ", v78)
+											tmp89 := lang.Apply1(lang.NewIllegalArgumentError, tmp88)
+											panic(tmp89)
 										}
-										tmp83 = tmp86
+										tmp82 = tmp85
 									}
-									tmp80 = tmp83
+									tmp79 = tmp82
 								}
-								tmp76 = tmp80
+								tmp75 = tmp79
 							} // end let
-							tmp56 = tmp76
+							tmp56 = tmp75
 						} // end let
 						tmp37 = tmp56
 					}
@@ -38287,50 +38064,49 @@ func LoadNS() {
 					var v20 any = tmp19
 					_ = v20
 					// let binding "fdecl"
-					tmp21 := lang.NewVector()
-					tmp22 := lang.Apply2(v20, tmp21, v16)
-					tmp23 := aotDirectFn447(tmp22)
-					var v24 any = tmp23
-					_ = v24
+					tmp21 := lang.Apply2(v20, closed19, v16)
+					tmp22 := aotDirectFn447(tmp21)
+					var v23 any = tmp22
+					_ = v23
 					// let binding "decl"
-					var tmp25 any
+					var tmp24 any
 					{ // let
 						// let binding "p"
-						var v26 any = v8
-						_ = v26
+						var v25 any = v8
+						_ = v25
 						// let binding "d"
-						var v27 any = v24
-						_ = v27
+						var v26 any = v23
+						_ = v26
 						for {
-							var tmp28 any
-							if lang.IsTruthy(v26) {
-								tmp30 := aotDirectFn299(v26)
-								var tmp29 any = tmp30
-								tmp32 := aotDirectFn183(v26)
-								tmp33 := aotDirectFn115(tmp32, v27)
-								var tmp31 any = tmp33
-								v26 = tmp29
-								v27 = tmp31
+							var tmp27 any
+							if lang.IsTruthy(v25) {
+								tmp29 := aotDirectFn299(v25)
+								var tmp28 any = tmp29
+								tmp31 := aotDirectFn183(v25)
+								tmp32 := aotDirectFn115(tmp31, v26)
+								var tmp30 any = tmp32
+								v25 = tmp28
+								v26 = tmp30
 								continue
 							} else {
-								tmp28 = v27
+								tmp27 = v26
 							}
-							tmp25 = tmp28
+							tmp24 = tmp27
 							break
 						}
 					} // end let
-					var v26 any = tmp25
-					_ = v26
-					tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp28 := aotDirectFn115(sym_clojure_DOT_core_SLASH_defn, v26)
+					var v25 any = tmp24
+					_ = v25
+					tmp26 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp27 := aotDirectFn115(sym_clojure_DOT_core_SLASH_defn, v25)
+					tmp28 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp29 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp30 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp31 := lang.Apply2(tmp30, sym_var, v4)
-					tmp32 := lang.Apply3(tmp29, sym__DOT_, tmp31, lang.NewList(sym_SetMacro))
-					tmp33 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp34 := lang.Apply2(tmp33, sym_var, v4)
-					tmp35 := lang.Apply4(tmp27, sym_do, tmp28, tmp32, tmp34)
-					tmp6 = tmp35
+					tmp30 := lang.Apply2(tmp29, sym_var, v4)
+					tmp31 := lang.Apply3(tmp28, sym__DOT_, tmp30, closed25)
+					tmp32 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp33 := lang.Apply2(tmp32, sym_var, v4)
+					tmp34 := lang.Apply4(tmp26, sym_do, tmp27, tmp31, tmp33)
+					tmp6 = tmp34
 				} // end let
 				return tmp6
 			}),
@@ -38365,22 +38141,21 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := aotKeywordMapNew14(sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
-				tmp11 := aotDirectFn569(v4, tmp10)
-				tmp12 := lang.Apply1(tmp9, tmp11)
-				tmp13 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp14 := lang.Apply1(tmp13, sym_clojure_DOT_core_SLASH_AddMethod)
-				tmp15 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp16 := lang.Apply1(tmp15, v5)
+				tmp10 := aotDirectFn569(v4, closed26)
+				tmp11 := lang.Apply1(tmp9, tmp10)
+				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp13 := lang.Apply1(tmp12, sym_clojure_DOT_core_SLASH_AddMethod)
+				tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp15 := lang.Apply1(tmp14, v5)
+				tmp16 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp19 := lang.Apply1(tmp18, sym_clojure_DOT_core_SLASH_fn)
-				tmp20 := aotDirectFn112Arity2(tmp19, v6)
-				tmp21 := aotDirectFn447(tmp20)
-				tmp22 := lang.Apply1(tmp17, tmp21)
-				tmp23 := aotDirectFn112.Invoke5(tmp8, tmp12, tmp14, tmp16, tmp22)
-				tmp24 := aotDirectFn447(tmp23)
-				return tmp24
+				tmp18 := lang.Apply1(tmp17, sym_clojure_DOT_core_SLASH_fn)
+				tmp19 := aotDirectFn112Arity2(tmp18, v6)
+				tmp20 := aotDirectFn447(tmp19)
+				tmp21 := lang.Apply1(tmp16, tmp20)
+				tmp22 := aotDirectFn112.Invoke5(tmp8, tmp11, tmp13, tmp15, tmp21)
+				tmp23 := aotDirectFn447(tmp22)
+				return tmp23
 			}),
 			4,
 		)
@@ -38441,167 +38216,166 @@ func LoadNS() {
 						tmp20 := aotDirectFn183(v16)
 						tmp17 = tmp20
 					} else {
-						tmp21 := lang.NewMap()
-						tmp17 = tmp21
+						tmp17 = closed24
 					}
-					var v22 any = tmp17
-					_ = v22
+					var v21 any = tmp17
+					_ = v21
 					// let binding "options"
-					var tmp23 any
-					tmp24 := aotDirectFn183(v16)
-					tmp25 := aotDirectFn274(tmp24)
-					if lang.IsTruthy(tmp25) {
-						tmp26 := aotDirectFn299(v16)
-						tmp23 = tmp26
+					var tmp22 any
+					tmp23 := aotDirectFn183(v16)
+					tmp24 := aotDirectFn274(tmp23)
+					if lang.IsTruthy(tmp24) {
+						tmp25 := aotDirectFn299(v16)
+						tmp22 = tmp25
 					} else {
-						tmp23 = v16
+						tmp22 = v16
 					}
-					var v27 any = tmp23
-					_ = v27
+					var v26 any = tmp22
+					_ = v26
 					// let binding "dispatch-fn"
-					tmp28 := aotDirectFn183(v27)
-					var v29 any = tmp28
-					_ = v29
+					tmp27 := aotDirectFn183(v26)
+					var v28 any = tmp27
+					_ = v28
 					// let binding "options"
-					tmp30 := aotDirectFn299(v27)
-					var v31 any = tmp30
-					_ = v31
+					tmp29 := aotDirectFn299(v26)
+					var v30 any = tmp29
+					_ = v30
 					// let binding "m"
-					var tmp32 any
+					var tmp31 any
 					if lang.IsTruthy(v11) {
-						var tmp33 any = v22
-						tmp33 = lang.Assoc(tmp33, kw_doc, v11)
-						tmp32 = tmp33
+						var tmp32 any = v21
+						tmp32 = lang.Assoc(tmp32, kw_doc, v11)
+						tmp31 = tmp32
 					} else {
-						tmp32 = v22
+						tmp31 = v21
 					}
-					var v34 any = tmp32
-					_ = v34
+					var v33 any = tmp31
+					_ = v33
 					// let binding "m"
-					var tmp35 any
-					tmp36 := aotDirectFn285(v4)
-					if lang.IsTruthy(tmp36) {
-						tmp37 := aotDirectFn285(v4)
-						tmp38 := aotDirectFn113Arity2(tmp37, v34)
-						tmp35 = tmp38
+					var tmp34 any
+					tmp35 := aotDirectFn285(v4)
+					if lang.IsTruthy(tmp35) {
+						tmp36 := aotDirectFn285(v4)
+						tmp37 := aotDirectFn113Arity2(tmp36, v33)
+						tmp34 = tmp37
 					} else {
-						tmp35 = v34
+						tmp34 = v33
 					}
-					var v39 any = tmp35
-					_ = v39
+					var v38 any = tmp34
+					_ = v38
 					// let binding "mm-name"
-					tmp40 := aotDirectFn569(v4, v39)
-					var v41 any = tmp40
-					_ = v41
-					var tmp42 any
-					tmp43 := aotDirectFn118(v31)
-					tmp44 := aotDirectFn9Arity2(tmp43, int64(1))
-					if lang.IsTruthy(tmp44) {
-						tmp45 := lang.Apply1(lang.NewError, "The syntax for defmulti has changed. Example: (defmulti name dispatch-fn :default dispatch-value)")
-						panic(tmp45)
+					tmp39 := aotDirectFn569(v4, v38)
+					var v40 any = tmp39
+					_ = v40
+					var tmp41 any
+					tmp42 := aotDirectFn118(v30)
+					tmp43 := aotDirectFn9Arity2(tmp42, int64(1))
+					if lang.IsTruthy(tmp43) {
+						tmp44 := lang.Apply1(lang.NewError, "The syntax for defmulti has changed. Example: (defmulti name dispatch-fn :default dispatch-value)")
+						panic(tmp44)
 					} else {
 					}
-					_ = tmp42
-					var tmp46 any
+					_ = tmp41
+					var tmp45 any
 					{ // let
 						// let binding "options"
-						tmp47 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
-						tmp48 := aotDirectFn35Arity2(tmp47, v31)
-						var v49 any = tmp48
-						_ = v49
+						tmp46 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
+						tmp47 := aotDirectFn35Arity2(tmp46, v30)
+						var v48 any = tmp47
+						_ = v48
 						// let binding "default"
-						tmp50 := runtime.RT.Get(v49, kw_default, kw_default)
-						var v51 any = tmp50
-						_ = v51
+						tmp49 := runtime.RT.Get(v48, kw_default, kw_default)
+						var v50 any = tmp49
+						_ = v50
 						// let binding "hierarchy"
-						tmp52 := lang.InternVarName(sym_clojure_DOT_core, sym_global_DASH_hierarchy)
-						tmp53 := runtime.RT.Get(v49, kw_hierarchy, tmp52)
-						var v54 any = tmp53
-						_ = v54
-						tmp55 := aotDirectFn91.Invoke3(v49, kw_default, kw_hierarchy)
-						_ = tmp55
-						tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp57 := lang.Apply1(tmp56, sym_clojure_DOT_core_SLASH_let)
-						tmp58 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp59 := checkDerefVar(var_clojure_DOT_core_vector)
-						tmp60 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp61 := lang.Apply1(tmp60, sym_v__0__auto__)
+						tmp51 := lang.InternVarName(sym_clojure_DOT_core, sym_global_DASH_hierarchy)
+						tmp52 := runtime.RT.Get(v48, kw_hierarchy, tmp51)
+						var v53 any = tmp52
+						_ = v53
+						tmp54 := aotDirectFn91.Invoke3(v48, kw_default, kw_hierarchy)
+						_ = tmp54
+						tmp55 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp56 := lang.Apply1(tmp55, sym_clojure_DOT_core_SLASH_let)
+						tmp57 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp58 := checkDerefVar(var_clojure_DOT_core_vector)
+						tmp59 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp60 := lang.Apply1(tmp59, sym_v__0__auto__)
+						tmp61 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp62 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp63 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp64 := lang.Apply1(tmp63, sym_def)
-						tmp65 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp66 := lang.Apply1(tmp65, v41)
-						tmp67 := aotDirectFn112Arity2(tmp64, tmp66)
-						tmp68 := aotDirectFn447(tmp67)
-						tmp69 := lang.Apply1(tmp62, tmp68)
-						tmp70 := aotDirectFn112Arity2(tmp61, tmp69)
-						tmp71 := aotDirectFn447(tmp70)
-						tmp72 := aotDirectFn35Arity2(tmp59, tmp71)
-						tmp73 := lang.Apply1(tmp58, tmp72)
+						tmp63 := lang.Apply1(tmp62, sym_def)
+						tmp64 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp65 := lang.Apply1(tmp64, v40)
+						tmp66 := aotDirectFn112Arity2(tmp63, tmp65)
+						tmp67 := aotDirectFn447(tmp66)
+						tmp68 := lang.Apply1(tmp61, tmp67)
+						tmp69 := aotDirectFn112Arity2(tmp60, tmp68)
+						tmp70 := aotDirectFn447(tmp69)
+						tmp71 := aotDirectFn35Arity2(tmp58, tmp70)
+						tmp72 := lang.Apply1(tmp57, tmp71)
+						tmp73 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp74 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp75 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp76 := lang.Apply1(tmp75, sym_clojure_DOT_core_SLASH_when_DASH_not)
+						tmp75 := lang.Apply1(tmp74, sym_clojure_DOT_core_SLASH_when_DASH_not)
+						tmp76 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp77 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp78 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp79 := lang.Apply1(tmp78, sym_clojure_DOT_core_SLASH_and)
+						tmp78 := lang.Apply1(tmp77, sym_clojure_DOT_core_SLASH_and)
+						tmp79 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp80 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp81 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp82 := lang.Apply1(tmp81, sym__DOT_HasRoot)
-						tmp83 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp84 := lang.Apply1(tmp83, sym_v__0__auto__)
-						tmp85 := aotDirectFn112Arity2(tmp82, tmp84)
-						tmp86 := aotDirectFn447(tmp85)
-						tmp87 := lang.Apply1(tmp80, tmp86)
+						tmp81 := lang.Apply1(tmp80, sym__DOT_HasRoot)
+						tmp82 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp83 := lang.Apply1(tmp82, sym_v__0__auto__)
+						tmp84 := aotDirectFn112Arity2(tmp81, tmp83)
+						tmp85 := aotDirectFn447(tmp84)
+						tmp86 := lang.Apply1(tmp79, tmp85)
+						tmp87 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp88 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp89 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp90 := lang.Apply1(tmp89, sym_clojure_DOT_core_SLASH_instance_QMARK_)
-						tmp91 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp92 := lang.Apply1(tmp91, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
+						tmp89 := lang.Apply1(tmp88, sym_clojure_DOT_core_SLASH_instance_QMARK_)
+						tmp90 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp91 := lang.Apply1(tmp90, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
+						tmp92 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp93 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp94 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp95 := lang.Apply1(tmp94, sym_clojure_DOT_core_SLASH_deref)
-						tmp96 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp97 := lang.Apply1(tmp96, sym_v__0__auto__)
-						tmp98 := aotDirectFn112Arity2(tmp95, tmp97)
-						tmp99 := aotDirectFn447(tmp98)
-						tmp100 := lang.Apply1(tmp93, tmp99)
-						tmp101 := aotDirectFn112.Invoke3(tmp90, tmp92, tmp100)
-						tmp102 := aotDirectFn447(tmp101)
-						tmp103 := lang.Apply1(tmp88, tmp102)
-						tmp104 := aotDirectFn112.Invoke3(tmp79, tmp87, tmp103)
-						tmp105 := aotDirectFn447(tmp104)
-						tmp106 := lang.Apply1(tmp77, tmp105)
+						tmp94 := lang.Apply1(tmp93, sym_clojure_DOT_core_SLASH_deref)
+						tmp95 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp96 := lang.Apply1(tmp95, sym_v__0__auto__)
+						tmp97 := aotDirectFn112Arity2(tmp94, tmp96)
+						tmp98 := aotDirectFn447(tmp97)
+						tmp99 := lang.Apply1(tmp92, tmp98)
+						tmp100 := aotDirectFn112.Invoke3(tmp89, tmp91, tmp99)
+						tmp101 := aotDirectFn447(tmp100)
+						tmp102 := lang.Apply1(tmp87, tmp101)
+						tmp103 := aotDirectFn112.Invoke3(tmp78, tmp86, tmp102)
+						tmp104 := aotDirectFn447(tmp103)
+						tmp105 := lang.Apply1(tmp76, tmp104)
+						tmp106 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp107 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp108 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp109 := lang.Apply1(tmp108, sym_def)
-						tmp110 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp111 := lang.Apply1(tmp110, v41)
+						tmp108 := lang.Apply1(tmp107, sym_def)
+						tmp109 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp110 := lang.Apply1(tmp109, v40)
+						tmp111 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp112 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp113 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp114 := lang.Apply1(tmp113, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn)
-						tmp115 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp116 := aotDirectFn292(v41)
-						tmp117 := lang.Apply1(tmp115, tmp116)
-						tmp118 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp119 := lang.Apply1(tmp118, v29)
-						tmp120 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp121 := lang.Apply1(tmp120, v51)
-						tmp122 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp123 := lang.Apply1(tmp122, v54)
-						tmp124 := aotDirectFn112.Invoke5(tmp114, tmp117, tmp119, tmp121, tmp123)
-						tmp125 := aotDirectFn447(tmp124)
-						tmp126 := lang.Apply1(tmp112, tmp125)
-						tmp127 := aotDirectFn112.Invoke3(tmp109, tmp111, tmp126)
-						tmp128 := aotDirectFn447(tmp127)
-						tmp129 := lang.Apply1(tmp107, tmp128)
-						tmp130 := aotDirectFn112.Invoke3(tmp76, tmp106, tmp129)
-						tmp131 := aotDirectFn447(tmp130)
-						tmp132 := lang.Apply1(tmp74, tmp131)
-						tmp133 := aotDirectFn112.Invoke3(tmp57, tmp73, tmp132)
-						tmp134 := aotDirectFn447(tmp133)
-						tmp46 = tmp134
+						tmp113 := lang.Apply1(tmp112, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn)
+						tmp114 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp115 := aotDirectFn292(v40)
+						tmp116 := lang.Apply1(tmp114, tmp115)
+						tmp117 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp118 := lang.Apply1(tmp117, v28)
+						tmp119 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp120 := lang.Apply1(tmp119, v50)
+						tmp121 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp122 := lang.Apply1(tmp121, v53)
+						tmp123 := aotDirectFn112.Invoke5(tmp113, tmp116, tmp118, tmp120, tmp122)
+						tmp124 := aotDirectFn447(tmp123)
+						tmp125 := lang.Apply1(tmp111, tmp124)
+						tmp126 := aotDirectFn112.Invoke3(tmp108, tmp110, tmp125)
+						tmp127 := aotDirectFn447(tmp126)
+						tmp128 := lang.Apply1(tmp106, tmp127)
+						tmp129 := aotDirectFn112.Invoke3(tmp75, tmp105, tmp128)
+						tmp130 := aotDirectFn447(tmp129)
+						tmp131 := lang.Apply1(tmp73, tmp130)
+						tmp132 := aotDirectFn112.Invoke3(tmp56, tmp72, tmp131)
+						tmp133 := aotDirectFn447(tmp132)
+						tmp45 = tmp133
 					} // end let
-					tmp6 = tmp46
+					tmp6 = tmp45
 				} // end let
 				return tmp6
 			}),
@@ -38652,161 +38426,159 @@ func LoadNS() {
 							tmp15 := aotKeywordMapNew15(tmp14)
 							tmp11 = tmp15
 						} else {
-							tmp16 := lang.NewMap()
-							tmp11 = tmp16
+							tmp11 = closed24
 						}
-						var v17 any = tmp11
-						_ = v17
+						var v16 any = tmp11
+						_ = v16
 						// let binding "fdecl"
-						var tmp18 any
-						tmp19 := aotDirectFn183(v6)
-						tmp20 := aotDirectFn495(tmp19)
-						if lang.IsTruthy(tmp20) {
-							tmp21 := aotDirectFn299(v6)
-							tmp18 = tmp21
+						var tmp17 any
+						tmp18 := aotDirectFn183(v6)
+						tmp19 := aotDirectFn495(tmp18)
+						if lang.IsTruthy(tmp19) {
+							tmp20 := aotDirectFn299(v6)
+							tmp17 = tmp20
 						} else {
-							tmp18 = v6
+							tmp17 = v6
 						}
-						var v22 any = tmp18
-						_ = v22
+						var v21 any = tmp17
+						_ = v21
 						// let binding "m"
-						var tmp23 any
-						tmp24 := aotDirectFn183(v22)
-						tmp25 := aotDirectFn274(tmp24)
-						if lang.IsTruthy(tmp25) {
-							tmp26 := aotDirectFn183(v22)
-							tmp27 := aotDirectFn113Arity2(v17, tmp26)
-							tmp23 = tmp27
+						var tmp22 any
+						tmp23 := aotDirectFn183(v21)
+						tmp24 := aotDirectFn274(tmp23)
+						if lang.IsTruthy(tmp24) {
+							tmp25 := aotDirectFn183(v21)
+							tmp26 := aotDirectFn113Arity2(v16, tmp25)
+							tmp22 = tmp26
 						} else {
-							tmp23 = v17
+							tmp22 = v16
 						}
-						var v28 any = tmp23
-						_ = v28
+						var v27 any = tmp22
+						_ = v27
 						// let binding "fdecl"
-						var tmp29 any
-						tmp30 := aotDirectFn183(v22)
-						tmp31 := aotDirectFn274(tmp30)
-						if lang.IsTruthy(tmp31) {
-							tmp32 := aotDirectFn299(v22)
-							tmp29 = tmp32
+						var tmp28 any
+						tmp29 := aotDirectFn183(v21)
+						tmp30 := aotDirectFn274(tmp29)
+						if lang.IsTruthy(tmp30) {
+							tmp31 := aotDirectFn299(v21)
+							tmp28 = tmp31
 						} else {
-							tmp29 = v22
+							tmp28 = v21
 						}
-						var v33 any = tmp29
-						_ = v33
+						var v32 any = tmp28
+						_ = v32
 						// let binding "fdecl"
-						var tmp34 any
-						tmp35 := aotDirectFn183(v33)
-						tmp36 := aotDirectFn564(tmp35)
-						if lang.IsTruthy(tmp36) {
-							tmp37 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp38 := lang.Apply1(tmp37, v33)
-							tmp34 = tmp38
+						var tmp33 any
+						tmp34 := aotDirectFn183(v32)
+						tmp35 := aotDirectFn564(tmp34)
+						if lang.IsTruthy(tmp35) {
+							tmp36 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp37 := lang.Apply1(tmp36, v32)
+							tmp33 = tmp37
 						} else {
-							tmp34 = v33
+							tmp33 = v32
 						}
-						var v39 any = tmp34
-						_ = v39
+						var v38 any = tmp33
+						_ = v38
 						// let binding "m"
-						var tmp40 any
-						tmp41 := aotDirectFn248(v39)
-						tmp42 := aotDirectFn274(tmp41)
-						if lang.IsTruthy(tmp42) {
-							tmp43 := aotDirectFn248(v39)
-							tmp44 := aotDirectFn113Arity2(v28, tmp43)
-							tmp40 = tmp44
+						var tmp39 any
+						tmp40 := aotDirectFn248(v38)
+						tmp41 := aotDirectFn274(tmp40)
+						if lang.IsTruthy(tmp41) {
+							tmp42 := aotDirectFn248(v38)
+							tmp43 := aotDirectFn113Arity2(v27, tmp42)
+							tmp39 = tmp43
 						} else {
-							tmp40 = v28
+							tmp39 = v27
 						}
-						var v45 any = tmp40
-						_ = v45
+						var v44 any = tmp39
+						_ = v44
 						// let binding "fdecl"
-						var tmp46 any
-						tmp47 := aotDirectFn248(v39)
-						tmp48 := aotDirectFn274(tmp47)
-						if lang.IsTruthy(tmp48) {
-							tmp49 := aotDirectFn78(v39)
-							tmp46 = tmp49
+						var tmp45 any
+						tmp46 := aotDirectFn248(v38)
+						tmp47 := aotDirectFn274(tmp46)
+						if lang.IsTruthy(tmp47) {
+							tmp48 := aotDirectFn78(v38)
+							tmp45 = tmp48
 						} else {
-							tmp46 = v39
+							tmp45 = v38
 						}
-						var v50 any = tmp46
-						_ = v50
+						var v49 any = tmp45
+						_ = v49
 						// let binding "m"
-						tmp51 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp52 := aotDirectFn469(v50)
-						tmp53 := lang.Apply2(tmp51, sym_quote, tmp52)
-						tmp54 := aotKeywordMapNew16(tmp53)
-						tmp55 := aotDirectFn113Arity2(tmp54, v45)
-						var v56 any = tmp55
-						_ = v56
+						tmp50 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp51 := aotDirectFn469(v49)
+						tmp52 := lang.Apply2(tmp50, sym_quote, tmp51)
+						tmp53 := aotKeywordMapNew16(tmp52)
+						tmp54 := aotDirectFn113Arity2(tmp53, v44)
+						var v55 any = tmp54
+						_ = v55
 						// let binding "m"
-						var tmp57 any
+						var tmp56 any
 						{ // let
 							// let binding "inline"
-							tmp58 := aotKeywordSite9.Get(kw_inline, v56, nil)
-							var v59 any = tmp58
-							_ = v59
+							tmp57 := aotKeywordSite9.Get(kw_inline, v55, nil)
+							var v58 any = tmp57
+							_ = v58
 							// let binding "ifn"
-							tmp60 := aotDirectFn183(v59)
-							var v61 any = tmp60
-							_ = v61
+							tmp59 := aotDirectFn183(v58)
+							var v60 any = tmp59
+							_ = v60
 							// let binding "iname"
-							tmp62 := aotDirectFn442(v59)
-							var v63 any = tmp62
-							_ = v63
+							tmp61 := aotDirectFn442(v58)
+							var v62 any = tmp61
+							_ = v62
+							var tmp63 any
 							var tmp64 any
-							var tmp65 any
-							tmp66 := lang.Equiv(sym_fn, v61)
-							if lang.IsTruthy(tmp66) {
-								var tmp67 any
-								tmp68 := lang.IsInstance[*lang.Symbol](v63)
-								if lang.IsTruthy(tmp68) {
-									tmp67 = false
-								} else {
-									tmp67 = true
-								}
-								tmp65 = tmp67
-							} else {
-							}
+							tmp65 := lang.Equiv(sym_fn, v60)
 							if lang.IsTruthy(tmp65) {
-								tmp69 := v5.(interface{ Name() string }).Name()
-								tmp70 := lang.Apply2(lang.ConcatStrings, tmp69, "__inliner")
-								tmp71 := lang.Apply1(lang.NewSymbol, tmp70)
-								tmp72 := aotDirectFn299(v59)
-								tmp73 := aotDirectFn115(tmp71, tmp72)
-								tmp74 := aotDirectFn115(v61, tmp73)
-								var tmp75 any = v56
-								tmp75 = lang.Assoc(tmp75, kw_inline, tmp74)
-								tmp64 = tmp75
+								var tmp66 any
+								tmp67 := lang.IsInstance[*lang.Symbol](v62)
+								if lang.IsTruthy(tmp67) {
+									tmp66 = false
+								} else {
+									tmp66 = true
+								}
+								tmp64 = tmp66
 							} else {
-								tmp64 = v56
 							}
-							tmp57 = tmp64
+							if lang.IsTruthy(tmp64) {
+								tmp68 := v5.(interface{ Name() string }).Name()
+								tmp69 := lang.Apply2(lang.ConcatStrings, tmp68, "__inliner")
+								tmp70 := lang.Apply1(lang.NewSymbol, tmp69)
+								tmp71 := aotDirectFn299(v58)
+								tmp72 := aotDirectFn115(tmp70, tmp71)
+								tmp73 := aotDirectFn115(v60, tmp72)
+								var tmp74 any = v55
+								tmp74 = lang.Assoc(tmp74, kw_inline, tmp73)
+								tmp63 = tmp74
+							} else {
+								tmp63 = v55
+							}
+							tmp56 = tmp63
 						} // end let
-						var v58 any = tmp57
-						_ = v58
+						var v57 any = tmp56
+						_ = v57
 						// let binding "m"
-						var tmp59 any
-						tmp60 := aotDirectFn285(v5)
-						if lang.IsTruthy(tmp60) {
-							tmp61 := aotDirectFn285(v5)
-							tmp59 = tmp61
+						var tmp58 any
+						tmp59 := aotDirectFn285(v5)
+						if lang.IsTruthy(tmp59) {
+							tmp60 := aotDirectFn285(v5)
+							tmp58 = tmp60
 						} else {
-							tmp62 := lang.NewMap()
-							tmp59 = tmp62
+							tmp58 = closed24
 						}
-						tmp63 := aotDirectFn113Arity2(tmp59, v58)
-						var v64 any = tmp63
-						_ = v64
-						tmp65 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp66 := aotDirectFn569(v5, v64)
-						tmp67 := aotDirectFn115(sym_clojure_DOT_core_SLASH_fn, v50)
-						tmp68 := aotKeywordSite10.Get(kw_tag, v64, nil)
-						tmp69 := aotKeywordMapNew17(tmp68)
-						tmp70 := aotDirectFn569(tmp67, tmp69)
-						tmp71 := lang.Apply3(tmp65, sym_def, tmp66, tmp70)
-						tmp10 = tmp71
+						tmp61 := aotDirectFn113Arity2(tmp58, v57)
+						var v62 any = tmp61
+						_ = v62
+						tmp63 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp64 := aotDirectFn569(v5, v62)
+						tmp65 := aotDirectFn115(sym_clojure_DOT_core_SLASH_fn, v49)
+						tmp66 := aotKeywordSite10.Get(kw_tag, v62, nil)
+						tmp67 := aotKeywordMapNew17(tmp66)
+						tmp68 := aotDirectFn569(tmp65, tmp67)
+						tmp69 := lang.Apply3(tmp63, sym_def, tmp64, tmp68)
+						tmp10 = tmp69
 					} // end let
 					return tmp10
 				}),
@@ -39184,10 +38956,9 @@ func LoadNS() {
 				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp6 := lang.NewVector()
-				tmp7 := aotDirectFn252Arity3(sym_fn_STAR_, tmp6, v4)
-				tmp8 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay, tmp7)
-				return tmp8
+				tmp6 := aotDirectFn252Arity3(sym_fn_STAR_, closed19, v4)
+				tmp7 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay, tmp6)
+				return tmp7
 			}),
 			2,
 		)
@@ -39290,134 +39061,133 @@ func LoadNS() {
 									var v22 any = tmp21
 									_ = v22
 									// let binding "has-rest"
-									tmp23 := lang.NewSet(sym__AMP_)
-									tmp24 := aotDirectFn474(tmp23, v14)
-									var v25 any = tmp24
-									_ = v25
-									var tmp26 any
+									tmp23 := aotDirectFn474(closed29, v14)
+									var v24 any = tmp23
+									_ = v24
+									var tmp25 any
 									{ // let
 										// let binding "ret"
-										var tmp27 any
+										var tmp26 any
 										{ // let
 											// let binding "ret"
-											tmp28 := aotDirectFn113.Invoke3(v13, v18, v15)
-											var v29 any = tmp28
-											_ = v29
-											var tmp30 any
-											if lang.IsTruthy(v25) {
-												tmp31 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp32 := lang.Apply2(tmp31, sym_clojure_DOT_core_SLASH_seq, v18)
-												tmp33 := aotDirectFn113.Invoke3(v29, v20, tmp32)
-												tmp30 = tmp33
+											tmp27 := aotDirectFn113.Invoke3(v13, v18, v15)
+											var v28 any = tmp27
+											_ = v28
+											var tmp29 any
+											if lang.IsTruthy(v24) {
+												tmp30 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp31 := lang.Apply2(tmp30, sym_clojure_DOT_core_SLASH_seq, v18)
+												tmp32 := aotDirectFn113.Invoke3(v28, v20, tmp31)
+												tmp29 = tmp32
 											} else {
-												tmp30 = v29
+												tmp29 = v28
 											}
-											tmp27 = tmp30
+											tmp26 = tmp29
 										} // end let
-										var v28 any = tmp27
-										_ = v28
+										var v27 any = tmp26
+										_ = v27
 										// let binding "n"
-										var v29 any = int64(0)
-										_ = v29
+										var v28 any = int64(0)
+										_ = v28
 										// let binding "bs"
-										var v30 any = v14
-										_ = v30
+										var v29 any = v14
+										_ = v29
 										// let binding "seen-rest?"
-										var v31 any = false
-										_ = v31
+										var v30 any = false
+										_ = v30
 										for {
-											var tmp32 any
-											tmp33 := aotDirectFn447(v30)
-											if lang.IsTruthy(tmp33) {
-												var tmp34 any
+											var tmp31 any
+											tmp32 := aotDirectFn447(v29)
+											if lang.IsTruthy(tmp32) {
+												var tmp33 any
 												{ // let
 													// let binding "firstb"
-													tmp35 := aotDirectFn183(v30)
-													var v36 any = tmp35
-													_ = v36
-													var tmp37 any
-													tmp38 := aotDirectFn9Arity2(v36, sym__AMP_)
-													if lang.IsTruthy(tmp38) {
-														tmp40 := aotDirectFn442(v30)
-														tmp41 := lang.Apply3(v7, v28, tmp40, v20)
-														var tmp39 any = tmp41
-														var tmp42 any = v29
-														tmp44 := aotDirectFn302(v30)
-														var tmp43 any = tmp44
-														var tmp45 any = true
-														v28 = tmp39
+													tmp34 := aotDirectFn183(v29)
+													var v35 any = tmp34
+													_ = v35
+													var tmp36 any
+													tmp37 := aotDirectFn9Arity2(v35, sym__AMP_)
+													if lang.IsTruthy(tmp37) {
+														tmp39 := aotDirectFn442(v29)
+														tmp40 := lang.Apply3(v7, v27, tmp39, v20)
+														var tmp38 any = tmp40
+														var tmp41 any = v28
+														tmp43 := aotDirectFn302(v29)
+														var tmp42 any = tmp43
+														var tmp44 any = true
+														v27 = tmp38
+														v28 = tmp41
 														v29 = tmp42
-														v30 = tmp43
-														v31 = tmp45
+														v30 = tmp44
 														continue
 													} else {
-														var tmp46 any
-														tmp47 := aotDirectFn9Arity2(v36, kw_as)
-														if lang.IsTruthy(tmp47) {
-															tmp48 := aotDirectFn442(v30)
-															tmp49 := lang.Apply3(v7, v28, tmp48, v18)
-															tmp46 = tmp49
+														var tmp45 any
+														tmp46 := aotDirectFn9Arity2(v35, kw_as)
+														if lang.IsTruthy(tmp46) {
+															tmp47 := aotDirectFn442(v29)
+															tmp48 := lang.Apply3(v7, v27, tmp47, v18)
+															tmp45 = tmp48
 														} else {
-															var tmp50 any
-															if lang.IsTruthy(v31) {
-																tmp51 := lang.Apply1(errors8.New, "Unsupported binding form, only :as can follow & parameter")
-																panic(tmp51)
+															var tmp49 any
+															if lang.IsTruthy(v30) {
+																tmp50 := lang.Apply1(errors8.New, "Unsupported binding form, only :as can follow & parameter")
+																panic(tmp50)
 															} else {
-																var tmp53 any
-																if lang.IsTruthy(v25) {
-																	tmp54 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp55 := lang.Apply1(tmp54, sym_clojure_DOT_core_SLASH_first)
-																	tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp57 := lang.Apply1(tmp56, v20)
-																	tmp58 := aotDirectFn112Arity2(tmp55, tmp57)
-																	tmp59 := aotDirectFn447(tmp58)
-																	tmp60 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp61 := lang.Apply1(tmp60, sym_clojure_DOT_core_SLASH_next)
-																	tmp62 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp63 := lang.Apply1(tmp62, v20)
-																	tmp64 := aotDirectFn112Arity2(tmp61, tmp63)
-																	tmp65 := aotDirectFn447(tmp64)
-																	tmp66 := aotDirectFn113.Invoke5(v28, v22, tmp59, v20, tmp65)
-																	tmp53 = tmp66
+																var tmp52 any
+																if lang.IsTruthy(v24) {
+																	tmp53 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp54 := lang.Apply1(tmp53, sym_clojure_DOT_core_SLASH_first)
+																	tmp55 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp56 := lang.Apply1(tmp55, v20)
+																	tmp57 := aotDirectFn112Arity2(tmp54, tmp56)
+																	tmp58 := aotDirectFn447(tmp57)
+																	tmp59 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp60 := lang.Apply1(tmp59, sym_clojure_DOT_core_SLASH_next)
+																	tmp61 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp62 := lang.Apply1(tmp61, v20)
+																	tmp63 := aotDirectFn112Arity2(tmp60, tmp62)
+																	tmp64 := aotDirectFn447(tmp63)
+																	tmp65 := aotDirectFn113.Invoke5(v27, v22, tmp58, v20, tmp64)
+																	tmp52 = tmp65
 																} else {
-																	tmp53 = v28
+																	tmp52 = v27
 																}
-																var tmp67 any
-																if lang.IsTruthy(v25) {
-																	tmp67 = v22
+																var tmp66 any
+																if lang.IsTruthy(v24) {
+																	tmp66 = v22
 																} else {
-																	tmp68 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp69 := lang.Apply4(tmp68, sym_clojure_DOT_core_SLASH_nth, v18, v29, nil)
-																	tmp67 = tmp69
+																	tmp67 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp68 := lang.Apply4(tmp67, sym_clojure_DOT_core_SLASH_nth, v18, v28, nil)
+																	tmp66 = tmp68
 																}
-																tmp70 := lang.Apply3(v7, tmp53, v36, tmp67)
-																var tmp52 any = tmp70
-																tmp72 := lang.Numbers.Inc(v29)
-																var tmp71 any = tmp72
-																tmp74 := aotDirectFn299(v30)
-																var tmp73 any = tmp74
-																var tmp75 any = v31
-																v28 = tmp52
-																v29 = tmp71
-																v30 = tmp73
-																v31 = tmp75
+																tmp69 := lang.Apply3(v7, tmp52, v35, tmp66)
+																var tmp51 any = tmp69
+																tmp71 := lang.Numbers.Inc(v28)
+																var tmp70 any = tmp71
+																tmp73 := aotDirectFn299(v29)
+																var tmp72 any = tmp73
+																var tmp74 any = v30
+																v27 = tmp51
+																v28 = tmp70
+																v29 = tmp72
+																v30 = tmp74
 																continue
 															}
-															tmp46 = tmp50
+															tmp45 = tmp49
 														}
-														tmp37 = tmp46
+														tmp36 = tmp45
 													}
-													tmp34 = tmp37
+													tmp33 = tmp36
 												} // end let
-												tmp32 = tmp34
+												tmp31 = tmp33
 											} else {
-												tmp32 = v28
+												tmp31 = v27
 											}
-											tmp26 = tmp32
+											tmp25 = tmp31
 											break
 										}
 									} // end let
-									tmp16 = tmp26
+									tmp16 = tmp25
 								} // end let
 								return tmp16
 							})
@@ -39439,320 +39209,318 @@ func LoadNS() {
 									var v20 any = tmp19
 									_ = v20
 									// let binding "gmapseq"
-									tmp21 := aotKeywordMapNew14(sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq)
-									tmp22 := aotDirectFn569(v20, tmp21)
-									var v23 any = tmp22
-									_ = v23
+									tmp21 := aotDirectFn569(v20, closed30)
+									var v22 any = tmp21
+									_ = v22
 									// let binding "defaults"
-									tmp24 := aotKeywordSite18.Get(kw_or, v16, nil)
-									var v25 any = tmp24
-									_ = v25
-									var tmp26 any
+									tmp23 := aotKeywordSite18.Get(kw_or, v16, nil)
+									var v24 any = tmp23
+									_ = v24
+									var tmp25 any
 									{ // let
 										// let binding "ret"
-										var tmp27 lang.FnFunc1
-										tmp27 = lang.FnFunc1(func(p0 any) any {
-											v28 := p0
-											_ = v28
-											var tmp29 any
-											tmp30 := aotKeywordSite19.Get(kw_as, v16, nil)
-											if lang.IsTruthy(tmp30) {
-												tmp31 := aotKeywordSite20.Get(kw_as, v16, nil)
-												tmp32 := aotDirectFn113.Invoke3(v28, tmp31, v20)
-												tmp29 = tmp32
+										var tmp26 lang.FnFunc1
+										tmp26 = lang.FnFunc1(func(p0 any) any {
+											v27 := p0
+											_ = v27
+											var tmp28 any
+											tmp29 := aotKeywordSite19.Get(kw_as, v16, nil)
+											if lang.IsTruthy(tmp29) {
+												tmp30 := aotKeywordSite20.Get(kw_as, v16, nil)
+												tmp31 := aotDirectFn113.Invoke3(v27, tmp30, v20)
+												tmp28 = tmp31
 											} else {
-												tmp29 = v28
+												tmp28 = v27
 											}
-											return tmp29
+											return tmp28
 										})
-										tmp28 := aotDirectFn113Arity2(v15, v20)
-										tmp29 := aotDirectFn113Arity2(tmp28, v17)
-										tmp30 := aotDirectFn113Arity2(tmp29, v20)
-										tmp31 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp32 := lang.Apply1(tmp31, sym_if)
+										tmp27 := aotDirectFn113Arity2(v15, v20)
+										tmp28 := aotDirectFn113Arity2(tmp27, v17)
+										tmp29 := aotDirectFn113Arity2(tmp28, v20)
+										tmp30 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp31 := lang.Apply1(tmp30, sym_if)
+										tmp32 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp33 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp34 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp35 := lang.Apply1(tmp34, sym_clojure_DOT_core_SLASH_seq_QMARK_)
-										tmp36 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp37 := lang.Apply1(tmp36, v20)
-										tmp38 := aotDirectFn112Arity2(tmp35, tmp37)
-										tmp39 := aotDirectFn447(tmp38)
-										tmp40 := lang.Apply1(tmp33, tmp39)
+										tmp34 := lang.Apply1(tmp33, sym_clojure_DOT_core_SLASH_seq_QMARK_)
+										tmp35 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp36 := lang.Apply1(tmp35, v20)
+										tmp37 := aotDirectFn112Arity2(tmp34, tmp36)
+										tmp38 := aotDirectFn447(tmp37)
+										tmp39 := lang.Apply1(tmp32, tmp38)
+										tmp40 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp41 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp42 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp43 := lang.Apply1(tmp42, sym_if)
+										tmp42 := lang.Apply1(tmp41, sym_if)
+										tmp43 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp44 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp45 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp46 := lang.Apply1(tmp45, sym_clojure_DOT_core_SLASH_next)
-										tmp47 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp48 := lang.Apply1(tmp47, v23)
-										tmp49 := aotDirectFn112Arity2(tmp46, tmp48)
-										tmp50 := aotDirectFn447(tmp49)
-										tmp51 := lang.Apply1(tmp44, tmp50)
+										tmp45 := lang.Apply1(tmp44, sym_clojure_DOT_core_SLASH_next)
+										tmp46 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp47 := lang.Apply1(tmp46, v22)
+										tmp48 := aotDirectFn112Arity2(tmp45, tmp47)
+										tmp49 := aotDirectFn447(tmp48)
+										tmp50 := lang.Apply1(tmp43, tmp49)
+										tmp51 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp52 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp53 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp54 := lang.Apply1(tmp53, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc)
+										tmp53 := lang.Apply1(tmp52, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc)
+										tmp54 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp55 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp57 := lang.Apply1(tmp56, sym_clojure_DOT_core_SLASH_to_DASH_array)
-										tmp58 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp59 := lang.Apply1(tmp58, v23)
-										tmp60 := aotDirectFn112Arity2(tmp57, tmp59)
-										tmp61 := aotDirectFn447(tmp60)
-										tmp62 := lang.Apply1(tmp55, tmp61)
-										tmp63 := aotDirectFn112Arity2(tmp54, tmp62)
-										tmp64 := aotDirectFn447(tmp63)
-										tmp65 := lang.Apply1(tmp52, tmp64)
+										tmp56 := lang.Apply1(tmp55, sym_clojure_DOT_core_SLASH_to_DASH_array)
+										tmp57 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp58 := lang.Apply1(tmp57, v22)
+										tmp59 := aotDirectFn112Arity2(tmp56, tmp58)
+										tmp60 := aotDirectFn447(tmp59)
+										tmp61 := lang.Apply1(tmp54, tmp60)
+										tmp62 := aotDirectFn112Arity2(tmp53, tmp61)
+										tmp63 := aotDirectFn447(tmp62)
+										tmp64 := lang.Apply1(tmp51, tmp63)
+										tmp65 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp66 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp67 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp68 := lang.Apply1(tmp67, sym_if)
+										tmp67 := lang.Apply1(tmp66, sym_if)
+										tmp68 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp69 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp70 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp71 := lang.Apply1(tmp70, sym_clojure_DOT_core_SLASH_seq)
-										tmp72 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp73 := lang.Apply1(tmp72, v23)
-										tmp74 := aotDirectFn112Arity2(tmp71, tmp73)
-										tmp75 := aotDirectFn447(tmp74)
-										tmp76 := lang.Apply1(tmp69, tmp75)
+										tmp70 := lang.Apply1(tmp69, sym_clojure_DOT_core_SLASH_seq)
+										tmp71 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp72 := lang.Apply1(tmp71, v22)
+										tmp73 := aotDirectFn112Arity2(tmp70, tmp72)
+										tmp74 := aotDirectFn447(tmp73)
+										tmp75 := lang.Apply1(tmp68, tmp74)
+										tmp76 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp77 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp78 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp79 := lang.Apply1(tmp78, sym_clojure_DOT_core_SLASH_first)
-										tmp80 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp81 := lang.Apply1(tmp80, v23)
-										tmp82 := aotDirectFn112Arity2(tmp79, tmp81)
-										tmp83 := aotDirectFn447(tmp82)
-										tmp84 := lang.Apply1(tmp77, tmp83)
+										tmp78 := lang.Apply1(tmp77, sym_clojure_DOT_core_SLASH_first)
+										tmp79 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp80 := lang.Apply1(tmp79, v22)
+										tmp81 := aotDirectFn112Arity2(tmp78, tmp80)
+										tmp82 := aotDirectFn447(tmp81)
+										tmp83 := lang.Apply1(tmp76, tmp82)
+										tmp84 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp85 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp86 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp87 := lang.Apply1(tmp86, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap)
-										tmp88 := aotDirectFn112Arity1(tmp87)
-										tmp89 := aotDirectFn447(tmp88)
-										tmp90 := lang.Apply1(tmp85, tmp89)
-										tmp91 := aotDirectFn112.Invoke4(tmp68, tmp76, tmp84, tmp90)
-										tmp92 := aotDirectFn447(tmp91)
-										tmp93 := lang.Apply1(tmp66, tmp92)
-										tmp94 := aotDirectFn112.Invoke4(tmp43, tmp51, tmp65, tmp93)
-										tmp95 := aotDirectFn447(tmp94)
-										tmp96 := lang.Apply1(tmp41, tmp95)
-										tmp97 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp98 := lang.Apply1(tmp97, v20)
-										tmp99 := aotDirectFn112.Invoke4(tmp32, tmp40, tmp96, tmp98)
-										tmp100 := aotDirectFn447(tmp99)
-										tmp101 := aotDirectFn113Arity2(tmp30, tmp100)
-										tmp102 := lang.Apply1(tmp27, tmp101)
-										var v103 any = tmp102
-										_ = v103
+										tmp86 := lang.Apply1(tmp85, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap)
+										tmp87 := aotDirectFn112Arity1(tmp86)
+										tmp88 := aotDirectFn447(tmp87)
+										tmp89 := lang.Apply1(tmp84, tmp88)
+										tmp90 := aotDirectFn112.Invoke4(tmp67, tmp75, tmp83, tmp89)
+										tmp91 := aotDirectFn447(tmp90)
+										tmp92 := lang.Apply1(tmp65, tmp91)
+										tmp93 := aotDirectFn112.Invoke4(tmp42, tmp50, tmp64, tmp92)
+										tmp94 := aotDirectFn447(tmp93)
+										tmp95 := lang.Apply1(tmp40, tmp94)
+										tmp96 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp97 := lang.Apply1(tmp96, v20)
+										tmp98 := aotDirectFn112.Invoke4(tmp31, tmp39, tmp95, tmp97)
+										tmp99 := aotDirectFn447(tmp98)
+										tmp100 := aotDirectFn113Arity2(tmp29, tmp99)
+										tmp101 := lang.Apply1(tmp26, tmp100)
+										var v102 any = tmp101
+										_ = v102
 										// let binding "bes"
-										var tmp104 any
+										var tmp103 any
 										{ // let
 											// let binding "transforms"
-											var tmp105 lang.FnFunc2
-											tmp105 = lang.FnFunc2(func(p0, p1 any) any {
-												v106 := p0
+											var tmp104 lang.FnFunc2
+											tmp104 = lang.FnFunc2(func(p0, p1 any) any {
+												v105 := p0
+												_ = v105
+												v106 := p1
 												_ = v106
-												v107 := p1
-												_ = v107
-												var tmp108 any
-												tmp109 := aotDirectFn247(v107)
-												if lang.IsTruthy(tmp109) {
-													var tmp110 any
+												var tmp107 any
+												tmp108 := aotDirectFn247(v106)
+												if lang.IsTruthy(tmp108) {
+													var tmp109 any
 													{ // let
 														// let binding "mkns"
-														tmp111 := aotDirectFn293(v107)
-														var v112 any = tmp111
-														_ = v112
+														tmp110 := aotDirectFn293(v106)
+														var v111 any = tmp110
+														_ = v111
 														// let binding "mkn"
-														tmp113 := aotDirectFn292(v107)
-														var v114 any = tmp113
-														_ = v114
-														var tmp115 any
-														tmp116 := aotDirectFn9Arity2(v114, "keys")
-														if lang.IsTruthy(tmp116) {
-															var tmp117 lang.FnFunc1
-															tmp117 = lang.FnFunc1(func(p0 any) any {
-																v118 := p0
-																_ = v118
-																var tmp119 any
+														tmp112 := aotDirectFn292(v106)
+														var v113 any = tmp112
+														_ = v113
+														var tmp114 any
+														tmp115 := aotDirectFn9Arity2(v113, "keys")
+														if lang.IsTruthy(tmp115) {
+															var tmp116 lang.FnFunc1
+															tmp116 = lang.FnFunc1(func(p0 any) any {
+																v117 := p0
+																_ = v117
+																var tmp118 any
 																{ // let
 																	// let binding "or__0__auto__"
-																	var v120 any = v112
-																	_ = v120
-																	var tmp121 any
-																	if lang.IsTruthy(v120) {
-																		tmp121 = v120
+																	var v119 any = v111
+																	_ = v119
+																	var tmp120 any
+																	if lang.IsTruthy(v119) {
+																		tmp120 = v119
 																	} else {
-																		tmp122 := aotDirectFn293(v118)
-																		tmp121 = tmp122
+																		tmp121 := aotDirectFn293(v117)
+																		tmp120 = tmp121
 																	}
-																	tmp119 = tmp121
+																	tmp118 = tmp120
 																} // end let
-																tmp120 := aotDirectFn292(v118)
-																tmp121 := aotDirectFn246Arity2(tmp119, tmp120)
-																return tmp121
+																tmp119 := aotDirectFn292(v117)
+																tmp120 := aotDirectFn246Arity2(tmp118, tmp119)
+																return tmp120
 															})
-															var tmp118 any = v106
-															tmp118 = lang.Assoc(tmp118, v107, tmp117)
-															tmp115 = tmp118
+															var tmp117 any = v105
+															tmp117 = lang.Assoc(tmp117, v106, tmp116)
+															tmp114 = tmp117
 														} else {
-															var tmp119 any
-															tmp120 := aotDirectFn9Arity2(v114, "syms")
-															if lang.IsTruthy(tmp120) {
-																var tmp121 lang.FnFunc1
-																tmp121 = lang.FnFunc1(func(p0 any) any {
-																	v122 := p0
-																	_ = v122
-																	tmp123 := checkDerefVar(var_clojure_DOT_core_list)
-																	var tmp124 any
+															var tmp118 any
+															tmp119 := aotDirectFn9Arity2(v113, "syms")
+															if lang.IsTruthy(tmp119) {
+																var tmp120 lang.FnFunc1
+																tmp120 = lang.FnFunc1(func(p0 any) any {
+																	v121 := p0
+																	_ = v121
+																	tmp122 := checkDerefVar(var_clojure_DOT_core_list)
+																	var tmp123 any
 																	{ // let
 																		// let binding "or__0__auto__"
-																		var v125 any = v112
-																		_ = v125
-																		var tmp126 any
-																		if lang.IsTruthy(v125) {
-																			tmp126 = v125
+																		var v124 any = v111
+																		_ = v124
+																		var tmp125 any
+																		if lang.IsTruthy(v124) {
+																			tmp125 = v124
 																		} else {
-																			tmp127 := aotDirectFn293(v122)
-																			tmp126 = tmp127
+																			tmp126 := aotDirectFn293(v121)
+																			tmp125 = tmp126
 																		}
-																		tmp124 = tmp126
+																		tmp123 = tmp125
 																	} // end let
-																	tmp125 := aotDirectFn292(v122)
-																	tmp126 := aotDirectFn505Arity2(tmp124, tmp125)
-																	tmp127 := lang.Apply2(tmp123, sym_quote, tmp126)
-																	return tmp127
+																	tmp124 := aotDirectFn292(v121)
+																	tmp125 := aotDirectFn505Arity2(tmp123, tmp124)
+																	tmp126 := lang.Apply2(tmp122, sym_quote, tmp125)
+																	return tmp126
 																})
-																var tmp122 any = v106
-																tmp122 = lang.Assoc(tmp122, v107, tmp121)
-																tmp119 = tmp122
+																var tmp121 any = v105
+																tmp121 = lang.Assoc(tmp121, v106, tmp120)
+																tmp118 = tmp121
 															} else {
-																var tmp123 any
-																tmp124 := aotDirectFn9Arity2(v114, "strs")
-																if lang.IsTruthy(tmp124) {
-																	tmp125 := checkDerefVar(var_clojure_DOT_core_str)
-																	var tmp126 any = v106
-																	tmp126 = lang.Assoc(tmp126, v107, tmp125)
-																	tmp123 = tmp126
+																var tmp122 any
+																tmp123 := aotDirectFn9Arity2(v113, "strs")
+																if lang.IsTruthy(tmp123) {
+																	tmp124 := checkDerefVar(var_clojure_DOT_core_str)
+																	var tmp125 any = v105
+																	tmp125 = lang.Assoc(tmp125, v106, tmp124)
+																	tmp122 = tmp125
 																} else {
-																	tmp123 = v106
+																	tmp122 = v105
 																}
-																tmp119 = tmp123
+																tmp118 = tmp122
 															}
-															tmp115 = tmp119
+															tmp114 = tmp118
 														}
-														tmp110 = tmp115
+														tmp109 = tmp114
 													} // end let
-													tmp108 = tmp110
+													tmp107 = tmp109
 												} else {
-													tmp108 = v106
+													tmp107 = v105
 												}
-												return tmp108
+												return tmp107
 											})
-											tmp106 := lang.NewMap()
-											tmp107 := aotDirectFn245(v16)
-											tmp108 := aotDirectFn404Arity3(tmp105, tmp106, tmp107)
-											var v109 any = tmp108
-											_ = v109
-											var tmp110 lang.FnFunc2
-											tmp110 = lang.FnFunc2(func(p0, p1 any) any {
-												v111 := p0
-												_ = v111
-												v112 := p1
-												_ = v112
-												var tmp113 lang.FnFunc2
-												tmp113 = lang.FnFunc2(func(p0, p1 any) any {
-													v114 := p0
-													_ = v114
-													v115 := p1
-													_ = v115
-													tmp116 := aotDirectFn556(v112)
-													tmp117 := lang.Apply1(tmp116, v115)
-													var tmp118 any = v114
-													tmp118 = lang.Assoc(tmp118, v115, tmp117)
-													return tmp118
+											tmp105 := aotDirectFn245(v16)
+											tmp106 := aotDirectFn404Arity3(tmp104, closed24, tmp105)
+											var v107 any = tmp106
+											_ = v107
+											var tmp108 lang.FnFunc2
+											tmp108 = lang.FnFunc2(func(p0, p1 any) any {
+												v109 := p0
+												_ = v109
+												v110 := p1
+												_ = v110
+												var tmp111 lang.FnFunc2
+												tmp111 = lang.FnFunc2(func(p0, p1 any) any {
+													v112 := p0
+													_ = v112
+													v113 := p1
+													_ = v113
+													tmp114 := aotDirectFn556(v110)
+													tmp115 := lang.Apply1(tmp114, v113)
+													var tmp116 any = v112
+													tmp116 = lang.Assoc(tmp116, v113, tmp115)
+													return tmp116
 												})
-												tmp114 := aotDirectFn244(v112)
-												tmp115 := aotDirectFn140Arity2(v111, tmp114)
-												tmp116 := aotDirectFn244(v112)
-												tmp117 := lang.Apply1(tmp116, v111)
-												tmp118 := aotDirectFn404Arity3(tmp113, tmp115, tmp117)
-												return tmp118
+												tmp112 := aotDirectFn244(v110)
+												tmp113 := aotDirectFn140Arity2(v109, tmp112)
+												tmp114 := aotDirectFn244(v110)
+												tmp115 := lang.Apply1(tmp114, v109)
+												tmp116 := aotDirectFn404Arity3(tmp111, tmp113, tmp115)
+												return tmp116
 											})
-											tmp111 := aotDirectFn140.Invoke3(v16, kw_as, kw_or)
-											tmp112 := aotDirectFn404Arity3(tmp110, tmp111, v109)
-											tmp104 = tmp112
+											tmp109 := aotDirectFn140.Invoke3(v16, kw_as, kw_or)
+											tmp110 := aotDirectFn404Arity3(tmp108, tmp109, v107)
+											tmp103 = tmp110
 										} // end let
-										var v105 any = tmp104
-										_ = v105
+										var v104 any = tmp103
+										_ = v104
 										for {
-											var tmp106 any
-											tmp107 := aotDirectFn447(v105)
-											if lang.IsTruthy(tmp107) {
-												var tmp108 any
+											var tmp105 any
+											tmp106 := aotDirectFn447(v104)
+											if lang.IsTruthy(tmp106) {
+												var tmp107 any
 												{ // let
 													// let binding "bb"
-													tmp109 := aotDirectFn183(v105)
-													tmp110 := aotDirectFn244(tmp109)
-													var v111 any = tmp110
-													_ = v111
+													tmp108 := aotDirectFn183(v104)
+													tmp109 := aotDirectFn244(tmp108)
+													var v110 any = tmp109
+													_ = v110
 													// let binding "bk"
-													tmp112 := aotDirectFn183(v105)
-													tmp113 := aotDirectFn556(tmp112)
-													var v114 any = tmp113
-													_ = v114
+													tmp111 := aotDirectFn183(v104)
+													tmp112 := aotDirectFn556(tmp111)
+													var v113 any = tmp112
+													_ = v113
 													// let binding "local"
-													var tmp115 any
-													tmp116 := lang.IsInstance[lang.Named](v111)
-													if lang.IsTruthy(tmp116) {
-														tmp117 := aotDirectFn292(v111)
-														tmp118 := aotDirectFn505Arity2(nil, tmp117)
-														tmp119 := aotDirectFn285(v111)
-														tmp120 := aotDirectFn569(tmp118, tmp119)
-														tmp115 = tmp120
+													var tmp114 any
+													tmp115 := lang.IsInstance[lang.Named](v110)
+													if lang.IsTruthy(tmp115) {
+														tmp116 := aotDirectFn292(v110)
+														tmp117 := aotDirectFn505Arity2(nil, tmp116)
+														tmp118 := aotDirectFn285(v110)
+														tmp119 := aotDirectFn569(tmp117, tmp118)
+														tmp114 = tmp119
 													} else {
-														tmp115 = v111
+														tmp114 = v110
 													}
-													var v121 any = tmp115
-													_ = v121
+													var v120 any = tmp114
+													_ = v120
 													// let binding "bv"
-													var tmp122 any
-													tmp123 := aotDirectFn117(v25, v121)
-													if lang.IsTruthy(tmp123) {
-														tmp124 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp125 := lang.Apply1(v25, v121)
-														tmp126 := lang.Apply4(tmp124, sym_clojure_DOT_core_SLASH_get, v20, v114, tmp125)
-														tmp122 = tmp126
+													var tmp121 any
+													tmp122 := aotDirectFn117(v24, v120)
+													if lang.IsTruthy(tmp122) {
+														tmp123 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp124 := lang.Apply1(v24, v120)
+														tmp125 := lang.Apply4(tmp123, sym_clojure_DOT_core_SLASH_get, v20, v113, tmp124)
+														tmp121 = tmp125
 													} else {
-														tmp127 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp128 := lang.Apply3(tmp127, sym_clojure_DOT_core_SLASH_get, v20, v114)
-														tmp122 = tmp128
+														tmp126 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp127 := lang.Apply3(tmp126, sym_clojure_DOT_core_SLASH_get, v20, v113)
+														tmp121 = tmp127
 													}
-													var v129 any = tmp122
-													_ = v129
-													var tmp131 any
-													tmp132 := aotDirectFn215(v111)
-													if lang.IsTruthy(tmp132) {
-														tmp133 := aotDirectFn113.Invoke3(v103, v121, v129)
-														tmp131 = tmp133
+													var v128 any = tmp121
+													_ = v128
+													var tmp130 any
+													tmp131 := aotDirectFn215(v110)
+													if lang.IsTruthy(tmp131) {
+														tmp132 := aotDirectFn113.Invoke3(v102, v120, v128)
+														tmp130 = tmp132
 													} else {
-														tmp134 := lang.Apply3(v7, v103, v111, v129)
-														tmp131 = tmp134
+														tmp133 := lang.Apply3(v7, v102, v110, v128)
+														tmp130 = tmp133
 													}
-													var tmp130 any = tmp131
-													tmp136 := aotDirectFn299(v105)
-													var tmp135 any = tmp136
-													v103 = tmp130
-													v105 = tmp135
+													var tmp129 any = tmp130
+													tmp135 := aotDirectFn299(v104)
+													var tmp134 any = tmp135
+													v102 = tmp129
+													v104 = tmp134
 													continue
 												} // end let
-												tmp106 = tmp108
+												tmp105 = tmp107
 											} else {
-												tmp106 = v103
+												tmp105 = v102
 											}
-											tmp26 = tmp106
+											tmp25 = tmp105
 											break
 										}
 									} // end let
-									tmp18 = tmp26
+									tmp18 = tmp25
 								} // end let
 								return tmp18
 							})
@@ -39816,9 +39584,8 @@ func LoadNS() {
 				if lang.IsTruthy(tmp14) {
 					tmp10 = v2
 				} else {
-					tmp15 := lang.NewVector()
-					tmp16 := aotDirectFn404Arity3(v9, tmp15, v5)
-					tmp10 = tmp16
+					tmp15 := aotDirectFn404Arity3(v9, closed19, v5)
+					tmp10 = tmp15
 				}
 				tmp3 = tmp10
 			} // end let
@@ -40004,290 +39771,289 @@ func LoadNS() {
 											_ = v45
 											// let binding "chunk-"
 											tmp46 := aotDirectFn202Arity1("chunk_")
-											tmp47 := aotKeywordMapNew14(sym_clojure_DOT_lang_DOT_IChunk)
-											tmp48 := aotDirectFn569(tmp46, tmp47)
-											var v49 any = tmp48
-											_ = v49
+											tmp47 := aotDirectFn569(tmp46, closed33)
+											var v48 any = tmp47
+											_ = v48
 											// let binding "count-"
-											tmp50 := aotDirectFn202Arity1("count_")
-											var v51 any = tmp50
-											_ = v51
+											tmp49 := aotDirectFn202Arity1("count_")
+											var v50 any = tmp49
+											_ = v50
 											// let binding "i-"
-											tmp52 := aotDirectFn202Arity1("i_")
-											var v53 any = tmp52
-											_ = v53
+											tmp51 := aotDirectFn202Arity1("i_")
+											var v52 any = tmp51
+											_ = v52
 											// let binding "recform"
-											tmp54 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp55 := lang.Apply1(tmp54, sym_recur)
+											tmp53 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp54 := lang.Apply1(tmp53, sym_recur)
+											tmp55 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp57 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp58 := lang.Apply1(tmp57, sym_clojure_DOT_core_SLASH_next)
-											tmp59 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp60 := lang.Apply1(tmp59, v45)
-											tmp61 := aotDirectFn112Arity2(tmp58, tmp60)
-											tmp62 := aotDirectFn447(tmp61)
-											tmp63 := lang.Apply1(tmp56, tmp62)
-											tmp64 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp65 := lang.Apply1(tmp64, nil)
-											tmp66 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp67 := lang.Apply1(tmp66, int64(0))
-											tmp68 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp69 := lang.Apply1(tmp68, int64(0))
-											tmp70 := aotDirectFn112.Invoke5(tmp55, tmp63, tmp65, tmp67, tmp69)
-											tmp71 := aotDirectFn447(tmp70)
-											var v72 any = tmp71
-											_ = v72
+											tmp57 := lang.Apply1(tmp56, sym_clojure_DOT_core_SLASH_next)
+											tmp58 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp59 := lang.Apply1(tmp58, v45)
+											tmp60 := aotDirectFn112Arity2(tmp57, tmp59)
+											tmp61 := aotDirectFn447(tmp60)
+											tmp62 := lang.Apply1(tmp55, tmp61)
+											tmp63 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp64 := lang.Apply1(tmp63, nil)
+											tmp65 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp66 := lang.Apply1(tmp65, int64(0))
+											tmp67 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp68 := lang.Apply1(tmp67, int64(0))
+											tmp69 := aotDirectFn112.Invoke5(tmp54, tmp62, tmp64, tmp66, tmp68)
+											tmp70 := aotDirectFn447(tmp69)
+											var v71 any = tmp70
+											_ = v71
 											// let binding "steppair"
-											tmp73 := aotDirectFn302(v27)
-											tmp74 := lang.Apply2(v25, v72, tmp73)
-											var v75 any = tmp74
-											_ = v75
+											tmp72 := aotDirectFn302(v27)
+											tmp73 := lang.Apply2(v25, v71, tmp72)
+											var v74 any = tmp73
+											_ = v74
 											// let binding "needrec"
-											tmp76 := lang.Apply1(v75, int64(0))
-											var v77 any = tmp76
-											_ = v77
+											tmp75 := lang.Apply1(v74, int64(0))
+											var v76 any = tmp75
+											_ = v76
 											// let binding "subform"
-											tmp78 := lang.Apply1(v75, int64(1))
-											var v79 any = tmp78
-											_ = v79
+											tmp77 := lang.Apply1(v74, int64(1))
+											var v78 any = tmp77
+											_ = v78
 											// let binding "recform-chunk"
-											tmp80 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp81 := lang.Apply1(tmp80, sym_recur)
-											tmp82 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp83 := lang.Apply1(tmp82, v45)
-											tmp84 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp85 := lang.Apply1(tmp84, v49)
-											tmp86 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp87 := lang.Apply1(tmp86, v51)
+											tmp79 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp80 := lang.Apply1(tmp79, sym_recur)
+											tmp81 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp82 := lang.Apply1(tmp81, v45)
+											tmp83 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp84 := lang.Apply1(tmp83, v48)
+											tmp85 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp86 := lang.Apply1(tmp85, v50)
+											tmp87 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp88 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp89 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp90 := lang.Apply1(tmp89, sym_clojure_DOT_core_SLASH_unchecked_DASH_inc)
-											tmp91 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp92 := lang.Apply1(tmp91, v53)
-											tmp93 := aotDirectFn112Arity2(tmp90, tmp92)
-											tmp94 := aotDirectFn447(tmp93)
-											tmp95 := lang.Apply1(tmp88, tmp94)
-											tmp96 := aotDirectFn112.Invoke5(tmp81, tmp83, tmp85, tmp87, tmp95)
-											tmp97 := aotDirectFn447(tmp96)
-											var v98 any = tmp97
-											_ = v98
+											tmp89 := lang.Apply1(tmp88, sym_clojure_DOT_core_SLASH_unchecked_DASH_inc)
+											tmp90 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp91 := lang.Apply1(tmp90, v52)
+											tmp92 := aotDirectFn112Arity2(tmp89, tmp91)
+											tmp93 := aotDirectFn447(tmp92)
+											tmp94 := lang.Apply1(tmp87, tmp93)
+											tmp95 := aotDirectFn112.Invoke5(tmp80, tmp82, tmp84, tmp86, tmp94)
+											tmp96 := aotDirectFn447(tmp95)
+											var v97 any = tmp96
+											_ = v97
 											// let binding "steppair-chunk"
-											tmp99 := aotDirectFn302(v27)
-											tmp100 := lang.Apply2(v25, v98, tmp99)
-											var v101 any = tmp100
-											_ = v101
+											tmp98 := aotDirectFn302(v27)
+											tmp99 := lang.Apply2(v25, v97, tmp98)
+											var v100 any = tmp99
+											_ = v100
 											// let binding "subform-chunk"
-											tmp102 := lang.Apply1(v101, int64(1))
-											var v103 any = tmp102
-											_ = v103
-											tmp104 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp105 := lang.Apply1(tmp104, sym_clojure_DOT_core_SLASH_loop)
-											tmp106 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp107 := checkDerefVar(var_clojure_DOT_core_vector)
-											tmp108 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp109 := lang.Apply1(tmp108, v45)
+											tmp101 := lang.Apply1(v100, int64(1))
+											var v102 any = tmp101
+											_ = v102
+											tmp103 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp104 := lang.Apply1(tmp103, sym_clojure_DOT_core_SLASH_loop)
+											tmp105 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp106 := checkDerefVar(var_clojure_DOT_core_vector)
+											tmp107 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp108 := lang.Apply1(tmp107, v45)
+											tmp109 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp110 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp111 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp112 := lang.Apply1(tmp111, sym_clojure_DOT_core_SLASH_seq)
-											tmp113 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp114 := lang.Apply1(tmp113, v39)
-											tmp115 := aotDirectFn112Arity2(tmp112, tmp114)
-											tmp116 := aotDirectFn447(tmp115)
-											tmp117 := lang.Apply1(tmp110, tmp116)
-											tmp118 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp119 := lang.Apply1(tmp118, v49)
-											tmp120 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp121 := lang.Apply1(tmp120, nil)
-											tmp122 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp123 := lang.Apply1(tmp122, v51)
-											tmp124 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp125 := lang.Apply1(tmp124, int64(0))
-											tmp126 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp127 := lang.Apply1(tmp126, v53)
-											tmp128 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp129 := lang.Apply1(tmp128, int64(0))
-											tmp130 := aotDirectFn112.Invoke8(tmp109, tmp117, tmp119, tmp121, tmp123, tmp125, tmp127, tmp129)
-											tmp131 := aotDirectFn447(tmp130)
-											tmp132 := aotDirectFn35Arity2(tmp107, tmp131)
-											tmp133 := lang.Apply1(tmp106, tmp132)
+											tmp111 := lang.Apply1(tmp110, sym_clojure_DOT_core_SLASH_seq)
+											tmp112 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp113 := lang.Apply1(tmp112, v39)
+											tmp114 := aotDirectFn112Arity2(tmp111, tmp113)
+											tmp115 := aotDirectFn447(tmp114)
+											tmp116 := lang.Apply1(tmp109, tmp115)
+											tmp117 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp118 := lang.Apply1(tmp117, v48)
+											tmp119 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp120 := lang.Apply1(tmp119, nil)
+											tmp121 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp122 := lang.Apply1(tmp121, v50)
+											tmp123 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp124 := lang.Apply1(tmp123, int64(0))
+											tmp125 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp126 := lang.Apply1(tmp125, v52)
+											tmp127 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp128 := lang.Apply1(tmp127, int64(0))
+											tmp129 := aotDirectFn112.Invoke8(tmp108, tmp116, tmp118, tmp120, tmp122, tmp124, tmp126, tmp128)
+											tmp130 := aotDirectFn447(tmp129)
+											tmp131 := aotDirectFn35Arity2(tmp106, tmp130)
+											tmp132 := lang.Apply1(tmp105, tmp131)
+											tmp133 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp134 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp135 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp136 := lang.Apply1(tmp135, sym_if)
+											tmp135 := lang.Apply1(tmp134, sym_if)
+											tmp136 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp137 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp138 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp139 := lang.Apply1(tmp138, sym_clojure_DOT_core_SLASH__LT_)
-											tmp140 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp141 := lang.Apply1(tmp140, v53)
-											tmp142 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp143 := lang.Apply1(tmp142, v51)
-											tmp144 := aotDirectFn112.Invoke3(tmp139, tmp141, tmp143)
-											tmp145 := aotDirectFn447(tmp144)
-											tmp146 := lang.Apply1(tmp137, tmp145)
+											tmp138 := lang.Apply1(tmp137, sym_clojure_DOT_core_SLASH__LT_)
+											tmp139 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp140 := lang.Apply1(tmp139, v52)
+											tmp141 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp142 := lang.Apply1(tmp141, v50)
+											tmp143 := aotDirectFn112.Invoke3(tmp138, tmp140, tmp142)
+											tmp144 := aotDirectFn447(tmp143)
+											tmp145 := lang.Apply1(tmp136, tmp144)
+											tmp146 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp147 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp148 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp149 := lang.Apply1(tmp148, sym_clojure_DOT_core_SLASH_let)
-											tmp150 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp151 := checkDerefVar(var_clojure_DOT_core_vector)
-											tmp152 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp153 := lang.Apply1(tmp152, v37)
+											tmp148 := lang.Apply1(tmp147, sym_clojure_DOT_core_SLASH_let)
+											tmp149 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp150 := checkDerefVar(var_clojure_DOT_core_vector)
+											tmp151 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp152 := lang.Apply1(tmp151, v37)
+											tmp153 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp154 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp155 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp156 := lang.Apply1(tmp155, sym__DOT_nth)
-											tmp157 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp158 := lang.Apply1(tmp157, v49)
-											tmp159 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp160 := lang.Apply1(tmp159, v53)
-											tmp161 := aotDirectFn112.Invoke3(tmp156, tmp158, tmp160)
-											tmp162 := aotDirectFn447(tmp161)
-											tmp163 := lang.Apply1(tmp154, tmp162)
-											tmp164 := aotDirectFn112Arity2(tmp153, tmp163)
-											tmp165 := aotDirectFn447(tmp164)
-											tmp166 := aotDirectFn35Arity2(tmp151, tmp165)
-											tmp167 := lang.Apply1(tmp150, tmp166)
-											tmp168 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp169 := lang.Apply1(tmp168, v103)
-											var tmp170 any
-											if lang.IsTruthy(v77) {
-												tmp171 := lang.NewVector(v98)
-												tmp170 = tmp171
+											tmp155 := lang.Apply1(tmp154, sym__DOT_nth)
+											tmp156 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp157 := lang.Apply1(tmp156, v48)
+											tmp158 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp159 := lang.Apply1(tmp158, v52)
+											tmp160 := aotDirectFn112.Invoke3(tmp155, tmp157, tmp159)
+											tmp161 := aotDirectFn447(tmp160)
+											tmp162 := lang.Apply1(tmp153, tmp161)
+											tmp163 := aotDirectFn112Arity2(tmp152, tmp162)
+											tmp164 := aotDirectFn447(tmp163)
+											tmp165 := aotDirectFn35Arity2(tmp150, tmp164)
+											tmp166 := lang.Apply1(tmp149, tmp165)
+											tmp167 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp168 := lang.Apply1(tmp167, v102)
+											var tmp169 any
+											if lang.IsTruthy(v76) {
+												tmp170 := lang.NewVector(v97)
+												tmp169 = tmp170
 											} else {
 											}
-											tmp172 := aotDirectFn112.Invoke4(tmp149, tmp167, tmp169, tmp170)
-											tmp173 := aotDirectFn447(tmp172)
-											tmp174 := lang.Apply1(tmp147, tmp173)
+											tmp171 := aotDirectFn112.Invoke4(tmp148, tmp166, tmp168, tmp169)
+											tmp172 := aotDirectFn447(tmp171)
+											tmp173 := lang.Apply1(tmp146, tmp172)
+											tmp174 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp175 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp176 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp177 := lang.Apply1(tmp176, sym_clojure_DOT_core_SLASH_when_DASH_let)
-											tmp178 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp179 := checkDerefVar(var_clojure_DOT_core_vector)
-											tmp180 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp181 := lang.Apply1(tmp180, v45)
+											tmp176 := lang.Apply1(tmp175, sym_clojure_DOT_core_SLASH_when_DASH_let)
+											tmp177 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp178 := checkDerefVar(var_clojure_DOT_core_vector)
+											tmp179 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp180 := lang.Apply1(tmp179, v45)
+											tmp181 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp182 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp183 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp184 := lang.Apply1(tmp183, sym_clojure_DOT_core_SLASH_seq)
-											tmp185 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp186 := lang.Apply1(tmp185, v45)
-											tmp187 := aotDirectFn112Arity2(tmp184, tmp186)
-											tmp188 := aotDirectFn447(tmp187)
-											tmp189 := lang.Apply1(tmp182, tmp188)
-											tmp190 := aotDirectFn112Arity2(tmp181, tmp189)
-											tmp191 := aotDirectFn447(tmp190)
-											tmp192 := aotDirectFn35Arity2(tmp179, tmp191)
-											tmp193 := lang.Apply1(tmp178, tmp192)
+											tmp183 := lang.Apply1(tmp182, sym_clojure_DOT_core_SLASH_seq)
+											tmp184 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp185 := lang.Apply1(tmp184, v45)
+											tmp186 := aotDirectFn112Arity2(tmp183, tmp185)
+											tmp187 := aotDirectFn447(tmp186)
+											tmp188 := lang.Apply1(tmp181, tmp187)
+											tmp189 := aotDirectFn112Arity2(tmp180, tmp188)
+											tmp190 := aotDirectFn447(tmp189)
+											tmp191 := aotDirectFn35Arity2(tmp178, tmp190)
+											tmp192 := lang.Apply1(tmp177, tmp191)
+											tmp193 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp194 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp195 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp196 := lang.Apply1(tmp195, sym_if)
+											tmp195 := lang.Apply1(tmp194, sym_if)
+											tmp196 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp197 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp198 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp199 := lang.Apply1(tmp198, sym_clojure_DOT_core_SLASH_chunked_DASH_seq_QMARK_)
-											tmp200 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp201 := lang.Apply1(tmp200, v45)
-											tmp202 := aotDirectFn112Arity2(tmp199, tmp201)
-											tmp203 := aotDirectFn447(tmp202)
-											tmp204 := lang.Apply1(tmp197, tmp203)
+											tmp198 := lang.Apply1(tmp197, sym_clojure_DOT_core_SLASH_chunked_DASH_seq_QMARK_)
+											tmp199 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp200 := lang.Apply1(tmp199, v45)
+											tmp201 := aotDirectFn112Arity2(tmp198, tmp200)
+											tmp202 := aotDirectFn447(tmp201)
+											tmp203 := lang.Apply1(tmp196, tmp202)
+											tmp204 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp205 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp206 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp207 := lang.Apply1(tmp206, sym_clojure_DOT_core_SLASH_let)
-											tmp208 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp209 := checkDerefVar(var_clojure_DOT_core_vector)
-											tmp210 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp211 := lang.Apply1(tmp210, sym_c__0__auto__)
+											tmp206 := lang.Apply1(tmp205, sym_clojure_DOT_core_SLASH_let)
+											tmp207 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp208 := checkDerefVar(var_clojure_DOT_core_vector)
+											tmp209 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp210 := lang.Apply1(tmp209, sym_c__0__auto__)
+											tmp211 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp212 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp213 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp214 := lang.Apply1(tmp213, sym_clojure_DOT_core_SLASH_chunk_DASH_first)
-											tmp215 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp216 := lang.Apply1(tmp215, v45)
-											tmp217 := aotDirectFn112Arity2(tmp214, tmp216)
-											tmp218 := aotDirectFn447(tmp217)
-											tmp219 := lang.Apply1(tmp212, tmp218)
-											tmp220 := aotDirectFn112Arity2(tmp211, tmp219)
-											tmp221 := aotDirectFn447(tmp220)
-											tmp222 := aotDirectFn35Arity2(tmp209, tmp221)
-											tmp223 := lang.Apply1(tmp208, tmp222)
+											tmp213 := lang.Apply1(tmp212, sym_clojure_DOT_core_SLASH_chunk_DASH_first)
+											tmp214 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp215 := lang.Apply1(tmp214, v45)
+											tmp216 := aotDirectFn112Arity2(tmp213, tmp215)
+											tmp217 := aotDirectFn447(tmp216)
+											tmp218 := lang.Apply1(tmp211, tmp217)
+											tmp219 := aotDirectFn112Arity2(tmp210, tmp218)
+											tmp220 := aotDirectFn447(tmp219)
+											tmp221 := aotDirectFn35Arity2(tmp208, tmp220)
+											tmp222 := lang.Apply1(tmp207, tmp221)
+											tmp223 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp224 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp225 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp226 := lang.Apply1(tmp225, sym_recur)
+											tmp225 := lang.Apply1(tmp224, sym_recur)
+											tmp226 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp227 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp228 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp229 := lang.Apply1(tmp228, sym_clojure_DOT_core_SLASH_chunk_DASH_rest)
-											tmp230 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp231 := lang.Apply1(tmp230, v45)
-											tmp232 := aotDirectFn112Arity2(tmp229, tmp231)
-											tmp233 := aotDirectFn447(tmp232)
-											tmp234 := lang.Apply1(tmp227, tmp233)
-											tmp235 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp236 := lang.Apply1(tmp235, sym_c__0__auto__)
+											tmp228 := lang.Apply1(tmp227, sym_clojure_DOT_core_SLASH_chunk_DASH_rest)
+											tmp229 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp230 := lang.Apply1(tmp229, v45)
+											tmp231 := aotDirectFn112Arity2(tmp228, tmp230)
+											tmp232 := aotDirectFn447(tmp231)
+											tmp233 := lang.Apply1(tmp226, tmp232)
+											tmp234 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp235 := lang.Apply1(tmp234, sym_c__0__auto__)
+											tmp236 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp237 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp238 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp239 := lang.Apply1(tmp238, sym_clojure_DOT_core_SLASH_int)
+											tmp238 := lang.Apply1(tmp237, sym_clojure_DOT_core_SLASH_int)
+											tmp239 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp240 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp241 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp242 := lang.Apply1(tmp241, sym_clojure_DOT_core_SLASH_count)
-											tmp243 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp244 := lang.Apply1(tmp243, sym_c__0__auto__)
-											tmp245 := aotDirectFn112Arity2(tmp242, tmp244)
-											tmp246 := aotDirectFn447(tmp245)
-											tmp247 := lang.Apply1(tmp240, tmp246)
-											tmp248 := aotDirectFn112Arity2(tmp239, tmp247)
-											tmp249 := aotDirectFn447(tmp248)
-											tmp250 := lang.Apply1(tmp237, tmp249)
+											tmp241 := lang.Apply1(tmp240, sym_clojure_DOT_core_SLASH_count)
+											tmp242 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp243 := lang.Apply1(tmp242, sym_c__0__auto__)
+											tmp244 := aotDirectFn112Arity2(tmp241, tmp243)
+											tmp245 := aotDirectFn447(tmp244)
+											tmp246 := lang.Apply1(tmp239, tmp245)
+											tmp247 := aotDirectFn112Arity2(tmp238, tmp246)
+											tmp248 := aotDirectFn447(tmp247)
+											tmp249 := lang.Apply1(tmp236, tmp248)
+											tmp250 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp251 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp252 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp253 := lang.Apply1(tmp252, sym_clojure_DOT_core_SLASH_int)
-											tmp254 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp255 := lang.Apply1(tmp254, int64(0))
-											tmp256 := aotDirectFn112Arity2(tmp253, tmp255)
-											tmp257 := aotDirectFn447(tmp256)
-											tmp258 := lang.Apply1(tmp251, tmp257)
-											tmp259 := aotDirectFn112.Invoke5(tmp226, tmp234, tmp236, tmp250, tmp258)
-											tmp260 := aotDirectFn447(tmp259)
-											tmp261 := lang.Apply1(tmp224, tmp260)
-											tmp262 := aotDirectFn112.Invoke3(tmp207, tmp223, tmp261)
-											tmp263 := aotDirectFn447(tmp262)
-											tmp264 := lang.Apply1(tmp205, tmp263)
+											tmp252 := lang.Apply1(tmp251, sym_clojure_DOT_core_SLASH_int)
+											tmp253 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp254 := lang.Apply1(tmp253, int64(0))
+											tmp255 := aotDirectFn112Arity2(tmp252, tmp254)
+											tmp256 := aotDirectFn447(tmp255)
+											tmp257 := lang.Apply1(tmp250, tmp256)
+											tmp258 := aotDirectFn112.Invoke5(tmp225, tmp233, tmp235, tmp249, tmp257)
+											tmp259 := aotDirectFn447(tmp258)
+											tmp260 := lang.Apply1(tmp223, tmp259)
+											tmp261 := aotDirectFn112.Invoke3(tmp206, tmp222, tmp260)
+											tmp262 := aotDirectFn447(tmp261)
+											tmp263 := lang.Apply1(tmp204, tmp262)
+											tmp264 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp265 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp266 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp267 := lang.Apply1(tmp266, sym_clojure_DOT_core_SLASH_let)
-											tmp268 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp269 := checkDerefVar(var_clojure_DOT_core_vector)
-											tmp270 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp271 := lang.Apply1(tmp270, v37)
+											tmp266 := lang.Apply1(tmp265, sym_clojure_DOT_core_SLASH_let)
+											tmp267 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp268 := checkDerefVar(var_clojure_DOT_core_vector)
+											tmp269 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp270 := lang.Apply1(tmp269, v37)
+											tmp271 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp272 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp273 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp274 := lang.Apply1(tmp273, sym_clojure_DOT_core_SLASH_first)
-											tmp275 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp276 := lang.Apply1(tmp275, v45)
-											tmp277 := aotDirectFn112Arity2(tmp274, tmp276)
-											tmp278 := aotDirectFn447(tmp277)
-											tmp279 := lang.Apply1(tmp272, tmp278)
-											tmp280 := aotDirectFn112Arity2(tmp271, tmp279)
-											tmp281 := aotDirectFn447(tmp280)
-											tmp282 := aotDirectFn35Arity2(tmp269, tmp281)
-											tmp283 := lang.Apply1(tmp268, tmp282)
-											tmp284 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp285 := lang.Apply1(tmp284, v79)
-											var tmp286 any
-											if lang.IsTruthy(v77) {
-												tmp287 := lang.NewVector(v72)
-												tmp286 = tmp287
+											tmp273 := lang.Apply1(tmp272, sym_clojure_DOT_core_SLASH_first)
+											tmp274 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp275 := lang.Apply1(tmp274, v45)
+											tmp276 := aotDirectFn112Arity2(tmp273, tmp275)
+											tmp277 := aotDirectFn447(tmp276)
+											tmp278 := lang.Apply1(tmp271, tmp277)
+											tmp279 := aotDirectFn112Arity2(tmp270, tmp278)
+											tmp280 := aotDirectFn447(tmp279)
+											tmp281 := aotDirectFn35Arity2(tmp268, tmp280)
+											tmp282 := lang.Apply1(tmp267, tmp281)
+											tmp283 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp284 := lang.Apply1(tmp283, v78)
+											var tmp285 any
+											if lang.IsTruthy(v76) {
+												tmp286 := lang.NewVector(v71)
+												tmp285 = tmp286
 											} else {
 											}
-											tmp288 := aotDirectFn112.Invoke4(tmp267, tmp283, tmp285, tmp286)
-											tmp289 := aotDirectFn447(tmp288)
-											tmp290 := lang.Apply1(tmp265, tmp289)
-											tmp291 := aotDirectFn112.Invoke4(tmp196, tmp204, tmp264, tmp290)
-											tmp292 := aotDirectFn447(tmp291)
-											tmp293 := lang.Apply1(tmp194, tmp292)
-											tmp294 := aotDirectFn112.Invoke3(tmp177, tmp193, tmp293)
-											tmp295 := aotDirectFn447(tmp294)
-											tmp296 := lang.Apply1(tmp175, tmp295)
-											tmp297 := aotDirectFn112.Invoke4(tmp136, tmp146, tmp174, tmp296)
-											tmp298 := aotDirectFn447(tmp297)
-											tmp299 := lang.Apply1(tmp134, tmp298)
-											tmp300 := aotDirectFn112.Invoke3(tmp105, tmp133, tmp299)
-											tmp301 := aotDirectFn447(tmp300)
-											tmp302 := lang.NewVector(true, tmp301)
-											tmp43 = tmp302
+											tmp287 := aotDirectFn112.Invoke4(tmp266, tmp282, tmp284, tmp285)
+											tmp288 := aotDirectFn447(tmp287)
+											tmp289 := lang.Apply1(tmp264, tmp288)
+											tmp290 := aotDirectFn112.Invoke4(tmp195, tmp203, tmp263, tmp289)
+											tmp291 := aotDirectFn447(tmp290)
+											tmp292 := lang.Apply1(tmp193, tmp291)
+											tmp293 := aotDirectFn112.Invoke3(tmp176, tmp192, tmp292)
+											tmp294 := aotDirectFn447(tmp293)
+											tmp295 := lang.Apply1(tmp174, tmp294)
+											tmp296 := aotDirectFn112.Invoke4(tmp135, tmp145, tmp173, tmp295)
+											tmp297 := aotDirectFn447(tmp296)
+											tmp298 := lang.Apply1(tmp133, tmp297)
+											tmp299 := aotDirectFn112.Invoke3(tmp104, tmp132, tmp298)
+											tmp300 := aotDirectFn447(tmp299)
+											tmp301 := lang.NewVector(true, tmp300)
+											tmp43 = tmp301
 										} // end let
 										tmp40 = tmp43
 									}
@@ -41491,10 +41257,9 @@ func LoadNS() {
 						} // end let
 						return tmp29
 					})
-					tmp27 := lang.NewVector()
-					tmp28 := aotDirectFn335Arity2(int64(2), v25)
-					tmp29 := aotDirectFn404Arity3(tmp26, tmp27, tmp28)
-					return tmp29
+					tmp27 := aotDirectFn335Arity2(int64(2), v25)
+					tmp28 := aotDirectFn404Arity3(tmp26, closed19, tmp27)
+					return tmp28
 				})
 				var v25 any = tmp24
 				_ = v25
@@ -43071,12 +42836,11 @@ func LoadNS() {
 						}
 						return tmp15
 					})
-					tmp13 := lang.NewVector()
-					tmp14 := aotDirectFn404Arity3(tmp12, tmp13, v8)
-					tmp15 := aotDirectFn271Arity2(tmp11, tmp14)
-					tmp16 := aotDirectFn112Arity2(tmp10, tmp15)
-					tmp17 := aotDirectFn447(tmp16)
-					tmp5 = tmp17
+					tmp13 := aotDirectFn404Arity3(tmp12, closed19, v8)
+					tmp14 := aotDirectFn271Arity2(tmp11, tmp13)
+					tmp15 := aotDirectFn112Arity2(tmp10, tmp14)
+					tmp16 := aotDirectFn447(tmp15)
+					tmp5 = tmp16
 				} // end let
 				return tmp5
 			}),
@@ -43731,10 +43495,9 @@ func LoadNS() {
 				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp6 := lang.NewVector()
-				tmp7 := aotDirectFn252Arity3(sym_fn_STAR_, tmp6, v4)
-				tmp8 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq, tmp7)
-				return tmp8
+				tmp6 := aotDirectFn252Arity3(sym_fn_STAR_, closed19, v4)
+				tmp7 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq, tmp6)
+				return tmp7
 			}),
 			2,
 		)
@@ -44036,7 +43799,7 @@ func LoadNS() {
 					var v59 any = tmp48
 					_ = v59
 					// let binding "filter-opts"
-					tmp60 := aotDirectFn443(v15, lang.NewList(kw_exclude, kw_only, kw_rename, kw_refer))
+					tmp60 := aotDirectFn443(v15, closed35)
 					var v61 any = tmp60
 					_ = v61
 					// let binding "undefined-on-entry"
@@ -44371,19 +44134,18 @@ func LoadNS() {
 					var tmp14 any
 					{ // let
 						// let binding "supported"
-						tmp15 := lang.NewSet(kw_use, kw_refer, kw_verbose, kw_require, kw_reload_DASH_all, kw_reload, kw_as_DASH_alias, kw_as)
-						var v16 any = tmp15
-						_ = v16
+						var v15 any = closed36
+						_ = v15
 						// let binding "unsupported"
-						tmp17 := aotDirectFn416Arity2(v16, v6)
-						tmp18 := aotDirectFn447(tmp17)
-						var v19 any = tmp18
-						_ = v19
-						tmp20 := checkDerefVar(var_clojure_DOT_core_str)
-						tmp21 := aotDirectFn232Arity2(lang.NewChar(44), v19)
-						tmp22 := aotDirectFn35Arity3(tmp20, "Unsupported option(s) supplied: ", tmp21)
-						tmp23 := aotDirectFn516.Invoke2(v19, tmp22)
-						tmp14 = tmp23
+						tmp16 := aotDirectFn416Arity2(v15, v6)
+						tmp17 := aotDirectFn447(tmp16)
+						var v18 any = tmp17
+						_ = v18
+						tmp19 := checkDerefVar(var_clojure_DOT_core_str)
+						tmp20 := aotDirectFn232Arity2(lang.NewChar(44), v18)
+						tmp21 := aotDirectFn35Arity3(tmp19, "Unsupported option(s) supplied: ", tmp20)
+						tmp22 := aotDirectFn516.Invoke2(v18, tmp21)
+						tmp14 = tmp22
 					} // end let
 					_ = tmp14
 					tmp15 := aotDirectFn447(v13)
@@ -44949,39 +44711,38 @@ func LoadNS() {
 								} // end let
 								return tmp46
 							})
-							tmp44 := lang.NewVector()
-							tmp45 := checkDerefVar(var_clojure_DOT_core_vector)
-							tmp46 := aotDirectFn271Arity4(tmp45, v39, v37, v42)
-							tmp47 := aotDirectFn404Arity3(tmp43, tmp44, tmp46)
-							var v48 any = tmp47
-							_ = v48
-							tmp49 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp50 := lang.Apply1(tmp49, sym_clojure_DOT_core_SLASH_let)
-							tmp51 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp52 := lang.Apply1(tmp51, v48)
+							tmp44 := checkDerefVar(var_clojure_DOT_core_vector)
+							tmp45 := aotDirectFn271Arity4(tmp44, v39, v37, v42)
+							tmp46 := aotDirectFn404Arity3(tmp43, closed19, tmp45)
+							var v47 any = tmp46
+							_ = v47
+							tmp48 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp49 := lang.Apply1(tmp48, sym_clojure_DOT_core_SLASH_let)
+							tmp50 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp51 := lang.Apply1(tmp50, v47)
+							tmp52 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp53 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp54 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp55 := lang.Apply1(tmp54, sym_loop_STAR_)
-							tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp57 := aotDirectFn230Arity2(v42, v42)
-							tmp58 := aotDirectFn562(tmp57)
-							tmp59 := lang.Apply1(tmp56, tmp58)
+							tmp54 := lang.Apply1(tmp53, sym_loop_STAR_)
+							tmp55 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp56 := aotDirectFn230Arity2(v42, v42)
+							tmp57 := aotDirectFn562(tmp56)
+							tmp58 := lang.Apply1(tmp55, tmp57)
+							tmp59 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp60 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp61 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp62 := lang.Apply1(tmp61, sym_clojure_DOT_core_SLASH_let)
-							tmp63 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp64 := aotDirectFn230Arity2(v39, v42)
-							tmp65 := aotDirectFn562(tmp64)
-							tmp66 := lang.Apply1(tmp63, tmp65)
-							tmp67 := aotDirectFn112.Invoke3(tmp62, tmp66, v5)
-							tmp68 := aotDirectFn447(tmp67)
-							tmp69 := lang.Apply1(tmp60, tmp68)
-							tmp70 := aotDirectFn112.Invoke3(tmp55, tmp59, tmp69)
-							tmp71 := aotDirectFn447(tmp70)
-							tmp72 := lang.Apply1(tmp53, tmp71)
-							tmp73 := aotDirectFn112.Invoke3(tmp50, tmp52, tmp72)
-							tmp74 := aotDirectFn447(tmp73)
-							tmp34 = tmp74
+							tmp61 := lang.Apply1(tmp60, sym_clojure_DOT_core_SLASH_let)
+							tmp62 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp63 := aotDirectFn230Arity2(v39, v42)
+							tmp64 := aotDirectFn562(tmp63)
+							tmp65 := lang.Apply1(tmp62, tmp64)
+							tmp66 := aotDirectFn112.Invoke3(tmp61, tmp65, v5)
+							tmp67 := aotDirectFn447(tmp66)
+							tmp68 := lang.Apply1(tmp59, tmp67)
+							tmp69 := aotDirectFn112.Invoke3(tmp54, tmp58, tmp68)
+							tmp70 := aotDirectFn447(tmp69)
+							tmp71 := lang.Apply1(tmp52, tmp70)
+							tmp72 := aotDirectFn112.Invoke3(tmp49, tmp51, tmp71)
+							tmp73 := aotDirectFn447(tmp72)
+							tmp34 = tmp73
 						} // end let
 						tmp26 = tmp34
 					}
@@ -45489,11 +45250,10 @@ func LoadNS() {
 				tmp8 := aotDirectFn114Arity2(v5, tmp7)
 				return tmp8
 			})
-			tmp5 := lang.NewVector()
-			tmp6 := aotDirectFn521(tmp5)
-			tmp7 := aotDirectFn402Arity3(tmp4, tmp6, v3)
-			tmp8 := aotDirectFn342(tmp7)
-			return tmp8
+			tmp5 := aotDirectFn521(closed19)
+			tmp6 := aotDirectFn402Arity3(tmp4, tmp5, v3)
+			tmp7 := aotDirectFn342(tmp6)
+			return tmp7
 		})
 		aotDirectFn276Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
 			v2 := p0
@@ -45502,10 +45262,9 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := lang.NewVector()
-			tmp6 := aotDirectFn271Arity3(v2, v3, v4)
-			tmp7 := aotDirectFn233Arity2(tmp5, tmp6)
-			return tmp7
+			tmp5 := aotDirectFn271Arity3(v2, v3, v4)
+			tmp6 := aotDirectFn233Arity2(closed19, tmp5)
+			return tmp6
 		})
 		aotDirectFn276Arity4 = lang.FnFunc4(func(p0, p1, p2, p3 any) any {
 			v2 := p0
@@ -45516,10 +45275,9 @@ func LoadNS() {
 			_ = v4
 			v5 := p3
 			_ = v5
-			tmp6 := lang.NewVector()
-			tmp7 := aotDirectFn271Arity4(v2, v3, v4, v5)
-			tmp8 := aotDirectFn233Arity2(tmp6, tmp7)
-			return tmp8
+			tmp6 := aotDirectFn271Arity4(v2, v3, v4, v5)
+			tmp7 := aotDirectFn233Arity2(closed19, tmp6)
+			return tmp7
 		})
 		tmp1 = lang.NewArityFn(
 			nil,
@@ -45538,11 +45296,10 @@ func LoadNS() {
 				_ = v5
 				var v6 any = rest
 				_ = v6
-				tmp7 := lang.NewVector()
-				tmp8 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp9 := aotDirectFn35.Invoke6(tmp8, v2, v3, v4, v5, v6)
-				tmp10 := aotDirectFn233Arity2(tmp7, tmp9)
-				return tmp10
+				tmp7 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp8 := aotDirectFn35.Invoke6(tmp7, v2, v3, v4, v5, v6)
+				tmp9 := aotDirectFn233Arity2(closed19, tmp8)
+				return tmp9
 			}),
 			4,
 		)
@@ -45574,71 +45331,69 @@ func LoadNS() {
 					var v9 any = v2
 					_ = v9
 					// let binding "new-params"
-					tmp10 := lang.NewVector()
-					tmp11 := aotDirectFn285(v9)
-					tmp12 := aotDirectFn569(tmp10, tmp11)
-					var v13 any = tmp12
-					_ = v13
+					tmp10 := aotDirectFn285(v9)
+					tmp11 := aotDirectFn569(closed19, tmp10)
+					var v12 any = tmp11
+					_ = v12
 					// let binding "lets"
-					tmp14 := lang.NewVector()
-					var v15 any = tmp14
-					_ = v15
+					var v13 any = closed19
+					_ = v13
 					for {
-						var tmp16 any
+						var tmp14 any
 						if lang.IsTruthy(v9) {
-							var tmp17 any
-							tmp18 := aotDirectFn183(v9)
-							tmp19 := aotDirectFn506(tmp18)
-							if lang.IsTruthy(tmp19) {
-								tmp21 := aotDirectFn299(v9)
-								var tmp20 any = tmp21
-								tmp23 := aotDirectFn183(v9)
-								tmp24 := aotDirectFn113Arity2(v13, tmp23)
-								var tmp22 any = tmp24
-								var tmp25 any = v15
-								v9 = tmp20
-								v13 = tmp22
-								v15 = tmp25
+							var tmp15 any
+							tmp16 := aotDirectFn183(v9)
+							tmp17 := aotDirectFn506(tmp16)
+							if lang.IsTruthy(tmp17) {
+								tmp19 := aotDirectFn299(v9)
+								var tmp18 any = tmp19
+								tmp21 := aotDirectFn183(v9)
+								tmp22 := aotDirectFn113Arity2(v12, tmp21)
+								var tmp20 any = tmp22
+								var tmp23 any = v13
+								v9 = tmp18
+								v12 = tmp20
+								v13 = tmp23
 								continue
 							} else {
-								var tmp26 any
+								var tmp24 any
 								{ // let
 									// let binding "gparam"
-									tmp27 := aotDirectFn202Arity1("p__")
-									var v28 any = tmp27
-									_ = v28
-									tmp30 := aotDirectFn299(v9)
+									tmp25 := aotDirectFn202Arity1("p__")
+									var v26 any = tmp25
+									_ = v26
+									tmp28 := aotDirectFn299(v9)
+									var tmp27 any = tmp28
+									tmp30 := aotDirectFn113Arity2(v12, v26)
 									var tmp29 any = tmp30
-									tmp32 := aotDirectFn113Arity2(v13, v28)
-									var tmp31 any = tmp32
-									tmp34 := aotDirectFn183(v9)
-									tmp35 := aotDirectFn113Arity2(v15, tmp34)
-									tmp36 := aotDirectFn113Arity2(tmp35, v28)
-									var tmp33 any = tmp36
-									v9 = tmp29
+									tmp32 := aotDirectFn183(v9)
+									tmp33 := aotDirectFn113Arity2(v13, tmp32)
+									tmp34 := aotDirectFn113Arity2(tmp33, v26)
+									var tmp31 any = tmp34
+									v9 = tmp27
+									v12 = tmp29
 									v13 = tmp31
-									v15 = tmp33
 									continue
 								} // end let
-								tmp17 = tmp26
+								tmp15 = tmp24
 							}
-							tmp16 = tmp17
+							tmp14 = tmp15
 						} else {
+							tmp25 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp26 := lang.Apply1(tmp25, v12)
 							tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp28 := lang.Apply1(tmp27, v13)
-							tmp29 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp28 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp29 := lang.Apply1(tmp28, sym_clojure_DOT_core_SLASH_let)
 							tmp30 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp31 := lang.Apply1(tmp30, sym_clojure_DOT_core_SLASH_let)
-							tmp32 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp33 := lang.Apply1(tmp32, v15)
-							tmp34 := aotDirectFn112.Invoke3(tmp31, tmp33, v3)
-							tmp35 := aotDirectFn447(tmp34)
-							tmp36 := lang.Apply1(tmp29, tmp35)
-							tmp37 := aotDirectFn112Arity2(tmp28, tmp36)
-							tmp38 := aotDirectFn447(tmp37)
-							tmp16 = tmp38
+							tmp31 := lang.Apply1(tmp30, v13)
+							tmp32 := aotDirectFn112.Invoke3(tmp29, tmp31, v3)
+							tmp33 := aotDirectFn447(tmp32)
+							tmp34 := lang.Apply1(tmp27, tmp33)
+							tmp35 := aotDirectFn112Arity2(tmp26, tmp34)
+							tmp36 := aotDirectFn447(tmp35)
+							tmp14 = tmp36
 						}
-						tmp8 = tmp16
+						tmp8 = tmp14
 						break
 					}
 				} // end let
@@ -46022,34 +45777,33 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "ret"
-				tmp4 := lang.NewMap()
-				var v5 any = tmp4
-				_ = v5
+				var v4 any = closed24
+				_ = v4
 				// let binding "s"
-				var v6 any = v2
-				_ = v6
+				var v5 any = v2
+				_ = v5
 				for {
-					var tmp7 any
-					tmp8 := aotDirectFn447(v6)
-					if lang.IsTruthy(tmp8) {
-						tmp10 := aotDirectFn183(v6)
-						tmp11 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-						tmp12 := aotDirectFn299(v6)
-						tmp13 := aotDirectFn512Arity2(tmp11, tmp12)
-						var tmp14 any = v5
-						tmp14 = lang.Assoc(tmp14, tmp10, tmp13)
-						var tmp9 any = tmp14
-						tmp16 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-						tmp17 := aotDirectFn299(v6)
-						tmp18 := aotDirectFn152Arity2(tmp16, tmp17)
-						var tmp15 any = tmp18
-						v5 = tmp9
-						v6 = tmp15
+					var tmp6 any
+					tmp7 := aotDirectFn447(v5)
+					if lang.IsTruthy(tmp7) {
+						tmp9 := aotDirectFn183(v5)
+						tmp10 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
+						tmp11 := aotDirectFn299(v5)
+						tmp12 := aotDirectFn512Arity2(tmp10, tmp11)
+						var tmp13 any = v4
+						tmp13 = lang.Assoc(tmp13, tmp9, tmp12)
+						var tmp8 any = tmp13
+						tmp15 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
+						tmp16 := aotDirectFn299(v5)
+						tmp17 := aotDirectFn152Arity2(tmp15, tmp16)
+						var tmp14 any = tmp17
+						v4 = tmp8
+						v5 = tmp14
 						continue
 					} else {
-						tmp7 = v5
+						tmp6 = v4
 					}
-					tmp3 = tmp7
+					tmp3 = tmp6
 					break
 				}
 			} // end let
@@ -46286,8 +46040,7 @@ func LoadNS() {
 						if lang.IsTruthy(v15) {
 							tmp16 = v15
 						} else {
-							tmp17 := lang.NewVector(int64(0), int64(0))
-							tmp16 = tmp17
+							tmp16 = closed47
 						}
 						tmp11 = tmp16
 					} // end let
@@ -47497,6 +47250,313 @@ func LoadNS() {
 		var_clojure_DOT_core_use = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_use.SetMetaLazyMacro(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(5934), kw_column, int(7), kw_end_DASH_line, int(5934), kw_end_DASH_column, int(9), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Like 'require, but also refers to each lib's namespace using\n  clojure.core/refer. Use :use in the ns macro in preference to calling\n  this directly.\n\n  'use accepts additional options in libspecs: :exclude, :only, :rename.\n  The arguments and semantics for :exclude, :only, and :rename are the same\n  as those documented for clojure.core/refer.", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+		}, false)
+	}
+	// Throwable->map
+	{
+		tmp0 := sym_Throwable_DASH__GT_map
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			var tmp3 any
+			{ // let
+				// let binding "base"
+				var tmp4 lang.FnFunc1
+				tmp4 = lang.FnFunc1(func(p0 any) any {
+					v5 := p0
+					_ = v5
+					tmp6 := aotDirectFn100(v5)
+					tmp7, ok := lang.FieldOrMethod(tmp6, "Name")
+					if !ok {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp6, "Name")))
+					}
+					var tmp8 any
+					switch reflect.TypeOf(tmp7).Kind() {
+					case reflect.Func:
+						tmp8 = lang.Apply(tmp7, nil)
+					default:
+						tmp8 = tmp7
+					}
+					tmp9 := aotDirectFn505Arity1(tmp8)
+					tmp10 := aotKeywordMapNew7(tmp9)
+					var tmp11 any
+					{ // let
+						// let binding "temp__0__auto__"
+						tmp12, ok := lang.FieldOrMethod(v5, "getLocalizedMessage")
+						if !ok {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v5, "getLocalizedMessage")))
+						}
+						var tmp13 any
+						switch reflect.TypeOf(tmp12).Kind() {
+						case reflect.Func:
+							tmp13 = lang.Apply(tmp12, nil)
+						default:
+							tmp13 = tmp12
+						}
+						var v14 any = tmp13
+						_ = v14
+						var tmp15 any
+						if lang.IsTruthy(v14) {
+							var tmp16 any
+							{ // let
+								// let binding "msg"
+								var v17 any = v14
+								_ = v17
+								tmp18 := aotKeywordMapNew8(v17)
+								tmp16 = tmp18
+							} // end let
+							tmp15 = tmp16
+						} else {
+						}
+						tmp11 = tmp15
+					} // end let
+					var tmp12 any
+					{ // let
+						// let binding "temp__0__auto__"
+						tmp13 := aotDirectFn169(v5)
+						var v14 any = tmp13
+						_ = v14
+						var tmp15 any
+						if lang.IsTruthy(v14) {
+							var tmp16 any
+							{ // let
+								// let binding "ed"
+								var v17 any = v14
+								_ = v17
+								tmp18 := aotKeywordMapNew9(v17)
+								tmp16 = tmp18
+							} // end let
+							tmp15 = tmp16
+						} else {
+						}
+						tmp12 = tmp15
+					} // end let
+					var tmp13 any
+					{ // let
+						// let binding "st"
+						tmp14, ok := lang.FieldOrMethod(v5, "getStackTrace")
+						if !ok {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v5, "getStackTrace")))
+						}
+						var tmp15 any
+						switch reflect.TypeOf(tmp14).Kind() {
+						case reflect.Func:
+							tmp15 = lang.Apply(tmp14, nil)
+						default:
+							tmp15 = tmp14
+						}
+						var v16 any = tmp15
+						_ = v16
+						var tmp17 any
+						tmp18 := runtime.RT.Alength(v16)
+						tmp19 := lang.Numbers.IsPos(tmp18)
+						if lang.IsTruthy(tmp19) {
+							tmp20 := aotDirectFn26Arity2(v16, int64(0))
+							tmp21 := aotDirectFn16(tmp20)
+							tmp22 := aotKeywordMapNew10(tmp21)
+							tmp17 = tmp22
+						} else {
+						}
+						tmp13 = tmp17
+					} // end let
+					tmp14 := aotDirectFn282.Invoke4(tmp10, tmp11, tmp12, tmp13)
+					return tmp14
+				})
+				var v5 any = tmp4
+				_ = v5
+				// let binding "via"
+				var tmp6 any
+				{ // let
+					// let binding "via"
+					var v7 any = closed19
+					_ = v7
+					// let binding "t"
+					var v8 any = v2
+					_ = v8
+					for {
+						var tmp9 any
+						if lang.IsTruthy(v8) {
+							tmp11 := aotDirectFn113Arity2(v7, v8)
+							var tmp10 any = tmp11
+							tmp13, ok := lang.FieldOrMethod(v8, "getCause")
+							if !ok {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "getCause")))
+							}
+							var tmp14 any
+							switch reflect.TypeOf(tmp13).Kind() {
+							case reflect.Func:
+								tmp14 = lang.Apply(tmp13, nil)
+							default:
+								tmp14 = tmp13
+							}
+							var tmp12 any = tmp14
+							v7 = tmp10
+							v8 = tmp12
+							continue
+						} else {
+							tmp9 = v7
+						}
+						tmp6 = tmp9
+						break
+					}
+				} // end let
+				var v7 any = tmp6
+				_ = v7
+				// let binding "root"
+				tmp8 := aotDirectFn341(v7)
+				var v9 any = tmp8
+				_ = v9
+				var tmp10 any
+				if runtime.IsDefaultCoreVar(var_clojure_DOT_core_vec) && runtime.IsDefaultCoreVar(var_clojure_DOT_core_map) {
+					tmp10 = runtime.VectorMap(v5, v7)
+				} else {
+					tmp11 := aotDirectFn271Arity2(v5, v7)
+					tmp12 := aotDirectFn562(tmp11)
+					tmp10 = tmp12
+				}
+				var tmp13 any
+				if runtime.IsDefaultCoreVar(var_clojure_DOT_core_vec) && runtime.IsDefaultCoreVar(var_clojure_DOT_core_map) {
+					tmp14 := checkDerefVar(var_clojure_DOT_core_StackTraceElement_DASH__GT_vec)
+					var tmp15 any
+					{ // let
+						// let binding "or__0__auto__"
+						var v16 any = v9
+						_ = v16
+						var tmp17 any
+						if lang.IsTruthy(v16) {
+							tmp17 = v16
+						} else {
+							tmp17 = v2
+						}
+						tmp15 = tmp17
+					} // end let
+					tmp16, ok := lang.FieldOrMethod(tmp15, "getStackTrace")
+					if !ok {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp15, "getStackTrace")))
+					}
+					var tmp17 any
+					switch reflect.TypeOf(tmp16).Kind() {
+					case reflect.Func:
+						tmp17 = lang.Apply(tmp16, nil)
+					default:
+						tmp17 = tmp16
+					}
+					tmp13 = runtime.VectorMap(tmp14, tmp17)
+				} else {
+					tmp18 := checkDerefVar(var_clojure_DOT_core_StackTraceElement_DASH__GT_vec)
+					var tmp19 any
+					{ // let
+						// let binding "or__0__auto__"
+						var v20 any = v9
+						_ = v20
+						var tmp21 any
+						if lang.IsTruthy(v20) {
+							tmp21 = v20
+						} else {
+							tmp21 = v2
+						}
+						tmp19 = tmp21
+					} // end let
+					tmp20, ok := lang.FieldOrMethod(tmp19, "getStackTrace")
+					if !ok {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp19, "getStackTrace")))
+					}
+					var tmp21 any
+					switch reflect.TypeOf(tmp20).Kind() {
+					case reflect.Func:
+						tmp21 = lang.Apply(tmp20, nil)
+					default:
+						tmp21 = tmp20
+					}
+					tmp22 := aotDirectFn271Arity2(tmp18, tmp21)
+					tmp23 := aotDirectFn562(tmp22)
+					tmp13 = tmp23
+				}
+				tmp24 := aotKeywordMapNew11(tmp10, tmp13)
+				var tmp25 any
+				{ // let
+					// let binding "temp__0__auto__"
+					tmp26, ok := lang.FieldOrMethod(v9, "getLocalizedMessage")
+					if !ok {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v9, "getLocalizedMessage")))
+					}
+					var tmp27 any
+					switch reflect.TypeOf(tmp26).Kind() {
+					case reflect.Func:
+						tmp27 = lang.Apply(tmp26, nil)
+					default:
+						tmp27 = tmp26
+					}
+					var v28 any = tmp27
+					_ = v28
+					var tmp29 any
+					if lang.IsTruthy(v28) {
+						var tmp30 any
+						{ // let
+							// let binding "root-msg"
+							var v31 any = v28
+							_ = v31
+							tmp32 := aotKeywordMapNew12(v31)
+							tmp30 = tmp32
+						} // end let
+						tmp29 = tmp30
+					} else {
+					}
+					tmp25 = tmp29
+				} // end let
+				var tmp26 any
+				{ // let
+					// let binding "temp__0__auto__"
+					tmp27 := aotDirectFn169(v9)
+					var v28 any = tmp27
+					_ = v28
+					var tmp29 any
+					if lang.IsTruthy(v28) {
+						var tmp30 any
+						{ // let
+							// let binding "data"
+							var v31 any = v28
+							_ = v31
+							tmp32 := aotKeywordMapNew9(v31)
+							tmp30 = tmp32
+						} // end let
+						tmp29 = tmp30
+					} else {
+					}
+					tmp26 = tmp29
+				} // end let
+				var tmp27 any
+				{ // let
+					// let binding "temp__0__auto__"
+					tmp28 := aotDirectFn169(v2)
+					tmp29 := aotKeywordSite0.Get(kw_clojure_DOT_error_SLASH_phase, tmp28, nil)
+					var v30 any = tmp29
+					_ = v30
+					var tmp31 any
+					if lang.IsTruthy(v30) {
+						var tmp32 any
+						{ // let
+							// let binding "phase"
+							var v33 any = v30
+							_ = v33
+							tmp34 := aotKeywordMapNew13(v33)
+							tmp32 = tmp34
+						} // end let
+						tmp31 = tmp32
+					} else {
+					}
+					tmp27 = tmp31
+				} // end let
+				tmp28 := aotDirectFn282.Invoke4(tmp24, tmp25, tmp26, tmp27)
+				tmp3 = tmp28
+			} // end let
+			return tmp3
+		})
+		aotDirectFn17 = tmp1
+		var_clojure_DOT_core_Throwable_DASH__GT_map = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_core_Throwable_DASH__GT_map.SetMetaLazyMacro(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core_print.glj", kw_line, int(442), kw_column, int(7), kw_end_DASH_line, int(442), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a Throwable with keys:\n    :cause - root cause message\n    :phase - error phase\n    :via - cause chain, with cause keys:\n             :type - exception class symbol\n             :message - exception message\n             :data - ex-data\n             :at - top stack element\n    :trace - root cause stack elements", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		}, false)
 	}
 	// emit-extend-type
@@ -50008,4 +50068,5719 @@ func LoadNS() {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(6762), kw_column, int(7), kw_end_DASH_line, int(6762), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_xform, sym_f, sym_coll), lang.NewVector(sym_xform, sym_f, sym_init, sym_coll)), kw_doc, "reduce with a transformation of f (xf). If init is not\n  supplied, (f) will be called to produce it. f should be a reducing\n  step function that accepts both 1 and 2 arguments, if it accepts\n  only 2 you can add the arity-1 with 'completing'. Returns the result\n  of applying (the transformed) xf to init and the first item in coll,\n  then applying xf to that result and the 2nd item, etc. If coll\n  contains no items, returns init and f is not called. Note that\n  certain transforms may inject or skip items.", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		}, false)
 	}
+	nativeVersionaotDirectFn0 := var_clojure_DOT_core__STAR_.RootVersion()
+	nativeVersionaotDirectFn1 := var_clojure_DOT_core__STAR__TICK_.RootVersion()
+	nativeVersionaotDirectFn10 := var_clojure_DOT_core__EQ__EQ_.RootVersion()
+	nativeVersionaotDirectFn100 := var_clojure_DOT_core_class.RootVersion()
+	nativeVersionaotDirectFn101 := var_clojure_DOT_core_class_QMARK_.RootVersion()
+	nativeVersionaotDirectFn102 := var_clojure_DOT_core_clear_DASH_agent_DASH_errors.RootVersion()
+	nativeVersionaotDirectFn103 := var_clojure_DOT_core_coll_QMARK_.RootVersion()
+	nativeVersionaotDirectFn104 := var_clojure_DOT_core_commute.RootVersion()
+	nativeVersionaotDirectFn105 := var_clojure_DOT_core_comp.RootVersion()
+	nativeVersionaotDirectFn106 := var_clojure_DOT_core_comparator.RootVersion()
+	nativeVersionaotDirectFn107 := var_clojure_DOT_core_compare.RootVersion()
+	nativeVersionaotDirectFn108 := var_clojure_DOT_core_compare_DASH_and_DASH_set_BANG_.RootVersion()
+	nativeVersionaotDirectFn109 := var_clojure_DOT_core_compile.RootVersion()
+	nativeVersionaotDirectFn11 := var_clojure_DOT_core__GT_.RootVersion()
+	nativeVersionaotDirectFn110 := var_clojure_DOT_core_complement.RootVersion()
+	nativeVersionaotDirectFn111 := var_clojure_DOT_core_completing.RootVersion()
+	nativeVersionaotDirectFn112 := var_clojure_DOT_core_concat.RootVersion()
+	nativeVersionaotDirectFn113 := var_clojure_DOT_core_conj.RootVersion()
+	nativeVersionaotDirectFn114 := var_clojure_DOT_core_conj_BANG_.RootVersion()
+	nativeVersionaotDirectFn115 := var_clojure_DOT_core_cons.RootVersion()
+	nativeVersionaotDirectFn116 := var_clojure_DOT_core_constantly.RootVersion()
+	nativeVersionaotDirectFn117 := var_clojure_DOT_core_contains_QMARK_.RootVersion()
+	nativeVersionaotDirectFn118 := var_clojure_DOT_core_count.RootVersion()
+	nativeVersionaotDirectFn119 := var_clojure_DOT_core_counted_QMARK_.RootVersion()
+	nativeVersionaotDirectFn12 := var_clojure_DOT_core__GT_0_QMARK_.RootVersion()
+	nativeVersionaotDirectFn120 := var_clojure_DOT_core_create_DASH_ns.RootVersion()
+	nativeVersionaotDirectFn121 := var_clojure_DOT_core_create_DASH_struct.RootVersion()
+	nativeVersionaotDirectFn122 := var_clojure_DOT_core_cycle.RootVersion()
+	nativeVersionaotDirectFn123 := var_clojure_DOT_core_data_DASH_reader_DASH_urls.RootVersion()
+	nativeVersionaotDirectFn124 := var_clojure_DOT_core_data_DASH_reader_DASH_var.RootVersion()
+	nativeVersionaotDirectFn125 := var_clojure_DOT_core_dec.RootVersion()
+	nativeVersionaotDirectFn126 := var_clojure_DOT_core_dec_TICK_.RootVersion()
+	nativeVersionaotDirectFn127 := var_clojure_DOT_core_decimal_QMARK_.RootVersion()
+	nativeVersionaotDirectFn128 := var_clojure_DOT_core_dedupe.RootVersion()
+	nativeVersionaotDirectFn129 := var_clojure_DOT_core_delay_QMARK_.RootVersion()
+	nativeVersionaotDirectFn13 := var_clojure_DOT_core__GT_1_QMARK_.RootVersion()
+	nativeVersionaotDirectFn130 := var_clojure_DOT_core_deliver.RootVersion()
+	nativeVersionaotDirectFn131 := var_clojure_DOT_core_denominator.RootVersion()
+	nativeVersionaotDirectFn132 := var_clojure_DOT_core_deref.RootVersion()
+	nativeVersionaotDirectFn133 := var_clojure_DOT_core_deref_DASH_as_DASH_map.RootVersion()
+	nativeVersionaotDirectFn134 := var_clojure_DOT_core_deref_DASH_future.RootVersion()
+	nativeVersionaotDirectFn135 := var_clojure_DOT_core_derive.RootVersion()
+	nativeVersionaotDirectFn136 := var_clojure_DOT_core_descendants.RootVersion()
+	nativeVersionaotDirectFn137 := var_clojure_DOT_core_destructure.RootVersion()
+	nativeVersionaotDirectFn138 := var_clojure_DOT_core_disj.RootVersion()
+	nativeVersionaotDirectFn139 := var_clojure_DOT_core_disj_BANG_.RootVersion()
+	nativeVersionaotDirectFn14 := var_clojure_DOT_core__GT__EQ_.RootVersion()
+	nativeVersionaotDirectFn140 := var_clojure_DOT_core_dissoc.RootVersion()
+	nativeVersionaotDirectFn141 := var_clojure_DOT_core_dissoc_BANG_.RootVersion()
+	nativeVersionaotDirectFn142 := var_clojure_DOT_core_distinct.RootVersion()
+	nativeVersionaotDirectFn143 := var_clojure_DOT_core_distinct_QMARK_.RootVersion()
+	nativeVersionaotDirectFn144 := var_clojure_DOT_core_doall.RootVersion()
+	nativeVersionaotDirectFn145 := var_clojure_DOT_core_dorun.RootVersion()
+	nativeVersionaotDirectFn146 := var_clojure_DOT_core_double.RootVersion()
+	nativeVersionaotDirectFn147 := var_clojure_DOT_core_double_DASH_array.RootVersion()
+	nativeVersionaotDirectFn148 := var_clojure_DOT_core_double_QMARK_.RootVersion()
+	nativeVersionaotDirectFn149 := var_clojure_DOT_core_doubles.RootVersion()
+	nativeVersionaotDirectFn15 := var_clojure_DOT_core_NaN_QMARK_.RootVersion()
+	nativeVersionaotDirectFn150 := var_clojure_DOT_core_drop.RootVersion()
+	nativeVersionaotDirectFn151 := var_clojure_DOT_core_drop_DASH_last.RootVersion()
+	nativeVersionaotDirectFn152 := var_clojure_DOT_core_drop_DASH_while.RootVersion()
+	nativeVersionaotDirectFn153 := var_clojure_DOT_core_elide_DASH_top_DASH_frames.RootVersion()
+	nativeVersionaotDirectFn154 := var_clojure_DOT_core_emit_DASH_extend_DASH_protocol.RootVersion()
+	nativeVersionaotDirectFn155 := var_clojure_DOT_core_emit_DASH_extend_DASH_type.RootVersion()
+	nativeVersionaotDirectFn156 := var_clojure_DOT_core_emit_DASH_hinted_DASH_impl.RootVersion()
+	nativeVersionaotDirectFn157 := var_clojure_DOT_core_empty.RootVersion()
+	nativeVersionaotDirectFn158 := var_clojure_DOT_core_empty_QMARK_.RootVersion()
+	nativeVersionaotDirectFn159 := var_clojure_DOT_core_ensure.RootVersion()
+	nativeVersionaotDirectFn16 := var_clojure_DOT_core_StackTraceElement_DASH__GT_vec.RootVersion()
+	nativeVersionaotDirectFn160 := var_clojure_DOT_core_ensure_DASH_reduced.RootVersion()
+	nativeVersionaotDirectFn161 := var_clojure_DOT_core_enumeration_DASH_seq.RootVersion()
+	nativeVersionaotDirectFn162 := var_clojure_DOT_core_error_DASH_handler.RootVersion()
+	nativeVersionaotDirectFn163 := var_clojure_DOT_core_error_DASH_mode.RootVersion()
+	nativeVersionaotDirectFn164 := var_clojure_DOT_core_eval.RootVersion()
+	nativeVersionaotDirectFn165 := var_clojure_DOT_core_even_QMARK_.RootVersion()
+	nativeVersionaotDirectFn166 := var_clojure_DOT_core_every_DASH_pred.RootVersion()
+	nativeVersionaotDirectFn167 := var_clojure_DOT_core_every_QMARK_.RootVersion()
+	nativeVersionaotDirectFn168 := var_clojure_DOT_core_ex_DASH_cause.RootVersion()
+	nativeVersionaotDirectFn169 := var_clojure_DOT_core_ex_DASH_data.RootVersion()
+	nativeVersionaotDirectFn17 := var_clojure_DOT_core_Throwable_DASH__GT_map.RootVersion()
+	nativeVersionaotDirectFn170 := var_clojure_DOT_core_ex_DASH_info.RootVersion()
+	nativeVersionaotDirectFn171 := var_clojure_DOT_core_ex_DASH_message.RootVersion()
+	nativeVersionaotDirectFn172 := var_clojure_DOT_core_extend.RootVersion()
+	nativeVersionaotDirectFn173 := var_clojure_DOT_core_false_QMARK_.RootVersion()
+	nativeVersionaotDirectFn174 := var_clojure_DOT_core_ffirst.RootVersion()
+	nativeVersionaotDirectFn175 := var_clojure_DOT_core_file_DASH_seq.RootVersion()
+	nativeVersionaotDirectFn176 := var_clojure_DOT_core_filter.RootVersion()
+	nativeVersionaotDirectFn177 := var_clojure_DOT_core_filter_DASH_key.RootVersion()
+	nativeVersionaotDirectFn178 := var_clojure_DOT_core_filterv.RootVersion()
+	nativeVersionaotDirectFn179 := var_clojure_DOT_core_find.RootVersion()
+	nativeVersionaotDirectFn18 := var_clojure_DOT_core_abs.RootVersion()
+	nativeVersionaotDirectFn180 := var_clojure_DOT_core_find_DASH_keyword.RootVersion()
+	nativeVersionaotDirectFn181 := var_clojure_DOT_core_find_DASH_ns.RootVersion()
+	nativeVersionaotDirectFn182 := var_clojure_DOT_core_find_DASH_var.RootVersion()
+	nativeVersionaotDirectFn183 := var_clojure_DOT_core_first.RootVersion()
+	nativeVersionaotDirectFn184 := var_clojure_DOT_core_fits_DASH_table_QMARK_.RootVersion()
+	nativeVersionaotDirectFn185 := var_clojure_DOT_core_flatten.RootVersion()
+	nativeVersionaotDirectFn186 := var_clojure_DOT_core_float.RootVersion()
+	nativeVersionaotDirectFn187 := var_clojure_DOT_core_float_DASH_array.RootVersion()
+	nativeVersionaotDirectFn188 := var_clojure_DOT_core_float_QMARK_.RootVersion()
+	nativeVersionaotDirectFn189 := var_clojure_DOT_core_floats.RootVersion()
+	nativeVersionaotDirectFn19 := var_clojure_DOT_core_accessor.RootVersion()
+	nativeVersionaotDirectFn190 := var_clojure_DOT_core_flush.RootVersion()
+	nativeVersionaotDirectFn191 := var_clojure_DOT_core_fn_QMARK_.RootVersion()
+	nativeVersionaotDirectFn192 := var_clojure_DOT_core_fnext.RootVersion()
+	nativeVersionaotDirectFn193 := var_clojure_DOT_core_fnil.RootVersion()
+	nativeVersionaotDirectFn194 := var_clojure_DOT_core_force.RootVersion()
+	nativeVersionaotDirectFn195 := var_clojure_DOT_core_format.RootVersion()
+	nativeVersionaotDirectFn196 := var_clojure_DOT_core_frequencies.RootVersion()
+	nativeVersionaotDirectFn197 := var_clojure_DOT_core_future_DASH_call.RootVersion()
+	nativeVersionaotDirectFn198 := var_clojure_DOT_core_future_DASH_cancel.RootVersion()
+	nativeVersionaotDirectFn199 := var_clojure_DOT_core_future_DASH_cancelled_QMARK_.RootVersion()
+	nativeVersionaotDirectFn2 := var_clojure_DOT_core__PLUS_.RootVersion()
+	nativeVersionaotDirectFn20 := var_clojure_DOT_core_aclone.RootVersion()
+	nativeVersionaotDirectFn200 := var_clojure_DOT_core_future_DASH_done_QMARK_.RootVersion()
+	nativeVersionaotDirectFn201 := var_clojure_DOT_core_future_QMARK_.RootVersion()
+	nativeVersionaotDirectFn202 := var_clojure_DOT_core_gensym.RootVersion()
+	nativeVersionaotDirectFn203 := var_clojure_DOT_core_get.RootVersion()
+	nativeVersionaotDirectFn204 := var_clojure_DOT_core_get_DASH_in.RootVersion()
+	nativeVersionaotDirectFn205 := var_clojure_DOT_core_get_DASH_method.RootVersion()
+	nativeVersionaotDirectFn206 := var_clojure_DOT_core_get_DASH_thread_DASH_bindings.RootVersion()
+	nativeVersionaotDirectFn207 := var_clojure_DOT_core_get_DASH_validator.RootVersion()
+	nativeVersionaotDirectFn208 := var_clojure_DOT_core_group_DASH_by.RootVersion()
+	nativeVersionaotDirectFn209 := var_clojure_DOT_core_halt_DASH_when.RootVersion()
+	nativeVersionaotDirectFn21 := var_clojure_DOT_core_add_DASH_classpath.RootVersion()
+	nativeVersionaotDirectFn210 := var_clojure_DOT_core_hash.RootVersion()
+	nativeVersionaotDirectFn211 := var_clojure_DOT_core_hash_DASH_map.RootVersion()
+	nativeVersionaotDirectFn212 := var_clojure_DOT_core_hash_DASH_ordered_DASH_coll.RootVersion()
+	nativeVersionaotDirectFn213 := var_clojure_DOT_core_hash_DASH_set.RootVersion()
+	nativeVersionaotDirectFn214 := var_clojure_DOT_core_hash_DASH_unordered_DASH_coll.RootVersion()
+	nativeVersionaotDirectFn215 := var_clojure_DOT_core_ident_QMARK_.RootVersion()
+	nativeVersionaotDirectFn216 := var_clojure_DOT_core_identical_QMARK_.RootVersion()
+	nativeVersionaotDirectFn217 := var_clojure_DOT_core_identity.RootVersion()
+	nativeVersionaotDirectFn218 := var_clojure_DOT_core_ifn_QMARK_.RootVersion()
+	nativeVersionaotDirectFn219 := var_clojure_DOT_core_inc.RootVersion()
+	nativeVersionaotDirectFn22 := var_clojure_DOT_core_add_DASH_watch.RootVersion()
+	nativeVersionaotDirectFn220 := var_clojure_DOT_core_inc_TICK_.RootVersion()
+	nativeVersionaotDirectFn221 := var_clojure_DOT_core_indexed_QMARK_.RootVersion()
+	nativeVersionaotDirectFn222 := var_clojure_DOT_core_infinite_QMARK_.RootVersion()
+	nativeVersionaotDirectFn223 := var_clojure_DOT_core_inst_DASH_ms.RootVersion()
+	nativeVersionaotDirectFn224 := var_clojure_DOT_core_inst_QMARK_.RootVersion()
+	nativeVersionaotDirectFn225 := var_clojure_DOT_core_instance_QMARK_.RootVersion()
+	nativeVersionaotDirectFn226 := var_clojure_DOT_core_int.RootVersion()
+	nativeVersionaotDirectFn227 := var_clojure_DOT_core_int_DASH_array.RootVersion()
+	nativeVersionaotDirectFn228 := var_clojure_DOT_core_int_QMARK_.RootVersion()
+	nativeVersionaotDirectFn229 := var_clojure_DOT_core_integer_QMARK_.RootVersion()
+	nativeVersionaotDirectFn23 := var_clojure_DOT_core_agent.RootVersion()
+	nativeVersionaotDirectFn230 := var_clojure_DOT_core_interleave.RootVersion()
+	nativeVersionaotDirectFn231 := var_clojure_DOT_core_intern.RootVersion()
+	nativeVersionaotDirectFn232 := var_clojure_DOT_core_interpose.RootVersion()
+	nativeVersionaotDirectFn233 := var_clojure_DOT_core_into.RootVersion()
+	nativeVersionaotDirectFn234 := var_clojure_DOT_core_into_DASH_array.RootVersion()
+	nativeVersionaotDirectFn235 := var_clojure_DOT_core_into1.RootVersion()
+	nativeVersionaotDirectFn236 := var_clojure_DOT_core_ints.RootVersion()
+	nativeVersionaotDirectFn237 := var_clojure_DOT_core_isa_QMARK_.RootVersion()
+	nativeVersionaotDirectFn238 := var_clojure_DOT_core_iterate.RootVersion()
+	nativeVersionaotDirectFn239 := var_clojure_DOT_core_iteration.RootVersion()
+	nativeVersionaotDirectFn24 := var_clojure_DOT_core_agent_DASH_error.RootVersion()
+	nativeVersionaotDirectFn240 := var_clojure_DOT_core_iterator_DASH_seq.RootVersion()
+	nativeVersionaotDirectFn241 := var_clojure_DOT_core_juxt.RootVersion()
+	nativeVersionaotDirectFn242 := var_clojure_DOT_core_keep.RootVersion()
+	nativeVersionaotDirectFn243 := var_clojure_DOT_core_keep_DASH_indexed.RootVersion()
+	nativeVersionaotDirectFn244 := var_clojure_DOT_core_key.RootVersion()
+	nativeVersionaotDirectFn245 := var_clojure_DOT_core_keys.RootVersion()
+	nativeVersionaotDirectFn246 := var_clojure_DOT_core_keyword.RootVersion()
+	nativeVersionaotDirectFn247 := var_clojure_DOT_core_keyword_QMARK_.RootVersion()
+	nativeVersionaotDirectFn248 := var_clojure_DOT_core_last.RootVersion()
+	nativeVersionaotDirectFn249 := var_clojure_DOT_core_libspec_QMARK_.RootVersion()
+	nativeVersionaotDirectFn25 := var_clojure_DOT_core_agent_DASH_errors.RootVersion()
+	nativeVersionaotDirectFn250 := var_clojure_DOT_core_lift_DASH_ns.RootVersion()
+	nativeVersionaotDirectFn251 := var_clojure_DOT_core_line_DASH_seq.RootVersion()
+	nativeVersionaotDirectFn252 := var_clojure_DOT_core_list_STAR_.RootVersion()
+	nativeVersionaotDirectFn253 := var_clojure_DOT_core_list_QMARK_.RootVersion()
+	nativeVersionaotDirectFn254 := var_clojure_DOT_core_load.RootVersion()
+	nativeVersionaotDirectFn255 := var_clojure_DOT_core_load_DASH_all.RootVersion()
+	nativeVersionaotDirectFn256 := var_clojure_DOT_core_load_DASH_data_DASH_reader_DASH_file.RootVersion()
+	nativeVersionaotDirectFn257 := var_clojure_DOT_core_load_DASH_data_DASH_readers.RootVersion()
+	nativeVersionaotDirectFn258 := var_clojure_DOT_core_load_DASH_lib.RootVersion()
+	nativeVersionaotDirectFn259 := var_clojure_DOT_core_load_DASH_libs.RootVersion()
+	nativeVersionaotDirectFn26 := var_clojure_DOT_core_aget.RootVersion()
+	nativeVersionaotDirectFn260 := var_clojure_DOT_core_load_DASH_one.RootVersion()
+	nativeVersionaotDirectFn261 := var_clojure_DOT_core_load_DASH_reader.RootVersion()
+	nativeVersionaotDirectFn262 := var_clojure_DOT_core_load_DASH_string.RootVersion()
+	nativeVersionaotDirectFn263 := var_clojure_DOT_core_loaded_DASH_libs.RootVersion()
+	nativeVersionaotDirectFn264 := var_clojure_DOT_core_long.RootVersion()
+	nativeVersionaotDirectFn265 := var_clojure_DOT_core_long_DASH_array.RootVersion()
+	nativeVersionaotDirectFn266 := var_clojure_DOT_core_longs.RootVersion()
+	nativeVersionaotDirectFn267 := var_clojure_DOT_core_macroexpand.RootVersion()
+	nativeVersionaotDirectFn268 := var_clojure_DOT_core_macroexpand_DASH_1.RootVersion()
+	nativeVersionaotDirectFn269 := var_clojure_DOT_core_make_DASH_array.RootVersion()
+	nativeVersionaotDirectFn27 := var_clojure_DOT_core_alength.RootVersion()
+	nativeVersionaotDirectFn270 := var_clojure_DOT_core_make_DASH_hierarchy.RootVersion()
+	nativeVersionaotDirectFn271 := var_clojure_DOT_core_map.RootVersion()
+	nativeVersionaotDirectFn272 := var_clojure_DOT_core_map_DASH_entry_QMARK_.RootVersion()
+	nativeVersionaotDirectFn273 := var_clojure_DOT_core_map_DASH_indexed.RootVersion()
+	nativeVersionaotDirectFn274 := var_clojure_DOT_core_map_QMARK_.RootVersion()
+	nativeVersionaotDirectFn275 := var_clojure_DOT_core_mapcat.RootVersion()
+	nativeVersionaotDirectFn276 := var_clojure_DOT_core_mapv.RootVersion()
+	nativeVersionaotDirectFn277 := var_clojure_DOT_core_max.RootVersion()
+	nativeVersionaotDirectFn278 := var_clojure_DOT_core_max_DASH_key.RootVersion()
+	nativeVersionaotDirectFn279 := var_clojure_DOT_core_maybe_DASH_destructured.RootVersion()
+	nativeVersionaotDirectFn28 := var_clojure_DOT_core_alias.RootVersion()
+	nativeVersionaotDirectFn280 := var_clojure_DOT_core_maybe_DASH_min_DASH_hash.RootVersion()
+	nativeVersionaotDirectFn281 := var_clojure_DOT_core_memoize.RootVersion()
+	nativeVersionaotDirectFn282 := var_clojure_DOT_core_merge.RootVersion()
+	nativeVersionaotDirectFn283 := var_clojure_DOT_core_merge_DASH_hash_DASH_collisions.RootVersion()
+	nativeVersionaotDirectFn284 := var_clojure_DOT_core_merge_DASH_with.RootVersion()
+	nativeVersionaotDirectFn285 := var_clojure_DOT_core_meta.RootVersion()
+	nativeVersionaotDirectFn286 := var_clojure_DOT_core_methods.RootVersion()
+	nativeVersionaotDirectFn287 := var_clojure_DOT_core_min.RootVersion()
+	nativeVersionaotDirectFn288 := var_clojure_DOT_core_min_DASH_key.RootVersion()
+	nativeVersionaotDirectFn289 := var_clojure_DOT_core_mix_DASH_collection_DASH_hash.RootVersion()
+	nativeVersionaotDirectFn29 := var_clojure_DOT_core_all_DASH_ns.RootVersion()
+	nativeVersionaotDirectFn290 := var_clojure_DOT_core_mk_DASH_bound_DASH_fn.RootVersion()
+	nativeVersionaotDirectFn291 := var_clojure_DOT_core_mod.RootVersion()
+	nativeVersionaotDirectFn292 := var_clojure_DOT_core_name.RootVersion()
+	nativeVersionaotDirectFn293 := var_clojure_DOT_core_namespace.RootVersion()
+	nativeVersionaotDirectFn294 := var_clojure_DOT_core_nary_DASH_inline.RootVersion()
+	nativeVersionaotDirectFn295 := var_clojure_DOT_core_nat_DASH_int_QMARK_.RootVersion()
+	nativeVersionaotDirectFn296 := var_clojure_DOT_core_neg_DASH_int_QMARK_.RootVersion()
+	nativeVersionaotDirectFn297 := var_clojure_DOT_core_neg_QMARK_.RootVersion()
+	nativeVersionaotDirectFn298 := var_clojure_DOT_core_newline.RootVersion()
+	nativeVersionaotDirectFn299 := var_clojure_DOT_core_next.RootVersion()
+	nativeVersionaotDirectFn3 := var_clojure_DOT_core__PLUS__TICK_.RootVersion()
+	nativeVersionaotDirectFn30 := var_clojure_DOT_core_alter.RootVersion()
+	nativeVersionaotDirectFn300 := var_clojure_DOT_core_nfirst.RootVersion()
+	nativeVersionaotDirectFn301 := var_clojure_DOT_core_nil_QMARK_.RootVersion()
+	nativeVersionaotDirectFn302 := var_clojure_DOT_core_nnext.RootVersion()
+	nativeVersionaotDirectFn303 := var_clojure_DOT_core_normalize_DASH_slurp_DASH_opts.RootVersion()
+	nativeVersionaotDirectFn304 := var_clojure_DOT_core_not.RootVersion()
+	nativeVersionaotDirectFn305 := var_clojure_DOT_core_not_DASH_any_QMARK_.RootVersion()
+	nativeVersionaotDirectFn306 := var_clojure_DOT_core_not_DASH_empty.RootVersion()
+	nativeVersionaotDirectFn307 := var_clojure_DOT_core_not_DASH_every_QMARK_.RootVersion()
+	nativeVersionaotDirectFn308 := var_clojure_DOT_core_not_EQ_.RootVersion()
+	nativeVersionaotDirectFn309 := var_clojure_DOT_core_ns_DASH_aliases.RootVersion()
+	nativeVersionaotDirectFn31 := var_clojure_DOT_core_alter_DASH_meta_BANG_.RootVersion()
+	nativeVersionaotDirectFn310 := var_clojure_DOT_core_ns_DASH_imports.RootVersion()
+	nativeVersionaotDirectFn311 := var_clojure_DOT_core_ns_DASH_interns.RootVersion()
+	nativeVersionaotDirectFn312 := var_clojure_DOT_core_ns_DASH_map.RootVersion()
+	nativeVersionaotDirectFn313 := var_clojure_DOT_core_ns_DASH_name.RootVersion()
+	nativeVersionaotDirectFn314 := var_clojure_DOT_core_ns_DASH_publics.RootVersion()
+	nativeVersionaotDirectFn315 := var_clojure_DOT_core_ns_DASH_refers.RootVersion()
+	nativeVersionaotDirectFn316 := var_clojure_DOT_core_ns_DASH_resolve.RootVersion()
+	nativeVersionaotDirectFn317 := var_clojure_DOT_core_ns_DASH_unalias.RootVersion()
+	nativeVersionaotDirectFn318 := var_clojure_DOT_core_ns_DASH_unmap.RootVersion()
+	nativeVersionaotDirectFn319 := var_clojure_DOT_core_nth.RootVersion()
+	nativeVersionaotDirectFn32 := var_clojure_DOT_core_alter_DASH_var_DASH_root.RootVersion()
+	nativeVersionaotDirectFn320 := var_clojure_DOT_core_nthnext.RootVersion()
+	nativeVersionaotDirectFn321 := var_clojure_DOT_core_nthrest.RootVersion()
+	nativeVersionaotDirectFn322 := var_clojure_DOT_core_num.RootVersion()
+	nativeVersionaotDirectFn323 := var_clojure_DOT_core_number_QMARK_.RootVersion()
+	nativeVersionaotDirectFn324 := var_clojure_DOT_core_numerator.RootVersion()
+	nativeVersionaotDirectFn325 := var_clojure_DOT_core_object_DASH_array.RootVersion()
+	nativeVersionaotDirectFn326 := var_clojure_DOT_core_odd_QMARK_.RootVersion()
+	nativeVersionaotDirectFn327 := var_clojure_DOT_core_parents.RootVersion()
+	nativeVersionaotDirectFn328 := var_clojure_DOT_core_parse_DASH_boolean.RootVersion()
+	nativeVersionaotDirectFn329 := var_clojure_DOT_core_parse_DASH_double.RootVersion()
+	nativeVersionaotDirectFn33 := var_clojure_DOT_core_ancestors.RootVersion()
+	nativeVersionaotDirectFn330 := var_clojure_DOT_core_parse_DASH_impls.RootVersion()
+	nativeVersionaotDirectFn331 := var_clojure_DOT_core_parse_DASH_long.RootVersion()
+	nativeVersionaotDirectFn332 := var_clojure_DOT_core_parse_DASH_uuid.RootVersion()
+	nativeVersionaotDirectFn333 := var_clojure_DOT_core_parsing_DASH_err.RootVersion()
+	nativeVersionaotDirectFn334 := var_clojure_DOT_core_partial.RootVersion()
+	nativeVersionaotDirectFn335 := var_clojure_DOT_core_partition.RootVersion()
+	nativeVersionaotDirectFn336 := var_clojure_DOT_core_partition_DASH_all.RootVersion()
+	nativeVersionaotDirectFn337 := var_clojure_DOT_core_partition_DASH_by.RootVersion()
+	nativeVersionaotDirectFn338 := var_clojure_DOT_core_partitionv.RootVersion()
+	nativeVersionaotDirectFn339 := var_clojure_DOT_core_partitionv_DASH_all.RootVersion()
+	nativeVersionaotDirectFn34 := var_clojure_DOT_core_any_QMARK_.RootVersion()
+	nativeVersionaotDirectFn340 := var_clojure_DOT_core_pcalls.RootVersion()
+	nativeVersionaotDirectFn341 := var_clojure_DOT_core_peek.RootVersion()
+	nativeVersionaotDirectFn342 := var_clojure_DOT_core_persistent_BANG_.RootVersion()
+	nativeVersionaotDirectFn343 := var_clojure_DOT_core_pmap.RootVersion()
+	nativeVersionaotDirectFn344 := var_clojure_DOT_core_pop.RootVersion()
+	nativeVersionaotDirectFn345 := var_clojure_DOT_core_pop_BANG_.RootVersion()
+	nativeVersionaotDirectFn346 := var_clojure_DOT_core_pop_DASH_thread_DASH_bindings.RootVersion()
+	nativeVersionaotDirectFn347 := var_clojure_DOT_core_pos_DASH_int_QMARK_.RootVersion()
+	nativeVersionaotDirectFn348 := var_clojure_DOT_core_pos_QMARK_.RootVersion()
+	nativeVersionaotDirectFn349 := var_clojure_DOT_core_pr_DASH_on.RootVersion()
+	nativeVersionaotDirectFn35 := var_clojure_DOT_core_apply.RootVersion()
+	nativeVersionaotDirectFn350 := var_clojure_DOT_core_pr_DASH_str.RootVersion()
+	nativeVersionaotDirectFn351 := var_clojure_DOT_core_prefer_DASH_method.RootVersion()
+	nativeVersionaotDirectFn352 := var_clojure_DOT_core_prefers.RootVersion()
+	nativeVersionaotDirectFn353 := var_clojure_DOT_core_prep_DASH_hashes.RootVersion()
+	nativeVersionaotDirectFn354 := var_clojure_DOT_core_prep_DASH_ints.RootVersion()
+	nativeVersionaotDirectFn355 := var_clojure_DOT_core_prependss.RootVersion()
+	nativeVersionaotDirectFn356 := var_clojure_DOT_core_preserving_DASH_reduced.RootVersion()
+	nativeVersionaotDirectFn357 := var_clojure_DOT_core_print.RootVersion()
+	nativeVersionaotDirectFn358 := var_clojure_DOT_core_print_DASH_ctor.RootVersion()
+	nativeVersionaotDirectFn359 := var_clojure_DOT_core_print_DASH_map.RootVersion()
+	nativeVersionaotDirectFn36 := var_clojure_DOT_core_array.RootVersion()
+	nativeVersionaotDirectFn360 := var_clojure_DOT_core_print_DASH_meta.RootVersion()
+	nativeVersionaotDirectFn361 := var_clojure_DOT_core_print_DASH_object.RootVersion()
+	nativeVersionaotDirectFn362 := var_clojure_DOT_core_print_DASH_prefix_DASH_map.RootVersion()
+	nativeVersionaotDirectFn364 := var_clojure_DOT_core_print_DASH_simple.RootVersion()
+	nativeVersionaotDirectFn365 := var_clojure_DOT_core_print_DASH_str.RootVersion()
+	nativeVersionaotDirectFn366 := var_clojure_DOT_core_print_DASH_tagged_DASH_object.RootVersion()
+	nativeVersionaotDirectFn367 := var_clojure_DOT_core_print_DASH_throwable.RootVersion()
+	nativeVersionaotDirectFn368 := var_clojure_DOT_core_printf.RootVersion()
+	nativeVersionaotDirectFn369 := var_clojure_DOT_core_println.RootVersion()
+	nativeVersionaotDirectFn37 := var_clojure_DOT_core_array_DASH_map.RootVersion()
+	nativeVersionaotDirectFn370 := var_clojure_DOT_core_println_DASH_str.RootVersion()
+	nativeVersionaotDirectFn371 := var_clojure_DOT_core_prn.RootVersion()
+	nativeVersionaotDirectFn372 := var_clojure_DOT_core_prn_DASH_str.RootVersion()
+	nativeVersionaotDirectFn373 := var_clojure_DOT_core_promise.RootVersion()
+	nativeVersionaotDirectFn374 := var_clojure_DOT_core_protocol_QMARK_.RootVersion()
+	nativeVersionaotDirectFn375 := var_clojure_DOT_core_push_DASH_thread_DASH_bindings.RootVersion()
+	nativeVersionaotDirectFn376 := var_clojure_DOT_core_qualified_DASH_ident_QMARK_.RootVersion()
+	nativeVersionaotDirectFn377 := var_clojure_DOT_core_qualified_DASH_keyword_QMARK_.RootVersion()
+	nativeVersionaotDirectFn378 := var_clojure_DOT_core_qualified_DASH_symbol_QMARK_.RootVersion()
+	nativeVersionaotDirectFn379 := var_clojure_DOT_core_quot.RootVersion()
+	nativeVersionaotDirectFn38 := var_clojure_DOT_core_aset.RootVersion()
+	nativeVersionaotDirectFn380 := var_clojure_DOT_core_rand.RootVersion()
+	nativeVersionaotDirectFn381 := var_clojure_DOT_core_rand_DASH_int.RootVersion()
+	nativeVersionaotDirectFn382 := var_clojure_DOT_core_rand_DASH_nth.RootVersion()
+	nativeVersionaotDirectFn383 := var_clojure_DOT_core_random_DASH_sample.RootVersion()
+	nativeVersionaotDirectFn384 := var_clojure_DOT_core_random_DASH_uuid.RootVersion()
+	nativeVersionaotDirectFn385 := var_clojure_DOT_core_range.RootVersion()
+	nativeVersionaotDirectFn386 := var_clojure_DOT_core_ratio_QMARK_.RootVersion()
+	nativeVersionaotDirectFn387 := var_clojure_DOT_core_rational_QMARK_.RootVersion()
+	nativeVersionaotDirectFn388 := var_clojure_DOT_core_rationalize.RootVersion()
+	nativeVersionaotDirectFn389 := var_clojure_DOT_core_re_DASH_find.RootVersion()
+	nativeVersionaotDirectFn39 := var_clojure_DOT_core_aset_DASH_boolean.RootVersion()
+	nativeVersionaotDirectFn390 := var_clojure_DOT_core_re_DASH_groups.RootVersion()
+	nativeVersionaotDirectFn391 := var_clojure_DOT_core_re_DASH_matcher.RootVersion()
+	nativeVersionaotDirectFn392 := var_clojure_DOT_core_re_DASH_matches.RootVersion()
+	nativeVersionaotDirectFn393 := var_clojure_DOT_core_re_DASH_pattern.RootVersion()
+	nativeVersionaotDirectFn394 := var_clojure_DOT_core_re_DASH_seq.RootVersion()
+	nativeVersionaotDirectFn395 := var_clojure_DOT_core_read.RootVersion()
+	nativeVersionaotDirectFn396 := var_clojure_DOT_core_read_PLUS_string.RootVersion()
+	nativeVersionaotDirectFn397 := var_clojure_DOT_core_read_DASH_line.RootVersion()
+	nativeVersionaotDirectFn398 := var_clojure_DOT_core_read_DASH_string.RootVersion()
+	nativeVersionaotDirectFn399 := var_clojure_DOT_core_reader_DASH_conditional.RootVersion()
+	nativeVersionaotDirectFn4 := var_clojure_DOT_core__DASH_.RootVersion()
+	nativeVersionaotDirectFn40 := var_clojure_DOT_core_aset_DASH_byte.RootVersion()
+	nativeVersionaotDirectFn400 := var_clojure_DOT_core_reader_DASH_conditional_QMARK_.RootVersion()
+	nativeVersionaotDirectFn401 := var_clojure_DOT_core_realized_QMARK_.RootVersion()
+	nativeVersionaotDirectFn402 := var_clojure_DOT_core_reduce.RootVersion()
+	nativeVersionaotDirectFn403 := var_clojure_DOT_core_reduce_DASH_kv.RootVersion()
+	nativeVersionaotDirectFn404 := var_clojure_DOT_core_reduce1.RootVersion()
+	nativeVersionaotDirectFn405 := var_clojure_DOT_core_reduced.RootVersion()
+	nativeVersionaotDirectFn406 := var_clojure_DOT_core_reduced_QMARK_.RootVersion()
+	nativeVersionaotDirectFn407 := var_clojure_DOT_core_reductions.RootVersion()
+	nativeVersionaotDirectFn408 := var_clojure_DOT_core_ref.RootVersion()
+	nativeVersionaotDirectFn409 := var_clojure_DOT_core_ref_DASH_history_DASH_count.RootVersion()
+	nativeVersionaotDirectFn41 := var_clojure_DOT_core_aset_DASH_char.RootVersion()
+	nativeVersionaotDirectFn410 := var_clojure_DOT_core_ref_DASH_max_DASH_history.RootVersion()
+	nativeVersionaotDirectFn411 := var_clojure_DOT_core_ref_DASH_min_DASH_history.RootVersion()
+	nativeVersionaotDirectFn412 := var_clojure_DOT_core_ref_DASH_set.RootVersion()
+	nativeVersionaotDirectFn413 := var_clojure_DOT_core_refer.RootVersion()
+	nativeVersionaotDirectFn414 := var_clojure_DOT_core_release_DASH_pending_DASH_sends.RootVersion()
+	nativeVersionaotDirectFn415 := var_clojure_DOT_core_rem.RootVersion()
+	nativeVersionaotDirectFn416 := var_clojure_DOT_core_remove.RootVersion()
+	nativeVersionaotDirectFn417 := var_clojure_DOT_core_remove_DASH_all_DASH_methods.RootVersion()
+	nativeVersionaotDirectFn418 := var_clojure_DOT_core_remove_DASH_method.RootVersion()
+	nativeVersionaotDirectFn419 := var_clojure_DOT_core_remove_DASH_ns.RootVersion()
+	nativeVersionaotDirectFn42 := var_clojure_DOT_core_aset_DASH_double.RootVersion()
+	nativeVersionaotDirectFn420 := var_clojure_DOT_core_remove_DASH_tap.RootVersion()
+	nativeVersionaotDirectFn421 := var_clojure_DOT_core_remove_DASH_watch.RootVersion()
+	nativeVersionaotDirectFn422 := var_clojure_DOT_core_repeat.RootVersion()
+	nativeVersionaotDirectFn423 := var_clojure_DOT_core_repeatedly.RootVersion()
+	nativeVersionaotDirectFn424 := var_clojure_DOT_core_replace.RootVersion()
+	nativeVersionaotDirectFn425 := var_clojure_DOT_core_replicate.RootVersion()
+	nativeVersionaotDirectFn426 := var_clojure_DOT_core_require.RootVersion()
+	nativeVersionaotDirectFn427 := var_clojure_DOT_core_requiring_DASH_resolve.RootVersion()
+	nativeVersionaotDirectFn428 := var_clojure_DOT_core_reset_BANG_.RootVersion()
+	nativeVersionaotDirectFn429 := var_clojure_DOT_core_reset_DASH_meta_BANG_.RootVersion()
+	nativeVersionaotDirectFn43 := var_clojure_DOT_core_aset_DASH_float.RootVersion()
+	nativeVersionaotDirectFn430 := var_clojure_DOT_core_reset_DASH_vals_BANG_.RootVersion()
+	nativeVersionaotDirectFn431 := var_clojure_DOT_core_resolve.RootVersion()
+	nativeVersionaotDirectFn432 := var_clojure_DOT_core_rest.RootVersion()
+	nativeVersionaotDirectFn433 := var_clojure_DOT_core_restart_DASH_agent.RootVersion()
+	nativeVersionaotDirectFn434 := var_clojure_DOT_core_resultset_DASH_seq.RootVersion()
+	nativeVersionaotDirectFn435 := var_clojure_DOT_core_reverse.RootVersion()
+	nativeVersionaotDirectFn436 := var_clojure_DOT_core_reversible_QMARK_.RootVersion()
+	nativeVersionaotDirectFn437 := var_clojure_DOT_core_root_DASH_directory.RootVersion()
+	nativeVersionaotDirectFn438 := var_clojure_DOT_core_root_DASH_resource.RootVersion()
+	nativeVersionaotDirectFn439 := var_clojure_DOT_core_rseq.RootVersion()
+	nativeVersionaotDirectFn44 := var_clojure_DOT_core_aset_DASH_int.RootVersion()
+	nativeVersionaotDirectFn440 := var_clojure_DOT_core_rsubseq.RootVersion()
+	nativeVersionaotDirectFn441 := var_clojure_DOT_core_run_BANG_.RootVersion()
+	nativeVersionaotDirectFn442 := var_clojure_DOT_core_second.RootVersion()
+	nativeVersionaotDirectFn443 := var_clojure_DOT_core_select_DASH_keys.RootVersion()
+	nativeVersionaotDirectFn444 := var_clojure_DOT_core_send.RootVersion()
+	nativeVersionaotDirectFn445 := var_clojure_DOT_core_send_DASH_off.RootVersion()
+	nativeVersionaotDirectFn446 := var_clojure_DOT_core_send_DASH_via.RootVersion()
+	nativeVersionaotDirectFn447 := var_clojure_DOT_core_seq.RootVersion()
+	nativeVersionaotDirectFn448 := var_clojure_DOT_core_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring.RootVersion()
+	nativeVersionaotDirectFn449 := var_clojure_DOT_core_seq_QMARK_.RootVersion()
+	nativeVersionaotDirectFn45 := var_clojure_DOT_core_aset_DASH_long.RootVersion()
+	nativeVersionaotDirectFn450 := var_clojure_DOT_core_seqable_QMARK_.RootVersion()
+	nativeVersionaotDirectFn451 := var_clojure_DOT_core_seque.RootVersion()
+	nativeVersionaotDirectFn452 := var_clojure_DOT_core_sequence.RootVersion()
+	nativeVersionaotDirectFn453 := var_clojure_DOT_core_sequential_QMARK_.RootVersion()
+	nativeVersionaotDirectFn454 := var_clojure_DOT_core_serialized_DASH_require.RootVersion()
+	nativeVersionaotDirectFn455 := var_clojure_DOT_core_set.RootVersion()
+	nativeVersionaotDirectFn456 := var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_executor_BANG_.RootVersion()
+	nativeVersionaotDirectFn457 := var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_.RootVersion()
+	nativeVersionaotDirectFn458 := var_clojure_DOT_core_set_DASH_error_DASH_handler_BANG_.RootVersion()
+	nativeVersionaotDirectFn459 := var_clojure_DOT_core_set_DASH_error_DASH_mode_BANG_.RootVersion()
+	nativeVersionaotDirectFn46 := var_clojure_DOT_core_aset_DASH_short.RootVersion()
+	nativeVersionaotDirectFn460 := var_clojure_DOT_core_set_DASH_validator_BANG_.RootVersion()
+	nativeVersionaotDirectFn461 := var_clojure_DOT_core_set_QMARK_.RootVersion()
+	nativeVersionaotDirectFn462 := var_clojure_DOT_core_setup_DASH_reference.RootVersion()
+	nativeVersionaotDirectFn463 := var_clojure_DOT_core_shift_DASH_mask.RootVersion()
+	nativeVersionaotDirectFn464 := var_clojure_DOT_core_short.RootVersion()
+	nativeVersionaotDirectFn465 := var_clojure_DOT_core_short_DASH_array.RootVersion()
+	nativeVersionaotDirectFn466 := var_clojure_DOT_core_shorts.RootVersion()
+	nativeVersionaotDirectFn467 := var_clojure_DOT_core_shuffle.RootVersion()
+	nativeVersionaotDirectFn468 := var_clojure_DOT_core_shutdown_DASH_agents.RootVersion()
+	nativeVersionaotDirectFn469 := var_clojure_DOT_core_sigs.RootVersion()
+	nativeVersionaotDirectFn47 := var_clojure_DOT_core_assoc.RootVersion()
+	nativeVersionaotDirectFn470 := var_clojure_DOT_core_simple_DASH_ident_QMARK_.RootVersion()
+	nativeVersionaotDirectFn471 := var_clojure_DOT_core_simple_DASH_keyword_QMARK_.RootVersion()
+	nativeVersionaotDirectFn472 := var_clojure_DOT_core_simple_DASH_symbol_QMARK_.RootVersion()
+	nativeVersionaotDirectFn473 := var_clojure_DOT_core_slurp.RootVersion()
+	nativeVersionaotDirectFn474 := var_clojure_DOT_core_some.RootVersion()
+	nativeVersionaotDirectFn475 := var_clojure_DOT_core_some_DASH_fn.RootVersion()
+	nativeVersionaotDirectFn476 := var_clojure_DOT_core_some_QMARK_.RootVersion()
+	nativeVersionaotDirectFn477 := var_clojure_DOT_core_sort.RootVersion()
+	nativeVersionaotDirectFn478 := var_clojure_DOT_core_sort_DASH_by.RootVersion()
+	nativeVersionaotDirectFn479 := var_clojure_DOT_core_sorted_DASH_map.RootVersion()
+	nativeVersionaotDirectFn48 := var_clojure_DOT_core_assoc_BANG_.RootVersion()
+	nativeVersionaotDirectFn480 := var_clojure_DOT_core_sorted_DASH_map_DASH_by.RootVersion()
+	nativeVersionaotDirectFn481 := var_clojure_DOT_core_sorted_DASH_set.RootVersion()
+	nativeVersionaotDirectFn482 := var_clojure_DOT_core_sorted_DASH_set_DASH_by.RootVersion()
+	nativeVersionaotDirectFn483 := var_clojure_DOT_core_sorted_QMARK_.RootVersion()
+	nativeVersionaotDirectFn484 := var_clojure_DOT_core_special_DASH_symbol_QMARK_.RootVersion()
+	nativeVersionaotDirectFn485 := var_clojure_DOT_core_spit.RootVersion()
+	nativeVersionaotDirectFn486 := var_clojure_DOT_core_split_DASH_at.RootVersion()
+	nativeVersionaotDirectFn487 := var_clojure_DOT_core_split_DASH_with.RootVersion()
+	nativeVersionaotDirectFn488 := var_clojure_DOT_core_splitv_DASH_at.RootVersion()
+	nativeVersionaotDirectFn489 := var_clojure_DOT_core_spread.RootVersion()
+	nativeVersionaotDirectFn49 := var_clojure_DOT_core_assoc_DASH_in.RootVersion()
+	nativeVersionaotDirectFn490 := var_clojure_DOT_core_str.RootVersion()
+	nativeVersionaotDirectFn491 := var_clojure_DOT_core_stream_DASH_into_BANG_.RootVersion()
+	nativeVersionaotDirectFn492 := var_clojure_DOT_core_stream_DASH_reduce_BANG_.RootVersion()
+	nativeVersionaotDirectFn493 := var_clojure_DOT_core_stream_DASH_seq_BANG_.RootVersion()
+	nativeVersionaotDirectFn494 := var_clojure_DOT_core_stream_DASH_transduce_BANG_.RootVersion()
+	nativeVersionaotDirectFn495 := var_clojure_DOT_core_string_QMARK_.RootVersion()
+	nativeVersionaotDirectFn496 := var_clojure_DOT_core_strip_DASH_ns.RootVersion()
+	nativeVersionaotDirectFn497 := var_clojure_DOT_core_struct.RootVersion()
+	nativeVersionaotDirectFn498 := var_clojure_DOT_core_struct_DASH_map.RootVersion()
+	nativeVersionaotDirectFn499 := var_clojure_DOT_core_subs.RootVersion()
+	nativeVersionaotDirectFn5 := var_clojure_DOT_core__DASH__TICK_.RootVersion()
+	nativeVersionaotDirectFn50 := var_clojure_DOT_core_associative_QMARK_.RootVersion()
+	nativeVersionaotDirectFn500 := var_clojure_DOT_core_subseq.RootVersion()
+	nativeVersionaotDirectFn501 := var_clojure_DOT_core_subvec.RootVersion()
+	nativeVersionaotDirectFn502 := var_clojure_DOT_core_supers.RootVersion()
+	nativeVersionaotDirectFn503 := var_clojure_DOT_core_swap_BANG_.RootVersion()
+	nativeVersionaotDirectFn504 := var_clojure_DOT_core_swap_DASH_vals_BANG_.RootVersion()
+	nativeVersionaotDirectFn505 := var_clojure_DOT_core_symbol.RootVersion()
+	nativeVersionaotDirectFn506 := var_clojure_DOT_core_symbol_QMARK_.RootVersion()
+	nativeVersionaotDirectFn507 := var_clojure_DOT_core_tagged_DASH_literal.RootVersion()
+	nativeVersionaotDirectFn508 := var_clojure_DOT_core_tagged_DASH_literal_QMARK_.RootVersion()
+	nativeVersionaotDirectFn509 := var_clojure_DOT_core_take.RootVersion()
+	nativeVersionaotDirectFn51 := var_clojure_DOT_core_atom.RootVersion()
+	nativeVersionaotDirectFn510 := var_clojure_DOT_core_take_DASH_last.RootVersion()
+	nativeVersionaotDirectFn511 := var_clojure_DOT_core_take_DASH_nth.RootVersion()
+	nativeVersionaotDirectFn512 := var_clojure_DOT_core_take_DASH_while.RootVersion()
+	nativeVersionaotDirectFn513 := var_clojure_DOT_core_test.RootVersion()
+	nativeVersionaotDirectFn514 := var_clojure_DOT_core_the_DASH_ns.RootVersion()
+	nativeVersionaotDirectFn515 := var_clojure_DOT_core_thread_DASH_bound_QMARK_.RootVersion()
+	nativeVersionaotDirectFn516 := var_clojure_DOT_core_throw_DASH_if.RootVersion()
+	nativeVersionaotDirectFn517 := var_clojure_DOT_core_to_DASH_array.RootVersion()
+	nativeVersionaotDirectFn518 := var_clojure_DOT_core_to_DASH_array_DASH_2d.RootVersion()
+	nativeVersionaotDirectFn519 := var_clojure_DOT_core_trampoline.RootVersion()
+	nativeVersionaotDirectFn52 := var_clojure_DOT_core_await.RootVersion()
+	nativeVersionaotDirectFn520 := var_clojure_DOT_core_transduce.RootVersion()
+	nativeVersionaotDirectFn521 := var_clojure_DOT_core_transient.RootVersion()
+	nativeVersionaotDirectFn522 := var_clojure_DOT_core_tree_DASH_seq.RootVersion()
+	nativeVersionaotDirectFn523 := var_clojure_DOT_core_true_QMARK_.RootVersion()
+	nativeVersionaotDirectFn524 := var_clojure_DOT_core_type.RootVersion()
+	nativeVersionaotDirectFn525 := var_clojure_DOT_core_unchecked_DASH_add.RootVersion()
+	nativeVersionaotDirectFn526 := var_clojure_DOT_core_unchecked_DASH_add_DASH_int.RootVersion()
+	nativeVersionaotDirectFn527 := var_clojure_DOT_core_unchecked_DASH_byte.RootVersion()
+	nativeVersionaotDirectFn528 := var_clojure_DOT_core_unchecked_DASH_char.RootVersion()
+	nativeVersionaotDirectFn529 := var_clojure_DOT_core_unchecked_DASH_dec.RootVersion()
+	nativeVersionaotDirectFn53 := var_clojure_DOT_core_await_DASH_for.RootVersion()
+	nativeVersionaotDirectFn530 := var_clojure_DOT_core_unchecked_DASH_dec_DASH_int.RootVersion()
+	nativeVersionaotDirectFn531 := var_clojure_DOT_core_unchecked_DASH_divide_DASH_int.RootVersion()
+	nativeVersionaotDirectFn532 := var_clojure_DOT_core_unchecked_DASH_double.RootVersion()
+	nativeVersionaotDirectFn533 := var_clojure_DOT_core_unchecked_DASH_float.RootVersion()
+	nativeVersionaotDirectFn534 := var_clojure_DOT_core_unchecked_DASH_inc.RootVersion()
+	nativeVersionaotDirectFn535 := var_clojure_DOT_core_unchecked_DASH_inc_DASH_int.RootVersion()
+	nativeVersionaotDirectFn536 := var_clojure_DOT_core_unchecked_DASH_int.RootVersion()
+	nativeVersionaotDirectFn537 := var_clojure_DOT_core_unchecked_DASH_long.RootVersion()
+	nativeVersionaotDirectFn538 := var_clojure_DOT_core_unchecked_DASH_multiply.RootVersion()
+	nativeVersionaotDirectFn539 := var_clojure_DOT_core_unchecked_DASH_multiply_DASH_int.RootVersion()
+	nativeVersionaotDirectFn54 := var_clojure_DOT_core_await1.RootVersion()
+	nativeVersionaotDirectFn540 := var_clojure_DOT_core_unchecked_DASH_negate.RootVersion()
+	nativeVersionaotDirectFn541 := var_clojure_DOT_core_unchecked_DASH_negate_DASH_int.RootVersion()
+	nativeVersionaotDirectFn542 := var_clojure_DOT_core_unchecked_DASH_remainder_DASH_int.RootVersion()
+	nativeVersionaotDirectFn543 := var_clojure_DOT_core_unchecked_DASH_short.RootVersion()
+	nativeVersionaotDirectFn544 := var_clojure_DOT_core_unchecked_DASH_subtract.RootVersion()
+	nativeVersionaotDirectFn545 := var_clojure_DOT_core_unchecked_DASH_subtract_DASH_int.RootVersion()
+	nativeVersionaotDirectFn546 := var_clojure_DOT_core_underive.RootVersion()
+	nativeVersionaotDirectFn547 := var_clojure_DOT_core_unreduced.RootVersion()
+	nativeVersionaotDirectFn548 := var_clojure_DOT_core_unsigned_DASH_bit_DASH_shift_DASH_right.RootVersion()
+	nativeVersionaotDirectFn549 := var_clojure_DOT_core_update.RootVersion()
+	nativeVersionaotDirectFn55 := var_clojure_DOT_core_bases.RootVersion()
+	nativeVersionaotDirectFn550 := var_clojure_DOT_core_update_DASH_in.RootVersion()
+	nativeVersionaotDirectFn551 := var_clojure_DOT_core_update_DASH_keys.RootVersion()
+	nativeVersionaotDirectFn552 := var_clojure_DOT_core_update_DASH_vals.RootVersion()
+	nativeVersionaotDirectFn553 := var_clojure_DOT_core_uri_QMARK_.RootVersion()
+	nativeVersionaotDirectFn554 := var_clojure_DOT_core_use.RootVersion()
+	nativeVersionaotDirectFn555 := var_clojure_DOT_core_uuid_QMARK_.RootVersion()
+	nativeVersionaotDirectFn556 := var_clojure_DOT_core_val.RootVersion()
+	nativeVersionaotDirectFn557 := var_clojure_DOT_core_vals.RootVersion()
+	nativeVersionaotDirectFn558 := var_clojure_DOT_core_var_DASH_get.RootVersion()
+	nativeVersionaotDirectFn559 := var_clojure_DOT_core_var_DASH_set.RootVersion()
+	nativeVersionaotDirectFn56 := var_clojure_DOT_core_bigdec.RootVersion()
+	nativeVersionaotDirectFn560 := var_clojure_DOT_core_var_QMARK_.RootVersion()
+	nativeVersionaotDirectFn561 := var_clojure_DOT_core_vary_DASH_meta.RootVersion()
+	nativeVersionaotDirectFn562 := var_clojure_DOT_core_vec.RootVersion()
+	nativeVersionaotDirectFn563 := var_clojure_DOT_core_vector.RootVersion()
+	nativeVersionaotDirectFn564 := var_clojure_DOT_core_vector_QMARK_.RootVersion()
+	nativeVersionaotDirectFn565 := var_clojure_DOT_core_volatile_BANG_.RootVersion()
+	nativeVersionaotDirectFn566 := var_clojure_DOT_core_volatile_QMARK_.RootVersion()
+	nativeVersionaotDirectFn567 := var_clojure_DOT_core_vreset_BANG_.RootVersion()
+	nativeVersionaotDirectFn568 := var_clojure_DOT_core_with_DASH_bindings_STAR_.RootVersion()
+	nativeVersionaotDirectFn569 := var_clojure_DOT_core_with_DASH_meta.RootVersion()
+	nativeVersionaotDirectFn57 := var_clojure_DOT_core_bigint.RootVersion()
+	nativeVersionaotDirectFn570 := var_clojure_DOT_core_with_DASH_redefs_DASH_fn.RootVersion()
+	nativeVersionaotDirectFn571 := var_clojure_DOT_core_xml_DASH_seq.RootVersion()
+	nativeVersionaotDirectFn572 := var_clojure_DOT_core_zero_QMARK_.RootVersion()
+	nativeVersionaotDirectFn573 := var_clojure_DOT_core_zipmap.RootVersion()
+	nativeVersionaotDirectFn58 := var_clojure_DOT_core_biginteger.RootVersion()
+	nativeVersionaotDirectFn59 := var_clojure_DOT_core_binding_DASH_conveyor_DASH_fn.RootVersion()
+	nativeVersionaotDirectFn6 := var_clojure_DOT_core__SLASH_.RootVersion()
+	nativeVersionaotDirectFn60 := var_clojure_DOT_core_bit_DASH_and.RootVersion()
+	nativeVersionaotDirectFn61 := var_clojure_DOT_core_bit_DASH_and_DASH_not.RootVersion()
+	nativeVersionaotDirectFn62 := var_clojure_DOT_core_bit_DASH_clear.RootVersion()
+	nativeVersionaotDirectFn63 := var_clojure_DOT_core_bit_DASH_flip.RootVersion()
+	nativeVersionaotDirectFn64 := var_clojure_DOT_core_bit_DASH_not.RootVersion()
+	nativeVersionaotDirectFn65 := var_clojure_DOT_core_bit_DASH_or.RootVersion()
+	nativeVersionaotDirectFn66 := var_clojure_DOT_core_bit_DASH_set.RootVersion()
+	nativeVersionaotDirectFn67 := var_clojure_DOT_core_bit_DASH_shift_DASH_left.RootVersion()
+	nativeVersionaotDirectFn68 := var_clojure_DOT_core_bit_DASH_shift_DASH_right.RootVersion()
+	nativeVersionaotDirectFn69 := var_clojure_DOT_core_bit_DASH_test.RootVersion()
+	nativeVersionaotDirectFn7 := var_clojure_DOT_core__LT_.RootVersion()
+	nativeVersionaotDirectFn70 := var_clojure_DOT_core_bit_DASH_xor.RootVersion()
+	nativeVersionaotDirectFn71 := var_clojure_DOT_core_boolean.RootVersion()
+	nativeVersionaotDirectFn72 := var_clojure_DOT_core_boolean_DASH_array.RootVersion()
+	nativeVersionaotDirectFn73 := var_clojure_DOT_core_boolean_QMARK_.RootVersion()
+	nativeVersionaotDirectFn74 := var_clojure_DOT_core_booleans.RootVersion()
+	nativeVersionaotDirectFn75 := var_clojure_DOT_core_bound_DASH_fn_STAR_.RootVersion()
+	nativeVersionaotDirectFn76 := var_clojure_DOT_core_bound_QMARK_.RootVersion()
+	nativeVersionaotDirectFn77 := var_clojure_DOT_core_bounded_DASH_count.RootVersion()
+	nativeVersionaotDirectFn78 := var_clojure_DOT_core_butlast.RootVersion()
+	nativeVersionaotDirectFn79 := var_clojure_DOT_core_byte.RootVersion()
+	nativeVersionaotDirectFn8 := var_clojure_DOT_core__LT__EQ_.RootVersion()
+	nativeVersionaotDirectFn80 := var_clojure_DOT_core_byte_DASH_array.RootVersion()
+	nativeVersionaotDirectFn81 := var_clojure_DOT_core_bytes.RootVersion()
+	nativeVersionaotDirectFn82 := var_clojure_DOT_core_bytes_QMARK_.RootVersion()
+	nativeVersionaotDirectFn83 := var_clojure_DOT_core_case_DASH_map.RootVersion()
+	nativeVersionaotDirectFn84 := var_clojure_DOT_core_cast.RootVersion()
+	nativeVersionaotDirectFn85 := var_clojure_DOT_core_cat.RootVersion()
+	nativeVersionaotDirectFn86 := var_clojure_DOT_core_char.RootVersion()
+	nativeVersionaotDirectFn87 := var_clojure_DOT_core_char_DASH_array.RootVersion()
+	nativeVersionaotDirectFn88 := var_clojure_DOT_core_char_QMARK_.RootVersion()
+	nativeVersionaotDirectFn89 := var_clojure_DOT_core_chars.RootVersion()
+	nativeVersionaotDirectFn9 := var_clojure_DOT_core__EQ_.RootVersion()
+	nativeVersionaotDirectFn90 := var_clojure_DOT_core_check_DASH_cyclic_DASH_dependency.RootVersion()
+	nativeVersionaotDirectFn91 := var_clojure_DOT_core_check_DASH_valid_DASH_options.RootVersion()
+	nativeVersionaotDirectFn92 := var_clojure_DOT_core_chunk.RootVersion()
+	nativeVersionaotDirectFn93 := var_clojure_DOT_core_chunk_DASH_append.RootVersion()
+	nativeVersionaotDirectFn94 := var_clojure_DOT_core_chunk_DASH_buffer.RootVersion()
+	nativeVersionaotDirectFn95 := var_clojure_DOT_core_chunk_DASH_cons.RootVersion()
+	nativeVersionaotDirectFn96 := var_clojure_DOT_core_chunk_DASH_first.RootVersion()
+	nativeVersionaotDirectFn97 := var_clojure_DOT_core_chunk_DASH_next.RootVersion()
+	nativeVersionaotDirectFn98 := var_clojure_DOT_core_chunk_DASH_rest.RootVersion()
+	nativeVersionaotDirectFn99 := var_clojure_DOT_core_chunked_DASH_seq_QMARK_.RootVersion()
+	runtime.RegisterCoreNativeLinks(func() {
+		if var_clojure_DOT_core__STAR_.RootVersion() != nativeVersionaotDirectFn0 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__STAR_) {
+			value := checkDerefVar(var_clojure_DOT_core__STAR_)
+			aotDirectFn0 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn0Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn0Arity1 = direct
+			} else {
+				aotDirectFn0Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn0Arity2 = direct
+			} else {
+				aotDirectFn0Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core__STAR__TICK_.RootVersion() != nativeVersionaotDirectFn1 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__STAR__TICK_) {
+			value := checkDerefVar(var_clojure_DOT_core__STAR__TICK_)
+			aotDirectFn1 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn1Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn1Arity1 = direct
+			} else {
+				aotDirectFn1Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn1Arity2 = direct
+			} else {
+				aotDirectFn1Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core__EQ__EQ_.RootVersion() != nativeVersionaotDirectFn10 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__EQ__EQ_) {
+			value := checkDerefVar(var_clojure_DOT_core__EQ__EQ_)
+			aotDirectFn10 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn10Arity1 = direct
+			} else {
+				aotDirectFn10Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn10Arity2 = direct
+			} else {
+				aotDirectFn10Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_class.RootVersion() != nativeVersionaotDirectFn100 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_class) {
+			value := checkDerefVar(var_clojure_DOT_core_class)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn100 = direct
+			} else {
+				aotDirectFn100 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_class_QMARK_.RootVersion() != nativeVersionaotDirectFn101 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_class_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_class_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn101 = direct
+			} else {
+				aotDirectFn101 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_clear_DASH_agent_DASH_errors.RootVersion() != nativeVersionaotDirectFn102 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_clear_DASH_agent_DASH_errors) {
+			value := checkDerefVar(var_clojure_DOT_core_clear_DASH_agent_DASH_errors)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn102 = direct
+			} else {
+				aotDirectFn102 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_coll_QMARK_.RootVersion() != nativeVersionaotDirectFn103 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_coll_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_coll_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn103 = direct
+			} else {
+				aotDirectFn103 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_commute.RootVersion() != nativeVersionaotDirectFn104 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_commute) {
+			value := checkDerefVar(var_clojure_DOT_core_commute)
+			aotDirectFn104 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_comp.RootVersion() != nativeVersionaotDirectFn105 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_comp) {
+			value := checkDerefVar(var_clojure_DOT_core_comp)
+			aotDirectFn105 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn105Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn105Arity1 = direct
+			} else {
+				aotDirectFn105Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn105Arity2 = direct
+			} else {
+				aotDirectFn105Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_comparator.RootVersion() != nativeVersionaotDirectFn106 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_comparator) {
+			value := checkDerefVar(var_clojure_DOT_core_comparator)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn106 = direct
+			} else {
+				aotDirectFn106 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_compare.RootVersion() != nativeVersionaotDirectFn107 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_compare) {
+			value := checkDerefVar(var_clojure_DOT_core_compare)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn107 = direct
+			} else {
+				aotDirectFn107 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_compare_DASH_and_DASH_set_BANG_.RootVersion() != nativeVersionaotDirectFn108 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_compare_DASH_and_DASH_set_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_compare_DASH_and_DASH_set_BANG_)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn108 = direct
+			} else {
+				aotDirectFn108 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_compile.RootVersion() != nativeVersionaotDirectFn109 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_compile) {
+			value := checkDerefVar(var_clojure_DOT_core_compile)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn109 = direct
+			} else {
+				aotDirectFn109 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core__GT_.RootVersion() != nativeVersionaotDirectFn11 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__GT_) {
+			value := checkDerefVar(var_clojure_DOT_core__GT_)
+			aotDirectFn11 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn11Arity1 = direct
+			} else {
+				aotDirectFn11Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn11Arity2 = direct
+			} else {
+				aotDirectFn11Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_complement.RootVersion() != nativeVersionaotDirectFn110 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_complement) {
+			value := checkDerefVar(var_clojure_DOT_core_complement)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn110 = direct
+			} else {
+				aotDirectFn110 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_completing.RootVersion() != nativeVersionaotDirectFn111 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_completing) {
+			value := checkDerefVar(var_clojure_DOT_core_completing)
+			aotDirectFn111 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn111Arity1 = direct
+			} else {
+				aotDirectFn111Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn111Arity2 = direct
+			} else {
+				aotDirectFn111Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_concat.RootVersion() != nativeVersionaotDirectFn112 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_concat) {
+			value := checkDerefVar(var_clojure_DOT_core_concat)
+			aotDirectFn112 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn112Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn112Arity1 = direct
+			} else {
+				aotDirectFn112Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn112Arity2 = direct
+			} else {
+				aotDirectFn112Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_conj.RootVersion() != nativeVersionaotDirectFn113 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_conj) {
+			value := checkDerefVar(var_clojure_DOT_core_conj)
+			aotDirectFn113 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn113Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn113Arity1 = direct
+			} else {
+				aotDirectFn113Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn113Arity2 = direct
+			} else {
+				aotDirectFn113Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_conj_BANG_.RootVersion() != nativeVersionaotDirectFn114 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_conj_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
+			aotDirectFn114 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn114Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn114Arity1 = direct
+			} else {
+				aotDirectFn114Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn114Arity2 = direct
+			} else {
+				aotDirectFn114Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_cons.RootVersion() != nativeVersionaotDirectFn115 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_cons) {
+			value := checkDerefVar(var_clojure_DOT_core_cons)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn115 = direct
+			} else {
+				aotDirectFn115 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_constantly.RootVersion() != nativeVersionaotDirectFn116 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_constantly) {
+			value := checkDerefVar(var_clojure_DOT_core_constantly)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn116 = direct
+			} else {
+				aotDirectFn116 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_contains_QMARK_.RootVersion() != nativeVersionaotDirectFn117 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_contains_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn117 = direct
+			} else {
+				aotDirectFn117 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_count.RootVersion() != nativeVersionaotDirectFn118 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_count) {
+			value := checkDerefVar(var_clojure_DOT_core_count)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn118 = direct
+			} else {
+				aotDirectFn118 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_counted_QMARK_.RootVersion() != nativeVersionaotDirectFn119 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_counted_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_counted_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn119 = direct
+			} else {
+				aotDirectFn119 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core__GT_0_QMARK_.RootVersion() != nativeVersionaotDirectFn12 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__GT_0_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core__GT_0_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn12 = direct
+			} else {
+				aotDirectFn12 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_create_DASH_ns.RootVersion() != nativeVersionaotDirectFn120 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_create_DASH_ns) {
+			value := checkDerefVar(var_clojure_DOT_core_create_DASH_ns)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn120 = direct
+			} else {
+				aotDirectFn120 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_create_DASH_struct.RootVersion() != nativeVersionaotDirectFn121 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_create_DASH_struct) {
+			value := checkDerefVar(var_clojure_DOT_core_create_DASH_struct)
+			aotDirectFn121 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_cycle.RootVersion() != nativeVersionaotDirectFn122 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_cycle) {
+			value := checkDerefVar(var_clojure_DOT_core_cycle)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn122 = direct
+			} else {
+				aotDirectFn122 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_data_DASH_reader_DASH_urls.RootVersion() != nativeVersionaotDirectFn123 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_data_DASH_reader_DASH_urls) {
+			value := checkDerefVar(var_clojure_DOT_core_data_DASH_reader_DASH_urls)
+			aotDirectFn123 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_data_DASH_reader_DASH_var.RootVersion() != nativeVersionaotDirectFn124 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_data_DASH_reader_DASH_var) {
+			value := checkDerefVar(var_clojure_DOT_core_data_DASH_reader_DASH_var)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn124 = direct
+			} else {
+				aotDirectFn124 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_dec.RootVersion() != nativeVersionaotDirectFn125 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_dec) {
+			value := checkDerefVar(var_clojure_DOT_core_dec)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn125 = direct
+			} else {
+				aotDirectFn125 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_dec_TICK_.RootVersion() != nativeVersionaotDirectFn126 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_dec_TICK_) {
+			value := checkDerefVar(var_clojure_DOT_core_dec_TICK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn126 = direct
+			} else {
+				aotDirectFn126 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_decimal_QMARK_.RootVersion() != nativeVersionaotDirectFn127 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_decimal_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_decimal_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn127 = direct
+			} else {
+				aotDirectFn127 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_dedupe.RootVersion() != nativeVersionaotDirectFn128 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_dedupe) {
+			value := checkDerefVar(var_clojure_DOT_core_dedupe)
+			aotDirectFn128 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn128Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn128Arity1 = direct
+			} else {
+				aotDirectFn128Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_delay_QMARK_.RootVersion() != nativeVersionaotDirectFn129 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_delay_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_delay_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn129 = direct
+			} else {
+				aotDirectFn129 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core__GT_1_QMARK_.RootVersion() != nativeVersionaotDirectFn13 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__GT_1_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core__GT_1_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn13 = direct
+			} else {
+				aotDirectFn13 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_deliver.RootVersion() != nativeVersionaotDirectFn130 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_deliver) {
+			value := checkDerefVar(var_clojure_DOT_core_deliver)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn130 = direct
+			} else {
+				aotDirectFn130 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_denominator.RootVersion() != nativeVersionaotDirectFn131 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_denominator) {
+			value := checkDerefVar(var_clojure_DOT_core_denominator)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn131 = direct
+			} else {
+				aotDirectFn131 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_deref.RootVersion() != nativeVersionaotDirectFn132 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_deref) {
+			value := checkDerefVar(var_clojure_DOT_core_deref)
+			aotDirectFn132 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn132Arity1 = direct
+			} else {
+				aotDirectFn132Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn132Arity3 = direct
+			} else {
+				aotDirectFn132Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_deref_DASH_as_DASH_map.RootVersion() != nativeVersionaotDirectFn133 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_deref_DASH_as_DASH_map) {
+			value := checkDerefVar(var_clojure_DOT_core_deref_DASH_as_DASH_map)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn133 = direct
+			} else {
+				aotDirectFn133 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_deref_DASH_future.RootVersion() != nativeVersionaotDirectFn134 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_deref_DASH_future) {
+			value := checkDerefVar(var_clojure_DOT_core_deref_DASH_future)
+			aotDirectFn134 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn134Arity1 = direct
+			} else {
+				aotDirectFn134Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn134Arity3 = direct
+			} else {
+				aotDirectFn134Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_derive.RootVersion() != nativeVersionaotDirectFn135 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_derive) {
+			value := checkDerefVar(var_clojure_DOT_core_derive)
+			aotDirectFn135 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn135Arity2 = direct
+			} else {
+				aotDirectFn135Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn135Arity3 = direct
+			} else {
+				aotDirectFn135Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_descendants.RootVersion() != nativeVersionaotDirectFn136 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_descendants) {
+			value := checkDerefVar(var_clojure_DOT_core_descendants)
+			aotDirectFn136 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn136Arity1 = direct
+			} else {
+				aotDirectFn136Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn136Arity2 = direct
+			} else {
+				aotDirectFn136Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_destructure.RootVersion() != nativeVersionaotDirectFn137 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_destructure) {
+			value := checkDerefVar(var_clojure_DOT_core_destructure)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn137 = direct
+			} else {
+				aotDirectFn137 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_disj.RootVersion() != nativeVersionaotDirectFn138 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_disj) {
+			value := checkDerefVar(var_clojure_DOT_core_disj)
+			aotDirectFn138 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn138Arity1 = direct
+			} else {
+				aotDirectFn138Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn138Arity2 = direct
+			} else {
+				aotDirectFn138Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_disj_BANG_.RootVersion() != nativeVersionaotDirectFn139 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_disj_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_disj_BANG_)
+			aotDirectFn139 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn139Arity1 = direct
+			} else {
+				aotDirectFn139Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn139Arity2 = direct
+			} else {
+				aotDirectFn139Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core__GT__EQ_.RootVersion() != nativeVersionaotDirectFn14 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__GT__EQ_) {
+			value := checkDerefVar(var_clojure_DOT_core__GT__EQ_)
+			aotDirectFn14 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn14Arity1 = direct
+			} else {
+				aotDirectFn14Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn14Arity2 = direct
+			} else {
+				aotDirectFn14Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_dissoc.RootVersion() != nativeVersionaotDirectFn140 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_dissoc) {
+			value := checkDerefVar(var_clojure_DOT_core_dissoc)
+			aotDirectFn140 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn140Arity1 = direct
+			} else {
+				aotDirectFn140Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn140Arity2 = direct
+			} else {
+				aotDirectFn140Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_dissoc_BANG_.RootVersion() != nativeVersionaotDirectFn141 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_dissoc_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_dissoc_BANG_)
+			aotDirectFn141 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn141Arity2 = direct
+			} else {
+				aotDirectFn141Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_distinct.RootVersion() != nativeVersionaotDirectFn142 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_distinct) {
+			value := checkDerefVar(var_clojure_DOT_core_distinct)
+			aotDirectFn142 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn142Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn142Arity1 = direct
+			} else {
+				aotDirectFn142Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_distinct_QMARK_.RootVersion() != nativeVersionaotDirectFn143 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_distinct_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_distinct_QMARK_)
+			aotDirectFn143 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn143Arity1 = direct
+			} else {
+				aotDirectFn143Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn143Arity2 = direct
+			} else {
+				aotDirectFn143Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_doall.RootVersion() != nativeVersionaotDirectFn144 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_doall) {
+			value := checkDerefVar(var_clojure_DOT_core_doall)
+			aotDirectFn144 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn144Arity1 = direct
+			} else {
+				aotDirectFn144Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn144Arity2 = direct
+			} else {
+				aotDirectFn144Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_dorun.RootVersion() != nativeVersionaotDirectFn145 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_dorun) {
+			value := checkDerefVar(var_clojure_DOT_core_dorun)
+			aotDirectFn145 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn145Arity1 = direct
+			} else {
+				aotDirectFn145Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn145Arity2 = direct
+			} else {
+				aotDirectFn145Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_double.RootVersion() != nativeVersionaotDirectFn146 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_double) {
+			value := checkDerefVar(var_clojure_DOT_core_double)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn146 = direct
+			} else {
+				aotDirectFn146 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_double_DASH_array.RootVersion() != nativeVersionaotDirectFn147 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_double_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_double_DASH_array)
+			aotDirectFn147 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn147Arity1 = direct
+			} else {
+				aotDirectFn147Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn147Arity2 = direct
+			} else {
+				aotDirectFn147Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_double_QMARK_.RootVersion() != nativeVersionaotDirectFn148 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_double_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_double_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn148 = direct
+			} else {
+				aotDirectFn148 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_doubles.RootVersion() != nativeVersionaotDirectFn149 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_doubles) {
+			value := checkDerefVar(var_clojure_DOT_core_doubles)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn149 = direct
+			} else {
+				aotDirectFn149 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_NaN_QMARK_.RootVersion() != nativeVersionaotDirectFn15 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_NaN_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_NaN_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn15 = direct
+			} else {
+				aotDirectFn15 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_drop.RootVersion() != nativeVersionaotDirectFn150 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_drop) {
+			value := checkDerefVar(var_clojure_DOT_core_drop)
+			aotDirectFn150 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn150Arity1 = direct
+			} else {
+				aotDirectFn150Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn150Arity2 = direct
+			} else {
+				aotDirectFn150Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_drop_DASH_last.RootVersion() != nativeVersionaotDirectFn151 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_drop_DASH_last) {
+			value := checkDerefVar(var_clojure_DOT_core_drop_DASH_last)
+			aotDirectFn151 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn151Arity1 = direct
+			} else {
+				aotDirectFn151Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn151Arity2 = direct
+			} else {
+				aotDirectFn151Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_drop_DASH_while.RootVersion() != nativeVersionaotDirectFn152 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_drop_DASH_while) {
+			value := checkDerefVar(var_clojure_DOT_core_drop_DASH_while)
+			aotDirectFn152 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn152Arity1 = direct
+			} else {
+				aotDirectFn152Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn152Arity2 = direct
+			} else {
+				aotDirectFn152Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_elide_DASH_top_DASH_frames.RootVersion() != nativeVersionaotDirectFn153 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_elide_DASH_top_DASH_frames) {
+			value := checkDerefVar(var_clojure_DOT_core_elide_DASH_top_DASH_frames)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn153 = direct
+			} else {
+				aotDirectFn153 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_emit_DASH_extend_DASH_protocol.RootVersion() != nativeVersionaotDirectFn154 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_emit_DASH_extend_DASH_protocol) {
+			value := checkDerefVar(var_clojure_DOT_core_emit_DASH_extend_DASH_protocol)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn154 = direct
+			} else {
+				aotDirectFn154 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_emit_DASH_extend_DASH_type.RootVersion() != nativeVersionaotDirectFn155 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_emit_DASH_extend_DASH_type) {
+			value := checkDerefVar(var_clojure_DOT_core_emit_DASH_extend_DASH_type)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn155 = direct
+			} else {
+				aotDirectFn155 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_emit_DASH_hinted_DASH_impl.RootVersion() != nativeVersionaotDirectFn156 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_emit_DASH_hinted_DASH_impl) {
+			value := checkDerefVar(var_clojure_DOT_core_emit_DASH_hinted_DASH_impl)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn156 = direct
+			} else {
+				aotDirectFn156 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_empty.RootVersion() != nativeVersionaotDirectFn157 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_empty) {
+			value := checkDerefVar(var_clojure_DOT_core_empty)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn157 = direct
+			} else {
+				aotDirectFn157 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_empty_QMARK_.RootVersion() != nativeVersionaotDirectFn158 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_empty_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn158 = direct
+			} else {
+				aotDirectFn158 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ensure.RootVersion() != nativeVersionaotDirectFn159 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ensure) {
+			value := checkDerefVar(var_clojure_DOT_core_ensure)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn159 = direct
+			} else {
+				aotDirectFn159 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_StackTraceElement_DASH__GT_vec.RootVersion() != nativeVersionaotDirectFn16 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_StackTraceElement_DASH__GT_vec) {
+			value := checkDerefVar(var_clojure_DOT_core_StackTraceElement_DASH__GT_vec)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn16 = direct
+			} else {
+				aotDirectFn16 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ensure_DASH_reduced.RootVersion() != nativeVersionaotDirectFn160 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ensure_DASH_reduced) {
+			value := checkDerefVar(var_clojure_DOT_core_ensure_DASH_reduced)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn160 = direct
+			} else {
+				aotDirectFn160 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_enumeration_DASH_seq.RootVersion() != nativeVersionaotDirectFn161 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_enumeration_DASH_seq) {
+			value := checkDerefVar(var_clojure_DOT_core_enumeration_DASH_seq)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn161 = direct
+			} else {
+				aotDirectFn161 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_error_DASH_handler.RootVersion() != nativeVersionaotDirectFn162 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_error_DASH_handler) {
+			value := checkDerefVar(var_clojure_DOT_core_error_DASH_handler)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn162 = direct
+			} else {
+				aotDirectFn162 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_error_DASH_mode.RootVersion() != nativeVersionaotDirectFn163 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_error_DASH_mode) {
+			value := checkDerefVar(var_clojure_DOT_core_error_DASH_mode)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn163 = direct
+			} else {
+				aotDirectFn163 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_eval.RootVersion() != nativeVersionaotDirectFn164 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_eval) {
+			value := checkDerefVar(var_clojure_DOT_core_eval)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn164 = direct
+			} else {
+				aotDirectFn164 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_even_QMARK_.RootVersion() != nativeVersionaotDirectFn165 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_even_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_even_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn165 = direct
+			} else {
+				aotDirectFn165 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_every_DASH_pred.RootVersion() != nativeVersionaotDirectFn166 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_every_DASH_pred) {
+			value := checkDerefVar(var_clojure_DOT_core_every_DASH_pred)
+			aotDirectFn166 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn166Arity1 = direct
+			} else {
+				aotDirectFn166Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn166Arity2 = direct
+			} else {
+				aotDirectFn166Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn166Arity3 = direct
+			} else {
+				aotDirectFn166Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_every_QMARK_.RootVersion() != nativeVersionaotDirectFn167 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_every_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_every_QMARK_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn167 = direct
+			} else {
+				aotDirectFn167 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_ex_DASH_cause.RootVersion() != nativeVersionaotDirectFn168 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ex_DASH_cause) {
+			value := checkDerefVar(var_clojure_DOT_core_ex_DASH_cause)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn168 = direct
+			} else {
+				aotDirectFn168 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ex_DASH_data.RootVersion() != nativeVersionaotDirectFn169 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ex_DASH_data) {
+			value := checkDerefVar(var_clojure_DOT_core_ex_DASH_data)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn169 = direct
+			} else {
+				aotDirectFn169 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_Throwable_DASH__GT_map.RootVersion() != nativeVersionaotDirectFn17 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_Throwable_DASH__GT_map) {
+			value := checkDerefVar(var_clojure_DOT_core_Throwable_DASH__GT_map)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn17 = direct
+			} else {
+				aotDirectFn17 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ex_DASH_info.RootVersion() != nativeVersionaotDirectFn170 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ex_DASH_info) {
+			value := checkDerefVar(var_clojure_DOT_core_ex_DASH_info)
+			aotDirectFn170 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn170Arity2 = direct
+			} else {
+				aotDirectFn170Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn170Arity3 = direct
+			} else {
+				aotDirectFn170Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_ex_DASH_message.RootVersion() != nativeVersionaotDirectFn171 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ex_DASH_message) {
+			value := checkDerefVar(var_clojure_DOT_core_ex_DASH_message)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn171 = direct
+			} else {
+				aotDirectFn171 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_extend.RootVersion() != nativeVersionaotDirectFn172 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_extend) {
+			value := checkDerefVar(var_clojure_DOT_core_extend)
+			aotDirectFn172 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_false_QMARK_.RootVersion() != nativeVersionaotDirectFn173 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_false_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_false_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn173 = direct
+			} else {
+				aotDirectFn173 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ffirst.RootVersion() != nativeVersionaotDirectFn174 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ffirst) {
+			value := checkDerefVar(var_clojure_DOT_core_ffirst)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn174 = direct
+			} else {
+				aotDirectFn174 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_file_DASH_seq.RootVersion() != nativeVersionaotDirectFn175 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_file_DASH_seq) {
+			value := checkDerefVar(var_clojure_DOT_core_file_DASH_seq)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn175 = direct
+			} else {
+				aotDirectFn175 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_filter.RootVersion() != nativeVersionaotDirectFn176 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_filter) {
+			value := checkDerefVar(var_clojure_DOT_core_filter)
+			aotDirectFn176 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn176Arity1 = direct
+			} else {
+				aotDirectFn176Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn176Arity2 = direct
+			} else {
+				aotDirectFn176Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_filter_DASH_key.RootVersion() != nativeVersionaotDirectFn177 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_filter_DASH_key) {
+			value := checkDerefVar(var_clojure_DOT_core_filter_DASH_key)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn177 = direct
+			} else {
+				aotDirectFn177 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_filterv.RootVersion() != nativeVersionaotDirectFn178 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_filterv) {
+			value := checkDerefVar(var_clojure_DOT_core_filterv)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn178 = direct
+			} else {
+				aotDirectFn178 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_find.RootVersion() != nativeVersionaotDirectFn179 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_find) {
+			value := checkDerefVar(var_clojure_DOT_core_find)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn179 = direct
+			} else {
+				aotDirectFn179 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_abs.RootVersion() != nativeVersionaotDirectFn18 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_abs) {
+			value := checkDerefVar(var_clojure_DOT_core_abs)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn18 = direct
+			} else {
+				aotDirectFn18 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_find_DASH_keyword.RootVersion() != nativeVersionaotDirectFn180 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_find_DASH_keyword) {
+			value := checkDerefVar(var_clojure_DOT_core_find_DASH_keyword)
+			aotDirectFn180 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn180Arity1 = direct
+			} else {
+				aotDirectFn180Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn180Arity2 = direct
+			} else {
+				aotDirectFn180Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_find_DASH_ns.RootVersion() != nativeVersionaotDirectFn181 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_find_DASH_ns) {
+			value := checkDerefVar(var_clojure_DOT_core_find_DASH_ns)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn181 = direct
+			} else {
+				aotDirectFn181 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_find_DASH_var.RootVersion() != nativeVersionaotDirectFn182 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_find_DASH_var) {
+			value := checkDerefVar(var_clojure_DOT_core_find_DASH_var)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn182 = direct
+			} else {
+				aotDirectFn182 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_first.RootVersion() != nativeVersionaotDirectFn183 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_first) {
+			value := checkDerefVar(var_clojure_DOT_core_first)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn183 = direct
+			} else {
+				aotDirectFn183 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_fits_DASH_table_QMARK_.RootVersion() != nativeVersionaotDirectFn184 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_fits_DASH_table_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_fits_DASH_table_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn184 = direct
+			} else {
+				aotDirectFn184 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_flatten.RootVersion() != nativeVersionaotDirectFn185 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_flatten) {
+			value := checkDerefVar(var_clojure_DOT_core_flatten)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn185 = direct
+			} else {
+				aotDirectFn185 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_float.RootVersion() != nativeVersionaotDirectFn186 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_float) {
+			value := checkDerefVar(var_clojure_DOT_core_float)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn186 = direct
+			} else {
+				aotDirectFn186 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_float_DASH_array.RootVersion() != nativeVersionaotDirectFn187 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_float_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_float_DASH_array)
+			aotDirectFn187 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn187Arity1 = direct
+			} else {
+				aotDirectFn187Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn187Arity2 = direct
+			} else {
+				aotDirectFn187Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_float_QMARK_.RootVersion() != nativeVersionaotDirectFn188 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_float_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_float_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn188 = direct
+			} else {
+				aotDirectFn188 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_floats.RootVersion() != nativeVersionaotDirectFn189 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_floats) {
+			value := checkDerefVar(var_clojure_DOT_core_floats)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn189 = direct
+			} else {
+				aotDirectFn189 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_accessor.RootVersion() != nativeVersionaotDirectFn19 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_accessor) {
+			value := checkDerefVar(var_clojure_DOT_core_accessor)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn19 = direct
+			} else {
+				aotDirectFn19 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_flush.RootVersion() != nativeVersionaotDirectFn190 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_flush) {
+			value := checkDerefVar(var_clojure_DOT_core_flush)
+			aotDirectFn190 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_fn_QMARK_.RootVersion() != nativeVersionaotDirectFn191 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_fn_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_fn_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn191 = direct
+			} else {
+				aotDirectFn191 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_fnext.RootVersion() != nativeVersionaotDirectFn192 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_fnext) {
+			value := checkDerefVar(var_clojure_DOT_core_fnext)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn192 = direct
+			} else {
+				aotDirectFn192 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_fnil.RootVersion() != nativeVersionaotDirectFn193 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_fnil) {
+			value := checkDerefVar(var_clojure_DOT_core_fnil)
+			aotDirectFn193 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn193Arity2 = direct
+			} else {
+				aotDirectFn193Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn193Arity3 = direct
+			} else {
+				aotDirectFn193Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn193Arity4 = direct
+			} else {
+				aotDirectFn193Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_force.RootVersion() != nativeVersionaotDirectFn194 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_force) {
+			value := checkDerefVar(var_clojure_DOT_core_force)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn194 = direct
+			} else {
+				aotDirectFn194 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_format.RootVersion() != nativeVersionaotDirectFn195 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_format) {
+			value := checkDerefVar(var_clojure_DOT_core_format)
+			aotDirectFn195 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_frequencies.RootVersion() != nativeVersionaotDirectFn196 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_frequencies) {
+			value := checkDerefVar(var_clojure_DOT_core_frequencies)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn196 = direct
+			} else {
+				aotDirectFn196 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_future_DASH_call.RootVersion() != nativeVersionaotDirectFn197 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_future_DASH_call) {
+			value := checkDerefVar(var_clojure_DOT_core_future_DASH_call)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn197 = direct
+			} else {
+				aotDirectFn197 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_future_DASH_cancel.RootVersion() != nativeVersionaotDirectFn198 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_future_DASH_cancel) {
+			value := checkDerefVar(var_clojure_DOT_core_future_DASH_cancel)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn198 = direct
+			} else {
+				aotDirectFn198 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_future_DASH_cancelled_QMARK_.RootVersion() != nativeVersionaotDirectFn199 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_future_DASH_cancelled_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_future_DASH_cancelled_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn199 = direct
+			} else {
+				aotDirectFn199 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core__PLUS_.RootVersion() != nativeVersionaotDirectFn2 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__PLUS_) {
+			value := checkDerefVar(var_clojure_DOT_core__PLUS_)
+			aotDirectFn2 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn2Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn2Arity1 = direct
+			} else {
+				aotDirectFn2Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn2Arity2 = direct
+			} else {
+				aotDirectFn2Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_aclone.RootVersion() != nativeVersionaotDirectFn20 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aclone) {
+			value := checkDerefVar(var_clojure_DOT_core_aclone)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn20 = direct
+			} else {
+				aotDirectFn20 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_future_DASH_done_QMARK_.RootVersion() != nativeVersionaotDirectFn200 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_future_DASH_done_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_future_DASH_done_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn200 = direct
+			} else {
+				aotDirectFn200 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_future_QMARK_.RootVersion() != nativeVersionaotDirectFn201 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_future_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_future_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn201 = direct
+			} else {
+				aotDirectFn201 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_gensym.RootVersion() != nativeVersionaotDirectFn202 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_gensym) {
+			value := checkDerefVar(var_clojure_DOT_core_gensym)
+			aotDirectFn202 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn202Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn202Arity1 = direct
+			} else {
+				aotDirectFn202Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_get.RootVersion() != nativeVersionaotDirectFn203 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_get) {
+			value := checkDerefVar(var_clojure_DOT_core_get)
+			aotDirectFn203 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn203Arity2 = direct
+			} else {
+				aotDirectFn203Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn203Arity3 = direct
+			} else {
+				aotDirectFn203Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_get_DASH_in.RootVersion() != nativeVersionaotDirectFn204 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_get_DASH_in) {
+			value := checkDerefVar(var_clojure_DOT_core_get_DASH_in)
+			aotDirectFn204 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn204Arity2 = direct
+			} else {
+				aotDirectFn204Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn204Arity3 = direct
+			} else {
+				aotDirectFn204Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_get_DASH_method.RootVersion() != nativeVersionaotDirectFn205 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_get_DASH_method) {
+			value := checkDerefVar(var_clojure_DOT_core_get_DASH_method)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn205 = direct
+			} else {
+				aotDirectFn205 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_get_DASH_thread_DASH_bindings.RootVersion() != nativeVersionaotDirectFn206 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_get_DASH_thread_DASH_bindings) {
+			value := checkDerefVar(var_clojure_DOT_core_get_DASH_thread_DASH_bindings)
+			aotDirectFn206 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_get_DASH_validator.RootVersion() != nativeVersionaotDirectFn207 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_get_DASH_validator) {
+			value := checkDerefVar(var_clojure_DOT_core_get_DASH_validator)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn207 = direct
+			} else {
+				aotDirectFn207 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_group_DASH_by.RootVersion() != nativeVersionaotDirectFn208 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_group_DASH_by) {
+			value := checkDerefVar(var_clojure_DOT_core_group_DASH_by)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn208 = direct
+			} else {
+				aotDirectFn208 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_halt_DASH_when.RootVersion() != nativeVersionaotDirectFn209 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_halt_DASH_when) {
+			value := checkDerefVar(var_clojure_DOT_core_halt_DASH_when)
+			aotDirectFn209 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn209Arity1 = direct
+			} else {
+				aotDirectFn209Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn209Arity2 = direct
+			} else {
+				aotDirectFn209Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_add_DASH_classpath.RootVersion() != nativeVersionaotDirectFn21 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_add_DASH_classpath) {
+			value := checkDerefVar(var_clojure_DOT_core_add_DASH_classpath)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn21 = direct
+			} else {
+				aotDirectFn21 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_hash.RootVersion() != nativeVersionaotDirectFn210 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_hash) {
+			value := checkDerefVar(var_clojure_DOT_core_hash)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn210 = direct
+			} else {
+				aotDirectFn210 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_hash_DASH_map.RootVersion() != nativeVersionaotDirectFn211 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_hash_DASH_map) {
+			value := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
+			aotDirectFn211 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn211Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_hash_DASH_ordered_DASH_coll.RootVersion() != nativeVersionaotDirectFn212 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_hash_DASH_ordered_DASH_coll) {
+			value := checkDerefVar(var_clojure_DOT_core_hash_DASH_ordered_DASH_coll)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn212 = direct
+			} else {
+				aotDirectFn212 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_hash_DASH_set.RootVersion() != nativeVersionaotDirectFn213 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_hash_DASH_set) {
+			value := checkDerefVar(var_clojure_DOT_core_hash_DASH_set)
+			aotDirectFn213 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn213Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_hash_DASH_unordered_DASH_coll.RootVersion() != nativeVersionaotDirectFn214 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_hash_DASH_unordered_DASH_coll) {
+			value := checkDerefVar(var_clojure_DOT_core_hash_DASH_unordered_DASH_coll)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn214 = direct
+			} else {
+				aotDirectFn214 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ident_QMARK_.RootVersion() != nativeVersionaotDirectFn215 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ident_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_ident_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn215 = direct
+			} else {
+				aotDirectFn215 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_identical_QMARK_.RootVersion() != nativeVersionaotDirectFn216 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_identical_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_identical_QMARK_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn216 = direct
+			} else {
+				aotDirectFn216 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_identity.RootVersion() != nativeVersionaotDirectFn217 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_identity) {
+			value := checkDerefVar(var_clojure_DOT_core_identity)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn217 = direct
+			} else {
+				aotDirectFn217 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ifn_QMARK_.RootVersion() != nativeVersionaotDirectFn218 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ifn_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_ifn_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn218 = direct
+			} else {
+				aotDirectFn218 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_inc.RootVersion() != nativeVersionaotDirectFn219 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_inc) {
+			value := checkDerefVar(var_clojure_DOT_core_inc)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn219 = direct
+			} else {
+				aotDirectFn219 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_add_DASH_watch.RootVersion() != nativeVersionaotDirectFn22 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_add_DASH_watch) {
+			value := checkDerefVar(var_clojure_DOT_core_add_DASH_watch)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn22 = direct
+			} else {
+				aotDirectFn22 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_inc_TICK_.RootVersion() != nativeVersionaotDirectFn220 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_inc_TICK_) {
+			value := checkDerefVar(var_clojure_DOT_core_inc_TICK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn220 = direct
+			} else {
+				aotDirectFn220 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_indexed_QMARK_.RootVersion() != nativeVersionaotDirectFn221 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_indexed_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_indexed_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn221 = direct
+			} else {
+				aotDirectFn221 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_infinite_QMARK_.RootVersion() != nativeVersionaotDirectFn222 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_infinite_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_infinite_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn222 = direct
+			} else {
+				aotDirectFn222 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_inst_DASH_ms.RootVersion() != nativeVersionaotDirectFn223 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_inst_DASH_ms) {
+			value := checkDerefVar(var_clojure_DOT_core_inst_DASH_ms)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn223 = direct
+			} else {
+				aotDirectFn223 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_inst_QMARK_.RootVersion() != nativeVersionaotDirectFn224 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_inst_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_inst_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn224 = direct
+			} else {
+				aotDirectFn224 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_instance_QMARK_.RootVersion() != nativeVersionaotDirectFn225 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_instance_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn225 = direct
+			} else {
+				aotDirectFn225 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_int.RootVersion() != nativeVersionaotDirectFn226 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_int) {
+			value := checkDerefVar(var_clojure_DOT_core_int)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn226 = direct
+			} else {
+				aotDirectFn226 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_int_DASH_array.RootVersion() != nativeVersionaotDirectFn227 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_int_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_int_DASH_array)
+			aotDirectFn227 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn227Arity1 = direct
+			} else {
+				aotDirectFn227Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn227Arity2 = direct
+			} else {
+				aotDirectFn227Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_int_QMARK_.RootVersion() != nativeVersionaotDirectFn228 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_int_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_int_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn228 = direct
+			} else {
+				aotDirectFn228 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_integer_QMARK_.RootVersion() != nativeVersionaotDirectFn229 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_integer_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_integer_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn229 = direct
+			} else {
+				aotDirectFn229 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_agent.RootVersion() != nativeVersionaotDirectFn23 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_agent) {
+			value := checkDerefVar(var_clojure_DOT_core_agent)
+			aotDirectFn23 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_interleave.RootVersion() != nativeVersionaotDirectFn230 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_interleave) {
+			value := checkDerefVar(var_clojure_DOT_core_interleave)
+			aotDirectFn230 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn230Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn230Arity1 = direct
+			} else {
+				aotDirectFn230Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn230Arity2 = direct
+			} else {
+				aotDirectFn230Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_intern.RootVersion() != nativeVersionaotDirectFn231 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_intern) {
+			value := checkDerefVar(var_clojure_DOT_core_intern)
+			aotDirectFn231 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn231Arity2 = direct
+			} else {
+				aotDirectFn231Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn231Arity3 = direct
+			} else {
+				aotDirectFn231Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_interpose.RootVersion() != nativeVersionaotDirectFn232 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_interpose) {
+			value := checkDerefVar(var_clojure_DOT_core_interpose)
+			aotDirectFn232 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn232Arity1 = direct
+			} else {
+				aotDirectFn232Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn232Arity2 = direct
+			} else {
+				aotDirectFn232Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_into.RootVersion() != nativeVersionaotDirectFn233 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_into) {
+			value := checkDerefVar(var_clojure_DOT_core_into)
+			aotDirectFn233 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn233Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn233Arity1 = direct
+			} else {
+				aotDirectFn233Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn233Arity2 = direct
+			} else {
+				aotDirectFn233Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn233Arity3 = direct
+			} else {
+				aotDirectFn233Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_into_DASH_array.RootVersion() != nativeVersionaotDirectFn234 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_into_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_into_DASH_array)
+			aotDirectFn234 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn234Arity1 = direct
+			} else {
+				aotDirectFn234Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn234Arity2 = direct
+			} else {
+				aotDirectFn234Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_into1.RootVersion() != nativeVersionaotDirectFn235 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_into1) {
+			value := checkDerefVar(var_clojure_DOT_core_into1)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn235 = direct
+			} else {
+				aotDirectFn235 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_ints.RootVersion() != nativeVersionaotDirectFn236 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ints) {
+			value := checkDerefVar(var_clojure_DOT_core_ints)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn236 = direct
+			} else {
+				aotDirectFn236 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_isa_QMARK_.RootVersion() != nativeVersionaotDirectFn237 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_isa_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_isa_QMARK_)
+			aotDirectFn237 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn237Arity2 = direct
+			} else {
+				aotDirectFn237Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn237Arity3 = direct
+			} else {
+				aotDirectFn237Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_iterate.RootVersion() != nativeVersionaotDirectFn238 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_iterate) {
+			value := checkDerefVar(var_clojure_DOT_core_iterate)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn238 = direct
+			} else {
+				aotDirectFn238 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_iteration.RootVersion() != nativeVersionaotDirectFn239 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_iteration) {
+			value := checkDerefVar(var_clojure_DOT_core_iteration)
+			aotDirectFn239 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_agent_DASH_error.RootVersion() != nativeVersionaotDirectFn24 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_agent_DASH_error) {
+			value := checkDerefVar(var_clojure_DOT_core_agent_DASH_error)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn24 = direct
+			} else {
+				aotDirectFn24 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_iterator_DASH_seq.RootVersion() != nativeVersionaotDirectFn240 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_iterator_DASH_seq) {
+			value := checkDerefVar(var_clojure_DOT_core_iterator_DASH_seq)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn240 = direct
+			} else {
+				aotDirectFn240 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_juxt.RootVersion() != nativeVersionaotDirectFn241 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_juxt) {
+			value := checkDerefVar(var_clojure_DOT_core_juxt)
+			aotDirectFn241 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn241Arity1 = direct
+			} else {
+				aotDirectFn241Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn241Arity2 = direct
+			} else {
+				aotDirectFn241Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn241Arity3 = direct
+			} else {
+				aotDirectFn241Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_keep.RootVersion() != nativeVersionaotDirectFn242 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_keep) {
+			value := checkDerefVar(var_clojure_DOT_core_keep)
+			aotDirectFn242 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn242Arity1 = direct
+			} else {
+				aotDirectFn242Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn242Arity2 = direct
+			} else {
+				aotDirectFn242Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_keep_DASH_indexed.RootVersion() != nativeVersionaotDirectFn243 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_keep_DASH_indexed) {
+			value := checkDerefVar(var_clojure_DOT_core_keep_DASH_indexed)
+			aotDirectFn243 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn243Arity1 = direct
+			} else {
+				aotDirectFn243Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn243Arity2 = direct
+			} else {
+				aotDirectFn243Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_key.RootVersion() != nativeVersionaotDirectFn244 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_key) {
+			value := checkDerefVar(var_clojure_DOT_core_key)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn244 = direct
+			} else {
+				aotDirectFn244 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_keys.RootVersion() != nativeVersionaotDirectFn245 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_keys) {
+			value := checkDerefVar(var_clojure_DOT_core_keys)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn245 = direct
+			} else {
+				aotDirectFn245 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_keyword.RootVersion() != nativeVersionaotDirectFn246 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_keyword) {
+			value := checkDerefVar(var_clojure_DOT_core_keyword)
+			aotDirectFn246 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn246Arity1 = direct
+			} else {
+				aotDirectFn246Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn246Arity2 = direct
+			} else {
+				aotDirectFn246Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_keyword_QMARK_.RootVersion() != nativeVersionaotDirectFn247 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_keyword_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn247 = direct
+			} else {
+				aotDirectFn247 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_last.RootVersion() != nativeVersionaotDirectFn248 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_last) {
+			value := checkDerefVar(var_clojure_DOT_core_last)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn248 = direct
+			} else {
+				aotDirectFn248 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_libspec_QMARK_.RootVersion() != nativeVersionaotDirectFn249 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_libspec_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_libspec_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn249 = direct
+			} else {
+				aotDirectFn249 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_agent_DASH_errors.RootVersion() != nativeVersionaotDirectFn25 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_agent_DASH_errors) {
+			value := checkDerefVar(var_clojure_DOT_core_agent_DASH_errors)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn25 = direct
+			} else {
+				aotDirectFn25 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_lift_DASH_ns.RootVersion() != nativeVersionaotDirectFn250 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_lift_DASH_ns) {
+			value := checkDerefVar(var_clojure_DOT_core_lift_DASH_ns)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn250 = direct
+			} else {
+				aotDirectFn250 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_line_DASH_seq.RootVersion() != nativeVersionaotDirectFn251 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_line_DASH_seq) {
+			value := checkDerefVar(var_clojure_DOT_core_line_DASH_seq)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn251 = direct
+			} else {
+				aotDirectFn251 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_list_STAR_.RootVersion() != nativeVersionaotDirectFn252 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_list_STAR_) {
+			value := checkDerefVar(var_clojure_DOT_core_list_STAR_)
+			aotDirectFn252 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn252Arity1 = direct
+			} else {
+				aotDirectFn252Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn252Arity2 = direct
+			} else {
+				aotDirectFn252Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn252Arity3 = direct
+			} else {
+				aotDirectFn252Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn252Arity4 = direct
+			} else {
+				aotDirectFn252Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_list_QMARK_.RootVersion() != nativeVersionaotDirectFn253 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_list_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_list_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn253 = direct
+			} else {
+				aotDirectFn253 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_load.RootVersion() != nativeVersionaotDirectFn254 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_load) {
+			value := checkDerefVar(var_clojure_DOT_core_load)
+			aotDirectFn254 = runtime.CoreArityFn(value.(lang.IFn))
+			aotRootVersion254 = var_clojure_DOT_core_load.RootVersion()
+		}
+		if var_clojure_DOT_core_load_DASH_all.RootVersion() != nativeVersionaotDirectFn255 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_load_DASH_all) {
+			value := checkDerefVar(var_clojure_DOT_core_load_DASH_all)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn255 = direct
+			} else {
+				aotDirectFn255 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_load_DASH_data_DASH_reader_DASH_file.RootVersion() != nativeVersionaotDirectFn256 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_load_DASH_data_DASH_reader_DASH_file) {
+			value := checkDerefVar(var_clojure_DOT_core_load_DASH_data_DASH_reader_DASH_file)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn256 = direct
+			} else {
+				aotDirectFn256 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_load_DASH_data_DASH_readers.RootVersion() != nativeVersionaotDirectFn257 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_load_DASH_data_DASH_readers) {
+			value := checkDerefVar(var_clojure_DOT_core_load_DASH_data_DASH_readers)
+			aotDirectFn257 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_load_DASH_lib.RootVersion() != nativeVersionaotDirectFn258 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_load_DASH_lib) {
+			value := checkDerefVar(var_clojure_DOT_core_load_DASH_lib)
+			aotDirectFn258 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_load_DASH_libs.RootVersion() != nativeVersionaotDirectFn259 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_load_DASH_libs) {
+			value := checkDerefVar(var_clojure_DOT_core_load_DASH_libs)
+			aotDirectFn259 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_aget.RootVersion() != nativeVersionaotDirectFn26 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aget) {
+			value := checkDerefVar(var_clojure_DOT_core_aget)
+			aotDirectFn26 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn26Arity2 = direct
+			} else {
+				aotDirectFn26Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_load_DASH_one.RootVersion() != nativeVersionaotDirectFn260 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_load_DASH_one) {
+			value := checkDerefVar(var_clojure_DOT_core_load_DASH_one)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn260 = direct
+			} else {
+				aotDirectFn260 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_load_DASH_reader.RootVersion() != nativeVersionaotDirectFn261 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_load_DASH_reader) {
+			value := checkDerefVar(var_clojure_DOT_core_load_DASH_reader)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn261 = direct
+			} else {
+				aotDirectFn261 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_load_DASH_string.RootVersion() != nativeVersionaotDirectFn262 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_load_DASH_string) {
+			value := checkDerefVar(var_clojure_DOT_core_load_DASH_string)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn262 = direct
+			} else {
+				aotDirectFn262 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_loaded_DASH_libs.RootVersion() != nativeVersionaotDirectFn263 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_loaded_DASH_libs) {
+			value := checkDerefVar(var_clojure_DOT_core_loaded_DASH_libs)
+			aotDirectFn263 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_long.RootVersion() != nativeVersionaotDirectFn264 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_long) {
+			value := checkDerefVar(var_clojure_DOT_core_long)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn264 = direct
+			} else {
+				aotDirectFn264 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_long_DASH_array.RootVersion() != nativeVersionaotDirectFn265 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_long_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_long_DASH_array)
+			aotDirectFn265 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn265Arity1 = direct
+			} else {
+				aotDirectFn265Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn265Arity2 = direct
+			} else {
+				aotDirectFn265Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_longs.RootVersion() != nativeVersionaotDirectFn266 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_longs) {
+			value := checkDerefVar(var_clojure_DOT_core_longs)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn266 = direct
+			} else {
+				aotDirectFn266 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_macroexpand.RootVersion() != nativeVersionaotDirectFn267 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_macroexpand) {
+			value := checkDerefVar(var_clojure_DOT_core_macroexpand)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn267 = direct
+			} else {
+				aotDirectFn267 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_macroexpand_DASH_1.RootVersion() != nativeVersionaotDirectFn268 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_macroexpand_DASH_1) {
+			value := checkDerefVar(var_clojure_DOT_core_macroexpand_DASH_1)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn268 = direct
+			} else {
+				aotDirectFn268 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_make_DASH_array.RootVersion() != nativeVersionaotDirectFn269 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_make_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_make_DASH_array)
+			aotDirectFn269 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn269Arity2 = direct
+			} else {
+				aotDirectFn269Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_alength.RootVersion() != nativeVersionaotDirectFn27 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_alength) {
+			value := checkDerefVar(var_clojure_DOT_core_alength)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn27 = direct
+			} else {
+				aotDirectFn27 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_make_DASH_hierarchy.RootVersion() != nativeVersionaotDirectFn270 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_make_DASH_hierarchy) {
+			value := checkDerefVar(var_clojure_DOT_core_make_DASH_hierarchy)
+			aotDirectFn270 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_map.RootVersion() != nativeVersionaotDirectFn271 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_map) {
+			value := checkDerefVar(var_clojure_DOT_core_map)
+			aotDirectFn271 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn271Arity1 = direct
+			} else {
+				aotDirectFn271Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn271Arity2 = direct
+			} else {
+				aotDirectFn271Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn271Arity3 = direct
+			} else {
+				aotDirectFn271Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn271Arity4 = direct
+			} else {
+				aotDirectFn271Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_map_DASH_entry_QMARK_.RootVersion() != nativeVersionaotDirectFn272 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_map_DASH_entry_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_map_DASH_entry_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn272 = direct
+			} else {
+				aotDirectFn272 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_map_DASH_indexed.RootVersion() != nativeVersionaotDirectFn273 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_map_DASH_indexed) {
+			value := checkDerefVar(var_clojure_DOT_core_map_DASH_indexed)
+			aotDirectFn273 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn273Arity1 = direct
+			} else {
+				aotDirectFn273Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn273Arity2 = direct
+			} else {
+				aotDirectFn273Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_map_QMARK_.RootVersion() != nativeVersionaotDirectFn274 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_map_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_map_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn274 = direct
+			} else {
+				aotDirectFn274 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_mapcat.RootVersion() != nativeVersionaotDirectFn275 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_mapcat) {
+			value := checkDerefVar(var_clojure_DOT_core_mapcat)
+			aotDirectFn275 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn275Arity1 = direct
+			} else {
+				aotDirectFn275Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_mapv.RootVersion() != nativeVersionaotDirectFn276 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_mapv) {
+			value := checkDerefVar(var_clojure_DOT_core_mapv)
+			aotDirectFn276 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn276Arity2 = direct
+			} else {
+				aotDirectFn276Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn276Arity3 = direct
+			} else {
+				aotDirectFn276Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn276Arity4 = direct
+			} else {
+				aotDirectFn276Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_max.RootVersion() != nativeVersionaotDirectFn277 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_max) {
+			value := checkDerefVar(var_clojure_DOT_core_max)
+			aotDirectFn277 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn277Arity1 = direct
+			} else {
+				aotDirectFn277Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn277Arity2 = direct
+			} else {
+				aotDirectFn277Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_max_DASH_key.RootVersion() != nativeVersionaotDirectFn278 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_max_DASH_key) {
+			value := checkDerefVar(var_clojure_DOT_core_max_DASH_key)
+			aotDirectFn278 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn278Arity2 = direct
+			} else {
+				aotDirectFn278Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn278Arity3 = direct
+			} else {
+				aotDirectFn278Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_maybe_DASH_destructured.RootVersion() != nativeVersionaotDirectFn279 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_maybe_DASH_destructured) {
+			value := checkDerefVar(var_clojure_DOT_core_maybe_DASH_destructured)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn279 = direct
+			} else {
+				aotDirectFn279 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_alias.RootVersion() != nativeVersionaotDirectFn28 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_alias) {
+			value := checkDerefVar(var_clojure_DOT_core_alias)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn28 = direct
+			} else {
+				aotDirectFn28 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_maybe_DASH_min_DASH_hash.RootVersion() != nativeVersionaotDirectFn280 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_maybe_DASH_min_DASH_hash) {
+			value := checkDerefVar(var_clojure_DOT_core_maybe_DASH_min_DASH_hash)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn280 = direct
+			} else {
+				aotDirectFn280 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_memoize.RootVersion() != nativeVersionaotDirectFn281 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_memoize) {
+			value := checkDerefVar(var_clojure_DOT_core_memoize)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn281 = direct
+			} else {
+				aotDirectFn281 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_merge.RootVersion() != nativeVersionaotDirectFn282 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_merge) {
+			value := checkDerefVar(var_clojure_DOT_core_merge)
+			aotDirectFn282 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_merge_DASH_hash_DASH_collisions.RootVersion() != nativeVersionaotDirectFn283 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_merge_DASH_hash_DASH_collisions) {
+			value := checkDerefVar(var_clojure_DOT_core_merge_DASH_hash_DASH_collisions)
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn283 = direct
+			} else {
+				aotDirectFn283 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_merge_DASH_with.RootVersion() != nativeVersionaotDirectFn284 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_merge_DASH_with) {
+			value := checkDerefVar(var_clojure_DOT_core_merge_DASH_with)
+			aotDirectFn284 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_meta.RootVersion() != nativeVersionaotDirectFn285 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_meta) {
+			value := checkDerefVar(var_clojure_DOT_core_meta)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn285 = direct
+			} else {
+				aotDirectFn285 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_methods.RootVersion() != nativeVersionaotDirectFn286 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_methods) {
+			value := checkDerefVar(var_clojure_DOT_core_methods)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn286 = direct
+			} else {
+				aotDirectFn286 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_min.RootVersion() != nativeVersionaotDirectFn287 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_min) {
+			value := checkDerefVar(var_clojure_DOT_core_min)
+			aotDirectFn287 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn287Arity1 = direct
+			} else {
+				aotDirectFn287Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn287Arity2 = direct
+			} else {
+				aotDirectFn287Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_min_DASH_key.RootVersion() != nativeVersionaotDirectFn288 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_min_DASH_key) {
+			value := checkDerefVar(var_clojure_DOT_core_min_DASH_key)
+			aotDirectFn288 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn288Arity2 = direct
+			} else {
+				aotDirectFn288Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn288Arity3 = direct
+			} else {
+				aotDirectFn288Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_mix_DASH_collection_DASH_hash.RootVersion() != nativeVersionaotDirectFn289 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_mix_DASH_collection_DASH_hash) {
+			value := checkDerefVar(var_clojure_DOT_core_mix_DASH_collection_DASH_hash)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn289 = direct
+			} else {
+				aotDirectFn289 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_all_DASH_ns.RootVersion() != nativeVersionaotDirectFn29 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_all_DASH_ns) {
+			value := checkDerefVar(var_clojure_DOT_core_all_DASH_ns)
+			aotDirectFn29 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_mk_DASH_bound_DASH_fn.RootVersion() != nativeVersionaotDirectFn290 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn) {
+			value := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn290 = direct
+			} else {
+				aotDirectFn290 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_mod.RootVersion() != nativeVersionaotDirectFn291 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_mod) {
+			value := checkDerefVar(var_clojure_DOT_core_mod)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn291 = direct
+			} else {
+				aotDirectFn291 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_name.RootVersion() != nativeVersionaotDirectFn292 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_name) {
+			value := checkDerefVar(var_clojure_DOT_core_name)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn292 = direct
+			} else {
+				aotDirectFn292 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_namespace.RootVersion() != nativeVersionaotDirectFn293 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_namespace) {
+			value := checkDerefVar(var_clojure_DOT_core_namespace)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn293 = direct
+			} else {
+				aotDirectFn293 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_nary_DASH_inline.RootVersion() != nativeVersionaotDirectFn294 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_nary_DASH_inline) {
+			value := checkDerefVar(var_clojure_DOT_core_nary_DASH_inline)
+			aotDirectFn294 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn294Arity1 = direct
+			} else {
+				aotDirectFn294Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn294Arity2 = direct
+			} else {
+				aotDirectFn294Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_nat_DASH_int_QMARK_.RootVersion() != nativeVersionaotDirectFn295 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_nat_DASH_int_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_nat_DASH_int_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn295 = direct
+			} else {
+				aotDirectFn295 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_neg_DASH_int_QMARK_.RootVersion() != nativeVersionaotDirectFn296 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_neg_DASH_int_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_neg_DASH_int_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn296 = direct
+			} else {
+				aotDirectFn296 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_neg_QMARK_.RootVersion() != nativeVersionaotDirectFn297 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_neg_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_neg_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn297 = direct
+			} else {
+				aotDirectFn297 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_newline.RootVersion() != nativeVersionaotDirectFn298 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_newline) {
+			value := checkDerefVar(var_clojure_DOT_core_newline)
+			aotDirectFn298 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_next.RootVersion() != nativeVersionaotDirectFn299 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_next) {
+			value := checkDerefVar(var_clojure_DOT_core_next)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn299 = direct
+			} else {
+				aotDirectFn299 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core__PLUS__TICK_.RootVersion() != nativeVersionaotDirectFn3 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__PLUS__TICK_) {
+			value := checkDerefVar(var_clojure_DOT_core__PLUS__TICK_)
+			aotDirectFn3 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn3Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn3Arity1 = direct
+			} else {
+				aotDirectFn3Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn3Arity2 = direct
+			} else {
+				aotDirectFn3Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_alter.RootVersion() != nativeVersionaotDirectFn30 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_alter) {
+			value := checkDerefVar(var_clojure_DOT_core_alter)
+			aotDirectFn30 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_nfirst.RootVersion() != nativeVersionaotDirectFn300 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_nfirst) {
+			value := checkDerefVar(var_clojure_DOT_core_nfirst)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn300 = direct
+			} else {
+				aotDirectFn300 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_nil_QMARK_.RootVersion() != nativeVersionaotDirectFn301 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_nil_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_nil_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn301 = direct
+			} else {
+				aotDirectFn301 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_nnext.RootVersion() != nativeVersionaotDirectFn302 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_nnext) {
+			value := checkDerefVar(var_clojure_DOT_core_nnext)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn302 = direct
+			} else {
+				aotDirectFn302 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_normalize_DASH_slurp_DASH_opts.RootVersion() != nativeVersionaotDirectFn303 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_normalize_DASH_slurp_DASH_opts) {
+			value := checkDerefVar(var_clojure_DOT_core_normalize_DASH_slurp_DASH_opts)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn303 = direct
+			} else {
+				aotDirectFn303 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_not.RootVersion() != nativeVersionaotDirectFn304 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_not) {
+			value := checkDerefVar(var_clojure_DOT_core_not)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn304 = direct
+			} else {
+				aotDirectFn304 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_not_DASH_any_QMARK_.RootVersion() != nativeVersionaotDirectFn305 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_not_DASH_any_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_not_DASH_any_QMARK_)
+			aotDirectFn305 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn305Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn305Arity1 = direct
+			} else {
+				aotDirectFn305Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn305Arity2 = direct
+			} else {
+				aotDirectFn305Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn305Arity3 = direct
+			} else {
+				aotDirectFn305Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_not_DASH_empty.RootVersion() != nativeVersionaotDirectFn306 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_not_DASH_empty) {
+			value := checkDerefVar(var_clojure_DOT_core_not_DASH_empty)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn306 = direct
+			} else {
+				aotDirectFn306 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_not_DASH_every_QMARK_.RootVersion() != nativeVersionaotDirectFn307 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_not_DASH_every_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_not_DASH_every_QMARK_)
+			aotDirectFn307 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn307Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn307Arity1 = direct
+			} else {
+				aotDirectFn307Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn307Arity2 = direct
+			} else {
+				aotDirectFn307Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn307Arity3 = direct
+			} else {
+				aotDirectFn307Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_not_EQ_.RootVersion() != nativeVersionaotDirectFn308 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_not_EQ_) {
+			value := checkDerefVar(var_clojure_DOT_core_not_EQ_)
+			aotDirectFn308 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn308Arity1 = direct
+			} else {
+				aotDirectFn308Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn308Arity2 = direct
+			} else {
+				aotDirectFn308Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_ns_DASH_aliases.RootVersion() != nativeVersionaotDirectFn309 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_aliases) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_aliases)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn309 = direct
+			} else {
+				aotDirectFn309 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_alter_DASH_meta_BANG_.RootVersion() != nativeVersionaotDirectFn31 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_alter_DASH_meta_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_alter_DASH_meta_BANG_)
+			aotDirectFn31 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_ns_DASH_imports.RootVersion() != nativeVersionaotDirectFn310 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_imports) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_imports)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn310 = direct
+			} else {
+				aotDirectFn310 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ns_DASH_interns.RootVersion() != nativeVersionaotDirectFn311 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_interns) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_interns)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn311 = direct
+			} else {
+				aotDirectFn311 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ns_DASH_map.RootVersion() != nativeVersionaotDirectFn312 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_map) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_map)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn312 = direct
+			} else {
+				aotDirectFn312 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ns_DASH_name.RootVersion() != nativeVersionaotDirectFn313 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_name) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_name)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn313 = direct
+			} else {
+				aotDirectFn313 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ns_DASH_publics.RootVersion() != nativeVersionaotDirectFn314 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_publics) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_publics)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn314 = direct
+			} else {
+				aotDirectFn314 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ns_DASH_refers.RootVersion() != nativeVersionaotDirectFn315 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_refers) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_refers)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn315 = direct
+			} else {
+				aotDirectFn315 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ns_DASH_resolve.RootVersion() != nativeVersionaotDirectFn316 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_resolve) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_resolve)
+			aotDirectFn316 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn316Arity2 = direct
+			} else {
+				aotDirectFn316Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn316Arity3 = direct
+			} else {
+				aotDirectFn316Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_ns_DASH_unalias.RootVersion() != nativeVersionaotDirectFn317 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_unalias) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_unalias)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn317 = direct
+			} else {
+				aotDirectFn317 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_ns_DASH_unmap.RootVersion() != nativeVersionaotDirectFn318 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ns_DASH_unmap) {
+			value := checkDerefVar(var_clojure_DOT_core_ns_DASH_unmap)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn318 = direct
+			} else {
+				aotDirectFn318 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_nth.RootVersion() != nativeVersionaotDirectFn319 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_nth) {
+			value := checkDerefVar(var_clojure_DOT_core_nth)
+			aotDirectFn319 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn319Arity2 = direct
+			} else {
+				aotDirectFn319Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn319Arity3 = direct
+			} else {
+				aotDirectFn319Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_alter_DASH_var_DASH_root.RootVersion() != nativeVersionaotDirectFn32 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_alter_DASH_var_DASH_root) {
+			value := checkDerefVar(var_clojure_DOT_core_alter_DASH_var_DASH_root)
+			aotDirectFn32 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_nthnext.RootVersion() != nativeVersionaotDirectFn320 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_nthnext) {
+			value := checkDerefVar(var_clojure_DOT_core_nthnext)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn320 = direct
+			} else {
+				aotDirectFn320 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_nthrest.RootVersion() != nativeVersionaotDirectFn321 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_nthrest) {
+			value := checkDerefVar(var_clojure_DOT_core_nthrest)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn321 = direct
+			} else {
+				aotDirectFn321 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_num.RootVersion() != nativeVersionaotDirectFn322 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_num) {
+			value := checkDerefVar(var_clojure_DOT_core_num)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn322 = direct
+			} else {
+				aotDirectFn322 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_number_QMARK_.RootVersion() != nativeVersionaotDirectFn323 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_number_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_number_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn323 = direct
+			} else {
+				aotDirectFn323 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_numerator.RootVersion() != nativeVersionaotDirectFn324 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_numerator) {
+			value := checkDerefVar(var_clojure_DOT_core_numerator)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn324 = direct
+			} else {
+				aotDirectFn324 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_object_DASH_array.RootVersion() != nativeVersionaotDirectFn325 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_object_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_object_DASH_array)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn325 = direct
+			} else {
+				aotDirectFn325 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_odd_QMARK_.RootVersion() != nativeVersionaotDirectFn326 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_odd_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_odd_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn326 = direct
+			} else {
+				aotDirectFn326 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_parents.RootVersion() != nativeVersionaotDirectFn327 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_parents) {
+			value := checkDerefVar(var_clojure_DOT_core_parents)
+			aotDirectFn327 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn327Arity1 = direct
+			} else {
+				aotDirectFn327Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn327Arity2 = direct
+			} else {
+				aotDirectFn327Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_parse_DASH_boolean.RootVersion() != nativeVersionaotDirectFn328 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_parse_DASH_boolean) {
+			value := checkDerefVar(var_clojure_DOT_core_parse_DASH_boolean)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn328 = direct
+			} else {
+				aotDirectFn328 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_parse_DASH_double.RootVersion() != nativeVersionaotDirectFn329 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_parse_DASH_double) {
+			value := checkDerefVar(var_clojure_DOT_core_parse_DASH_double)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn329 = direct
+			} else {
+				aotDirectFn329 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ancestors.RootVersion() != nativeVersionaotDirectFn33 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ancestors) {
+			value := checkDerefVar(var_clojure_DOT_core_ancestors)
+			aotDirectFn33 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn33Arity1 = direct
+			} else {
+				aotDirectFn33Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn33Arity2 = direct
+			} else {
+				aotDirectFn33Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_parse_DASH_impls.RootVersion() != nativeVersionaotDirectFn330 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_parse_DASH_impls) {
+			value := checkDerefVar(var_clojure_DOT_core_parse_DASH_impls)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn330 = direct
+			} else {
+				aotDirectFn330 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_parse_DASH_long.RootVersion() != nativeVersionaotDirectFn331 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_parse_DASH_long) {
+			value := checkDerefVar(var_clojure_DOT_core_parse_DASH_long)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn331 = direct
+			} else {
+				aotDirectFn331 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_parse_DASH_uuid.RootVersion() != nativeVersionaotDirectFn332 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_parse_DASH_uuid) {
+			value := checkDerefVar(var_clojure_DOT_core_parse_DASH_uuid)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn332 = direct
+			} else {
+				aotDirectFn332 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_parsing_DASH_err.RootVersion() != nativeVersionaotDirectFn333 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_parsing_DASH_err) {
+			value := checkDerefVar(var_clojure_DOT_core_parsing_DASH_err)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn333 = direct
+			} else {
+				aotDirectFn333 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_partial.RootVersion() != nativeVersionaotDirectFn334 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_partial) {
+			value := checkDerefVar(var_clojure_DOT_core_partial)
+			aotDirectFn334 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn334Arity1 = direct
+			} else {
+				aotDirectFn334Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn334Arity2 = direct
+			} else {
+				aotDirectFn334Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn334Arity3 = direct
+			} else {
+				aotDirectFn334Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn334Arity4 = direct
+			} else {
+				aotDirectFn334Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_partition.RootVersion() != nativeVersionaotDirectFn335 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_partition) {
+			value := checkDerefVar(var_clojure_DOT_core_partition)
+			aotDirectFn335 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn335Arity2 = direct
+			} else {
+				aotDirectFn335Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn335Arity3 = direct
+			} else {
+				aotDirectFn335Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn335Arity4 = direct
+			} else {
+				aotDirectFn335Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_partition_DASH_all.RootVersion() != nativeVersionaotDirectFn336 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_partition_DASH_all) {
+			value := checkDerefVar(var_clojure_DOT_core_partition_DASH_all)
+			aotDirectFn336 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn336Arity1 = direct
+			} else {
+				aotDirectFn336Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn336Arity2 = direct
+			} else {
+				aotDirectFn336Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn336Arity3 = direct
+			} else {
+				aotDirectFn336Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_partition_DASH_by.RootVersion() != nativeVersionaotDirectFn337 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_partition_DASH_by) {
+			value := checkDerefVar(var_clojure_DOT_core_partition_DASH_by)
+			aotDirectFn337 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn337Arity1 = direct
+			} else {
+				aotDirectFn337Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn337Arity2 = direct
+			} else {
+				aotDirectFn337Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_partitionv.RootVersion() != nativeVersionaotDirectFn338 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_partitionv) {
+			value := checkDerefVar(var_clojure_DOT_core_partitionv)
+			aotDirectFn338 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn338Arity2 = direct
+			} else {
+				aotDirectFn338Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn338Arity3 = direct
+			} else {
+				aotDirectFn338Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn338Arity4 = direct
+			} else {
+				aotDirectFn338Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_partitionv_DASH_all.RootVersion() != nativeVersionaotDirectFn339 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_partitionv_DASH_all) {
+			value := checkDerefVar(var_clojure_DOT_core_partitionv_DASH_all)
+			aotDirectFn339 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn339Arity1 = direct
+			} else {
+				aotDirectFn339Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn339Arity2 = direct
+			} else {
+				aotDirectFn339Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn339Arity3 = direct
+			} else {
+				aotDirectFn339Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_any_QMARK_.RootVersion() != nativeVersionaotDirectFn34 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_any_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_any_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn34 = direct
+			} else {
+				aotDirectFn34 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_pcalls.RootVersion() != nativeVersionaotDirectFn340 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_pcalls) {
+			value := checkDerefVar(var_clojure_DOT_core_pcalls)
+			aotDirectFn340 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_peek.RootVersion() != nativeVersionaotDirectFn341 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_peek) {
+			value := checkDerefVar(var_clojure_DOT_core_peek)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn341 = direct
+			} else {
+				aotDirectFn341 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_persistent_BANG_.RootVersion() != nativeVersionaotDirectFn342 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_persistent_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_persistent_BANG_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn342 = direct
+			} else {
+				aotDirectFn342 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_pmap.RootVersion() != nativeVersionaotDirectFn343 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_pmap) {
+			value := checkDerefVar(var_clojure_DOT_core_pmap)
+			aotDirectFn343 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn343Arity2 = direct
+			} else {
+				aotDirectFn343Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_pop.RootVersion() != nativeVersionaotDirectFn344 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_pop) {
+			value := checkDerefVar(var_clojure_DOT_core_pop)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn344 = direct
+			} else {
+				aotDirectFn344 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_pop_BANG_.RootVersion() != nativeVersionaotDirectFn345 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_pop_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_pop_BANG_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn345 = direct
+			} else {
+				aotDirectFn345 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_pop_DASH_thread_DASH_bindings.RootVersion() != nativeVersionaotDirectFn346 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings) {
+			value := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
+			aotDirectFn346 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_pos_DASH_int_QMARK_.RootVersion() != nativeVersionaotDirectFn347 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_pos_DASH_int_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_pos_DASH_int_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn347 = direct
+			} else {
+				aotDirectFn347 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_pos_QMARK_.RootVersion() != nativeVersionaotDirectFn348 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_pos_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_pos_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn348 = direct
+			} else {
+				aotDirectFn348 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_pr_DASH_on.RootVersion() != nativeVersionaotDirectFn349 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_pr_DASH_on) {
+			value := checkDerefVar(var_clojure_DOT_core_pr_DASH_on)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn349 = direct
+			} else {
+				aotDirectFn349 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_apply.RootVersion() != nativeVersionaotDirectFn35 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_apply) {
+			value := checkDerefVar(var_clojure_DOT_core_apply)
+			aotDirectFn35 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn35Arity2 = direct
+			} else {
+				aotDirectFn35Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn35Arity3 = direct
+			} else {
+				aotDirectFn35Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn35Arity4 = direct
+			} else {
+				aotDirectFn35Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+			aotDirectFn35Arity5 = lang.FnFunc5(func(p0 any, p1 any, p2 any, p3 any, p4 any) any { return lang.Apply5(value, p0, p1, p2, p3, p4) })
+		}
+		if var_clojure_DOT_core_pr_DASH_str.RootVersion() != nativeVersionaotDirectFn350 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_pr_DASH_str) {
+			value := checkDerefVar(var_clojure_DOT_core_pr_DASH_str)
+			aotDirectFn350 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_prefer_DASH_method.RootVersion() != nativeVersionaotDirectFn351 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_prefer_DASH_method) {
+			value := checkDerefVar(var_clojure_DOT_core_prefer_DASH_method)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn351 = direct
+			} else {
+				aotDirectFn351 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_prefers.RootVersion() != nativeVersionaotDirectFn352 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_prefers) {
+			value := checkDerefVar(var_clojure_DOT_core_prefers)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn352 = direct
+			} else {
+				aotDirectFn352 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_prep_DASH_hashes.RootVersion() != nativeVersionaotDirectFn353 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_prep_DASH_hashes) {
+			value := checkDerefVar(var_clojure_DOT_core_prep_DASH_hashes)
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn353 = direct
+			} else {
+				aotDirectFn353 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_prep_DASH_ints.RootVersion() != nativeVersionaotDirectFn354 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_prep_DASH_ints) {
+			value := checkDerefVar(var_clojure_DOT_core_prep_DASH_ints)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn354 = direct
+			} else {
+				aotDirectFn354 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_prependss.RootVersion() != nativeVersionaotDirectFn355 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_prependss) {
+			value := checkDerefVar(var_clojure_DOT_core_prependss)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn355 = direct
+			} else {
+				aotDirectFn355 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_preserving_DASH_reduced.RootVersion() != nativeVersionaotDirectFn356 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_preserving_DASH_reduced) {
+			value := checkDerefVar(var_clojure_DOT_core_preserving_DASH_reduced)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn356 = direct
+			} else {
+				aotDirectFn356 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_print.RootVersion() != nativeVersionaotDirectFn357 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print) {
+			value := checkDerefVar(var_clojure_DOT_core_print)
+			aotDirectFn357 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_print_DASH_ctor.RootVersion() != nativeVersionaotDirectFn358 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print_DASH_ctor) {
+			value := checkDerefVar(var_clojure_DOT_core_print_DASH_ctor)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn358 = direct
+			} else {
+				aotDirectFn358 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_print_DASH_map.RootVersion() != nativeVersionaotDirectFn359 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print_DASH_map) {
+			value := checkDerefVar(var_clojure_DOT_core_print_DASH_map)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn359 = direct
+			} else {
+				aotDirectFn359 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_array.RootVersion() != nativeVersionaotDirectFn36 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_array) {
+			value := checkDerefVar(var_clojure_DOT_core_array)
+			aotDirectFn36 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_print_DASH_meta.RootVersion() != nativeVersionaotDirectFn360 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print_DASH_meta) {
+			value := checkDerefVar(var_clojure_DOT_core_print_DASH_meta)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn360 = direct
+			} else {
+				aotDirectFn360 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_print_DASH_object.RootVersion() != nativeVersionaotDirectFn361 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print_DASH_object) {
+			value := checkDerefVar(var_clojure_DOT_core_print_DASH_object)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn361 = direct
+			} else {
+				aotDirectFn361 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_print_DASH_prefix_DASH_map.RootVersion() != nativeVersionaotDirectFn362 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print_DASH_prefix_DASH_map) {
+			value := checkDerefVar(var_clojure_DOT_core_print_DASH_prefix_DASH_map)
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn362 = direct
+			} else {
+				aotDirectFn362 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_print_DASH_simple.RootVersion() != nativeVersionaotDirectFn364 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print_DASH_simple) {
+			value := checkDerefVar(var_clojure_DOT_core_print_DASH_simple)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn364 = direct
+			} else {
+				aotDirectFn364 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_print_DASH_str.RootVersion() != nativeVersionaotDirectFn365 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print_DASH_str) {
+			value := checkDerefVar(var_clojure_DOT_core_print_DASH_str)
+			aotDirectFn365 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_print_DASH_tagged_DASH_object.RootVersion() != nativeVersionaotDirectFn366 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print_DASH_tagged_DASH_object) {
+			value := checkDerefVar(var_clojure_DOT_core_print_DASH_tagged_DASH_object)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn366 = direct
+			} else {
+				aotDirectFn366 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_print_DASH_throwable.RootVersion() != nativeVersionaotDirectFn367 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_print_DASH_throwable) {
+			value := checkDerefVar(var_clojure_DOT_core_print_DASH_throwable)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn367 = direct
+			} else {
+				aotDirectFn367 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_printf.RootVersion() != nativeVersionaotDirectFn368 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_printf) {
+			value := checkDerefVar(var_clojure_DOT_core_printf)
+			aotDirectFn368 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_println.RootVersion() != nativeVersionaotDirectFn369 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_println) {
+			value := checkDerefVar(var_clojure_DOT_core_println)
+			aotDirectFn369 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_array_DASH_map.RootVersion() != nativeVersionaotDirectFn37 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_array_DASH_map) {
+			value := checkDerefVar(var_clojure_DOT_core_array_DASH_map)
+			aotDirectFn37 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn37Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_println_DASH_str.RootVersion() != nativeVersionaotDirectFn370 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_println_DASH_str) {
+			value := checkDerefVar(var_clojure_DOT_core_println_DASH_str)
+			aotDirectFn370 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_prn.RootVersion() != nativeVersionaotDirectFn371 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_prn) {
+			value := checkDerefVar(var_clojure_DOT_core_prn)
+			aotDirectFn371 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_prn_DASH_str.RootVersion() != nativeVersionaotDirectFn372 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_prn_DASH_str) {
+			value := checkDerefVar(var_clojure_DOT_core_prn_DASH_str)
+			aotDirectFn372 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_promise.RootVersion() != nativeVersionaotDirectFn373 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_promise) {
+			value := checkDerefVar(var_clojure_DOT_core_promise)
+			aotDirectFn373 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_protocol_QMARK_.RootVersion() != nativeVersionaotDirectFn374 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_protocol_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_protocol_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn374 = direct
+			} else {
+				aotDirectFn374 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_push_DASH_thread_DASH_bindings.RootVersion() != nativeVersionaotDirectFn375 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_push_DASH_thread_DASH_bindings) {
+			value := checkDerefVar(var_clojure_DOT_core_push_DASH_thread_DASH_bindings)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn375 = direct
+			} else {
+				aotDirectFn375 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_qualified_DASH_ident_QMARK_.RootVersion() != nativeVersionaotDirectFn376 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_qualified_DASH_ident_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_qualified_DASH_ident_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn376 = direct
+			} else {
+				aotDirectFn376 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_qualified_DASH_keyword_QMARK_.RootVersion() != nativeVersionaotDirectFn377 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_qualified_DASH_keyword_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_qualified_DASH_keyword_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn377 = direct
+			} else {
+				aotDirectFn377 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_qualified_DASH_symbol_QMARK_.RootVersion() != nativeVersionaotDirectFn378 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_qualified_DASH_symbol_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_qualified_DASH_symbol_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn378 = direct
+			} else {
+				aotDirectFn378 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_quot.RootVersion() != nativeVersionaotDirectFn379 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_quot) {
+			value := checkDerefVar(var_clojure_DOT_core_quot)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn379 = direct
+			} else {
+				aotDirectFn379 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_aset.RootVersion() != nativeVersionaotDirectFn38 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aset) {
+			value := checkDerefVar(var_clojure_DOT_core_aset)
+			aotDirectFn38 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn38Arity3 = direct
+			} else {
+				aotDirectFn38Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_rand.RootVersion() != nativeVersionaotDirectFn380 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_rand) {
+			value := checkDerefVar(var_clojure_DOT_core_rand)
+			aotDirectFn380 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn380Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn380Arity1 = direct
+			} else {
+				aotDirectFn380Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_rand_DASH_int.RootVersion() != nativeVersionaotDirectFn381 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_rand_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_rand_DASH_int)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn381 = direct
+			} else {
+				aotDirectFn381 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_rand_DASH_nth.RootVersion() != nativeVersionaotDirectFn382 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_rand_DASH_nth) {
+			value := checkDerefVar(var_clojure_DOT_core_rand_DASH_nth)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn382 = direct
+			} else {
+				aotDirectFn382 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_random_DASH_sample.RootVersion() != nativeVersionaotDirectFn383 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_random_DASH_sample) {
+			value := checkDerefVar(var_clojure_DOT_core_random_DASH_sample)
+			aotDirectFn383 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn383Arity1 = direct
+			} else {
+				aotDirectFn383Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn383Arity2 = direct
+			} else {
+				aotDirectFn383Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_random_DASH_uuid.RootVersion() != nativeVersionaotDirectFn384 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_random_DASH_uuid) {
+			value := checkDerefVar(var_clojure_DOT_core_random_DASH_uuid)
+			aotDirectFn384 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_range.RootVersion() != nativeVersionaotDirectFn385 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_range) {
+			value := checkDerefVar(var_clojure_DOT_core_range)
+			aotDirectFn385 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn385Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn385Arity1 = direct
+			} else {
+				aotDirectFn385Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn385Arity2 = direct
+			} else {
+				aotDirectFn385Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn385Arity3 = direct
+			} else {
+				aotDirectFn385Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_ratio_QMARK_.RootVersion() != nativeVersionaotDirectFn386 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ratio_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_ratio_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn386 = direct
+			} else {
+				aotDirectFn386 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_rational_QMARK_.RootVersion() != nativeVersionaotDirectFn387 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_rational_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_rational_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn387 = direct
+			} else {
+				aotDirectFn387 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_rationalize.RootVersion() != nativeVersionaotDirectFn388 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_rationalize) {
+			value := checkDerefVar(var_clojure_DOT_core_rationalize)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn388 = direct
+			} else {
+				aotDirectFn388 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_re_DASH_find.RootVersion() != nativeVersionaotDirectFn389 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_re_DASH_find) {
+			value := checkDerefVar(var_clojure_DOT_core_re_DASH_find)
+			aotDirectFn389 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn389Arity1 = direct
+			} else {
+				aotDirectFn389Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn389Arity2 = direct
+			} else {
+				aotDirectFn389Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_aset_DASH_boolean.RootVersion() != nativeVersionaotDirectFn39 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aset_DASH_boolean) {
+			value := checkDerefVar(var_clojure_DOT_core_aset_DASH_boolean)
+			aotDirectFn39 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn39Arity3 = direct
+			} else {
+				aotDirectFn39Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_re_DASH_groups.RootVersion() != nativeVersionaotDirectFn390 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_re_DASH_groups) {
+			value := checkDerefVar(var_clojure_DOT_core_re_DASH_groups)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn390 = direct
+			} else {
+				aotDirectFn390 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_re_DASH_matcher.RootVersion() != nativeVersionaotDirectFn391 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_re_DASH_matcher) {
+			value := checkDerefVar(var_clojure_DOT_core_re_DASH_matcher)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn391 = direct
+			} else {
+				aotDirectFn391 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_re_DASH_matches.RootVersion() != nativeVersionaotDirectFn392 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_re_DASH_matches) {
+			value := checkDerefVar(var_clojure_DOT_core_re_DASH_matches)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn392 = direct
+			} else {
+				aotDirectFn392 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_re_DASH_pattern.RootVersion() != nativeVersionaotDirectFn393 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_re_DASH_pattern) {
+			value := checkDerefVar(var_clojure_DOT_core_re_DASH_pattern)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn393 = direct
+			} else {
+				aotDirectFn393 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_re_DASH_seq.RootVersion() != nativeVersionaotDirectFn394 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_re_DASH_seq) {
+			value := checkDerefVar(var_clojure_DOT_core_re_DASH_seq)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn394 = direct
+			} else {
+				aotDirectFn394 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_read.RootVersion() != nativeVersionaotDirectFn395 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_read) {
+			value := checkDerefVar(var_clojure_DOT_core_read)
+			aotDirectFn395 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_read_PLUS_string.RootVersion() != nativeVersionaotDirectFn396 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_read_PLUS_string) {
+			value := checkDerefVar(var_clojure_DOT_core_read_PLUS_string)
+			aotDirectFn396 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_read_DASH_line.RootVersion() != nativeVersionaotDirectFn397 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_read_DASH_line) {
+			value := checkDerefVar(var_clojure_DOT_core_read_DASH_line)
+			aotDirectFn397 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_read_DASH_string.RootVersion() != nativeVersionaotDirectFn398 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_read_DASH_string) {
+			value := checkDerefVar(var_clojure_DOT_core_read_DASH_string)
+			aotDirectFn398 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn398Arity1 = direct
+			} else {
+				aotDirectFn398Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn398Arity2 = direct
+			} else {
+				aotDirectFn398Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_reader_DASH_conditional.RootVersion() != nativeVersionaotDirectFn399 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reader_DASH_conditional) {
+			value := checkDerefVar(var_clojure_DOT_core_reader_DASH_conditional)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn399 = direct
+			} else {
+				aotDirectFn399 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core__DASH_.RootVersion() != nativeVersionaotDirectFn4 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__DASH_) {
+			value := checkDerefVar(var_clojure_DOT_core__DASH_)
+			aotDirectFn4 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn4Arity1 = direct
+			} else {
+				aotDirectFn4Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn4Arity2 = direct
+			} else {
+				aotDirectFn4Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_aset_DASH_byte.RootVersion() != nativeVersionaotDirectFn40 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aset_DASH_byte) {
+			value := checkDerefVar(var_clojure_DOT_core_aset_DASH_byte)
+			aotDirectFn40 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn40Arity3 = direct
+			} else {
+				aotDirectFn40Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_reader_DASH_conditional_QMARK_.RootVersion() != nativeVersionaotDirectFn400 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reader_DASH_conditional_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_reader_DASH_conditional_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn400 = direct
+			} else {
+				aotDirectFn400 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_realized_QMARK_.RootVersion() != nativeVersionaotDirectFn401 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_realized_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_realized_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn401 = direct
+			} else {
+				aotDirectFn401 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_reduce.RootVersion() != nativeVersionaotDirectFn402 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reduce) {
+			value := checkDerefVar(var_clojure_DOT_core_reduce)
+			aotDirectFn402 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn402Arity2 = direct
+			} else {
+				aotDirectFn402Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn402Arity3 = direct
+			} else {
+				aotDirectFn402Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_reduce_DASH_kv.RootVersion() != nativeVersionaotDirectFn403 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reduce_DASH_kv) {
+			value := checkDerefVar(var_clojure_DOT_core_reduce_DASH_kv)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn403 = direct
+			} else {
+				aotDirectFn403 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_reduce1.RootVersion() != nativeVersionaotDirectFn404 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reduce1) {
+			value := checkDerefVar(var_clojure_DOT_core_reduce1)
+			aotDirectFn404 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn404Arity2 = direct
+			} else {
+				aotDirectFn404Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn404Arity3 = direct
+			} else {
+				aotDirectFn404Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_reduced.RootVersion() != nativeVersionaotDirectFn405 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reduced) {
+			value := checkDerefVar(var_clojure_DOT_core_reduced)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn405 = direct
+			} else {
+				aotDirectFn405 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_reduced_QMARK_.RootVersion() != nativeVersionaotDirectFn406 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reduced_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_reduced_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn406 = direct
+			} else {
+				aotDirectFn406 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_reductions.RootVersion() != nativeVersionaotDirectFn407 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reductions) {
+			value := checkDerefVar(var_clojure_DOT_core_reductions)
+			aotDirectFn407 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn407Arity2 = direct
+			} else {
+				aotDirectFn407Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn407Arity3 = direct
+			} else {
+				aotDirectFn407Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_ref.RootVersion() != nativeVersionaotDirectFn408 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ref) {
+			value := checkDerefVar(var_clojure_DOT_core_ref)
+			aotDirectFn408 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn408Arity1 = direct
+			} else {
+				aotDirectFn408Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_ref_DASH_history_DASH_count.RootVersion() != nativeVersionaotDirectFn409 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ref_DASH_history_DASH_count) {
+			value := checkDerefVar(var_clojure_DOT_core_ref_DASH_history_DASH_count)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn409 = direct
+			} else {
+				aotDirectFn409 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_aset_DASH_char.RootVersion() != nativeVersionaotDirectFn41 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aset_DASH_char) {
+			value := checkDerefVar(var_clojure_DOT_core_aset_DASH_char)
+			aotDirectFn41 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn41Arity3 = direct
+			} else {
+				aotDirectFn41Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_ref_DASH_max_DASH_history.RootVersion() != nativeVersionaotDirectFn410 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ref_DASH_max_DASH_history) {
+			value := checkDerefVar(var_clojure_DOT_core_ref_DASH_max_DASH_history)
+			aotDirectFn410 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn410Arity1 = direct
+			} else {
+				aotDirectFn410Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn410Arity2 = direct
+			} else {
+				aotDirectFn410Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_ref_DASH_min_DASH_history.RootVersion() != nativeVersionaotDirectFn411 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ref_DASH_min_DASH_history) {
+			value := checkDerefVar(var_clojure_DOT_core_ref_DASH_min_DASH_history)
+			aotDirectFn411 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn411Arity1 = direct
+			} else {
+				aotDirectFn411Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn411Arity2 = direct
+			} else {
+				aotDirectFn411Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_ref_DASH_set.RootVersion() != nativeVersionaotDirectFn412 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_ref_DASH_set) {
+			value := checkDerefVar(var_clojure_DOT_core_ref_DASH_set)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn412 = direct
+			} else {
+				aotDirectFn412 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_refer.RootVersion() != nativeVersionaotDirectFn413 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_refer) {
+			value := checkDerefVar(var_clojure_DOT_core_refer)
+			aotDirectFn413 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_release_DASH_pending_DASH_sends.RootVersion() != nativeVersionaotDirectFn414 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_release_DASH_pending_DASH_sends) {
+			value := checkDerefVar(var_clojure_DOT_core_release_DASH_pending_DASH_sends)
+			aotDirectFn414 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_rem.RootVersion() != nativeVersionaotDirectFn415 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_rem) {
+			value := checkDerefVar(var_clojure_DOT_core_rem)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn415 = direct
+			} else {
+				aotDirectFn415 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_remove.RootVersion() != nativeVersionaotDirectFn416 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_remove) {
+			value := checkDerefVar(var_clojure_DOT_core_remove)
+			aotDirectFn416 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn416Arity1 = direct
+			} else {
+				aotDirectFn416Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn416Arity2 = direct
+			} else {
+				aotDirectFn416Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_remove_DASH_all_DASH_methods.RootVersion() != nativeVersionaotDirectFn417 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_remove_DASH_all_DASH_methods) {
+			value := checkDerefVar(var_clojure_DOT_core_remove_DASH_all_DASH_methods)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn417 = direct
+			} else {
+				aotDirectFn417 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_remove_DASH_method.RootVersion() != nativeVersionaotDirectFn418 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_remove_DASH_method) {
+			value := checkDerefVar(var_clojure_DOT_core_remove_DASH_method)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn418 = direct
+			} else {
+				aotDirectFn418 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_remove_DASH_ns.RootVersion() != nativeVersionaotDirectFn419 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_remove_DASH_ns) {
+			value := checkDerefVar(var_clojure_DOT_core_remove_DASH_ns)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn419 = direct
+			} else {
+				aotDirectFn419 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_aset_DASH_double.RootVersion() != nativeVersionaotDirectFn42 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aset_DASH_double) {
+			value := checkDerefVar(var_clojure_DOT_core_aset_DASH_double)
+			aotDirectFn42 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn42Arity3 = direct
+			} else {
+				aotDirectFn42Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_remove_DASH_tap.RootVersion() != nativeVersionaotDirectFn420 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_remove_DASH_tap) {
+			value := checkDerefVar(var_clojure_DOT_core_remove_DASH_tap)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn420 = direct
+			} else {
+				aotDirectFn420 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_remove_DASH_watch.RootVersion() != nativeVersionaotDirectFn421 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_remove_DASH_watch) {
+			value := checkDerefVar(var_clojure_DOT_core_remove_DASH_watch)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn421 = direct
+			} else {
+				aotDirectFn421 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_repeat.RootVersion() != nativeVersionaotDirectFn422 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_repeat) {
+			value := checkDerefVar(var_clojure_DOT_core_repeat)
+			aotDirectFn422 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn422Arity1 = direct
+			} else {
+				aotDirectFn422Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn422Arity2 = direct
+			} else {
+				aotDirectFn422Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_repeatedly.RootVersion() != nativeVersionaotDirectFn423 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_repeatedly) {
+			value := checkDerefVar(var_clojure_DOT_core_repeatedly)
+			aotDirectFn423 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn423Arity1 = direct
+			} else {
+				aotDirectFn423Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn423Arity2 = direct
+			} else {
+				aotDirectFn423Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_replace.RootVersion() != nativeVersionaotDirectFn424 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_replace) {
+			value := checkDerefVar(var_clojure_DOT_core_replace)
+			aotDirectFn424 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn424Arity1 = direct
+			} else {
+				aotDirectFn424Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn424Arity2 = direct
+			} else {
+				aotDirectFn424Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_replicate.RootVersion() != nativeVersionaotDirectFn425 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_replicate) {
+			value := checkDerefVar(var_clojure_DOT_core_replicate)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn425 = direct
+			} else {
+				aotDirectFn425 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_require.RootVersion() != nativeVersionaotDirectFn426 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_require) {
+			value := checkDerefVar(var_clojure_DOT_core_require)
+			aotDirectFn426 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_requiring_DASH_resolve.RootVersion() != nativeVersionaotDirectFn427 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_requiring_DASH_resolve) {
+			value := checkDerefVar(var_clojure_DOT_core_requiring_DASH_resolve)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn427 = direct
+			} else {
+				aotDirectFn427 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_reset_BANG_.RootVersion() != nativeVersionaotDirectFn428 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reset_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_reset_BANG_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn428 = direct
+			} else {
+				aotDirectFn428 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_reset_DASH_meta_BANG_.RootVersion() != nativeVersionaotDirectFn429 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reset_DASH_meta_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_reset_DASH_meta_BANG_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn429 = direct
+			} else {
+				aotDirectFn429 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_aset_DASH_float.RootVersion() != nativeVersionaotDirectFn43 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aset_DASH_float) {
+			value := checkDerefVar(var_clojure_DOT_core_aset_DASH_float)
+			aotDirectFn43 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn43Arity3 = direct
+			} else {
+				aotDirectFn43Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_reset_DASH_vals_BANG_.RootVersion() != nativeVersionaotDirectFn430 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reset_DASH_vals_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_reset_DASH_vals_BANG_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn430 = direct
+			} else {
+				aotDirectFn430 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_resolve.RootVersion() != nativeVersionaotDirectFn431 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_resolve) {
+			value := checkDerefVar(var_clojure_DOT_core_resolve)
+			aotDirectFn431 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn431Arity1 = direct
+			} else {
+				aotDirectFn431Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn431Arity2 = direct
+			} else {
+				aotDirectFn431Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_rest.RootVersion() != nativeVersionaotDirectFn432 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_rest) {
+			value := checkDerefVar(var_clojure_DOT_core_rest)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn432 = direct
+			} else {
+				aotDirectFn432 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_restart_DASH_agent.RootVersion() != nativeVersionaotDirectFn433 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_restart_DASH_agent) {
+			value := checkDerefVar(var_clojure_DOT_core_restart_DASH_agent)
+			aotDirectFn433 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_resultset_DASH_seq.RootVersion() != nativeVersionaotDirectFn434 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_resultset_DASH_seq) {
+			value := checkDerefVar(var_clojure_DOT_core_resultset_DASH_seq)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn434 = direct
+			} else {
+				aotDirectFn434 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_reverse.RootVersion() != nativeVersionaotDirectFn435 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reverse) {
+			value := checkDerefVar(var_clojure_DOT_core_reverse)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn435 = direct
+			} else {
+				aotDirectFn435 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_reversible_QMARK_.RootVersion() != nativeVersionaotDirectFn436 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_reversible_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_reversible_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn436 = direct
+			} else {
+				aotDirectFn436 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_root_DASH_directory.RootVersion() != nativeVersionaotDirectFn437 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_root_DASH_directory) {
+			value := checkDerefVar(var_clojure_DOT_core_root_DASH_directory)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn437 = direct
+			} else {
+				aotDirectFn437 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_root_DASH_resource.RootVersion() != nativeVersionaotDirectFn438 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_root_DASH_resource) {
+			value := checkDerefVar(var_clojure_DOT_core_root_DASH_resource)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn438 = direct
+			} else {
+				aotDirectFn438 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_rseq.RootVersion() != nativeVersionaotDirectFn439 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_rseq) {
+			value := checkDerefVar(var_clojure_DOT_core_rseq)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn439 = direct
+			} else {
+				aotDirectFn439 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_aset_DASH_int.RootVersion() != nativeVersionaotDirectFn44 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aset_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_aset_DASH_int)
+			aotDirectFn44 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn44Arity3 = direct
+			} else {
+				aotDirectFn44Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_rsubseq.RootVersion() != nativeVersionaotDirectFn440 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_rsubseq) {
+			value := checkDerefVar(var_clojure_DOT_core_rsubseq)
+			aotDirectFn440 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn440Arity3 = direct
+			} else {
+				aotDirectFn440Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			aotDirectFn440Arity5 = lang.FnFunc5(func(p0 any, p1 any, p2 any, p3 any, p4 any) any { return lang.Apply5(value, p0, p1, p2, p3, p4) })
+		}
+		if var_clojure_DOT_core_run_BANG_.RootVersion() != nativeVersionaotDirectFn441 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_run_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_run_BANG_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn441 = direct
+			} else {
+				aotDirectFn441 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_second.RootVersion() != nativeVersionaotDirectFn442 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_second) {
+			value := checkDerefVar(var_clojure_DOT_core_second)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn442 = direct
+			} else {
+				aotDirectFn442 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_select_DASH_keys.RootVersion() != nativeVersionaotDirectFn443 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_select_DASH_keys) {
+			value := checkDerefVar(var_clojure_DOT_core_select_DASH_keys)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn443 = direct
+			} else {
+				aotDirectFn443 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_send.RootVersion() != nativeVersionaotDirectFn444 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_send) {
+			value := checkDerefVar(var_clojure_DOT_core_send)
+			aotDirectFn444 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_send_DASH_off.RootVersion() != nativeVersionaotDirectFn445 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_send_DASH_off) {
+			value := checkDerefVar(var_clojure_DOT_core_send_DASH_off)
+			aotDirectFn445 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_send_DASH_via.RootVersion() != nativeVersionaotDirectFn446 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_send_DASH_via) {
+			value := checkDerefVar(var_clojure_DOT_core_send_DASH_via)
+			aotDirectFn446 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_seq.RootVersion() != nativeVersionaotDirectFn447 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_seq) {
+			value := checkDerefVar(var_clojure_DOT_core_seq)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn447 = direct
+			} else {
+				aotDirectFn447 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring.RootVersion() != nativeVersionaotDirectFn448 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring) {
+			value := checkDerefVar(var_clojure_DOT_core_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn448 = direct
+			} else {
+				aotDirectFn448 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_seq_QMARK_.RootVersion() != nativeVersionaotDirectFn449 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_seq_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn449 = direct
+			} else {
+				aotDirectFn449 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_aset_DASH_long.RootVersion() != nativeVersionaotDirectFn45 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aset_DASH_long) {
+			value := checkDerefVar(var_clojure_DOT_core_aset_DASH_long)
+			aotDirectFn45 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn45Arity3 = direct
+			} else {
+				aotDirectFn45Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_seqable_QMARK_.RootVersion() != nativeVersionaotDirectFn450 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_seqable_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_seqable_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn450 = direct
+			} else {
+				aotDirectFn450 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_seque.RootVersion() != nativeVersionaotDirectFn451 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_seque) {
+			value := checkDerefVar(var_clojure_DOT_core_seque)
+			aotDirectFn451 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_sequence.RootVersion() != nativeVersionaotDirectFn452 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sequence) {
+			value := checkDerefVar(var_clojure_DOT_core_sequence)
+			aotDirectFn452 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn452Arity1 = direct
+			} else {
+				aotDirectFn452Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn452Arity2 = direct
+			} else {
+				aotDirectFn452Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_sequential_QMARK_.RootVersion() != nativeVersionaotDirectFn453 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sequential_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_sequential_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn453 = direct
+			} else {
+				aotDirectFn453 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_serialized_DASH_require.RootVersion() != nativeVersionaotDirectFn454 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_serialized_DASH_require) {
+			value := checkDerefVar(var_clojure_DOT_core_serialized_DASH_require)
+			aotDirectFn454 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_set.RootVersion() != nativeVersionaotDirectFn455 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_set) {
+			value := checkDerefVar(var_clojure_DOT_core_set)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn455 = direct
+			} else {
+				aotDirectFn455 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_executor_BANG_.RootVersion() != nativeVersionaotDirectFn456 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_executor_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_executor_BANG_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn456 = direct
+			} else {
+				aotDirectFn456 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_.RootVersion() != nativeVersionaotDirectFn457 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn457 = direct
+			} else {
+				aotDirectFn457 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_set_DASH_error_DASH_handler_BANG_.RootVersion() != nativeVersionaotDirectFn458 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_set_DASH_error_DASH_handler_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_set_DASH_error_DASH_handler_BANG_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn458 = direct
+			} else {
+				aotDirectFn458 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_set_DASH_error_DASH_mode_BANG_.RootVersion() != nativeVersionaotDirectFn459 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_set_DASH_error_DASH_mode_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_set_DASH_error_DASH_mode_BANG_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn459 = direct
+			} else {
+				aotDirectFn459 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_aset_DASH_short.RootVersion() != nativeVersionaotDirectFn46 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_aset_DASH_short) {
+			value := checkDerefVar(var_clojure_DOT_core_aset_DASH_short)
+			aotDirectFn46 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn46Arity3 = direct
+			} else {
+				aotDirectFn46Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_set_DASH_validator_BANG_.RootVersion() != nativeVersionaotDirectFn460 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_set_DASH_validator_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_set_DASH_validator_BANG_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn460 = direct
+			} else {
+				aotDirectFn460 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_set_QMARK_.RootVersion() != nativeVersionaotDirectFn461 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_set_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_set_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn461 = direct
+			} else {
+				aotDirectFn461 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_setup_DASH_reference.RootVersion() != nativeVersionaotDirectFn462 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_setup_DASH_reference) {
+			value := checkDerefVar(var_clojure_DOT_core_setup_DASH_reference)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn462 = direct
+			} else {
+				aotDirectFn462 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_shift_DASH_mask.RootVersion() != nativeVersionaotDirectFn463 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_shift_DASH_mask) {
+			value := checkDerefVar(var_clojure_DOT_core_shift_DASH_mask)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn463 = direct
+			} else {
+				aotDirectFn463 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_short.RootVersion() != nativeVersionaotDirectFn464 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_short) {
+			value := checkDerefVar(var_clojure_DOT_core_short)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn464 = direct
+			} else {
+				aotDirectFn464 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_short_DASH_array.RootVersion() != nativeVersionaotDirectFn465 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_short_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_short_DASH_array)
+			aotDirectFn465 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn465Arity1 = direct
+			} else {
+				aotDirectFn465Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn465Arity2 = direct
+			} else {
+				aotDirectFn465Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_shorts.RootVersion() != nativeVersionaotDirectFn466 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_shorts) {
+			value := checkDerefVar(var_clojure_DOT_core_shorts)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn466 = direct
+			} else {
+				aotDirectFn466 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_shuffle.RootVersion() != nativeVersionaotDirectFn467 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_shuffle) {
+			value := checkDerefVar(var_clojure_DOT_core_shuffle)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn467 = direct
+			} else {
+				aotDirectFn467 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_shutdown_DASH_agents.RootVersion() != nativeVersionaotDirectFn468 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_shutdown_DASH_agents) {
+			value := checkDerefVar(var_clojure_DOT_core_shutdown_DASH_agents)
+			aotDirectFn468 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+		}
+		if var_clojure_DOT_core_sigs.RootVersion() != nativeVersionaotDirectFn469 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sigs) {
+			value := checkDerefVar(var_clojure_DOT_core_sigs)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn469 = direct
+			} else {
+				aotDirectFn469 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_assoc.RootVersion() != nativeVersionaotDirectFn47 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_assoc) {
+			value := checkDerefVar(var_clojure_DOT_core_assoc)
+			aotDirectFn47 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn47Arity3 = direct
+			} else {
+				aotDirectFn47Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_simple_DASH_ident_QMARK_.RootVersion() != nativeVersionaotDirectFn470 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_simple_DASH_ident_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_simple_DASH_ident_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn470 = direct
+			} else {
+				aotDirectFn470 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_simple_DASH_keyword_QMARK_.RootVersion() != nativeVersionaotDirectFn471 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_simple_DASH_keyword_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_simple_DASH_keyword_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn471 = direct
+			} else {
+				aotDirectFn471 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_simple_DASH_symbol_QMARK_.RootVersion() != nativeVersionaotDirectFn472 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_simple_DASH_symbol_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_simple_DASH_symbol_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn472 = direct
+			} else {
+				aotDirectFn472 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_slurp.RootVersion() != nativeVersionaotDirectFn473 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_slurp) {
+			value := checkDerefVar(var_clojure_DOT_core_slurp)
+			aotDirectFn473 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_some.RootVersion() != nativeVersionaotDirectFn474 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_some) {
+			value := checkDerefVar(var_clojure_DOT_core_some)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn474 = direct
+			} else {
+				aotDirectFn474 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_some_DASH_fn.RootVersion() != nativeVersionaotDirectFn475 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_some_DASH_fn) {
+			value := checkDerefVar(var_clojure_DOT_core_some_DASH_fn)
+			aotDirectFn475 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn475Arity1 = direct
+			} else {
+				aotDirectFn475Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn475Arity2 = direct
+			} else {
+				aotDirectFn475Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn475Arity3 = direct
+			} else {
+				aotDirectFn475Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_some_QMARK_.RootVersion() != nativeVersionaotDirectFn476 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_some_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_some_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn476 = direct
+			} else {
+				aotDirectFn476 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_sort.RootVersion() != nativeVersionaotDirectFn477 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sort) {
+			value := checkDerefVar(var_clojure_DOT_core_sort)
+			aotDirectFn477 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn477Arity1 = direct
+			} else {
+				aotDirectFn477Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn477Arity2 = direct
+			} else {
+				aotDirectFn477Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_sort_DASH_by.RootVersion() != nativeVersionaotDirectFn478 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sort_DASH_by) {
+			value := checkDerefVar(var_clojure_DOT_core_sort_DASH_by)
+			aotDirectFn478 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn478Arity2 = direct
+			} else {
+				aotDirectFn478Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn478Arity3 = direct
+			} else {
+				aotDirectFn478Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_sorted_DASH_map.RootVersion() != nativeVersionaotDirectFn479 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sorted_DASH_map) {
+			value := checkDerefVar(var_clojure_DOT_core_sorted_DASH_map)
+			aotDirectFn479 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_assoc_BANG_.RootVersion() != nativeVersionaotDirectFn48 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_assoc_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_assoc_BANG_)
+			aotDirectFn48 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn48Arity3 = direct
+			} else {
+				aotDirectFn48Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_sorted_DASH_map_DASH_by.RootVersion() != nativeVersionaotDirectFn480 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sorted_DASH_map_DASH_by) {
+			value := checkDerefVar(var_clojure_DOT_core_sorted_DASH_map_DASH_by)
+			aotDirectFn480 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_sorted_DASH_set.RootVersion() != nativeVersionaotDirectFn481 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sorted_DASH_set) {
+			value := checkDerefVar(var_clojure_DOT_core_sorted_DASH_set)
+			aotDirectFn481 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_sorted_DASH_set_DASH_by.RootVersion() != nativeVersionaotDirectFn482 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sorted_DASH_set_DASH_by) {
+			value := checkDerefVar(var_clojure_DOT_core_sorted_DASH_set_DASH_by)
+			aotDirectFn482 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_sorted_QMARK_.RootVersion() != nativeVersionaotDirectFn483 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_sorted_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_sorted_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn483 = direct
+			} else {
+				aotDirectFn483 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_special_DASH_symbol_QMARK_.RootVersion() != nativeVersionaotDirectFn484 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_special_DASH_symbol_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_special_DASH_symbol_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn484 = direct
+			} else {
+				aotDirectFn484 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_spit.RootVersion() != nativeVersionaotDirectFn485 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_spit) {
+			value := checkDerefVar(var_clojure_DOT_core_spit)
+			aotDirectFn485 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_split_DASH_at.RootVersion() != nativeVersionaotDirectFn486 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_split_DASH_at) {
+			value := checkDerefVar(var_clojure_DOT_core_split_DASH_at)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn486 = direct
+			} else {
+				aotDirectFn486 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_split_DASH_with.RootVersion() != nativeVersionaotDirectFn487 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_split_DASH_with) {
+			value := checkDerefVar(var_clojure_DOT_core_split_DASH_with)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn487 = direct
+			} else {
+				aotDirectFn487 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_splitv_DASH_at.RootVersion() != nativeVersionaotDirectFn488 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_splitv_DASH_at) {
+			value := checkDerefVar(var_clojure_DOT_core_splitv_DASH_at)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn488 = direct
+			} else {
+				aotDirectFn488 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_spread.RootVersion() != nativeVersionaotDirectFn489 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_spread) {
+			value := checkDerefVar(var_clojure_DOT_core_spread)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn489 = direct
+			} else {
+				aotDirectFn489 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_assoc_DASH_in.RootVersion() != nativeVersionaotDirectFn49 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_assoc_DASH_in) {
+			value := checkDerefVar(var_clojure_DOT_core_assoc_DASH_in)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn49 = direct
+			} else {
+				aotDirectFn49 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_str.RootVersion() != nativeVersionaotDirectFn490 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_str) {
+			value := checkDerefVar(var_clojure_DOT_core_str)
+			aotDirectFn490 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn490Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn490Arity1 = direct
+			} else {
+				aotDirectFn490Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_stream_DASH_into_BANG_.RootVersion() != nativeVersionaotDirectFn491 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_stream_DASH_into_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_stream_DASH_into_BANG_)
+			aotDirectFn491 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn491Arity2 = direct
+			} else {
+				aotDirectFn491Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn491Arity3 = direct
+			} else {
+				aotDirectFn491Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_stream_DASH_reduce_BANG_.RootVersion() != nativeVersionaotDirectFn492 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_stream_DASH_reduce_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_stream_DASH_reduce_BANG_)
+			aotDirectFn492 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn492Arity2 = direct
+			} else {
+				aotDirectFn492Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn492Arity3 = direct
+			} else {
+				aotDirectFn492Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_stream_DASH_seq_BANG_.RootVersion() != nativeVersionaotDirectFn493 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_stream_DASH_seq_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_stream_DASH_seq_BANG_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn493 = direct
+			} else {
+				aotDirectFn493 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_stream_DASH_transduce_BANG_.RootVersion() != nativeVersionaotDirectFn494 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_stream_DASH_transduce_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_stream_DASH_transduce_BANG_)
+			aotDirectFn494 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn494Arity3 = direct
+			} else {
+				aotDirectFn494Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn494Arity4 = direct
+			} else {
+				aotDirectFn494Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_string_QMARK_.RootVersion() != nativeVersionaotDirectFn495 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_string_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_string_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn495 = direct
+			} else {
+				aotDirectFn495 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_strip_DASH_ns.RootVersion() != nativeVersionaotDirectFn496 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_strip_DASH_ns) {
+			value := checkDerefVar(var_clojure_DOT_core_strip_DASH_ns)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn496 = direct
+			} else {
+				aotDirectFn496 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_struct.RootVersion() != nativeVersionaotDirectFn497 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_struct) {
+			value := checkDerefVar(var_clojure_DOT_core_struct)
+			aotDirectFn497 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_struct_DASH_map.RootVersion() != nativeVersionaotDirectFn498 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_struct_DASH_map) {
+			value := checkDerefVar(var_clojure_DOT_core_struct_DASH_map)
+			aotDirectFn498 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_subs.RootVersion() != nativeVersionaotDirectFn499 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_subs) {
+			value := checkDerefVar(var_clojure_DOT_core_subs)
+			aotDirectFn499 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn499Arity2 = direct
+			} else {
+				aotDirectFn499Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn499Arity3 = direct
+			} else {
+				aotDirectFn499Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core__DASH__TICK_.RootVersion() != nativeVersionaotDirectFn5 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__DASH__TICK_) {
+			value := checkDerefVar(var_clojure_DOT_core__DASH__TICK_)
+			aotDirectFn5 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn5Arity1 = direct
+			} else {
+				aotDirectFn5Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn5Arity2 = direct
+			} else {
+				aotDirectFn5Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_associative_QMARK_.RootVersion() != nativeVersionaotDirectFn50 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_associative_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_associative_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn50 = direct
+			} else {
+				aotDirectFn50 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_subseq.RootVersion() != nativeVersionaotDirectFn500 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_subseq) {
+			value := checkDerefVar(var_clojure_DOT_core_subseq)
+			aotDirectFn500 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn500Arity3 = direct
+			} else {
+				aotDirectFn500Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			aotDirectFn500Arity5 = lang.FnFunc5(func(p0 any, p1 any, p2 any, p3 any, p4 any) any { return lang.Apply5(value, p0, p1, p2, p3, p4) })
+		}
+		if var_clojure_DOT_core_subvec.RootVersion() != nativeVersionaotDirectFn501 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_subvec) {
+			value := checkDerefVar(var_clojure_DOT_core_subvec)
+			aotDirectFn501 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn501Arity2 = direct
+			} else {
+				aotDirectFn501Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn501Arity3 = direct
+			} else {
+				aotDirectFn501Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_supers.RootVersion() != nativeVersionaotDirectFn502 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_supers) {
+			value := checkDerefVar(var_clojure_DOT_core_supers)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn502 = direct
+			} else {
+				aotDirectFn502 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_swap_BANG_.RootVersion() != nativeVersionaotDirectFn503 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_swap_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_swap_BANG_)
+			aotDirectFn503 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_swap_DASH_vals_BANG_.RootVersion() != nativeVersionaotDirectFn504 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_swap_DASH_vals_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_swap_DASH_vals_BANG_)
+			aotDirectFn504 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_symbol.RootVersion() != nativeVersionaotDirectFn505 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_symbol) {
+			value := checkDerefVar(var_clojure_DOT_core_symbol)
+			aotDirectFn505 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn505Arity1 = direct
+			} else {
+				aotDirectFn505Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn505Arity2 = direct
+			} else {
+				aotDirectFn505Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_symbol_QMARK_.RootVersion() != nativeVersionaotDirectFn506 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_symbol_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn506 = direct
+			} else {
+				aotDirectFn506 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_tagged_DASH_literal.RootVersion() != nativeVersionaotDirectFn507 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_tagged_DASH_literal) {
+			value := checkDerefVar(var_clojure_DOT_core_tagged_DASH_literal)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn507 = direct
+			} else {
+				aotDirectFn507 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_tagged_DASH_literal_QMARK_.RootVersion() != nativeVersionaotDirectFn508 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_tagged_DASH_literal_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_tagged_DASH_literal_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn508 = direct
+			} else {
+				aotDirectFn508 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_take.RootVersion() != nativeVersionaotDirectFn509 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_take) {
+			value := checkDerefVar(var_clojure_DOT_core_take)
+			aotDirectFn509 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn509Arity1 = direct
+			} else {
+				aotDirectFn509Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn509Arity2 = direct
+			} else {
+				aotDirectFn509Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_atom.RootVersion() != nativeVersionaotDirectFn51 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_atom) {
+			value := checkDerefVar(var_clojure_DOT_core_atom)
+			aotDirectFn51 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn51Arity1 = direct
+			} else {
+				aotDirectFn51Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_take_DASH_last.RootVersion() != nativeVersionaotDirectFn510 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_take_DASH_last) {
+			value := checkDerefVar(var_clojure_DOT_core_take_DASH_last)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn510 = direct
+			} else {
+				aotDirectFn510 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_take_DASH_nth.RootVersion() != nativeVersionaotDirectFn511 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_take_DASH_nth) {
+			value := checkDerefVar(var_clojure_DOT_core_take_DASH_nth)
+			aotDirectFn511 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn511Arity1 = direct
+			} else {
+				aotDirectFn511Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn511Arity2 = direct
+			} else {
+				aotDirectFn511Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_take_DASH_while.RootVersion() != nativeVersionaotDirectFn512 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_take_DASH_while) {
+			value := checkDerefVar(var_clojure_DOT_core_take_DASH_while)
+			aotDirectFn512 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn512Arity1 = direct
+			} else {
+				aotDirectFn512Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn512Arity2 = direct
+			} else {
+				aotDirectFn512Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_test.RootVersion() != nativeVersionaotDirectFn513 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_test) {
+			value := checkDerefVar(var_clojure_DOT_core_test)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn513 = direct
+			} else {
+				aotDirectFn513 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_the_DASH_ns.RootVersion() != nativeVersionaotDirectFn514 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_the_DASH_ns) {
+			value := checkDerefVar(var_clojure_DOT_core_the_DASH_ns)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn514 = direct
+			} else {
+				aotDirectFn514 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_thread_DASH_bound_QMARK_.RootVersion() != nativeVersionaotDirectFn515 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_thread_DASH_bound_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_thread_DASH_bound_QMARK_)
+			aotDirectFn515 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_throw_DASH_if.RootVersion() != nativeVersionaotDirectFn516 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_throw_DASH_if) {
+			value := checkDerefVar(var_clojure_DOT_core_throw_DASH_if)
+			aotDirectFn516 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_to_DASH_array.RootVersion() != nativeVersionaotDirectFn517 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_to_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_to_DASH_array)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn517 = direct
+			} else {
+				aotDirectFn517 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_to_DASH_array_DASH_2d.RootVersion() != nativeVersionaotDirectFn518 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_to_DASH_array_DASH_2d) {
+			value := checkDerefVar(var_clojure_DOT_core_to_DASH_array_DASH_2d)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn518 = direct
+			} else {
+				aotDirectFn518 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_trampoline.RootVersion() != nativeVersionaotDirectFn519 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_trampoline) {
+			value := checkDerefVar(var_clojure_DOT_core_trampoline)
+			aotDirectFn519 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn519Arity1 = direct
+			} else {
+				aotDirectFn519Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_await.RootVersion() != nativeVersionaotDirectFn52 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_await) {
+			value := checkDerefVar(var_clojure_DOT_core_await)
+			aotDirectFn52 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_transduce.RootVersion() != nativeVersionaotDirectFn520 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_transduce) {
+			value := checkDerefVar(var_clojure_DOT_core_transduce)
+			aotDirectFn520 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn520Arity3 = direct
+			} else {
+				aotDirectFn520Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn520Arity4 = direct
+			} else {
+				aotDirectFn520Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_transient.RootVersion() != nativeVersionaotDirectFn521 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_transient) {
+			value := checkDerefVar(var_clojure_DOT_core_transient)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn521 = direct
+			} else {
+				aotDirectFn521 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_tree_DASH_seq.RootVersion() != nativeVersionaotDirectFn522 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_tree_DASH_seq) {
+			value := checkDerefVar(var_clojure_DOT_core_tree_DASH_seq)
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn522 = direct
+			} else {
+				aotDirectFn522 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_true_QMARK_.RootVersion() != nativeVersionaotDirectFn523 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_true_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_true_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn523 = direct
+			} else {
+				aotDirectFn523 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_type.RootVersion() != nativeVersionaotDirectFn524 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_type) {
+			value := checkDerefVar(var_clojure_DOT_core_type)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn524 = direct
+			} else {
+				aotDirectFn524 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_add.RootVersion() != nativeVersionaotDirectFn525 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_add) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_add)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn525 = direct
+			} else {
+				aotDirectFn525 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_add_DASH_int.RootVersion() != nativeVersionaotDirectFn526 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_add_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_add_DASH_int)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn526 = direct
+			} else {
+				aotDirectFn526 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_byte.RootVersion() != nativeVersionaotDirectFn527 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_byte) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_byte)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn527 = direct
+			} else {
+				aotDirectFn527 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_char.RootVersion() != nativeVersionaotDirectFn528 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_char) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_char)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn528 = direct
+			} else {
+				aotDirectFn528 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_dec.RootVersion() != nativeVersionaotDirectFn529 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_dec) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_dec)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn529 = direct
+			} else {
+				aotDirectFn529 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_await_DASH_for.RootVersion() != nativeVersionaotDirectFn53 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_await_DASH_for) {
+			value := checkDerefVar(var_clojure_DOT_core_await_DASH_for)
+			aotDirectFn53 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_unchecked_DASH_dec_DASH_int.RootVersion() != nativeVersionaotDirectFn530 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_dec_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_dec_DASH_int)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn530 = direct
+			} else {
+				aotDirectFn530 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_divide_DASH_int.RootVersion() != nativeVersionaotDirectFn531 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_divide_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_divide_DASH_int)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn531 = direct
+			} else {
+				aotDirectFn531 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_double.RootVersion() != nativeVersionaotDirectFn532 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_double) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_double)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn532 = direct
+			} else {
+				aotDirectFn532 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_float.RootVersion() != nativeVersionaotDirectFn533 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_float) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_float)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn533 = direct
+			} else {
+				aotDirectFn533 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_inc.RootVersion() != nativeVersionaotDirectFn534 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_inc) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_inc)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn534 = direct
+			} else {
+				aotDirectFn534 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_inc_DASH_int.RootVersion() != nativeVersionaotDirectFn535 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_inc_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_inc_DASH_int)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn535 = direct
+			} else {
+				aotDirectFn535 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_int.RootVersion() != nativeVersionaotDirectFn536 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_int)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn536 = direct
+			} else {
+				aotDirectFn536 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_long.RootVersion() != nativeVersionaotDirectFn537 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_long) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_long)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn537 = direct
+			} else {
+				aotDirectFn537 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_multiply.RootVersion() != nativeVersionaotDirectFn538 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_multiply) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_multiply)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn538 = direct
+			} else {
+				aotDirectFn538 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_multiply_DASH_int.RootVersion() != nativeVersionaotDirectFn539 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_multiply_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_multiply_DASH_int)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn539 = direct
+			} else {
+				aotDirectFn539 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_await1.RootVersion() != nativeVersionaotDirectFn54 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_await1) {
+			value := checkDerefVar(var_clojure_DOT_core_await1)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn54 = direct
+			} else {
+				aotDirectFn54 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_negate.RootVersion() != nativeVersionaotDirectFn540 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_negate) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_negate)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn540 = direct
+			} else {
+				aotDirectFn540 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_negate_DASH_int.RootVersion() != nativeVersionaotDirectFn541 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_negate_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_negate_DASH_int)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn541 = direct
+			} else {
+				aotDirectFn541 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_remainder_DASH_int.RootVersion() != nativeVersionaotDirectFn542 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_remainder_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_remainder_DASH_int)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn542 = direct
+			} else {
+				aotDirectFn542 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_short.RootVersion() != nativeVersionaotDirectFn543 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_short) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_short)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn543 = direct
+			} else {
+				aotDirectFn543 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_subtract.RootVersion() != nativeVersionaotDirectFn544 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_subtract) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_subtract)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn544 = direct
+			} else {
+				aotDirectFn544 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_unchecked_DASH_subtract_DASH_int.RootVersion() != nativeVersionaotDirectFn545 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unchecked_DASH_subtract_DASH_int) {
+			value := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_subtract_DASH_int)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn545 = direct
+			} else {
+				aotDirectFn545 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_underive.RootVersion() != nativeVersionaotDirectFn546 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_underive) {
+			value := checkDerefVar(var_clojure_DOT_core_underive)
+			aotDirectFn546 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn546Arity2 = direct
+			} else {
+				aotDirectFn546Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn546Arity3 = direct
+			} else {
+				aotDirectFn546Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+		}
+		if var_clojure_DOT_core_unreduced.RootVersion() != nativeVersionaotDirectFn547 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unreduced) {
+			value := checkDerefVar(var_clojure_DOT_core_unreduced)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn547 = direct
+			} else {
+				aotDirectFn547 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_unsigned_DASH_bit_DASH_shift_DASH_right.RootVersion() != nativeVersionaotDirectFn548 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_unsigned_DASH_bit_DASH_shift_DASH_right) {
+			value := checkDerefVar(var_clojure_DOT_core_unsigned_DASH_bit_DASH_shift_DASH_right)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn548 = direct
+			} else {
+				aotDirectFn548 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_update.RootVersion() != nativeVersionaotDirectFn549 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_update) {
+			value := checkDerefVar(var_clojure_DOT_core_update)
+			aotDirectFn549 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn549Arity3 = direct
+			} else {
+				aotDirectFn549Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn549Arity4 = direct
+			} else {
+				aotDirectFn549Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+			aotDirectFn549Arity5 = lang.FnFunc5(func(p0 any, p1 any, p2 any, p3 any, p4 any) any { return lang.Apply5(value, p0, p1, p2, p3, p4) })
+			aotDirectFn549Arity6 = lang.FnFunc6(func(p0 any, p1 any, p2 any, p3 any, p4 any, p5 any) any {
+				return lang.Apply6(value, p0, p1, p2, p3, p4, p5)
+			})
+		}
+		if var_clojure_DOT_core_bases.RootVersion() != nativeVersionaotDirectFn55 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bases) {
+			value := checkDerefVar(var_clojure_DOT_core_bases)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn55 = direct
+			} else {
+				aotDirectFn55 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_update_DASH_in.RootVersion() != nativeVersionaotDirectFn550 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_update_DASH_in) {
+			value := checkDerefVar(var_clojure_DOT_core_update_DASH_in)
+			aotDirectFn550 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_update_DASH_keys.RootVersion() != nativeVersionaotDirectFn551 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_update_DASH_keys) {
+			value := checkDerefVar(var_clojure_DOT_core_update_DASH_keys)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn551 = direct
+			} else {
+				aotDirectFn551 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_update_DASH_vals.RootVersion() != nativeVersionaotDirectFn552 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_update_DASH_vals) {
+			value := checkDerefVar(var_clojure_DOT_core_update_DASH_vals)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn552 = direct
+			} else {
+				aotDirectFn552 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_uri_QMARK_.RootVersion() != nativeVersionaotDirectFn553 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_uri_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_uri_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn553 = direct
+			} else {
+				aotDirectFn553 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_use.RootVersion() != nativeVersionaotDirectFn554 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_use) {
+			value := checkDerefVar(var_clojure_DOT_core_use)
+			aotDirectFn554 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_uuid_QMARK_.RootVersion() != nativeVersionaotDirectFn555 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_uuid_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_uuid_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn555 = direct
+			} else {
+				aotDirectFn555 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_val.RootVersion() != nativeVersionaotDirectFn556 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_val) {
+			value := checkDerefVar(var_clojure_DOT_core_val)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn556 = direct
+			} else {
+				aotDirectFn556 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_vals.RootVersion() != nativeVersionaotDirectFn557 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_vals) {
+			value := checkDerefVar(var_clojure_DOT_core_vals)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn557 = direct
+			} else {
+				aotDirectFn557 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_var_DASH_get.RootVersion() != nativeVersionaotDirectFn558 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_var_DASH_get) {
+			value := checkDerefVar(var_clojure_DOT_core_var_DASH_get)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn558 = direct
+			} else {
+				aotDirectFn558 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_var_DASH_set.RootVersion() != nativeVersionaotDirectFn559 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_var_DASH_set) {
+			value := checkDerefVar(var_clojure_DOT_core_var_DASH_set)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn559 = direct
+			} else {
+				aotDirectFn559 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bigdec.RootVersion() != nativeVersionaotDirectFn56 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bigdec) {
+			value := checkDerefVar(var_clojure_DOT_core_bigdec)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn56 = direct
+			} else {
+				aotDirectFn56 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_var_QMARK_.RootVersion() != nativeVersionaotDirectFn560 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_var_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_var_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn560 = direct
+			} else {
+				aotDirectFn560 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_vary_DASH_meta.RootVersion() != nativeVersionaotDirectFn561 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_vary_DASH_meta) {
+			value := checkDerefVar(var_clojure_DOT_core_vary_DASH_meta)
+			aotDirectFn561 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_vec.RootVersion() != nativeVersionaotDirectFn562 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_vec) {
+			value := checkDerefVar(var_clojure_DOT_core_vec)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn562 = direct
+			} else {
+				aotDirectFn562 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_vector.RootVersion() != nativeVersionaotDirectFn563 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_vector) {
+			value := checkDerefVar(var_clojure_DOT_core_vector)
+			aotDirectFn563 = runtime.CoreArityFn(value.(lang.IFn))
+			aotDirectFn563Arity0 = lang.FnFunc0(func() any { return lang.Apply0(value) })
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn563Arity1 = direct
+			} else {
+				aotDirectFn563Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn563Arity2 = direct
+			} else {
+				aotDirectFn563Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+			if direct, ok := lang.DirectFn3(value); ok {
+				aotDirectFn563Arity3 = direct
+			} else {
+				aotDirectFn563Arity3 = lang.FnFunc3(func(p0 any, p1 any, p2 any) any { return lang.Apply3(value, p0, p1, p2) })
+			}
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn563Arity4 = direct
+			} else {
+				aotDirectFn563Arity4 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+			aotDirectFn563Arity5 = lang.FnFunc5(func(p0 any, p1 any, p2 any, p3 any, p4 any) any { return lang.Apply5(value, p0, p1, p2, p3, p4) })
+			aotDirectFn563Arity6 = lang.FnFunc6(func(p0 any, p1 any, p2 any, p3 any, p4 any, p5 any) any {
+				return lang.Apply6(value, p0, p1, p2, p3, p4, p5)
+			})
+		}
+		if var_clojure_DOT_core_vector_QMARK_.RootVersion() != nativeVersionaotDirectFn564 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_vector_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn564 = direct
+			} else {
+				aotDirectFn564 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_volatile_BANG_.RootVersion() != nativeVersionaotDirectFn565 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_volatile_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_volatile_BANG_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn565 = direct
+			} else {
+				aotDirectFn565 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_volatile_QMARK_.RootVersion() != nativeVersionaotDirectFn566 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_volatile_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_volatile_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn566 = direct
+			} else {
+				aotDirectFn566 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_vreset_BANG_.RootVersion() != nativeVersionaotDirectFn567 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_vreset_BANG_) {
+			value := checkDerefVar(var_clojure_DOT_core_vreset_BANG_)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn567 = direct
+			} else {
+				aotDirectFn567 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_with_DASH_bindings_STAR_.RootVersion() != nativeVersionaotDirectFn568 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_with_DASH_bindings_STAR_) {
+			value := checkDerefVar(var_clojure_DOT_core_with_DASH_bindings_STAR_)
+			aotDirectFn568 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_with_DASH_meta.RootVersion() != nativeVersionaotDirectFn569 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_with_DASH_meta) {
+			value := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn569 = direct
+			} else {
+				aotDirectFn569 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bigint.RootVersion() != nativeVersionaotDirectFn57 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bigint) {
+			value := checkDerefVar(var_clojure_DOT_core_bigint)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn57 = direct
+			} else {
+				aotDirectFn57 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_with_DASH_redefs_DASH_fn.RootVersion() != nativeVersionaotDirectFn570 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_with_DASH_redefs_DASH_fn) {
+			value := checkDerefVar(var_clojure_DOT_core_with_DASH_redefs_DASH_fn)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn570 = direct
+			} else {
+				aotDirectFn570 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_xml_DASH_seq.RootVersion() != nativeVersionaotDirectFn571 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_xml_DASH_seq) {
+			value := checkDerefVar(var_clojure_DOT_core_xml_DASH_seq)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn571 = direct
+			} else {
+				aotDirectFn571 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_zero_QMARK_.RootVersion() != nativeVersionaotDirectFn572 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_zero_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_zero_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn572 = direct
+			} else {
+				aotDirectFn572 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_zipmap.RootVersion() != nativeVersionaotDirectFn573 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_zipmap) {
+			value := checkDerefVar(var_clojure_DOT_core_zipmap)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn573 = direct
+			} else {
+				aotDirectFn573 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_biginteger.RootVersion() != nativeVersionaotDirectFn58 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_biginteger) {
+			value := checkDerefVar(var_clojure_DOT_core_biginteger)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn58 = direct
+			} else {
+				aotDirectFn58 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_binding_DASH_conveyor_DASH_fn.RootVersion() != nativeVersionaotDirectFn59 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_binding_DASH_conveyor_DASH_fn) {
+			value := checkDerefVar(var_clojure_DOT_core_binding_DASH_conveyor_DASH_fn)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn59 = direct
+			} else {
+				aotDirectFn59 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core__SLASH_.RootVersion() != nativeVersionaotDirectFn6 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__SLASH_) {
+			value := checkDerefVar(var_clojure_DOT_core__SLASH_)
+			aotDirectFn6 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn6Arity1 = direct
+			} else {
+				aotDirectFn6Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn6Arity2 = direct
+			} else {
+				aotDirectFn6Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_and.RootVersion() != nativeVersionaotDirectFn60 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_and) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_and)
+			aotDirectFn60 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn60Arity2 = direct
+			} else {
+				aotDirectFn60Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_and_DASH_not.RootVersion() != nativeVersionaotDirectFn61 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_and_DASH_not) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_and_DASH_not)
+			aotDirectFn61 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn61Arity2 = direct
+			} else {
+				aotDirectFn61Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_clear.RootVersion() != nativeVersionaotDirectFn62 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_clear) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_clear)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn62 = direct
+			} else {
+				aotDirectFn62 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_flip.RootVersion() != nativeVersionaotDirectFn63 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_flip) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_flip)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn63 = direct
+			} else {
+				aotDirectFn63 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_not.RootVersion() != nativeVersionaotDirectFn64 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_not) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_not)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn64 = direct
+			} else {
+				aotDirectFn64 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_or.RootVersion() != nativeVersionaotDirectFn65 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_or) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_or)
+			aotDirectFn65 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn65Arity2 = direct
+			} else {
+				aotDirectFn65Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_set.RootVersion() != nativeVersionaotDirectFn66 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_set) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_set)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn66 = direct
+			} else {
+				aotDirectFn66 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_shift_DASH_left.RootVersion() != nativeVersionaotDirectFn67 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_shift_DASH_left) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_shift_DASH_left)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn67 = direct
+			} else {
+				aotDirectFn67 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_shift_DASH_right.RootVersion() != nativeVersionaotDirectFn68 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_shift_DASH_right) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_shift_DASH_right)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn68 = direct
+			} else {
+				aotDirectFn68 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_test.RootVersion() != nativeVersionaotDirectFn69 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_test) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_test)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn69 = direct
+			} else {
+				aotDirectFn69 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core__LT_.RootVersion() != nativeVersionaotDirectFn7 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__LT_) {
+			value := checkDerefVar(var_clojure_DOT_core__LT_)
+			aotDirectFn7 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn7Arity1 = direct
+			} else {
+				aotDirectFn7Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn7Arity2 = direct
+			} else {
+				aotDirectFn7Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bit_DASH_xor.RootVersion() != nativeVersionaotDirectFn70 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bit_DASH_xor) {
+			value := checkDerefVar(var_clojure_DOT_core_bit_DASH_xor)
+			aotDirectFn70 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn70Arity2 = direct
+			} else {
+				aotDirectFn70Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_boolean.RootVersion() != nativeVersionaotDirectFn71 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_boolean) {
+			value := checkDerefVar(var_clojure_DOT_core_boolean)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn71 = direct
+			} else {
+				aotDirectFn71 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_boolean_DASH_array.RootVersion() != nativeVersionaotDirectFn72 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_boolean_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_boolean_DASH_array)
+			aotDirectFn72 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn72Arity1 = direct
+			} else {
+				aotDirectFn72Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn72Arity2 = direct
+			} else {
+				aotDirectFn72Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_boolean_QMARK_.RootVersion() != nativeVersionaotDirectFn73 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_boolean_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_boolean_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn73 = direct
+			} else {
+				aotDirectFn73 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_booleans.RootVersion() != nativeVersionaotDirectFn74 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_booleans) {
+			value := checkDerefVar(var_clojure_DOT_core_booleans)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn74 = direct
+			} else {
+				aotDirectFn74 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_bound_DASH_fn_STAR_.RootVersion() != nativeVersionaotDirectFn75 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bound_DASH_fn_STAR_) {
+			value := checkDerefVar(var_clojure_DOT_core_bound_DASH_fn_STAR_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn75 = direct
+			} else {
+				aotDirectFn75 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_bound_QMARK_.RootVersion() != nativeVersionaotDirectFn76 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bound_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_bound_QMARK_)
+			aotDirectFn76 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_bounded_DASH_count.RootVersion() != nativeVersionaotDirectFn77 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bounded_DASH_count) {
+			value := checkDerefVar(var_clojure_DOT_core_bounded_DASH_count)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn77 = direct
+			} else {
+				aotDirectFn77 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_butlast.RootVersion() != nativeVersionaotDirectFn78 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_butlast) {
+			value := checkDerefVar(var_clojure_DOT_core_butlast)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn78 = direct
+			} else {
+				aotDirectFn78 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_byte.RootVersion() != nativeVersionaotDirectFn79 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_byte) {
+			value := checkDerefVar(var_clojure_DOT_core_byte)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn79 = direct
+			} else {
+				aotDirectFn79 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core__LT__EQ_.RootVersion() != nativeVersionaotDirectFn8 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__LT__EQ_) {
+			value := checkDerefVar(var_clojure_DOT_core__LT__EQ_)
+			aotDirectFn8 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn8Arity1 = direct
+			} else {
+				aotDirectFn8Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn8Arity2 = direct
+			} else {
+				aotDirectFn8Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_byte_DASH_array.RootVersion() != nativeVersionaotDirectFn80 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_byte_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_byte_DASH_array)
+			aotDirectFn80 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn80Arity1 = direct
+			} else {
+				aotDirectFn80Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn80Arity2 = direct
+			} else {
+				aotDirectFn80Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_bytes.RootVersion() != nativeVersionaotDirectFn81 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bytes) {
+			value := checkDerefVar(var_clojure_DOT_core_bytes)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn81 = direct
+			} else {
+				aotDirectFn81 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_bytes_QMARK_.RootVersion() != nativeVersionaotDirectFn82 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_bytes_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_bytes_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn82 = direct
+			} else {
+				aotDirectFn82 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_case_DASH_map.RootVersion() != nativeVersionaotDirectFn83 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_case_DASH_map) {
+			value := checkDerefVar(var_clojure_DOT_core_case_DASH_map)
+			if direct, ok := lang.DirectFn4(value); ok {
+				aotDirectFn83 = direct
+			} else {
+				aotDirectFn83 = lang.FnFunc4(func(p0 any, p1 any, p2 any, p3 any) any { return lang.Apply4(value, p0, p1, p2, p3) })
+			}
+		}
+		if var_clojure_DOT_core_cast.RootVersion() != nativeVersionaotDirectFn84 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_cast) {
+			value := checkDerefVar(var_clojure_DOT_core_cast)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn84 = direct
+			} else {
+				aotDirectFn84 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_cat.RootVersion() != nativeVersionaotDirectFn85 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_cat) {
+			value := checkDerefVar(var_clojure_DOT_core_cat)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn85 = direct
+			} else {
+				aotDirectFn85 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_char.RootVersion() != nativeVersionaotDirectFn86 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_char) {
+			value := checkDerefVar(var_clojure_DOT_core_char)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn86 = direct
+			} else {
+				aotDirectFn86 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_char_DASH_array.RootVersion() != nativeVersionaotDirectFn87 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_char_DASH_array) {
+			value := checkDerefVar(var_clojure_DOT_core_char_DASH_array)
+			aotDirectFn87 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn87Arity1 = direct
+			} else {
+				aotDirectFn87Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn87Arity2 = direct
+			} else {
+				aotDirectFn87Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_char_QMARK_.RootVersion() != nativeVersionaotDirectFn88 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_char_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_char_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn88 = direct
+			} else {
+				aotDirectFn88 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_chars.RootVersion() != nativeVersionaotDirectFn89 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_chars) {
+			value := checkDerefVar(var_clojure_DOT_core_chars)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn89 = direct
+			} else {
+				aotDirectFn89 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core__EQ_.RootVersion() != nativeVersionaotDirectFn9 && runtime.IsDefaultCoreVar(var_clojure_DOT_core__EQ_) {
+			value := checkDerefVar(var_clojure_DOT_core__EQ_)
+			aotDirectFn9 = runtime.CoreArityFn(value.(lang.IFn))
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn9Arity1 = direct
+			} else {
+				aotDirectFn9Arity1 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn9Arity2 = direct
+			} else {
+				aotDirectFn9Arity2 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_check_DASH_cyclic_DASH_dependency.RootVersion() != nativeVersionaotDirectFn90 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_check_DASH_cyclic_DASH_dependency) {
+			value := checkDerefVar(var_clojure_DOT_core_check_DASH_cyclic_DASH_dependency)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn90 = direct
+			} else {
+				aotDirectFn90 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_check_DASH_valid_DASH_options.RootVersion() != nativeVersionaotDirectFn91 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_check_DASH_valid_DASH_options) {
+			value := checkDerefVar(var_clojure_DOT_core_check_DASH_valid_DASH_options)
+			aotDirectFn91 = runtime.CoreArityFn(value.(lang.IFn))
+		}
+		if var_clojure_DOT_core_chunk.RootVersion() != nativeVersionaotDirectFn92 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_chunk) {
+			value := checkDerefVar(var_clojure_DOT_core_chunk)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn92 = direct
+			} else {
+				aotDirectFn92 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_chunk_DASH_append.RootVersion() != nativeVersionaotDirectFn93 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_chunk_DASH_append) {
+			value := checkDerefVar(var_clojure_DOT_core_chunk_DASH_append)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn93 = direct
+			} else {
+				aotDirectFn93 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_chunk_DASH_buffer.RootVersion() != nativeVersionaotDirectFn94 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_chunk_DASH_buffer) {
+			value := checkDerefVar(var_clojure_DOT_core_chunk_DASH_buffer)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn94 = direct
+			} else {
+				aotDirectFn94 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_chunk_DASH_cons.RootVersion() != nativeVersionaotDirectFn95 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_chunk_DASH_cons) {
+			value := checkDerefVar(var_clojure_DOT_core_chunk_DASH_cons)
+			if direct, ok := lang.DirectFn2(value); ok {
+				aotDirectFn95 = direct
+			} else {
+				aotDirectFn95 = lang.FnFunc2(func(p0 any, p1 any) any { return lang.Apply2(value, p0, p1) })
+			}
+		}
+		if var_clojure_DOT_core_chunk_DASH_first.RootVersion() != nativeVersionaotDirectFn96 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_chunk_DASH_first) {
+			value := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn96 = direct
+			} else {
+				aotDirectFn96 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_chunk_DASH_next.RootVersion() != nativeVersionaotDirectFn97 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_chunk_DASH_next) {
+			value := checkDerefVar(var_clojure_DOT_core_chunk_DASH_next)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn97 = direct
+			} else {
+				aotDirectFn97 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_chunk_DASH_rest.RootVersion() != nativeVersionaotDirectFn98 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_chunk_DASH_rest) {
+			value := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn98 = direct
+			} else {
+				aotDirectFn98 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+		if var_clojure_DOT_core_chunked_DASH_seq_QMARK_.RootVersion() != nativeVersionaotDirectFn99 && runtime.IsDefaultCoreVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_) {
+			value := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+			if direct, ok := lang.DirectFn1(value); ok {
+				aotDirectFn99 = direct
+			} else {
+				aotDirectFn99 = lang.FnFunc1(func(p0 any) any { return lang.Apply1(value, p0) })
+			}
+		}
+	})
 }

@@ -3,6 +3,7 @@ package lang
 import (
 	"fmt"
 	"reflect"
+	"sync/atomic"
 
 	"github.com/glojurelang/glojure/internal/persistent/vector"
 )
@@ -10,7 +11,7 @@ import (
 // Vector is a vector of values.
 type (
 	Vector struct {
-		attrs *vectorAttrs
+		attrs atomic.Pointer[vectorAttrs]
 		vec   vector.Persistent
 	}
 
@@ -146,7 +147,9 @@ func (v *Vector) LastIndexOf(value any) int {
 
 func (v *Vector) Cons(x any) Conser {
 	storage := &vectorUpdateStorage{}
-	storage.attrs = newVectorAttrs(v.Meta())
+	if meta := v.Meta(); meta != nil {
+		storage.attrs.Store(newVectorAttrs(meta))
+	}
 	storage.vec = v.vec.ConjValueInto(x, &storage.tail)
 	return &storage.Vector
 }
@@ -158,14 +161,14 @@ func (v *Vector) AssocN(i int, val any) IPersistentVector {
 	if i < v.Count() {
 		previous, _ := v.vec.Index(i)
 		if sameVectorValue(previous, val) {
-			return &Vector{attrs: newVectorAttrs(v.Meta()), vec: v.vec}
+			return newVectorWithMeta(v.vec, v.Meta())
 		}
 	}
 	result, ok := v.vec.AssocValue(i, val)
 	if !ok {
 		panic(NewIndexOutOfBoundsError())
 	}
-	return &Vector{attrs: newVectorAttrs(v.Meta()), vec: result}
+	return newVectorWithMeta(result, v.Meta())
 }
 
 // Only identity-preserving replacements can reuse the vector. Equality alone
@@ -192,7 +195,9 @@ func (v *Vector) ReplaceLast(val any) *Vector {
 	if !ok {
 		panic("can't pop an empty vector")
 	}
-	storage.attrs = newVectorAttrs(v.Meta())
+	if meta := v.Meta(); meta != nil {
+		storage.attrs.Store(newVectorAttrs(meta))
+	}
 	storage.vec = result
 	return &storage.Vector
 }
@@ -248,7 +253,7 @@ func (v *Vector) ValAtDefault(k, def any) any {
 }
 
 func (v *Vector) Nth(i int) any {
-	if a := v.attrs; a != nil && a.flat != nil {
+	if a := v.attrs.Load(); a != nil && a.flat != nil {
 		if i < 0 || i >= len(a.flat) {
 			panic(NewIndexOutOfBoundsError())
 		}
@@ -262,7 +267,7 @@ func (v *Vector) Nth(i int) any {
 }
 
 func (v *Vector) NthDefault(i int, def any) any {
-	if a := v.attrs; a != nil && a.flat != nil {
+	if a := v.attrs.Load(); a != nil && a.flat != nil {
 		if i >= 0 && i < len(a.flat) {
 			return a.flat[i]
 		}
@@ -339,47 +344,61 @@ func (v *Vector) Pop() IPersistentStack {
 	if !ok {
 		panic("can't pop an empty vector")
 	}
-	return &Vector{
-		attrs: newVectorAttrs(v.Meta()),
-		vec:   result,
+	resultVector := &Vector{vec: result}
+	if meta := v.Meta(); meta != nil {
+		resultVector.attrs.Store(newVectorAttrs(meta))
 	}
+	return resultVector
 }
 
 func (v *Vector) Meta() IPersistentMap {
-	if v.attrs == nil {
-		return nil
+	if attrs := v.attrs.Load(); attrs != nil {
+		return attrs.meta
 	}
-	return v.attrs.meta
+	return nil
 }
 
 func (v *Vector) WithMeta(meta IPersistentMap) any {
-	if v.Meta() == meta {
+	attrs := v.attrs.Load()
+	if attrs == nil && meta == nil || attrs != nil && attrs.meta == meta {
 		return v
 	}
-
-	cpy := *v
-	if v.attrs == nil {
-		cpy.attrs = newVectorAttrs(meta)
+	result := &Vector{vec: v.vec}
+	if attrs == nil {
+		result.attrs.Store(newVectorAttrs(meta))
 	} else {
-		attrs := *v.attrs
-		attrs.meta = meta
-		cpy.attrs = &attrs
+		result.attrs.Store(&vectorAttrs{meta: meta, flat: attrs.flat,
+			hash: atomic.LoadUint32(&attrs.hash), hasheq: atomic.LoadUint32(&attrs.hasheq)})
 	}
-	return &cpy
+	return result
 }
 
 func (v *Vector) HashEq() uint32 {
-	return apersistentVectorHashEq(&v.ensureAttrs().hasheq, v)
+	attrs := v.ensureAttrs()
+	if hash := atomic.LoadUint32(&attrs.hasheq); hash != 0 {
+		return hash
+	}
+	var hash uint32
+	apersistentVectorHashEq(&hash, v)
+	atomic.StoreUint32(&attrs.hasheq, hash)
+	return hash
 }
 
 func (v *Vector) Hash() uint32 {
-	return apersistentVectorHash(&v.ensureAttrs().hash, v)
+	attrs := v.ensureAttrs()
+	if hash := atomic.LoadUint32(&attrs.hash); hash != 0 {
+		return hash
+	}
+	var hash uint32
+	apersistentVectorHash(&hash, v)
+	atomic.StoreUint32(&attrs.hash, hash)
+	return hash
 }
 
 func (v *Vector) ReduceInit(f IFn, init any) any {
 	res := init
 	for i := 0; i < v.Count(); i++ {
-		res = f.Invoke(res, v.ValAt(i))
+		res = Apply2(f, res, v.Nth(i))
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}
@@ -389,11 +408,11 @@ func (v *Vector) ReduceInit(f IFn, init any) any {
 
 func (v *Vector) Reduce(f IFn) any {
 	if v.Count() == 0 {
-		return f.Invoke()
+		return Apply0(f)
 	}
 	res := v.ValAt(0)
 	for i := 1; i < v.Count(); i++ {
-		res = f.Invoke(res, v.ValAt(i))
+		res = Apply2(f, res, v.Nth(i))
 		if IsReduced(res) {
 			return res.(IDeref).Deref()
 		}
@@ -403,7 +422,7 @@ func (v *Vector) Reduce(f IFn) any {
 
 func (v *Vector) KVReduce(f IFn, init any) any {
 	for i := 0; i < v.Count(); i++ {
-		init = f.Invoke(init, i, v.ValAt(i))
+		init = Apply3(f, init, i, v.Nth(i))
 		if IsReduced(init) {
 			return init.(IDeref).Deref()
 		}
@@ -429,10 +448,14 @@ func newVectorAttrs(meta IPersistentMap) *vectorAttrs {
 }
 
 func (v *Vector) ensureAttrs() *vectorAttrs {
-	if v.attrs == nil {
-		v.attrs = &vectorAttrs{}
+	if attrs := v.attrs.Load(); attrs != nil {
+		return attrs
 	}
-	return v.attrs
+	attrs := &vectorAttrs{}
+	if v.attrs.CompareAndSwap(nil, attrs) {
+		return attrs
+	}
+	return v.attrs.Load()
 }
 
 func (v *Vector) AsTransient() ITransientCollection {
@@ -584,4 +607,12 @@ func (t *TransientVector) Invoke(args ...any) any {
 	}
 
 	return t.ValAt(i)
+}
+
+func newVectorWithMeta(storage vector.Persistent, meta IPersistentMap) *Vector {
+	result := &Vector{vec: storage}
+	if meta != nil {
+		result.attrs.Store(newVectorAttrs(meta))
+	}
+	return result
 }

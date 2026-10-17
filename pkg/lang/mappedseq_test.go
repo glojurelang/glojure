@@ -329,3 +329,11 @@ func TestMappedSeqRestKeepsInputTailLazy(t *testing.T) {
 		t.Fatalf("next failed to realize input: input=%d, map=%d", inputCalls, mapCalls)
 	}
 }
+
+func TestMappedSeqSkipsEmptyInputChunks(t *testing.T) {
+	source := NewChunkedCons(NewSliceChunk(nil), NewList(1, 2))
+	result := NewLazyMappedSeq(FnFunc1(func(value any) any { return value }), source)
+	if !Equals(NewVector(ToSlice(result)...), NewVector(1, 2)) {
+		t.Fatal("map retained an empty input chunk")
+	}
+}

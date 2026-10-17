@@ -156,6 +156,9 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 		installNativeCoreFunctions(core)
 	}
 	recordOptimizableCoreRoots(core)
+	if installNativeCoreOverrides {
+		refreshCoreNativeLinks()
+	}
 	versionVar := core.FindInternedVar(lang.NewSymbol("*glojure-version*"))
 	if versionVar != nil {
 		versionVar.BindRoot(parseVersion(Version))

@@ -386,6 +386,8 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
+	coreNativeLinks := g.generateCoreNativeLinks()
+
 	// Generate lifted values at the beginning of init() if any
 	if len(g.liftedValues) > 0 {
 		generated := make(map[*liftedValue]bool)
@@ -629,6 +631,7 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 		}
 	}
 
+	initBuf.WriteString(coreNativeLinks)
 	// Closing brace for LoadNS
 	initBuf.WriteString("}\n")
 	g.generateAOTKeywordHelpers()
@@ -1973,7 +1976,11 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 	case ast.OpMaybeClass:
 		return g.generateMaybeClass(node)
 	case ast.OpQuote:
-		return g.generateValue(node.Sub.(*ast.QuoteNode).Expr.Sub.(*ast.ConstNode).Value)
+		value := node.Sub.(*ast.QuoteNode).Expr.Sub.(*ast.ConstNode).Value
+		if _, collection := value.(lang.IPersistentCollection); collection {
+			return g.liftValue(value)
+		}
+		return g.generateValue(value)
 	case ast.OpFn:
 		return g.generateFn(NewFn(node, nil))
 	case ast.OpHostCall:
@@ -2059,6 +2066,9 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
+	if result, ok := g.generateAOTPartitionFold(invokeNode); ok {
+		return result
+	}
 	if result, ok := g.generateAOTVectorMap(invokeNode); ok {
 		return result
 	}
@@ -2893,6 +2903,10 @@ func (g *Generator) generateWithMeta(node *ast.Node) string {
 func (g *Generator) generateVector(node *ast.Node) string {
 	vectorNode := node.Sub.(*ast.VectorNode)
 
+	if values, ok := constantCollectionItems(vectorNode.Items); ok {
+		return g.liftValue(lang.NewVector(values...))
+	}
+
 	itemIds := make([]string, len(vectorNode.Items))
 	for i, item := range vectorNode.Items {
 		itemId := g.generateASTNode(item)
@@ -2912,12 +2926,13 @@ func (g *Generator) generateMap(node *ast.Node) string {
 	pairs := make([]any, 2*len(mapNode.Keys))
 	for i, key := range mapNode.Keys {
 		value := mapNode.Vals[i]
-		if key.Op != ast.OpConst || value.Op != ast.OpConst {
+		keyValue, keyOK := constantCollectionValue(key)
+		valValue, valOK := constantCollectionValue(value)
+		if !keyOK || !valOK {
 			literal = false
 			break
 		}
-		pairs[2*i] = key.Sub.(*ast.ConstNode).Value
-		pairs[2*i+1] = value.Sub.(*ast.ConstNode).Value
+		pairs[2*i], pairs[2*i+1] = keyValue, valValue
 	}
 	if literal {
 		return g.liftValue(lang.NewMap(pairs...))
@@ -3043,6 +3058,10 @@ func %s(%s) lang.IPersistentMap {
 
 func (g *Generator) generateSet(node *ast.Node) string {
 	setNode := node.Sub.(*ast.SetNode)
+
+	if values, ok := constantCollectionItems(setNode.Items); ok {
+		return g.liftValue(lang.NewSet(values...))
+	}
 
 	itemIds := make([]string, len(setNode.Items))
 	for i, item := range setNode.Items {
@@ -4125,4 +4144,50 @@ func nsToPath(ns string) string {
 	// replace dots with slashes
 	ns = strings.ReplaceAll(ns, ".", "/")
 	return ns
+}
+
+func constantCollectionItems(items []*ast.Node) ([]any, bool) {
+	values := make([]any, len(items))
+	for i, item := range items {
+		value, ok := constantCollectionValue(item)
+		if !ok {
+			return nil, false
+		}
+		values[i] = value
+	}
+	return values, true
+}
+
+func constantCollectionValue(node *ast.Node) (any, bool) {
+	switch node.Op {
+	case ast.OpConst:
+		constant := node.Sub.(*ast.ConstNode)
+		// A host export may read mutable Go state. Its analyzer placeholder
+		// must not become a compile-time snapshot of a runtime expression.
+		return constant.Value, constant.HostSymbol == nil
+	case ast.OpQuote:
+		return node.Sub.(*ast.QuoteNode).Expr.Sub.(*ast.ConstNode).Value, true
+	case ast.OpVector:
+		values, ok := constantCollectionItems(node.Sub.(*ast.VectorNode).Items)
+		if ok {
+			return lang.NewVector(values...), true
+		}
+	case ast.OpSet:
+		values, ok := constantCollectionItems(node.Sub.(*ast.SetNode).Items)
+		if ok {
+			return lang.NewSet(values...), true
+		}
+	case ast.OpMap:
+		m := node.Sub.(*ast.MapNode)
+		keys, keysOK := constantCollectionItems(m.Keys)
+		vals, valsOK := constantCollectionItems(m.Vals)
+		if keysOK && valsOK {
+			pairs := make([]any, 2*len(keys))
+			for i := range keys {
+				pairs[2*i], pairs[2*i+1] = keys[i], vals[i]
+			}
+			return lang.NewMap(pairs...), true
+		}
+	}
+	return nil, false
 }

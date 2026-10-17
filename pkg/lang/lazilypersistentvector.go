@@ -52,12 +52,9 @@ func CreateLazilyPersistentVector(obj any) IPersistentVector {
 		for i, r := range runes {
 			flat[i] = NewChar(r)
 		}
-		return &Vector{
-			attrs: &vectorAttrs{flat: flat},
-			vec: vector.Build(len(flat), func(i int) any {
-				return flat[i]
-			}),
-		}
+		result := &Vector{vec: vector.Build(len(flat), func(i int) any { return flat[i] })}
+		result.attrs.Store(&vectorAttrs{flat: flat})
+		return result
 	default:
 		return NewVector(ToSlice(obj)...)
 	}
