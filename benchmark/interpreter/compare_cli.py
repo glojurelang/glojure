@@ -14,6 +14,8 @@ parser.add_argument("reference", type=Path)
 parser.add_argument("candidate", type=Path)
 parser.add_argument("oracle", type=Path)
 parser.add_argument("source", type=Path)
+parser.add_argument("--cli-arg", action="append", default=[],
+                    help="argument before the source, e.g. --cli-arg=-l")
 parser.add_argument("--runs", type=int, default=11)
 parser.add_argument("--warmups", type=int, default=2)
 parser.add_argument("--output", type=Path, required=True)
@@ -26,7 +28,9 @@ binaries = {
     for name in ("reference", "candidate", "oracle")
 }
 source = args.source.resolve()
-expected = subprocess.check_output([binaries["reference"], source])
+expected = subprocess.check_output([
+    binaries["reference"], *args.cli_arg, source
+])
 timings = {name: [] for name in binaries}
 names = list(binaries)
 for iteration in range(args.warmups + args.runs):
@@ -35,7 +39,8 @@ for iteration in range(args.warmups + args.runs):
     for name in order:
         start = time.perf_counter_ns()
         result = subprocess.run(
-            [binaries[name], source], capture_output=True, check=True
+            [binaries[name], *args.cli_arg, source],
+            capture_output=True, check=True
         )
         elapsed = (time.perf_counter_ns() - start) / 1_000_000_000
         if result.stdout != expected:
@@ -45,6 +50,7 @@ for iteration in range(args.warmups + args.runs):
 
 medians = {name: statistics.median(values) for name, values in timings.items()}
 report = {
+    "cli_args": args.cli_arg,
     "seconds": timings,
     "medians": medians,
     "candidate_speedup": medians["reference"] / medians["candidate"],

@@ -54,6 +54,8 @@ medians, speed ratios, binary hashes, and the input hash.
 Keep toolchain versions and build options fixed and avoid concurrent builds or
 tests while measuring.
 Confirm gains in a second batch before accepting a performance milestone.
+For YAML loading, add `--cli-arg=-l`; the runner passes the same arguments to
+every binary and records them in the report.
 
 ## Training a generated CLI
 

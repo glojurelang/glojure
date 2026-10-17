@@ -75,6 +75,8 @@ func Seq(x interface{}) ISeq {
 		return nil
 	case *LazySeq:
 		return x.Seq()
+	case *mappedSeq:
+		return x.Seq()
 	case ISeq:
 		return x
 	case Seqable:
