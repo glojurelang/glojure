@@ -91,23 +91,9 @@ func (c *Cons) String() string {
 }
 
 func (c *Cons) Reduce(f IFn) any {
-	ret := c.First()
-	for seq := c.Next(); seq != nil; seq = seq.Next() {
-		ret = Apply2(f, ret, seq.First())
-		if IsReduced(ret) {
-			return ret.(IDeref).Deref()
-		}
-	}
-	return ret
+	return reduceSeqInit(c.Next(), f, c.First())
 }
 
 func (c *Cons) ReduceInit(f IFn, init any) any {
-	ret := init
-	for seq := ISeq(c); seq != nil; seq = seq.Next() {
-		ret = Apply2(f, ret, seq.First())
-		if IsReduced(ret) {
-			return ret.(IDeref).Deref()
-		}
-	}
-	return ret
+	return reduceSeqInit(c, f, init)
 }

@@ -301,7 +301,7 @@ func (s *apvSeq) Meta() IPersistentMap {
 func (s *apvSeq) Reduce(f IFn) any {
 	ret := s.v.Nth(s.i)
 	for x := s.i + 1; x < s.v.Count(); x++ {
-		ret = f.Invoke(ret, s.v.Nth(x))
+		ret = Apply2(f, ret, s.v.Nth(x))
 		if IsReduced(ret) {
 			return ret.(IDeref).Deref()
 		}
@@ -312,7 +312,7 @@ func (s *apvSeq) Reduce(f IFn) any {
 func (s *apvSeq) ReduceInit(f IFn, init any) any {
 	ret := init
 	for x := s.i; x < s.v.Count(); x++ {
-		ret = f.Invoke(ret, s.v.Nth(x))
+		ret = Apply2(f, ret, s.v.Nth(x))
 		if IsReduced(ret) {
 			return ret.(IDeref).Deref()
 		}

@@ -273,6 +273,31 @@ func newArrayMap(keyVals []any) *Map {
 }
 
 func newArrayMapWithSize(size int) *Map {
+	// Keep small maps in one allocation without reserving seven pairs for
+	// every one- or two-entry result produced by collection operations.
+	switch size {
+	case 2:
+		storage := &struct {
+			Map
+			values [2]any
+		}{}
+		storage.keyVals = storage.values[:]
+		return &storage.Map
+	case 4:
+		storage := &struct {
+			Map
+			values [4]any
+		}{}
+		storage.keyVals = storage.values[:]
+		return &storage.Map
+	case 6, 8:
+		storage := &struct {
+			Map
+			values [8]any
+		}{}
+		storage.keyVals = storage.values[:size]
+		return &storage.Map
+	}
 	if size <= arrayMapInlineSize {
 		storage := &inlineMapStorage{}
 		storage.Map.keyVals = storage.keyVals[:size]
@@ -550,8 +575,11 @@ func (m *Map) Assoc(k, v any) Associative {
 		threshold = arrayMapKeywordThreshold
 	}
 	if len(m.keyVals) < threshold {
-		newMap := m.clone()
-		newMap.keyVals = append(newMap.keyVals, k, v)
+		newMap := newArrayMapWithSize(len(m.keyVals) + 2)
+		newMap.meta = m.meta
+		copy(newMap.keyVals, m.keyVals)
+		newMap.keyVals[len(m.keyVals)] = k
+		newMap.keyVals[len(m.keyVals)+1] = v
 		return newMap
 	}
 	newMap := NewPersistentHashMap(m.keyVals...).(*PersistentHashMap).WithMeta(m.meta).(Associative)

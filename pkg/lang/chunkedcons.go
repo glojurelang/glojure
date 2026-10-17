@@ -14,6 +14,8 @@ type (
 var (
 	_ IChunkedSeq = (*ChunkedCons)(nil)
 	_ ASeq        = (*ChunkedCons)(nil)
+	_ IReduce     = (*ChunkedCons)(nil)
+	_ IReduceInit = (*ChunkedCons)(nil)
 )
 
 func NewChunkedCons(chunk IChunk, more ISeq) *ChunkedCons {
@@ -79,7 +81,39 @@ func (c *ChunkedCons) WithMeta(meta IPersistentMap) any {
 }
 
 func (c *ChunkedCons) Count() int {
-	return aseqCount(c)
+	return Count(c)
+}
+
+func (c *ChunkedCons) Reduce(fn IFn) any {
+	initial := c.First()
+	if next := c.Next(); next != nil {
+		return reduceSeqInit(next, fn, initial)
+	}
+	return initial
+}
+
+func (c *ChunkedCons) ReduceInit(fn IFn, init any) any {
+	return reduceSeqInit(c, fn, init)
+}
+
+func reduceSeqInit(seq ISeq, fn IFn, init any) any {
+	result := init
+	for seq != nil {
+		if chunked, ok := seq.(IChunkedSeq); ok {
+			result = chunked.ChunkedFirst().ReduceInit(fn, result)
+			if IsReduced(result) {
+				return result.(IDeref).Deref()
+			}
+			seq = chunked.ChunkedNext()
+		} else {
+			result = Apply2(fn, result, seq.First())
+			if IsReduced(result) {
+				return result.(IDeref).Deref()
+			}
+			seq = seq.Next()
+		}
+	}
+	return result
 }
 
 func (c *ChunkedCons) Cons(o any) Conser {

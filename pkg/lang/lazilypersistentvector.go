@@ -9,29 +9,34 @@ import (
 // CreateOwningLazilyPersistentVector creates a persistent vector that
 // owns the items in items. items must be a slice or array.
 func CreateOwningLazilyPersistentVector(items any) IPersistentVector {
+	if values, ok := items.([]any); ok {
+		return NewVector(values...)
+	}
 	itemsVal := reflect.ValueOf(items)
 	if itemsVal.Kind() != reflect.Slice && itemsVal.Kind() != reflect.Array {
 		panic(NewIllegalArgumentError("CreateOwningLazilyPersistentVector argument must be a slice or array"))
 	}
-	// TODO: optimize by building the tree directly within a PersistentVector.
-	args := make([]any, itemsVal.Len())
-	for i := 0; i < itemsVal.Len(); i++ {
-		args[i] = itemsVal.Index(i).Interface()
+	if itemsVal.Len() == 0 {
+		return emptyVector
 	}
-	return NewVector(args...)
+	return &Vector{vec: vector.Build(itemsVal.Len(), func(i int) any {
+		return itemsVal.Index(i).Interface()
+	})}
 }
+
+var vectorBufferConj = FnFunc2(func(acc, item any) any {
+	values := acc.(*[]any)
+	*values = append(*values, item)
+	return acc
+})
 
 func CreateLazilyPersistentVector(obj any) IPersistentVector {
 	switch obj := obj.(type) {
 	case IReduceInit:
-		return obj.ReduceInit(NewFnFunc(func(args ...any) any {
-			acc, item := args[0], args[1]
-			return acc.(IPersistentVector).Cons(item)
-		}), emptyVector).(IPersistentVector)
+		result := obj.ReduceInit(vectorBufferConj, new([]any)).(*[]any)
+		return NewVector((*result)...)
 	case ISeq:
-		// TODO: optimize for ISeq by building the tree directly with a
-		// PersistentVector implementaiton
-		slc := seqToSlice(obj)
+		slc := ToSlice(obj)
 		return NewVector(slc...)
 	case Seqable:
 		return CreateLazilyPersistentVector(obj.Seq())

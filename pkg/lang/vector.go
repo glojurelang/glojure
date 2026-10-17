@@ -271,8 +271,7 @@ func (v *Vector) ApplyTo(args ISeq) any {
 }
 
 func (v *Vector) Seq() ISeq {
-	// TODO: more efficient implementation using vector iterator
-	return apersistentVectorSeq(v)
+	return newVectorSeq(v, 0)
 }
 
 func (v *Vector) RSeq() ISeq {

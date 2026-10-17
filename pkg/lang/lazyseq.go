@@ -155,11 +155,7 @@ func (s *LazySeq) Seq() ISeq {
 }
 
 func (s *LazySeq) Count() int {
-	c := 0
-	for seq := s.Seq(); seq != nil; seq = seq.Next() {
-		c++
-	}
-	return c
+	return Count(s.Seq())
 }
 
 func (s *LazySeq) Reduce(f IFn) interface{} {
@@ -167,25 +163,12 @@ func (s *LazySeq) Reduce(f IFn) interface{} {
 	if seq == nil {
 		return Apply0(f)
 	}
-	ret := seq.First()
-	for seq = seq.Next(); seq != nil; seq = seq.Next() {
-		ret = Apply2(f, ret, seq.First())
-		if IsReduced(ret) {
-			return ret.(IDeref).Deref()
-		}
-	}
-	return ret
+	initial := seq.First()
+	return reduceSeqInit(seq.Next(), f, initial)
 }
 
 func (s *LazySeq) ReduceInit(f IFn, init interface{}) interface{} {
-	ret := init
-	for seq := s.Seq(); seq != nil; seq = seq.Next() {
-		ret = Apply2(f, ret, seq.First())
-		if IsReduced(ret) {
-			return ret.(IDeref).Deref()
-		}
-	}
-	return ret
+	return reduceSeqInit(s.Seq(), f, init)
 }
 
 func (s *LazySeq) Meta() IPersistentMap {

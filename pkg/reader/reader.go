@@ -565,7 +565,8 @@ func (r *Reader) readSet() (interface{}, error) {
 }
 
 func (r *Reader) readString() (interface{}, error) {
-	var str string
+	var buffer strings.Builder
+	needsUnquote := false
 	for {
 		rune, _, err := r.rs.ReadRune()
 		if err != nil {
@@ -573,24 +574,32 @@ func (r *Reader) readString() (interface{}, error) {
 		}
 
 		if rune == '\\' {
-			str += string(rune)
+			needsUnquote = true
+			buffer.WriteRune(rune)
 			rune, _, err = r.rs.ReadRune()
 			if err != nil {
 				return nil, r.error("error reading string: %w", err)
 			}
-			str += string(rune)
+			buffer.WriteRune(rune)
 			continue
 		} else if rune == '"' {
 			break
 		}
 
 		if rune == '\n' {
-			str += "\\n"
+			needsUnquote = true
+			buffer.WriteString("\\n")
 		} else {
-			str += string(rune)
+			// Preserve Unquote's handling of raw control characters.
+			needsUnquote = needsUnquote || rune < ' '
+			buffer.WriteRune(rune)
 		}
 	}
 
+	str := buffer.String()
+	if !needsUnquote {
+		return str, nil
+	}
 	str, err := strconv.Unquote(`"` + normalizeSurrogateEscapes(str) + `"`)
 	if err != nil {
 		return nil, r.error("invalid string: %w", err)
@@ -600,6 +609,9 @@ func (r *Reader) readString() (interface{}, error) {
 }
 
 func normalizeSurrogateEscapes(value string) string {
+	if !strings.Contains(value, `\u`) {
+		return value
+	}
 	var result strings.Builder
 	for index := 0; index < len(value); {
 		if index+12 <= len(value) && value[index] == '\\' && value[index+1] == 'u' &&

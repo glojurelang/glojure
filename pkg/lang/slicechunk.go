@@ -57,12 +57,9 @@ func (sc *SliceChunk) fieldOrMethod(name string) (interface{}, bool) {
 }
 
 func (sc *SliceChunk) ReduceInit(fn IFn, init interface{}) interface{} {
-	ret := fn.Invoke(init, sc.slc[0])
-	if IsReduced(ret) {
-		return ret
-	}
-	for i := 1; i < len(sc.slc); i++ {
-		ret = fn.Invoke(ret, sc.slc[i])
+	ret := init
+	for _, value := range sc.slc {
+		ret = Apply2(fn, ret, value)
 		if IsReduced(ret) {
 			return ret
 		}

@@ -510,11 +510,17 @@ func Count(coll any) int {
 	}
 	seq := Seq(coll)
 	count := 0
-	for ; seq != nil; seq = seq.Next() {
+	for seq != nil {
 		if counted, ok := seq.(Counted); ok {
 			return count + counted.Count()
 		}
-		count++
+		if chunked, ok := seq.(IChunkedSeq); ok {
+			count += chunked.ChunkedFirst().Count()
+			seq = chunked.ChunkedNext()
+		} else {
+			count++
+			seq = seq.Next()
+		}
 	}
 	return count
 }

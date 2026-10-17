@@ -1022,6 +1022,22 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	installFixedArityCoreFunction(core, "filter", 2, lang.FnFunc2(nativeFilterSeq))
 	installFixedArityCoreFunction(core, "distinct", 1, lang.FnFunc1(nativeDistinctSeq))
 	installFixedArityCoreFunction(core, "take", 2, lang.FnFunc2(nativeTakeSeq))
+	apply := core.FindInternedVar(lang.NewSymbol("apply"))
+	installFixedArityCoreFunction(core, "partial", 2,
+		lang.FnFunc2(func(fn, first any) any {
+			return &partialOne{fn: fn, first: first, apply: apply}
+		}))
+	if partition := core.FindInternedVar(lang.NewSymbol("partition")); partition != nil {
+		if fallback, ok := partition.Get().(lang.IFn); ok {
+			installFixedArityCoreFunction(core, "partition", 2,
+				lang.FnFunc2(func(n, coll any) any {
+					if size, ok := n.(int64); ok && size > 0 {
+						return nativePartition(size, coll)
+					}
+					return lang.Apply2(fallback, n, coll)
+				}))
+		}
+	}
 	if mod := core.FindInternedVar(lang.NewSymbol("mod")); mod != nil {
 		mod.BindRoot(lang.FnFunc2(nativeMod))
 	}
@@ -1040,6 +1056,7 @@ func recordOptimizableCoreRoots(core *lang.Namespace) {
 func init() {
 	if installNativeCoreOverrides {
 		registerNativeNamespaceInitializer("clojure/string", installNativeStringFunctions)
+		registerNativeNamespaceInitializer("clojure/walk", installNativeWalkFunctions)
 	}
 }
 
@@ -1056,6 +1073,31 @@ func installNativeStringFunctions() {
 			replace.BindRoot(nativeStringReplace{fallback: fallback})
 		}
 	}
+	if escape := namespace.FindInternedVar(lang.NewSymbol("escape")); escape != nil {
+		if fallback, ok := escape.Get().(lang.IFn); ok {
+			installFixedArityCoreFunction(namespace, "escape", 2,
+				lang.FnFunc2(func(value, replacements any) any {
+					if text, ok := value.(string); ok {
+						return nativeStringEscape(text, replacements)
+					}
+					return lang.Apply2(fallback, value, replacements)
+				}))
+		}
+	}
+}
+
+func nativeStringEscape(text string, replacements any) string {
+	var result strings.Builder
+	result.Grow(len(text))
+	for _, value := range text {
+		replacement := lang.Get(replacements, lang.NewChar(value))
+		if lang.IsTruthy(replacement) {
+			result.WriteString(nativeStrValue(replacement))
+		} else {
+			result.WriteRune(value)
+		}
+	}
+	return result.String()
 }
 
 func installFixedArityCoreFunction(
