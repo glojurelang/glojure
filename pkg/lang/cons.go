@@ -25,6 +25,22 @@ func NewCons(x any, xs any) ISeq {
 	}
 }
 
+// NewConsSequence copies values into one owned chain of uncounted seq nodes.
+// The nodes share an allocation without retaining the caller's mutable slice.
+func NewConsSequence(values []any) ISeq {
+	if len(values) == 0 {
+		return emptyList
+	}
+	nodes := make([]Cons, len(values))
+	for i, value := range values {
+		nodes[i].first = value
+		if i+1 < len(nodes) {
+			nodes[i].more = &nodes[i+1]
+		}
+	}
+	return &nodes[0]
+}
+
 func (c *Cons) xxx_sequential() {}
 
 func (c *Cons) Seq() ISeq {

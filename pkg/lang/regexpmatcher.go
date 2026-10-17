@@ -3,7 +3,31 @@ package lang
 import (
 	"io"
 	"regexp"
+	"sync"
+	"sync/atomic"
 )
+
+var longestRegexps sync.Map
+var longestRegexpCount atomic.Int32
+
+// LongestRegexp keeps full matching from stopping at a shorter alternative.
+// Copying preserves POSIX syntax and flags without mutating the caller's
+// regexp. Bound retention when callers construct many transient patterns.
+func LongestRegexp(pattern *regexp.Regexp) *regexp.Regexp {
+	if cached, ok := longestRegexps.Load(pattern); ok {
+		return cached.(*regexp.Regexp)
+	}
+	copy := pattern.Copy()
+	copy.Longest()
+	if count := longestRegexpCount.Load(); count < 256 &&
+		longestRegexpCount.CompareAndSwap(count, count+1) {
+		if cached, loaded := longestRegexps.LoadOrStore(pattern, copy); loaded {
+			longestRegexpCount.Add(-1)
+			return cached.(*regexp.Regexp)
+		}
+	}
+	return copy
+}
 
 type (
 	// RegexpMatcher is a matcher that matches a string against a
@@ -128,7 +152,7 @@ func (m *RegexpMatcher) GroupInt(group int) any {
 
 // Matches attempts to match the entire region against the pattern.
 func (m *RegexpMatcher) Matches() bool {
-	match := m.re.FindStringSubmatchIndex(m.s)
+	match := LongestRegexp(m.re).FindStringSubmatchIndex(m.s)
 	if match == nil || match[0] != 0 || match[1] != len(m.s) {
 		return false
 	}

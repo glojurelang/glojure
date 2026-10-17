@@ -8,8 +8,24 @@ import (
 )
 
 func First(x interface{}) interface{} {
-	if x == nil {
+	switch value := x.(type) {
+	case nil:
 		return nil
+	case *Map:
+		if value.Count() == 0 {
+			return nil
+		}
+		if value.keywordShape != nil {
+			return NewMapEntry(value.keywordShape.keys[0], value.keywordValueAt(0))
+		}
+		return NewMapEntry(value.keyVals[0], value.keyVals[1])
+	case *Vector:
+		if value.Count() == 0 {
+			return nil
+		}
+		return value.Nth(0)
+	case *MapEntry:
+		return value.Key()
 	}
 	s := Seq(x)
 	if s == nil {
@@ -19,6 +35,12 @@ func First(x interface{}) interface{} {
 }
 
 func Rest(x interface{}) interface{} {
+	if vector, ok := x.(*Vector); ok {
+		if rest := newVectorSeq(vector, 1); rest != nil {
+			return rest
+		}
+		return emptyList
+	}
 	s := Seq(x)
 	if s == nil {
 		return emptyList
@@ -27,6 +49,9 @@ func Rest(x interface{}) interface{} {
 }
 
 func Next(x interface{}) ISeq {
+	if vector, ok := x.(*Vector); ok {
+		return newVectorSeq(vector, 1)
+	}
 	if s, ok := x.(ISeq); ok {
 		return s.Next()
 	}

@@ -8,17 +8,16 @@ import (
 const (
 	mappedReady uint32 = 1 << iota
 	mappedNonempty
-	mappedRestReady
+	mappedChunked
 )
 
 // mappedSeq combines a lazy mapped value and its cached tail in one object.
 // Deferred tails can be empty and are normalized by Seq before traversal.
 type mappedSeq struct {
-	meta         IPersistentMap
 	hash, hasheq atomic.Uint32
 
 	fn     any
-	source ISeq
+	source any
 	mu     sync.Mutex
 	state  atomic.Uint32
 	value  any
@@ -39,6 +38,12 @@ func NewMappedSeq(fn any, source ISeq) ISeq {
 	return &mappedSeq{fn: fn, source: source}
 }
 
+// NewLazyMappedSeq accepts an unrealized collection while retaining the
+// mapper and its cached values in one object, without a per-element thunk.
+func NewLazyMappedSeq(fn, coll any) ISeq {
+	return &mappedSeq{fn: fn, source: coll}
+}
+
 // Publish a value only after its mapper succeeds. A failed realization can
 // then be retried, just as a LazySeq retains its thunk after a panic.
 func (s *mappedSeq) realize() {
@@ -51,13 +56,26 @@ func (s *mappedSeq) realize() {
 	state := mappedReady
 	var value any
 	if source != nil {
+		if chunked, ok := source.(IChunkedSeq); ok {
+			input := chunked.ChunkedFirst()
+			values := make([]any, input.Count())
+			for i := range values {
+				values[i] = Apply1(s.fn, input.Nth(i))
+			}
+			s.value = NewChunkedCons(NewSliceChunk(values),
+				NewLazyMappedSeq(s.fn, chunked.ChunkedMore()))
+			s.fn, s.source = nil, nil
+			s.state.Store(mappedReady | mappedNonempty | mappedChunked)
+			return
+		}
 		value = Apply1(s.fn, source.First())
+		// Capture the input rest after mapping the head, without realizing
+		// that rest or its mapper. Publish both together under one lock.
+		s.tail = &mappedSeq{fn: s.fn, source: source.More()}
 		state |= mappedNonempty
 	}
-	s.source, s.value = source, value
-	if source == nil {
-		s.fn = nil
-	}
+	s.value = value
+	s.fn, s.source = nil, nil
 	s.state.Store(state)
 }
 
@@ -72,50 +90,39 @@ func (s *mappedSeq) Seq() ISeq {
 	if state&mappedNonempty == 0 {
 		return nil
 	}
+	if state&mappedChunked != 0 {
+		return s.value.(ISeq)
+	}
 	return s
 }
 
 func (s *mappedSeq) First() any {
-	s.Seq()
+	if seq := s.Seq(); seq != nil && seq != s {
+		return seq.First()
+	}
 	return s.value
 }
 
-func (s *mappedSeq) rest() *mappedSeq {
-	if s.Seq() == nil {
+func (s *mappedSeq) Next() ISeq {
+	seq := s.Seq()
+	if seq == nil {
 		return nil
 	}
-	if s.state.Load()&mappedRestReady != 0 {
-		return s.tail
+	if seq != s {
+		return seq.Next()
 	}
-	return s.realizeRest()
-}
-
-func (s *mappedSeq) realizeRest() *mappedSeq {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	state := s.state.Load()
-	if state&mappedRestReady == 0 {
-		// More preserves a deferred input tail. Its Seq and the next mapper
-		// run only when the returned mapped tail is itself realized.
-		s.tail = &mappedSeq{fn: s.fn, source: s.source.More()}
-		s.fn, s.source = nil, nil
-		s.state.Store(state | mappedRestReady)
-	}
-	return s.tail
-}
-
-func (s *mappedSeq) Next() ISeq {
-	if rest := s.rest(); rest != nil {
-		return rest.Seq()
-	}
-	return nil
+	return s.tail.Seq()
 }
 
 func (s *mappedSeq) More() ISeq {
-	if rest := s.rest(); rest != nil {
-		return rest
+	seq := s.Seq()
+	if seq == nil {
+		return emptyList
 	}
-	return emptyList
+	if seq != s {
+		return seq.More()
+	}
+	return s.tail
 }
 
 func (s *mappedSeq) Count() int { return Count(s) }
@@ -137,11 +144,11 @@ func (s *mappedSeq) Equiv(other any) bool {
 }
 
 func (s *mappedSeq) Meta() IPersistentMap {
-	return s.meta
+	return nil
 }
 
 func (s *mappedSeq) WithMeta(meta IPersistentMap) any {
-	if meta == s.meta {
+	if meta == nil {
 		return s
 	}
 	return newLazySeqWithMeta(meta, s.Seq())
@@ -188,23 +195,10 @@ func (s *mappedSeq) Reduce(f IFn) any {
 	if seq == nil {
 		return Apply0(f)
 	}
-	result := seq.First()
-	for seq = seq.Next(); seq != nil; seq = seq.Next() {
-		result = Apply2(f, result, seq.First())
-		if IsReduced(result) {
-			return result.(IDeref).Deref()
-		}
-	}
-	return result
+	initial := seq.First()
+	return reduceSeqInit(seq.Next(), f, initial)
 }
 
 func (s *mappedSeq) ReduceInit(f IFn, init any) any {
-	result := init
-	for seq := s.Seq(); seq != nil; seq = seq.Next() {
-		result = Apply2(f, result, seq.First())
-		if IsReduced(result) {
-			return result.(IDeref).Deref()
-		}
-	}
-	return result
+	return reduceSeqInit(s.Seq(), f, init)
 }

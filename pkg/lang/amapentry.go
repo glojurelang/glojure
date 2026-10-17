@@ -41,7 +41,7 @@ func amapentryAsVector(a AMapEntry) IPersistentVector {
 }
 
 func amapentrySeq(a AMapEntry) ISeq {
-	return amapentryAsVector(a).Seq()
+	return newVectorSeq(a, 0)
 }
 
 func amapentryCons(a AMapEntry, o any) Conser {

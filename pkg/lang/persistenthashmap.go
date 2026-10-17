@@ -101,6 +101,17 @@ var (
 )
 
 func NewPersistentHashMap(keyvals ...any) IPersistentMap {
+	if len(keyvals)%2 != 0 {
+		panic(NewIllegalArgumentError("hash-map requires an even number of forms"))
+	}
+	if len(keyvals) >= 16 {
+		entries := make([]hashMapBuildEntry, len(keyvals)/2)
+		for i := range entries {
+			entries[i] = hashMapBuildEntry{HashEq(keyvals[2*i]), keyvals[2*i], keyvals[2*i+1]}
+		}
+		root, count := buildHashMapNode(entries, make([]hashMapBuildEntry, len(entries)), 0)
+		return &PersistentHashMap{root: root, count: count}
+	}
 	var res Associative = emptyPersistentHashMap
 	for i := 0; i < len(keyvals); i += 2 {
 		res = res.Assoc(keyvals[i], keyvals[i+1])

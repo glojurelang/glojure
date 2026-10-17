@@ -25,7 +25,7 @@ func TestVectorConstructionUsesReductionContract(t *testing.T) {
 }
 
 func TestVectorConstructionBoundariesAndSnapshots(t *testing.T) {
-	for _, count := range []int{0, 1, 31, 32, 33, 1023, 1024, 1025, 2500} {
+	for _, count := range []int{0, 1, 2, 3, 4, 31, 32, 33, 1023, 1024, 1025, 2500} {
 		values := make([]any, count)
 		for i := range values {
 			values[i] = i
@@ -59,6 +59,41 @@ func TestVectorConstructionFromTypedHostArrays(t *testing.T) {
 		result := CreateOwningLazilyPersistentVector(source)
 		if !Equals(result, NewVector(1, 2, 3)) {
 			t.Fatalf("typed construction from %T = %v", source, result)
+		}
+	}
+}
+
+func TestSmallVectorMetadataAndDerivedVersionsOwnStorage(t *testing.T) {
+	for count := 1; count <= 4; count++ {
+		values := make([]any, count)
+		for i := range values {
+			values[i] = i
+		}
+		original := NewVector(values...)
+		tagged := original.WithMeta(NewMap(NewKeyword("tag"), true)).(*Vector)
+		for i := range values {
+			values[i] = -1
+		}
+		transient := tagged.AsTransient()
+		for i := count; i < 40; i++ {
+			transient = transient.Conj(i).(ITransientCollection)
+		}
+		grown := transient.Persistent().(IPersistentVector)
+		for i := 0; i < 40; i++ {
+			if grown.Nth(i) != i {
+				t.Fatal("growing an inline vector changed its elements")
+			}
+		}
+		for i := 0; i < count; i++ {
+			if original.Nth(i) != i || tagged.Nth(i) != i {
+				t.Fatal("metadata or transient growth changed inline storage")
+			}
+		}
+		for grown.Count() > 0 {
+			grown = grown.Pop().(IPersistentVector)
+		}
+		if original.Count() != count || tagged.Count() != count {
+			t.Fatal("popping a derived vector changed a snapshot")
 		}
 	}
 }

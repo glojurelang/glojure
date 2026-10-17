@@ -9,12 +9,23 @@ type LazySeq struct {
 	meta         IPersistentMap
 	hash, hasheq uint32
 
-	fn  func() interface{}
-	sv  interface{}
-	seq ISeq
+	fn    func() interface{}
+	value any
 
 	mu       sync.Mutex
 	seqReady atomic.Bool
+	producer bool
+}
+
+// LazySeqProducer lets a runtime operation co-allocate its lazy sequence
+// and deferred state without a separate closure capturing that state.
+type LazySeqProducer interface{ RealizeSeq() any }
+
+// InitProducer initializes an unpublished, zero-value sequence. Producers
+// may embed LazySeq so both the sequence and its state share one allocation.
+func (s *LazySeq) InitProducer(producer LazySeqProducer) {
+	s.value = producer
+	s.producer = true
 }
 
 func NewLazySeq(fn func() interface{}) ISeq {
@@ -23,8 +34,8 @@ func NewLazySeq(fn func() interface{}) ISeq {
 
 func newLazySeqWithMeta(meta IPersistentMap, seq ISeq) ISeq {
 	s := &LazySeq{
-		meta: meta,
-		seq:  seq,
+		meta:  meta,
+		value: seq,
 	}
 	s.seqReady.Store(true)
 	return s
@@ -99,12 +110,12 @@ func (s *LazySeq) IsRealized() bool {
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	return IsNil(s.fn)
+	return !s.producer && IsNil(s.fn)
 }
 
 func (s *LazySeq) realize() interface{} {
 	if s.seqReady.Load() {
-		return s.seq
+		return s.readySeq()
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -112,36 +123,45 @@ func (s *LazySeq) realize() interface{} {
 }
 
 func (s *LazySeq) realizeLocked() interface{} {
-	if s.fn != nil {
-		s.sv = s.fn()
+	if s.producer {
+		s.value = s.value.(LazySeqProducer).RealizeSeq()
+		s.producer = false
+	} else if s.fn != nil {
+		s.value = s.fn()
 		s.fn = nil
 	}
-	if s.sv != nil {
-		return s.sv
+	return s.value
+}
+
+// A published value is either a normalized sequence or nil. The atomic
+// ready flag publishes the interface words together for concurrent readers.
+func (s *LazySeq) readySeq() ISeq {
+	if s.value == nil {
+		return nil
 	}
-	return s.seq
+	return s.value.(ISeq)
 }
 
 func (s *LazySeq) Seq() ISeq {
 	// Publish both nonempty and empty results once. Readers can then skip
 	// locking while the immutable sequence remains safely visible.
 	if s.seqReady.Load() {
-		return s.seq
+		return s.readySeq()
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.seqReady.Load() {
-		return s.seq
+		return s.readySeq()
 	}
 
 	s.realizeLocked()
 
-	if IsNil(s.sv) {
+	if IsNil(s.value) {
+		s.value = nil
 		s.seqReady.Store(true)
-		return s.seq
+		return s.readySeq()
 	}
-	ls := s.sv
-	s.sv = nil
+	ls := s.value
 	for {
 		lseq, ok := ls.(*LazySeq)
 		if !ok {
@@ -149,9 +169,9 @@ func (s *LazySeq) Seq() ISeq {
 		}
 		ls = lseq.realize()
 	}
-	s.seq = Seq(ls)
+	s.value = Seq(ls)
 	s.seqReady.Store(true)
-	return s.seq
+	return s.readySeq()
 }
 
 func (s *LazySeq) Count() int {

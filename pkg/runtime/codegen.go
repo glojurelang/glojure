@@ -2059,6 +2059,9 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
+	if result, ok := g.generateAOTVectorMap(invokeNode); ok {
+		return result
+	}
 	if result, ok := g.generateLocalAtomInvoke(invokeNode); ok {
 		return result
 	}
@@ -2563,6 +2566,13 @@ func (g *Generator) generateCase(node *ast.Node) string {
 			g.writef("if ")
 			if testType == lang.KWHashIdentity {
 				g.writef("%s == %s", testExpr, expectedExpr)
+			} else if constant, ok := entry.TestConstant.Sub.(*ast.ConstNode); ok &&
+				constant.Value != nil {
+				if _, keyword := constant.Value.(lang.Keyword); keyword {
+					g.writef("lang.KeywordEquals(%s, %s)", testExpr, expectedExpr)
+				} else {
+					g.writef("lang.Equals(%s, %s)", testExpr, expectedExpr)
+				}
 			} else {
 				g.writef("lang.Equals(%s, %s)", testExpr, expectedExpr)
 			}
@@ -2896,6 +2906,22 @@ func (g *Generator) generateVector(node *ast.Node) string {
 
 func (g *Generator) generateMap(node *ast.Node) string {
 	mapNode := node.Sub.(*ast.MapNode)
+	// Immutable literal maps can be shared like other closed constants.
+	// Keep expression-valued maps on the normal ordered evaluation path.
+	literal := true
+	pairs := make([]any, 2*len(mapNode.Keys))
+	for i, key := range mapNode.Keys {
+		value := mapNode.Vals[i]
+		if key.Op != ast.OpConst || value.Op != ast.OpConst {
+			literal = false
+			break
+		}
+		pairs[2*i] = key.Sub.(*ast.ConstNode).Value
+		pairs[2*i+1] = value.Sub.(*ast.ConstNode).Value
+	}
+	if literal {
+		return g.liftValue(lang.NewMap(pairs...))
+	}
 
 	keyValueCount := len(mapNode.Keys) * 2
 	if keyValueCount > 0 &&

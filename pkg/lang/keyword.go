@@ -31,6 +31,38 @@ type keywordLookup interface {
 	valAtKeyword(Keyword, any) any
 }
 
+// KeywordEquals keeps a literal keyword unboxed in generated comparisons.
+func KeywordEquals(value any, keyword Keyword) bool {
+	if other, ok := value.(Keyword); ok {
+		return other == keyword
+	}
+	return Equals(value, keyword)
+}
+
+// DissocKeyword avoids boxing missing literal keys on persistent array maps.
+// Other map representations retain their ordinary dissoc behavior.
+func DissocKeyword(coll any, keyword Keyword) any {
+	if coll == nil {
+		return nil
+	}
+	if m, ok := coll.(*Map); ok {
+		if m.keywordShape != nil {
+			if m.keywordShape.indexOf(keyword) < 0 {
+				return m
+			}
+		} else {
+			for i := 0; i < len(m.keyVals); i += 2 {
+				key, ok := m.keyVals[i].(Keyword)
+				if !ok || key == keyword {
+					return Dissoc(coll, keyword)
+				}
+			}
+			return m
+		}
+	}
+	return Dissoc(coll, keyword)
+}
+
 func NewKeyword(s string) Keyword {
 	keywordRegistryMu.Lock()
 	keywordRegistry[s] = struct{}{}

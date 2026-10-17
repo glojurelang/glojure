@@ -33,6 +33,14 @@ func NewSet(vals ...any) *Set {
 }
 
 func NewSet2(vals ...any) (*Set, error) {
+	if len(vals) >= 8 {
+		pairs := make([]any, 2*len(vals))
+		for i, value := range vals {
+			pairs[2*i], pairs[2*i+1] = value, true
+		}
+		return &Set{hashMap: NewPersistentHashMap(pairs...)}, nil
+	}
+
 	set := &Set{
 		hashMap: NewPersistentHashMap(),
 	}
@@ -316,7 +324,6 @@ func (s *SortedSet) Comparator() IFn {
 func (s *SortedSet) EntryKey(entry any) any {
 	return entry
 }
-
 
 func (s *SortedSet) ReduceInit(f IFn, init any) any {
 	ret := init

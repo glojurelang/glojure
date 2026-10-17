@@ -243,6 +243,9 @@ func (fn nativeCoreRegexMatch) Invoke(args ...interface{}) interface{} {
 func (fn nativeCoreRegexMatch) Invoke2(pattern, value interface{}) interface{} {
 	re := pattern.(*regexp.Regexp)
 	text := value.(string)
+	if fn.full {
+		re = lang.LongestRegexp(re)
+	}
 	indices := re.FindStringSubmatchIndex(text)
 	if indices == nil ||
 		(fn.full && (indices[0] != 0 || indices[1] != len(text))) {
@@ -259,6 +262,19 @@ func (fn nativeCoreRegexMatch) Invoke2(pattern, value interface{}) interface{} {
 		}
 	}
 	return lang.NewVector(groups...)
+}
+
+// MatchLiteralRegexp receives a pattern anchored by the code generator.
+// Patterns without captures need only a match bit, avoiding submatch arrays.
+func MatchLiteralRegexp(pattern *regexp.Regexp, value any) any {
+	text := value.(string)
+	if pattern.NumSubexp() == 0 {
+		if pattern.MatchString(text) {
+			return text
+		}
+		return nil
+	}
+	return (nativeCoreRegexMatch{}).Invoke2(pattern, text)
 }
 
 func (fn nativeCoreRegexMatch) ApplyTo(args lang.ISeq) interface{} {
@@ -1047,9 +1063,9 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 func recordOptimizableCoreRoots(core *lang.Namespace) {
 	recordDefaultCoreRoots(core,
 		"*", "+", "=", "assoc", "atom", "cons", "conj", "count", "dec", "deref",
-		"empty?", "even?", "filter", "first", "get", "identity", "inc", "map",
-		"neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
-		"quot", "reduce", "rem", "reset!", "rest", "seq", "swap!", "take", "zero?",
+		"dissoc", "empty?", "even?", "filter", "first", "get", "identity", "inc", "map",
+		"mapcat", "neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range", "re-matches",
+		"quot", "reduce", "rem", "reset!", "rest", "seq", "swap!", "take", "vec", "zero?",
 	)
 }
 
@@ -1073,6 +1089,7 @@ func installNativeStringFunctions() {
 			replace.BindRoot(nativeStringReplace{fallback: fallback})
 		}
 	}
+	installNativeStringJoin(namespace)
 	if escape := namespace.FindInternedVar(lang.NewSymbol("escape")); escape != nil {
 		if fallback, ok := escape.Get().(lang.IFn); ok {
 			installFixedArityCoreFunction(namespace, "escape", 2,
@@ -1168,36 +1185,7 @@ func nativeMod(num, div interface{}) interface{} {
 }
 
 func nativeMapSeq(fn, coll interface{}) interface{} {
-	if seq, ok := coll.(lang.ISeq); ok {
-		_, lazy := seq.(*lang.LazySeq)
-		_, chunked := seq.(lang.IChunkedSeq)
-		if !lazy && !chunked {
-			if source := seq.Seq(); source != nil {
-				return lang.NewMappedSeq(fn, source)
-			}
-		}
-	}
-	return lang.NewLazySeq(func() interface{} {
-		seq := lang.Seq(coll)
-		if seq == nil {
-			return nil
-		}
-		if chunked, ok := seq.(lang.IChunkedSeq); ok {
-			input := chunked.ChunkedFirst()
-			values := make([]interface{}, input.Count())
-			for i := range values {
-				values[i] = lang.Apply1(fn, input.Nth(i))
-			}
-			return lang.NewChunkedCons(
-				lang.NewSliceChunk(values),
-				nativeMapSeq(fn, chunked.ChunkedMore()).(lang.ISeq),
-			)
-		}
-		return lang.NewCons(
-			lang.Apply1(fn, seq.First()),
-			nativeMapSeq(fn, seq.More()),
-		)
-	})
+	return lang.NewLazyMappedSeq(fn, coll)
 }
 
 func nativeMapcatSeq(fn, coll any) any {
@@ -1248,43 +1236,60 @@ type concatCursor struct {
 	index              int
 }
 
+type concatProducer struct {
+	lang.LazySeq
+	cursor concatCursor
+}
+
 func nativeConcatCursor(cursor concatCursor) lang.ISeq {
-	return lang.NewLazySeq(func() any {
-		for {
-			if seq := lang.Seq(cursor.current); seq != nil {
-				if chunked, ok := seq.(lang.IChunkedSeq); ok {
-					chunk := chunked.ChunkedFirst()
-					if chunk.Count() == 0 {
-						cursor.current = chunked.ChunkedMore()
-						continue
-					}
-					cursor.current = chunked.ChunkedMore()
-					return lang.NewChunkedCons(chunk, nativeConcatCursor(cursor))
-				}
-				first := seq.First()
-				cursor.current = seq.More()
-				return lang.NewCons(first, nativeConcatCursor(cursor))
-			}
-			if cursor.chunk != nil && cursor.index < cursor.chunk.Count() {
-				cursor.current = cursor.chunk.Nth(cursor.index)
-				cursor.index++
-				continue
-			}
-			cursor.chunk = nil
-			cursor.index = 0
-			seq := lang.Seq(cursor.remaining)
-			if seq == nil {
-				return nil
-			}
+	state := &concatProducer{cursor: cursor}
+	state.InitProducer(state)
+	return &state.LazySeq
+}
+
+func (p *concatProducer) RealizeSeq() any {
+	result := p.realizeCursor()
+	p.cursor = concatCursor{}
+	return result
+}
+
+func (p *concatProducer) realizeCursor() any {
+	cursor := p.cursor
+
+	for {
+		if seq := lang.Seq(cursor.current); seq != nil {
 			if chunked, ok := seq.(lang.IChunkedSeq); ok {
-				cursor.chunk = chunked.ChunkedFirst()
-				cursor.remaining = chunked.ChunkedMore()
-				continue
+				chunk := chunked.ChunkedFirst()
+				if chunk.Count() == 0 {
+					cursor.current = chunked.ChunkedMore()
+					continue
+				}
+				cursor.current = chunked.ChunkedMore()
+				return lang.NewChunkedCons(chunk, nativeConcatCursor(cursor))
 			}
-			cursor.current = seq.First()
-			cursor.remaining = seq.More()
+			first := seq.First()
+			cursor.current = seq.More()
+			return lang.NewCons(first, nativeConcatCursor(cursor))
 		}
-	})
+		if cursor.chunk != nil && cursor.index < cursor.chunk.Count() {
+			cursor.current = cursor.chunk.Nth(cursor.index)
+			cursor.index++
+			continue
+		}
+		cursor.chunk = nil
+		cursor.index = 0
+		seq := lang.Seq(cursor.remaining)
+		if seq == nil {
+			return nil
+		}
+		if chunked, ok := seq.(lang.IChunkedSeq); ok {
+			cursor.chunk = chunked.ChunkedFirst()
+			cursor.remaining = chunked.ChunkedMore()
+			continue
+		}
+		cursor.current = seq.First()
+		cursor.remaining = seq.More()
+	}
 }
 
 func nativeFilterSeq(pred, coll interface{}) interface{} {

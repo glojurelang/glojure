@@ -88,6 +88,20 @@ type TailStorage struct {
 	entry tailEntry
 }
 
+// InlineTailStorage allows a collection wrapper to own its immutable tail
+// descriptor and values in the same allocation. Values must not be mutated.
+type InlineTailStorage struct {
+	base tailBase
+}
+
+func InitInlineTail(storage *InlineTailStorage, values []any) Persistent {
+	if len(values) == 0 || len(values) > tailMaxLen {
+		panic("invalid inline vector tail")
+	}
+	storage.base = tailBase(values)
+	return Persistent{count: len(values), tail: &storage.base}
+}
+
 // ReplaceTailStorage reserves storage for replacing the last tail entry
 // without copying either a base tail or a delta chain.
 type ReplaceTailStorage struct {

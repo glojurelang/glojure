@@ -2,6 +2,7 @@ package lang
 
 import (
 	"fmt"
+	"github.com/glojurelang/glojure/internal/murmur3"
 	"sync"
 	"sync/atomic"
 )
@@ -276,6 +277,13 @@ func newArrayMapWithSize(size int) *Map {
 	// Keep small maps in one allocation without reserving seven pairs for
 	// every one- or two-entry result produced by collection operations.
 	switch size {
+	case 1:
+		storage := &struct {
+			Map
+			values [1]any
+		}{}
+		storage.keyVals = storage.values[:]
+		return &storage.Map
 	case 2:
 		storage := &struct {
 			Map
@@ -326,6 +334,19 @@ func canBePersistentArrayMap(keyVals []any) bool {
 }
 
 func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
+	if len(init) >= 32 && len(init)%2 == 0 {
+		safe := true
+		for i := 0; i < len(init); i += 2 {
+			if !hashSafeArrayMapValue(init[i]) {
+				safe = false
+				break
+			}
+		}
+		if safe {
+			return newArrayMapDeduplicated(init)
+		}
+	}
+
 	hasTrailing := (len(init) & 1) == 1
 	complexPath := hasTrailing
 	for i := 0; i < len(init) && !complexPath; i += 2 {
@@ -531,6 +552,15 @@ func (m *Map) Assoc(k, v any) Associative {
 				if Identical(m.keywordValueAt(i), v) {
 					return m
 				}
+				if len(m.keyVals) <= 2 {
+					updated := newArrayMapWithSize(len(m.keyVals))
+					updated.meta, updated.keywordShape = m.meta, m.keywordShape
+					for j := range updated.keyVals {
+						updated.keyVals[j] = m.keywordValueAt(j)
+					}
+					updated.keyVals[i] = v
+					return updated
+				}
 				if m.keywordDelta != nil && int(m.keywordDelta.index) == i {
 					return newKeywordMapUpdate(
 						m,
@@ -683,9 +713,9 @@ func (m *Map) WithMeta(meta IPersistentMap) any {
 	if m.meta == meta {
 		return m
 	}
-	cpy := *m
-	cpy.meta = meta
-	return &cpy
+	return &Map{meta: meta, keyVals: m.keyVals,
+		keywordShape: m.keywordShape, keywordDelta: m.keywordDelta,
+		hash: atomic.LoadUint32(&m.hash), hasheq: atomic.LoadUint32(&m.hasheq)}
 }
 
 func (m *Map) ApplyTo(args ISeq) any {
@@ -701,19 +731,72 @@ func (m *Map) Cons(x any) Conser {
 }
 
 func (m *Map) ContainsKey(k any) bool {
-	return apersistentmapContainsKey(m, k)
+	if m.keywordShape != nil {
+		key, ok := k.(Keyword)
+		return ok && m.keywordShape.indexOf(key) >= 0
+	}
+	for i := 0; i < len(m.keyVals); i += 2 {
+		if Equiv(m.keyVals[i], k) {
+			return true
+		}
+	}
+	return false
 }
 
 func (m *Map) Equiv(o any) bool {
+	if other, ok := o.(*Map); ok {
+		if m == other {
+			return true
+		}
+		if m.Count() != other.Count() {
+			return false
+		}
+		if m.keywordShape != nil && other.keywordShape != nil {
+			for i, key := range m.keywordShape.keys {
+				index := i
+				if m.keywordShape != other.keywordShape {
+					index = other.keywordShape.indexOf(key)
+				}
+				if index < 0 || !Equiv(m.keywordValueAt(i), other.keywordValueAt(index)) {
+					return false
+				}
+			}
+			return true
+		}
+		if m.keywordShape == nil {
+			for i := 0; i < len(m.keyVals); i += 2 {
+				key := m.keyVals[i]
+				if !other.ContainsKey(key) || !Equiv(m.keyVals[i+1], other.ValAt(key)) {
+					return false
+				}
+			}
+			return true
+		}
+	}
 	return apersistentmapEquiv(m, o)
 }
 
 func (m *Map) Hash() uint32 {
-	return apersistentmapHash(&m.hash, m)
+	if cached := atomic.LoadUint32(&m.hash); cached != 0 {
+		return cached
+	}
+	var hash uint32
+	m.eachKeyValue(func(key, value any) { hash += Hash(key) ^ Hash(value) })
+	atomic.StoreUint32(&m.hash, hash)
+	return hash
 }
 
 func (m *Map) HashEq() uint32 {
-	return apersistentmapHashEq(&m.hasheq, m)
+	if cached := atomic.LoadUint32(&m.hasheq); cached != 0 {
+		return cached
+	}
+	var hash uint32
+	m.eachKeyValue(func(key, value any) {
+		hash += murmur3.MixCollHash(31*(31+HashEq(key))+HashEq(value), 2)
+	})
+	hash = murmur3.MixCollHash(hash, uint32(m.Count()))
+	atomic.StoreUint32(&m.hasheq, hash)
+	return hash
 }
 
 func (m *Map) Reduce(f IFn) any {
@@ -1253,4 +1336,76 @@ func (s *MapValSeq) ReduceInit(f IFn, init any) any {
 		}
 	}
 	return res
+}
+
+// Walk immutable storage directly when the operation needs key/value pairs,
+// avoiding temporary map entries and sequence cursors solely for hashing.
+func (m *Map) eachKeyValue(visit func(any, any)) {
+	if m.keywordShape != nil {
+		for i, key := range m.keywordShape.keys {
+			visit(key, m.keywordValueAt(i))
+		}
+	} else {
+		for i := 0; i < len(m.keyVals); i += 2 {
+			visit(m.keyVals[i], m.keyVals[i+1])
+		}
+	}
+}
+
+func newArrayMapDeduplicated(init []any) IPersistentMap {
+	result := newArrayMapWithSize(len(init))
+	heads := make(map[uint32]int, len(init)/2)
+	next := make([]int, len(init)/2)
+	count := 0
+	for i := 0; i < len(init); i += 2 {
+		key, value := init[i], init[i+1]
+		hash := HashEq(key)
+		index := heads[hash] - 1
+		for index >= 0 && !equalKey(key, result.keyVals[2*index]) {
+			index = next[index] - 1
+		}
+		if index >= 0 {
+			result.keyVals[2*index+1] = value
+			continue
+		}
+		result.keyVals[2*count], result.keyVals[2*count+1] = key, value
+		next[count] = heads[hash]
+		heads[hash] = count + 1
+		count++
+	}
+	result.keyVals = result.keyVals[:2*count]
+	return result
+}
+
+// Array maps also accept extension values whose Equals need not agree with
+// HashEq. Retain their original comparison-only construction contract.
+func hashSafeArrayMapValue(value any) bool {
+	switch value := value.(type) {
+	case nil, bool, Char, string, int64, Keyword:
+		return true
+	case *Symbol:
+		return value != nil
+	case *Map:
+		if value == nil {
+			return false
+		}
+		safe := true
+		value.eachKeyValue(func(key, val any) {
+			if !hashSafeArrayMapValue(key) || !hashSafeArrayMapValue(val) {
+				safe = false
+			}
+		})
+		return safe
+	default:
+		return false
+	}
+}
+
+// EntryVector flattens this map's entries in sequence order. The result
+// owns its storage just like vec of mapcat seq over the map's entry seq.
+func (m *Map) EntryVector() IPersistentVector {
+	if m.keywordShape == nil {
+		return NewVector(m.keyVals...)
+	}
+	return NewVector(m.interleavedKeyVals(0)...)
 }

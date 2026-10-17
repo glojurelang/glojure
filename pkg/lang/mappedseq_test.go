@@ -46,6 +46,120 @@ func TestMappedSeqIsLazyAndCachesValues(t *testing.T) {
 	}
 }
 
+func TestMappedSeqDefersInputAndKeepsChunkSemantics(t *testing.T) {
+	inputs, calls := 0, 0
+	values := make([]any, 65)
+	for i := range values {
+		values[i] = i
+	}
+	source := NewLazySeq(func() any {
+		inputs++
+		return NewVector(values...)
+	})
+	mapped := NewLazyMappedSeq(FnFunc1(func(value any) any {
+		calls++
+		return value.(int) + 1
+	}), source)
+	if inputs != 0 || calls != 0 || mapped.(IPending).IsRealized() {
+		t.Fatal("deferred map realized its input during construction")
+	}
+	if first := mapped.First(); first != 1 || inputs != 1 || calls != 32 {
+		t.Fatalf("first = %v after %d input and %d mapper calls", first, inputs, calls)
+	}
+	if _, chunked := Seq(mapped).(IChunkedSeq); !chunked {
+		t.Fatal("mapped vector lost chunk support")
+	}
+	if mapped.Next().First() != 2 || calls != 32 {
+		t.Fatal("next remapped a cached chunk")
+	}
+	for range 2 {
+		if Count(mapped) != 65 || calls != 65 || inputs != 1 {
+			t.Fatalf("traversal ran %d input and %d mapper calls", inputs, calls)
+		}
+	}
+}
+
+func TestDeferredMappedSeqEmptyAndComposedInputs(t *testing.T) {
+	for _, empty := range []any{nil, emptyList, NewVector(), NewMap()} {
+		seq := NewLazyMappedSeq(FnFunc1(func(value any) any {
+			t.Fatal("empty mapping invoked its mapper")
+			return nil
+		}), empty)
+		if seq.(IPending).IsRealized() || Seq(seq) != nil || !seq.(IPending).IsRealized() {
+			t.Fatal("empty mapping has incorrect realization state")
+		}
+	}
+	calls := 0
+	mapper := FnFunc1(func(value any) any {
+		calls++
+		return value.(int) + 1
+	})
+	inner := NewLazyMappedSeq(mapper, NewList(1, 2))
+	outer := NewLazyMappedSeq(mapper, inner)
+	if calls != 0 || outer.First() != 3 || calls != 2 {
+		t.Fatalf("composed mapping ran %d mapper calls", calls)
+	}
+	if Count(outer) != 2 || calls != 4 || outer.First() != 3 || calls != 4 {
+		t.Fatal("composed mapping did not share its cached values")
+	}
+}
+
+func TestDeferredMappedSeqRetriesFailedChunk(t *testing.T) {
+	for _, failAt := range []int{1, 2} {
+		calls, failed := 0, false
+		mapped := NewLazyMappedSeq(FnFunc1(func(value any) any {
+			calls++
+			if value == failAt && !failed {
+				failed = true
+				panic("retry")
+			}
+			return value
+		}), NewVector(1, 2, 3))
+		func() {
+			defer func() {
+				if recover() == nil {
+					t.Error("missing mapper panic")
+				}
+			}()
+			mapped.First()
+		}()
+		if mapped.(IPending).IsRealized() {
+			t.Fatal("failed chunk was published as realized")
+		}
+		if got := ToSlice(mapped); !reflect.DeepEqual(got, []any{1, 2, 3}) || calls != failAt+3 {
+			t.Fatalf("retry at %d: result %v after %d calls", failAt, got, calls)
+		}
+	}
+}
+
+func TestDeferredMappedSeqConcurrentChunkReaders(t *testing.T) {
+	values := make([]any, 65)
+	for i := range values {
+		values[i] = i
+	}
+	var calls atomic.Int64
+	mapped := NewLazyMappedSeq(FnFunc1(func(value any) any {
+		calls.Add(1)
+		return value
+	}), NewVector(values...))
+	var workers sync.WaitGroup
+	for range 16 {
+		workers.Add(1)
+		go func() {
+			defer workers.Done()
+			if Count(mapped) != 65 {
+				t.Error("wrong concurrent chunk count")
+			}
+			mapped.(Hasher).Hash()
+			mapped.(IHashEq).HashEq()
+		}()
+	}
+	workers.Wait()
+	if calls.Load() != 65 {
+		t.Fatalf("concurrent chunk mapping ran %d times", calls.Load())
+	}
+}
+
 func TestMappedSeqConvertsDirectlyToStringSlice(t *testing.T) {
 	calls := 0
 	mapped := NewMappedSeq(FnFunc1(func(value any) any {

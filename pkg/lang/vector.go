@@ -61,8 +61,45 @@ var (
 )
 
 func NewVector(values ...any) *Vector {
-	if len(values) == 0 {
+	switch len(values) {
+	case 0:
 		return emptyVector
+	case 1:
+		s := &struct {
+			Vector
+			tail  vector.InlineTailStorage
+			items [1]any
+		}{}
+		copy(s.items[:], values)
+		s.vec = vector.InitInlineTail(&s.tail, s.items[:])
+		return &s.Vector
+	case 2:
+		s := &struct {
+			Vector
+			tail  vector.InlineTailStorage
+			items [2]any
+		}{}
+		copy(s.items[:], values)
+		s.vec = vector.InitInlineTail(&s.tail, s.items[:])
+		return &s.Vector
+	case 3:
+		s := &struct {
+			Vector
+			tail  vector.InlineTailStorage
+			items [3]any
+		}{}
+		copy(s.items[:], values)
+		s.vec = vector.InitInlineTail(&s.tail, s.items[:])
+		return &s.Vector
+	case 4:
+		s := &struct {
+			Vector
+			tail  vector.InlineTailStorage
+			items [4]any
+		}{}
+		copy(s.items[:], values)
+		s.vec = vector.InitInlineTail(&s.tail, s.items[:])
+		return &s.Vector
 	}
 	return &Vector{
 		vec: vector.NewPersistent(values...),

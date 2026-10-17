@@ -4,6 +4,7 @@ package runtime
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -314,6 +315,15 @@ func (g *Generator) aotExternalIntrinsic(
 	case name == "assoc" && (arity == 3 || arity == 5):
 	case name == "count" && arity == 1:
 	case name == "deref" && arity == 1:
+	case name == "dissoc" && arity >= 2 && arity <= 5:
+	case name == "re-matches" && arity == 2:
+		if constant, ok := invoke.Args[0].Sub.(*ast.ConstNode); ok {
+			if _, ok := constant.Value.(*regexp.Regexp); !ok {
+				return ""
+			}
+		} else {
+			return ""
+		}
 	case name == "dec" && arity == 1:
 	case name == "cons" && arity == 2:
 	case name == "conj" && arity == 2:
@@ -374,6 +384,26 @@ func (g *Generator) aotExternalIntrinsicCall(
 		return fmt.Sprintf("lang.Count(%s)", args[0])
 	case "deref":
 		return fmt.Sprintf("lang.DerefValue(%s)", args[0])
+	case "dissoc":
+		result := args[0]
+		for i := 1; i < len(args); i++ {
+			helper := "lang.Dissoc"
+			if key := invoke.Args[i]; key.Op == ast.OpConst {
+				if _, ok := key.Sub.(*ast.ConstNode).Value.(lang.Keyword); ok {
+					helper = "lang.DissocKeyword"
+				}
+			}
+			result = fmt.Sprintf("%s(%s, %s)", helper, result, args[i])
+		}
+		return result
+	case "re-matches":
+		pattern := invoke.Args[0].Sub.(*ast.ConstNode).Value.(*regexp.Regexp)
+		anchored := regexp.MustCompile(`\A(?:` + pattern.String() + `)\z`)
+		// A closed-over original pattern may otherwise become an unused
+		// local when direct linking eliminates the ordinary call entirely.
+		g.writef("_ = %s\n", args[0])
+		return fmt.Sprintf("runtime.MatchLiteralRegexp(%s.(*%s.Regexp), %s)",
+			g.liftValue(anchored), g.addImportWithAlias("regexp"), args[1])
 	case "dec":
 		return fmt.Sprintf("lang.Numbers.Dec(%s)", args[0])
 	case "cons":
