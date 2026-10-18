@@ -275,7 +275,7 @@ test-repl-bsd: $(GO)
 test-aot: test-aot-runtime test-aot-codegen test-glj
 	$(MAKE) test-suite-aot
 
-test-suite-aot: $(GO) $(STDLIB-TARGETS) generate aot $(TEST-SUITE-DIR)
+test-suite-aot: $(GO) stdlib-present generate aot $(TEST-SUITE-DIR)
 	cd $(TEST-SUITE-DIR) && git checkout $(TEST-SUITE-BRANCH)
 	TEST_SUITE_EXPECT_FAILURES=$(TEST-SUITE-EXPECT-FAILURES) \
 	TEST_SUITE_EXPECT_ERRORS=$(TEST-SUITE-EXPECT-ERRORS) \

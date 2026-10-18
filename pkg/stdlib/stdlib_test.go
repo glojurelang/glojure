@@ -15,12 +15,12 @@ func TestStdLibEmbedsAllSourcesAndOnlySources(t *testing.T) {
 	t.Parallel()
 
 	var onDisk []string
-	for _, root := range []string{"clojure", "glojure"} {
+	for _, root := range []string{"clojure", "glojure", "clojurestar", "grenadine"} {
 		err := fs.WalkDir(os.DirFS("."), root, func(name string, entry fs.DirEntry, err error) error {
 			if err != nil {
 				return err
 			}
-			if !entry.IsDir() && path.Ext(name) == ".glj" {
+			if !entry.IsDir() && isSource(name) {
 				onDisk = append(onDisk, name)
 			}
 			return nil
@@ -38,7 +38,7 @@ func TestStdLibEmbedsAllSourcesAndOnlySources(t *testing.T) {
 		if entry.IsDir() {
 			return nil
 		}
-		if path.Ext(name) != ".glj" {
+		if !isSource(name) {
 			t.Errorf("embedded non-source file %q", name)
 		}
 		embedded = append(embedded, name)
@@ -52,5 +52,14 @@ func TestStdLibEmbedsAllSourcesAndOnlySources(t *testing.T) {
 	sort.Strings(embedded)
 	if !reflect.DeepEqual(embedded, onDisk) {
 		t.Fatalf("embedded sources differ from files on disk:\nembedded: %v\non disk:  %v", embedded, onDisk)
+	}
+}
+
+func isSource(name string) bool {
+	switch path.Ext(name) {
+	case ".glj", ".clj", ".cljc":
+		return true
+	default:
+		return false
 	}
 }
