@@ -112,8 +112,8 @@ func init() {
 		return ValueOf(args[0])
 	})
 	lang.RegisterHostConstructor("java.lang.Integer", constructor)
-	lang.RegisterHostTypeConstructor(reflect.TypeOf(int(0)), constructor)
-	lang.RegisterHostTypeConstructor(reflect.TypeOf(int32(0)), constructor)
+	// Primitive Go types must retain their zero-value allocation semantics.
+	// Integer construction dispatches through its JVM Class identity instead.
 
 	register("MIN_VALUE", "MIN_VALUE", MIN_VALUE)
 	register("MAX_VALUE", "MAX_VALUE", MAX_VALUE)

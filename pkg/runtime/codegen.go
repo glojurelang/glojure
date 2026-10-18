@@ -3652,6 +3652,16 @@ func (g *Generator) generateNew(node *ast.Node) string {
 	// the interpreter is more lax; it allows for expressions that evaluate to a type
 	// here we assume the class is a constant type. clojure's new form is similar
 	switch sub := newNode.Class.Sub.(type) {
+	case *ast.GoBuiltinNode:
+		classID := g.generateASTNode(newNode.Class)
+		args := []string{classID}
+		for _, arg := range newNode.Args {
+			args = append(args, g.generateASTNode(arg))
+		}
+		resultID := g.allocateTempVar()
+		g.writef("%s := lang.NewHostInstance(%s)\n",
+			resultID, strings.Join(args, ", "))
+		return resultID
 	case *ast.ConstNode:
 		if recordType, ok := sub.Value.(*lang.RecordType); ok {
 			record := g.allocAOTRecordType(recordType)

@@ -1,0 +1,8 @@
+(ns codegen.test.go-new)
+
+(defn ^{:expected-output [0 0 true 42 42]} -main []
+  [(go/deref (new go/int))
+   (go/deref (new go/int32))
+   (= (type (new go/int)) (go/ptr-to go/int))
+   (Integer. "42")
+   (java.lang.Integer. 42)])
