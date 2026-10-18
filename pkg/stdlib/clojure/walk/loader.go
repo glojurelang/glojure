@@ -349,6 +349,10 @@ func LoadNS() {
 			"throw-if",
 		})
 	}
+	var closed0 any
+	{
+		closed0 = lang.NewMap()
+	}
 	// keywordize-keys
 	{
 		tmp0 := sym_keywordize_DASH_keys
@@ -399,10 +403,9 @@ func LoadNS() {
 					var tmp8 any
 					tmp9 := lang.IsMap(v7)
 					if tmp9 {
-						tmp10 := lang.NewMap()
-						tmp11 := aotExternalFn5(v5, v7)
-						tmp12 := aotExternalFn4(tmp10, tmp11)
-						tmp8 = tmp12
+						tmp10 := aotExternalFn5(v5, v7)
+						tmp11 := aotExternalFn4(closed0, tmp10)
+						tmp8 = tmp11
 					} else {
 						tmp8 = v7
 					}
@@ -635,10 +638,9 @@ func LoadNS() {
 					var tmp8 any
 					tmp9 := lang.IsMap(v7)
 					if tmp9 {
-						tmp10 := lang.NewMap()
-						tmp11 := aotExternalFn5(v5, v7)
-						tmp12 := aotExternalFn4(tmp10, tmp11)
-						tmp8 = tmp12
+						tmp10 := aotExternalFn5(v5, v7)
+						tmp11 := aotExternalFn4(closed0, tmp10)
+						tmp8 = tmp11
 					} else {
 						tmp8 = v7
 					}

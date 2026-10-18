@@ -29525,7 +29525,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(uuid17.IsUUID, v2)
+			tmp3 := uuid17.IsUUID(v2)
 			return tmp3
 		})
 		aotDirectFn555 = tmp1

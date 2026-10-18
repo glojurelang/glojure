@@ -871,6 +871,18 @@ func LoadNS() {
 	}
 	ns.AddAlias(sym_temp, lang.FindOrCreateNamespace(sym_clojure_DOT_template))
 	ns.AddAlias(sym_str, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+	var closed0 any
+	var closed1 any
+	var closed2 any
+	{
+		closed0 = lang.NewMap()
+	}
+	{
+		closed1 = aotKeywordMapNew1(nil, nil)
+	}
+	{
+		closed2 = aotKeywordMapNew1(nil, nil)
+	}
 	// *initial-report-counters*
 	{
 		tmp0 := sym__STAR_initial_DASH_report_DASH_counters_STAR_
@@ -1041,8 +1053,7 @@ func LoadNS() {
 					} // end let
 					tmp8 = tmp11
 				} else {
-					tmp12 := aotKeywordMapNew1(nil, nil)
-					tmp8 = tmp12
+					tmp8 = closed1
 				}
 				tmp4 = tmp8
 			} // end let
@@ -1302,8 +1313,7 @@ func LoadNS() {
 				} // end let
 				tmp3 = tmp5
 			} else {
-				tmp6 := aotKeywordMapNew1(nil, nil)
-				tmp3 = tmp6
+				tmp3 = closed2
 			}
 			return tmp3
 		})
@@ -2716,18 +2726,16 @@ func LoadNS() {
 				// case entry 0 (key=0, collision=false)
 				if tmp8 == 0 {
 					if v6 == kw_error {
-						tmp9 := lang.NewMap()
-						tmp10 := aotExternalFn17(tmp9, v2)
-						tmp7 = tmp10
+						tmp9 := aotExternalFn17(closed0, v2)
+						tmp7 = tmp9
 					} else {
 						tmp7 = v2
 					}
 					// case entry 1 (key=1, collision=false)
 				} else if tmp8 == 1 {
 					if v6 == kw_fail {
-						tmp11 := lang.NewMap()
-						tmp12 := aotExternalFn17(tmp11, v2)
-						tmp7 = tmp12
+						tmp10 := aotExternalFn17(closed0, v2)
+						tmp7 = tmp10
 					} else {
 						tmp7 = v2
 					}
