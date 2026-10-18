@@ -79,6 +79,7 @@ func register(jvmName, goName string, v any) {
 }
 
 func init() {
+	pkgmap.Set(pkg+".IsUUID", IsUUID)
 	lang.RegisterReadablePrinter(reflect.TypeOf((*juuid.UUID)(nil)), func(value any, writer io.Writer) {
 		fmt.Fprintf(writer, "#uuid %q", value.(*juuid.UUID).String())
 	})

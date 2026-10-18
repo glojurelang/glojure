@@ -20,6 +20,7 @@ import (
 	"strings"
 	"time"
 
+	juuid "github.com/gloathub/gojava/uuid"
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
@@ -789,6 +790,13 @@ func (g *Generator) generateValue(value any) string {
 		return g.generateRecordConstructorValue(v)
 	case *lang.Class:
 		return g.generateClassValue(v)
+	case *juuid.UUID:
+		alias := g.addImportWithAlias("github.com/gloathub/gojava/uuid")
+		if v == nil {
+			return fmt.Sprintf("(*%s.UUID)(nil)", alias)
+		}
+		return fmt.Sprintf("%s.FromBits(%d, %d)", alias,
+			v.GetMostSignificantBits(), v.GetLeastSignificantBits())
 	case reflect.Type:
 		return g.generateTypeValue(v)
 	case *lang.Atom:
