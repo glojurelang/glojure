@@ -213,9 +213,22 @@ used by the executable:
 ```go
 import (
     _ "example.com/myapp/generated/example/app"
+    _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/math"
     _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/set"
     _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/string"
 )
+```
+
+`clojure.math` provides Clojure's math API, including its floating-point
+special cases and checked long arithmetic.
+Its source is maintained with the other Clojure standard-library originals.
+The math tests exercise evaluated functions and generated compact executables.
+An optional JVM comparison runs the same cases when `GLOJURE_MATH_JAVA` names
+a Java executable and `GLOJURE_MATH_JVM_CLASSPATH` contains Clojure and its
+dependencies:
+
+```sh
+make shell CMD='go test ./pkg/glj -run Math -count=1'
 ```
 
 Programs that use `slurp` with HTTP URLs can link that support explicitly:

@@ -21,6 +21,7 @@ func TestCompactRuntimeNamespaceLoaders(t *testing.T) {
 		"clojure/core/async",
 		"clojure/core/protocols",
 		"clojure/set",
+		"clojure/math",
 		"clojure/string",
 	} {
 		if runtime.GetNSLoader(resource) != nil {

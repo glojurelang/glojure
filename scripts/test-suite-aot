@@ -127,6 +127,7 @@ done
   printf '%s\n' '  "github.com/glojurelang/glojure/pkg/runtime"'
   printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/core/protocols"'
   printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/set"'
+  printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/math"'
   printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/string"'
   printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/template"'
   printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/test"'

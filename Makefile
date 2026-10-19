@@ -33,6 +33,7 @@ AOT-NAMESPACES := \
 	glojure.go.io \
 	glojure.go.types \
 	clojure.set \
+	clojure.math \
 	$(EXTRA-AOT-NAMESPACES)
 
 OS-TYPE := $(shell bash -c 'echo $$OSTYPE')

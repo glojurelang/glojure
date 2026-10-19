@@ -3,3 +3,8 @@
 
 (defn read [path]
   (os.ReadFile path))
+
+(defn typed-value ^long [^long x] x)
+
+(defn adjacent [x]
+  (Math/nextUp x))

@@ -17,6 +17,9 @@
 (def core-source?
   (= 'clojure.core (source-namespace zloc)))
 
+(def math-source?
+  (= 'clojure.math (source-namespace zloc)))
+
 ;; remove until we're at the end of all forms
 (defn skip-n [zloc n]
   ;; apply z/right n times
@@ -209,7 +212,13 @@
    'Math/incrementExact 'github.com:glojurelang:glojure:pkg:javacompat:math.IncrementExact
    'Math/decrementExact 'github.com:glojurelang:glojure:pkg:javacompat:math.DecrementExact
    'Math/toIntExact    'github.com:glojurelang:glojure:pkg:javacompat:math.ToIntExact
-   'Math/random        'github.com:glojurelang:glojure:pkg:javacompat:math.Random})
+   'Math/random        'github.com:glojurelang:glojure:pkg:javacompat:math.Random
+   'Math/ulp           'github.com:glojurelang:glojure:pkg:javacompat:math.Ulp
+   'Math/getExponent   'github.com:glojurelang:glojure:pkg:javacompat:math.GetExponent
+   'Math/nextAfter     'github.com:glojurelang:glojure:pkg:javacompat:math.NextAfter
+   'Math/nextUp        'github.com:glojurelang:glojure:pkg:javacompat:math.NextUp
+   'Math/nextDown      'github.com:glojurelang:glojure:pkg:javacompat:math.NextDown
+   'Math/scalb         'github.com:glojurelang:glojure:pkg:javacompat:math.Scalb})
 
 (def gojava-system-mappings
   {'System/out               'github.com:glojurelang:glojure:pkg:javacompat:system.Out
@@ -521,6 +530,25 @@
 
 (def replacements
   (concat
+    ;; Clojure's primitive parameter hints imply casts even when a math
+    ;; function is called indirectly. Glojure needs those casts explicitly.
+    (when math-source?
+      [[(fn [loc]
+          (and (z/list? loc) (= 'defn (first (z/sexpr loc)))))
+        (fn [loc]
+          (let [form (z/sexpr loc)
+                head (take-while #(not (vector? %)) form)
+                [args & body] (drop (count head) form)
+                casts (vec (mapcat
+                             (fn [arg]
+                               (when-let [tag (:tag (meta arg))]
+                                 (when (contains? '#{long double} tag)
+                                   [arg (list tag arg)])))
+                             args))]
+            (if (seq casts)
+              (z/replace loc
+                (concat head [args (list* 'let casts body)]))
+              loc)))]])
     (when core-source?
       (map (fn [[name form]] (definition-replace name form))
            portable-core-definitions))

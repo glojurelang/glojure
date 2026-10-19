@@ -14,6 +14,7 @@ package math
 
 import (
 	"fmt"
+	gomath "math"
 	mathrand "math/rand"
 	"reflect"
 
@@ -91,6 +92,65 @@ var (
 var Round = jmath.Round
 
 var Random = jmath.Random
+
+func Ulp(x any) any {
+	if v, ok := x.(float32); ok {
+		bits := gomath.Float32bits(v) & 0x7fffffff
+		if bits >= 0x7f800000 {
+			return gomath.Float32frombits(bits)
+		}
+		exponent := int(bits>>23) - 127
+		return float32(gomath.Ldexp(1, max(exponent-23, -149)))
+	}
+	v := gomath.Abs(toFloat64(x))
+	if gomath.IsInf(v, 0) || gomath.IsNaN(v) {
+		return v
+	}
+	exponent := int(gomath.Float64bits(v)>>52) - 1023
+	return gomath.Ldexp(1, max(exponent-52, -1074))
+}
+
+func GetExponent(x any) int32 {
+	if v, ok := x.(float32); ok {
+		return int32((gomath.Float32bits(v)>>23)&0xff) - 127
+	}
+	return int32((gomath.Float64bits(toFloat64(x))>>52)&0x7ff) - 1023
+}
+
+func NextAfter(start, direction any) any {
+	d := toFloat64(direction)
+	if v, ok := start.(float32); ok {
+		if gomath.IsNaN(float64(v)) || gomath.IsNaN(d) {
+			return float32(gomath.NaN())
+		}
+		if float64(v) == d {
+			return float32(d)
+		}
+		if float64(v) < d {
+			return gomath.Nextafter32(v, float32(gomath.Inf(1)))
+		}
+		return gomath.Nextafter32(v, float32(gomath.Inf(-1)))
+	}
+	v := toFloat64(start)
+	// Java returns the direction when the values compare equal, including
+	// opposite signed zeros. Go's Nextafter returns the start instead.
+	if v == d {
+		return d
+	}
+	return gomath.Nextafter(v, d)
+}
+
+func NextUp(x any) any { return NextAfter(x, gomath.Inf(1)) }
+
+func NextDown(x any) any { return NextAfter(x, gomath.Inf(-1)) }
+
+func Scalb(x, scale any) any {
+	exponent := int(int32(lang.AsInt64(scale)))
+	if v, ok := x.(float32); ok {
+		return float32(gomath.Ldexp(float64(v), exponent))
+	}
+	return gomath.Ldexp(toFloat64(x), exponent)
+}
 
 func Abs(x any) any {
 	switch v := x.(type) {
@@ -243,6 +303,12 @@ func init() {
 	register("incrementExact", "IncrementExact", lang.FnFunc(func(args ...any) any { return IncrementExact(args[0]) }))
 	register("decrementExact", "DecrementExact", lang.FnFunc(func(args ...any) any { return DecrementExact(args[0]) }))
 	register("toIntExact", "ToIntExact", lang.FnFunc(func(args ...any) any { return ToIntExact(args[0]) }))
+	register("ulp", "Ulp", lang.FnFunc(func(args ...any) any { return Ulp(args[0]) }))
+	register("getExponent", "GetExponent", lang.FnFunc(func(args ...any) any { return GetExponent(args[0]) }))
+	register("nextAfter", "NextAfter", lang.FnFunc(func(args ...any) any { return NextAfter(args[0], args[1]) }))
+	register("nextUp", "NextUp", lang.FnFunc(func(args ...any) any { return NextUp(args[0]) }))
+	register("nextDown", "NextDown", lang.FnFunc(func(args ...any) any { return NextDown(args[0]) }))
+	register("scalb", "Scalb", lang.FnFunc(func(args ...any) any { return Scalb(args[0], args[1]) }))
 }
 
 func fn1Float64(f func(float64) float64) lang.IFn {
