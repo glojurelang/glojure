@@ -83,6 +83,7 @@ TEST-SUITE-EXPECT-LOAD-ERRORS ?= 6
 MAKES-CLEAN := \
   report.html \
   bin/ \
+  benchmark/interpreter/__pycache__/ \
   scripts/rewrite-core/.cpcache/ \
   $(TEST-SUITE-DIR) \
 
