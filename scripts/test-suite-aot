@@ -126,6 +126,7 @@ done
   printf '%s\n' '  "github.com/glojurelang/glojure/pkg/lang"'
   printf '%s\n' '  "github.com/glojurelang/glojure/pkg/runtime"'
   printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/core/protocols"'
+  printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/set"'
   printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/string"'
   printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/template"'
   printf '%s\n' '  _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/test"'
@@ -156,6 +157,8 @@ done
   done
   printf '%s\n' '  testNS := lang.FindNamespace(lang.NewSymbol("clojure.test"))'
   printf '%s\n' '  runAllTests := testNS.FindInternedVar(lang.NewSymbol("run-all-tests")).Get()'
+  # Emit the Go regexp literally.
+  # shellcheck disable=SC2016
   printf '%s\n' '  summary := lang.Apply1(runAllTests, regexp.MustCompile(`^clojure\.(core|string)-test\..*$`))'
   printf '%s\n' '  failures := lang.MustAsInt(lang.GetDefault(summary, lang.NewKeyword("fail"), int64(0)))'
   printf '%s\n' '  errors := lang.MustAsInt(lang.GetDefault(summary, lang.NewKeyword("error"), int64(0)))'

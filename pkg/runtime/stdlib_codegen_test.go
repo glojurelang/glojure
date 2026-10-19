@@ -20,7 +20,9 @@ func TestPortableStdlibCodegenDiagnostics(t *testing.T) {
 	}
 	// Reload source roots, replacing native bootstrap overrides before codegen.
 	runtime.RT.Load("clojure/core")
-	for _, namespace := range []string{"clojure.core", "clojure.test", "glojure.go.io"} {
+	for _, namespace := range []string{
+		"clojure.core", "clojure.set", "clojure.test", "glojure.go.io",
+	} {
 		glj.Var("clojure.core", "require").Invoke(lang.NewSymbol(namespace))
 		read, write, err := os.Pipe()
 		if err != nil {

@@ -32,6 +32,7 @@ AOT-NAMESPACES := \
 	clojure.walk \
 	glojure.go.io \
 	glojure.go.types \
+	clojure.set \
 	$(EXTRA-AOT-NAMESPACES)
 
 OS-TYPE := $(shell bash -c 'echo $$OSTYPE')
@@ -76,7 +77,7 @@ TEST-SUITE-DIR := test/clojure-test-suite
 TEST-SUITE-FILE := test-glojure.glj
 TEST-SUITE-EXPECT-FAILURES ?= 0
 TEST-SUITE-EXPECT-ERRORS ?= 0
-TEST-SUITE-EXPECT-LOAD-ERRORS ?= 7
+TEST-SUITE-EXPECT-LOAD-ERRORS ?= 6
 
 MAKES-CLEAN := \
   report.html \

@@ -23,6 +23,7 @@ BASE_URL="https://raw.githubusercontent.com/clojure/clojure/${TAG}/src/clj/cloju
 FILES=(
     "core.clj"
     "core_print.clj"
+    "set.clj"
     "template.clj"
     "test.clj"
     "uuid.clj"

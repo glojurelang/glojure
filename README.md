@@ -213,6 +213,7 @@ used by the executable:
 ```go
 import (
     _ "example.com/myapp/generated/example/app"
+    _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/set"
     _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/string"
 )
 ```
