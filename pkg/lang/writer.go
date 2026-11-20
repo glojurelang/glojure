@@ -15,9 +15,9 @@ func AppendWriter(w io.Writer, v interface{}) io.Writer {
 	case []byte:
 		_, err = w.Write(v)
 	case rune:
-		_, err = w.Write([]byte{byte(v)})
+		_, err = io.WriteString(w, string(rune(v)))
 	case Char:
-		_, err = w.Write([]byte{byte(v)})
+		_, err = io.WriteString(w, string(rune(v)))
 	default:
 		err = fmt.Errorf("unsupported type %T", v)
 	}
