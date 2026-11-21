@@ -12,8 +12,10 @@ type (
 	}
 
 	future struct {
-		done chan struct{}
-		res  interface{}
+		done       chan struct{}
+		res        interface{}
+		panicValue any
+		panicked   bool
 	}
 )
 
@@ -26,15 +28,23 @@ var (
 	_ Future         = (*future)(nil)
 )
 
+// result is read only after done is closed, which publishes the value or panic.
+func (f *future) result() any {
+	if f.panicked {
+		panic(f.panicValue)
+	}
+	return f.res
+}
+
 func (f *future) Deref() interface{} {
 	<-f.done
-	return f.res
+	return f.result()
 }
 
 func (f *future) DerefWithTimeout(timeoutMS int64, timeoutVal interface{}) interface{} {
 	select {
 	case <-f.done:
-		return f.res
+		return f.result()
 	case <-time.After(time.Duration(timeoutMS) * time.Millisecond):
 		return timeoutVal
 	}
@@ -47,7 +57,7 @@ func (f *future) Get() interface{} {
 func (f *future) GetWithTimeout(timeout int64, timeUnit time.Duration) interface{} {
 	select {
 	case <-f.done:
-		return f.res
+		return f.result()
 	case <-time.After(time.Duration(timeout) * time.Millisecond):
 		panic(NewTimeoutError("future timeout"))
 	}
@@ -108,8 +118,14 @@ func AgentSubmit(fn IFn) IBlockingDeref {
 		done: make(chan struct{}),
 	}
 	go func() {
+		completed := false
+		defer func() {
+			fut.panicValue = recover()
+			fut.panicked = !completed
+			close(fut.done)
+		}()
 		fut.res = fn.Invoke()
-		close(fut.done)
+		completed = true
 	}()
 	return fut
 }
